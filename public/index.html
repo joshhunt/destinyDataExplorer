@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <style>body { background: #090B0E; }</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="%PUBLIC_URL%/apple-touch-180.png">
+    <link rel="shortcut icon" sizes="16x16" href="%PUBLIC_URL%/favicon-16.png">
+    <link rel="shortcut icon" sizes="32x32" href="%PUBLIC_URL%/favicon-32.png">
+    <link rel="shortcut icon" sizes="196x196" href="%PUBLIC_URL%/android-196.png">
+    <link rel='mask-icon' href='%PUBLIC_URL%/mask-icon.svg' color='#1C203A'>
+
+    <title>Destiny Data Explorer</title>
+
+    <script src="https://cdn.ravenjs.com/3.22.3/raven.min.js" crossorigin="anonymous"></script>
+    <meta name="google-site-verification" content="5bAaEIC4wr4ty_rtU5IZ6fl-I1Zh-4monu1OXOu1AZ4" />
+    <script src="https://apis.google.com/js/api.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script>
+      window.__withUID = function(cb) {
+        try {
+          const uid = localStorage.uid && JSON.parse(localStorage.getItem('uid'));
+          if (uid) {
+            cb(uid);
+          }
+        } catch (e) {}
+      }
+    </script>
+
+    <script>
+      var dsn = 'https://e243bfd31f3b4c02a3450417272f4393@sentry.io/294574'
+      Raven.config(window.location.href.indexOf('localhost') > -1 ? false : dsn, {
+        captureUnhandledRejections: true
+      }).install()
+
+      window.__withUID(function (uid) {
+        window.Raven.setUserContext({ id: uid });
+      });
+    </script>
+
+    <script>
+      window.onerror = function(errorMsg, errorSource) {
+        if (errorMsg.indexOf('SyntaxError') > -1 && errorSource) {
+          const newError = new Error('Custom error: ' + errorMsg + ' from ' + errorSource);
+          Raven.captureException(newError, { extra: { errorSource: errorSource } })
+        }
+      };
+
+    </script>
+
+    <script>
+    if (window.location.hostname === 'destinysets.com') {
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    (i[r] =
+      i[r] ||
+      function() {
+        (i[r].q = i[r].q || []).push(arguments);
+      }),
+      (i[r].l = 1 * new Date());
+    (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  })(
+    window,
+    document,
+    'script',
+    'https://www.google-analytics.com/analytics.js',
+    'ga'
+  );
+
+  ga('create', 'UA-89978211-1', 'auto');
+
+  window.__withUID(function (uid) {
+    ga('set', '&uid', uid);
+    ga('set', 'userId', uid);
+  });
+
+  ga('require', 'cleanUrlTracker', { stripQuery: true });
+  ga('require', 'urlChangeTracker');
+
+  ga('send', 'pageview');
+}
+</script>
+
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+  </body>
+</html>
