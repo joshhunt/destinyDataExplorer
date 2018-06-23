@@ -13,6 +13,7 @@ export default class AppRouter extends Component {
       <Provider store={store}>
         <Router history={browserHistory}>
           <Route path="/" component={Home} />
+          <Route path="/i/*" component={Home} />
         </Router>
       </Provider>
     );
