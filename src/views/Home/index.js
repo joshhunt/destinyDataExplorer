@@ -15,10 +15,14 @@ const values = memoize(defs => Object.values(defs));
 
 function parsePathSegment(segment) {
   const [type, hash] = segment.split(':');
-  return { type: `Destiny${type}Definition`, hash };
+  return { type: `Destiny${type}Definition`, shortType: type, hash };
 }
 
 function parsePath(splat) {
+  if (!splat) {
+    return [];
+  }
+
   return splat.split('/').map(parsePathSegment);
 }
 
@@ -72,6 +76,19 @@ class HomeView extends Component {
     return url;
   };
 
+  popView = () => {
+    const newViews = [...this.state.views];
+    newViews.pop();
+
+    const newPath =
+      newViews.length === 0
+        ? '/'
+        : '/i/' +
+          newViews.map(view => `${view.shortType}:${view.hash}`).join('/');
+
+    this.props.router.push(newPath);
+  };
+
   render() {
     const { loading, views } = this.state;
     const items = values(
@@ -107,6 +124,7 @@ class HomeView extends Component {
                   key={`${type}:${hash}`}
                   item={this.props.definitions[type][hash]}
                   type={type}
+                  onRequestClose={this.popView}
                 />
               )
           )}
