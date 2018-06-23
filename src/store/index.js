@@ -1,7 +1,7 @@
 import { createStore, combineReducers } from 'redux';
 
 import app from './app';
-import definitions from './definitions';
+import definitions, { SET_BULK_DEFINITIONS } from './definitions';
 
 const rootReducer = combineReducers({
   app,
@@ -10,7 +10,10 @@ const rootReducer = combineReducers({
 
 const store = (window.__store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window.__REDUX_DEVTOOLS_EXTENSION__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION__({
+      actionsBlacklist: [SET_BULK_DEFINITIONS]
+    })
 ));
 
 export default store;

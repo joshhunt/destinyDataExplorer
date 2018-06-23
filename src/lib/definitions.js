@@ -134,9 +134,6 @@ function allDataFromRemote(dbPath) {
 export function getAllDefinitions() {
   return fetchManifestDBPath()
     .then(dbPath => {
-      window.perfStart = performance.now();
-
-      console.log('dbPath', dbPath);
       return Promise.all([db.allData.get(dbPath), Promise.resolve(dbPath)]);
     })
     .then(([cachedData, dbPath]) => {
