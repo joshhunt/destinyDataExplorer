@@ -92,7 +92,8 @@ module.exports = function override(config, env) {
   return merge(config, {
     resolve: {
       alias: {
-        app: path.resolve(__dirname, 'src')
+        app: path.resolve(__dirname, 'src'),
+        src: path.resolve(__dirname, 'src')
       }
     }
   });
