@@ -87,8 +87,6 @@ module.exports = function override(config, env) {
     config.module.rules.push(stylusRules);
   }
 
-  // throw 'Stopping';
-
   return merge(config, {
     resolve: {
       alias: {

@@ -6,6 +6,7 @@ import inflate from 'file-loader!@destiny-item-manager/zip.js/WebContent/inflate
 import zipWorker from 'file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js'; // eslint-disable-line
 
 import { requireDatabase, getAllRecords } from './database';
+import { getDestiny } from './destiny';
 
 const db = new Dexie('destinyManifest');
 db.version(1).stores({
@@ -14,13 +15,11 @@ db.version(1).stores({
 });
 
 function fetchManifestDBPath() {
-  return fetch('https://www.bungie.net/platform/Destiny2/Manifest/')
-    .then(r => r.json())
-    .then(data => {
-      console.log('Got Manifest manifest back', data);
-      const englishUrl = data.Response.mobileWorldContentPaths.en;
-      return englishUrl;
-    });
+  return getDestiny('/platform/Destiny2/Manifest/').then(data => {
+    console.log('Got Manifest manifest back', data);
+    const englishUrl = data.mobileWorldContentPaths.en;
+    return englishUrl;
+  });
 }
 
 function fetchManifest(dbPath) {

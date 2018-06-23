@@ -1,5 +1,5 @@
 import sqlWasmPath from 'file-loader!sql.js/js/sql-wasm.js'; // eslint-disable-line
-import sqlWasmBinaryPath from 'file-loader!sql.js/js/sql-optimized-wasm-raw.wasm'; // eslint-disable-line
+import sqlWasmBinaryPath from '!!file-loader!sql.js/js/sql-optimized-wasm-raw.wasm'; // eslint-disable-line
 
 function importAsmJs() {
   delete window.Module;
