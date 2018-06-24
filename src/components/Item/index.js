@@ -10,8 +10,7 @@ import s from './styles.styl';
 
 export default function Item({ className, item, pathForItem }) {
   const {
-    displayProperties: { name, icon: _icon },
-    hash
+    displayProperties: { name, icon: _icon }
   } = item;
 
   const icon = _icon || '/img/misc/missing_icon_d2.png';

@@ -1,6 +1,6 @@
 import { EMBLEM, HUNTER, TITAN, WARLOCK, NO_CLASS } from 'app/lib/destinyEnums';
-import { getLower } from 'app/lib/utils';
-import CLASS_OVERRIDES from 'app/extraData/classOverrides';
+import { getLower } from 'src/lib/utils';
+// import CLASS_OVERRIDES from 'app/extraData/classOverrides';
 
 // TODO: we can just use itemCategoryHashes for this now?
 export const isOrnament = item =>
@@ -29,9 +29,9 @@ function classFromString(str) {
 }
 
 export const getItemClass = item => {
-  if (CLASS_OVERRIDES.hasOwnProperty(item.hash)) {
-    return CLASS_OVERRIDES[item.hash];
-  }
+  // if (CLASS_OVERRIDES.hasOwnProperty(item.hash)) {
+  //   return CLASS_OVERRIDES[item.hash];
+  // }
 
   const stackUniqueLabel = getLower(item, 'inventory.stackUniqueLabel');
   const plugCategoryIdentifier = getLower(item, 'plug.plugCategoryIdentifier');
@@ -47,3 +47,19 @@ export const getItemClass = item => {
 
   return item.classType;
 };
+
+export function getNameForItem(item, noQuotes) {
+  let foundName;
+
+  if (item.displayProperties && item.displayProperties.name) {
+    foundName = item.displayProperties.name;
+  } else if (item.progressDescription) {
+    foundName = item.progressDescription;
+  }
+
+  if (noQuotes) {
+    return foundName;
+  }
+
+  return foundName ? `"${foundName}"` : '';
+}

@@ -9,6 +9,7 @@ import SearchHeader from 'src/components/SearchHeader';
 import DataView from 'src/components/DataView';
 import Item from 'src/components/Item';
 
+import lookup from './lookup';
 import s from './styles.styl';
 
 const values = memoize(defs => Object.values(defs));
@@ -64,13 +65,13 @@ class HomeView extends Component {
     // });
   }
 
-  pathForItem = (type, item) => {
+  pathForItem = (shortType, item) => {
     let url = '';
 
     if (this.props.routeParams.splat) {
-      url = `${this.props.location.pathname}/${type}:${item.hash}`;
+      url = `${this.props.location.pathname}/${shortType}:${item.hash}`;
     } else {
-      url = `/i/${type}:${item.hash}`;
+      url = `/i/${shortType}:${item.hash}`;
     }
 
     return url;
@@ -87,6 +88,28 @@ class HomeView extends Component {
           newViews.map(view => `${view.shortType}:${view.hash}`).join('/');
 
     this.props.router.push(newPath);
+  };
+
+  lookupLinkedItem = (keyPath, hash) => {
+    const [fieldName, parentFieldName] = keyPath;
+
+    const { type: definitionType, shortType } =
+      lookup.find(data => data.fields.includes(fieldName)) ||
+      lookup.find(data => data.fields.includes(parentFieldName)) ||
+      {};
+
+    const defs = this.props.definitions[definitionType];
+
+    if (!defs) {
+      return null;
+    }
+
+    const item = defs[hash];
+
+    return {
+      definitionType: shortType,
+      item
+    };
   };
 
   render() {
@@ -125,6 +148,8 @@ class HomeView extends Component {
                   item={this.props.definitions[type][hash]}
                   type={type}
                   onRequestClose={this.popView}
+                  lookupLinkedItem={this.lookupLinkedItem}
+                  pathForItem={this.pathForItem}
                 />
               )
           )}
