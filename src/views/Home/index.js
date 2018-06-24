@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { memoize } from 'lodash';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { setBulkDefinitions } from 'src/store/definitions';
 import { getAllDefinitions } from 'src/lib/definitions';
@@ -137,22 +138,28 @@ class HomeView extends Component {
           </div>
         </div>
 
-        {views.length > 0 &&
-          views.map(
+        <ReactCSSTransitionGroup
+          transitionName="global-dataview-animation"
+          transitionEnterTimeout={200}
+          transitionLeaveTimeout={200}
+        >
+          {views.map(
             ({ type, hash }, index) =>
               this.props.definitions[type] && (
-                <DataView
-                  depth={index + 1}
-                  className={s.dataView}
-                  key={`${type}:${hash}`}
-                  item={this.props.definitions[type][hash]}
-                  type={type}
-                  onRequestClose={this.popView}
-                  lookupLinkedItem={this.lookupLinkedItem}
-                  pathForItem={this.pathForItem}
-                />
+                <div key={`${type}:${hash}`}>
+                  <DataView
+                    depth={index + 1}
+                    className={s.dataView}
+                    item={this.props.definitions[type][hash]}
+                    type={type}
+                    onRequestClose={this.popView}
+                    lookupLinkedItem={this.lookupLinkedItem}
+                    pathForItem={this.pathForItem}
+                  />
+                </div>
               )
           )}
+        </ReactCSSTransitionGroup>
       </div>
     );
   }

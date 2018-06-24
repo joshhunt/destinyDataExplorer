@@ -1,3 +1,5 @@
+$duration = 200ms
+
 .root
   height: 100%
   position: fixed
@@ -6,6 +8,21 @@
   bottom: 0
   right: 0
   background: rgba(black, .3)
+
+  :global(.global-dataview-animation-enter) &
+    background: rgba(black, 0)
+
+  :global(.global-dataview-animation-enter.global-dataview-animation-enter-active) &
+    background: rgba(black, .3)
+    transition: background $duration
+
+  :global(.global-dataview-animation-leave) &
+    background: rgba(black, .3)
+
+  :global(.global-dataview-animation-leave.global-dataview-animation-leave-active) &
+    background: rgba(black, 0)
+    transition: background $duration
+
 
 .data
   position: absolute
@@ -16,6 +33,23 @@
   background: #002C36
   padding: 10px
   box-shadow: 0 0px 20px rgba(black,0.3);
+  will-change: transform
+
+  :global(.global-dataview-animation-enter) &
+    transform: translate(100%)
+
+  :global(.global-dataview-animation-enter.global-dataview-animation-enter-active) &
+    transform: translate(0%)
+    transition: transform $duration
+
+  :global(.global-dataview-animation-leave) &
+    transform: translate(0%)
+
+  :global(.global-dataview-animation-leave.global-dataview-animation-leave-active) &
+    transform: translate(100%)
+    transition: transform $duration
+
+
 
 // JSON values
 .jsonLinkedValue
@@ -38,3 +72,24 @@
   padding: 3px 5px
   background: lighten(#0D2B35, 5%)
   border: 1px solid lighten(#0D2B35, 15%)
+
+
+
+
+:global(.global-dataview-animation-enter)
+  .data
+    transform: translate(100%)
+
+:global(.global-dataview-animation-enter.global-dataview-animation-enter-active)
+  .data
+    transform: translate(0%)
+    transition: transform $duration
+
+:global(.global-dataview-animation-leave)
+  .data
+    transform: translate(0%)
+
+:global(.global-dataview-animation-leave.global-dataview-animation-leave-active)
+  .data
+    transform: translate(100%)
+    transition: transform $duration
