@@ -31,14 +31,24 @@ export default [
 
   src('DestinyActivityModeDefinition', [
     'currentActivityModeHash',
-    'currentActivityModeHashes'
+    'currentActivityModeHashes',
+    'activityModeHashes',
+    'parentHashes'
   ]),
+
+  src('DestinyActivityTypeDefinition', ['activityTypeHash']),
 
   src('DestinyActivityDefinition', [
     'activityHash',
+    'defaultFreeroamActivityHash',
     'currentActivityHash',
     'currentPlaylistActivityHash'
   ]),
+
+  src('DestinyPlaceDefinition', 'placeHash'),
+  src('DestinyActivityGraphDefinition', 'activityGraphHash'),
+
+  src('DestinyDestinationDefinition', 'destinationHash'),
 
   src('DestinyProgressionLevelRequirementDefinition', [
     'progressionLevelRequirementHash'
@@ -47,7 +57,8 @@ export default [
   src('DestinyItemCategoryDefinition', [
     'categoryHash',
     'itemCategoryHashes',
-    'groupedCategoryHashes'
+    'groupedCategoryHashes',
+    'parentCategoryHashes'
   ]),
 
   src('DestinyLoreDefinition', ['loreHash']),
