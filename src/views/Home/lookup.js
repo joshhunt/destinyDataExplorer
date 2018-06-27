@@ -1,6 +1,7 @@
+import { makeTypeShort } from 'src/lib/destinyUtils';
+
 const src = (type, fields) => {
-  const match = type.match(/Destiny(\w+)Definition/);
-  const shortType = match ? match[1] : type;
+  const shortType = makeTypeShort(type);
   return { type, shortType, fields };
 };
 

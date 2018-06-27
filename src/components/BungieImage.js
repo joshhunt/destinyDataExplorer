@@ -1,6 +1,7 @@
 import React from 'react';
 
+import { bungieUrl } from 'src/lib/destinyUtils';
+
 export default function BungieImage({ src, ...props }) {
-  const url = src.includes('//bungie.net/') ? src : `https://bungie.net/${src}`;
-  return <img src={url} {...props} alt="" />;
+  return <img src={bungieUrl(src)} {...props} alt="" />;
 }

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import JSONTree from 'react-json-tree';
 
 import BungieImage from 'src/components/BungieImage';
-import { getNameForItem } from 'src/lib/destinyUtils';
+import { getNameForItem, bungieUrl } from 'src/lib/destinyUtils';
 
 import s from './styles.styl';
 
@@ -13,9 +13,10 @@ const isImage = value => isString(value) && value.match(/\.(png|jpg|jpeg)$/);
 
 function ImageValue({ value }) {
   return (
-    <span>
+    <a href={bungieUrl(value)} className={s.jsonLinkedValue}>
       <BungieImage className={s.jsonImage} src={value} alt="preview" />
-    </span>
+      "{value}"
+    </a>
   );
 }
 
@@ -77,6 +78,13 @@ export default class DataView extends Component {
       >
         <div className={s.data} style={{ left: 100 * depth }}>
           <h2>
+            {item.displayProperties.hasIcon && (
+              <BungieImage
+                className={s.titleIcon}
+                alt=""
+                src={item.displayProperties.icon}
+              />
+            )}
             {displayname} <code className={s.hash}>{item.hash}</code>
           </h2>
           <h3>{type}</h3>

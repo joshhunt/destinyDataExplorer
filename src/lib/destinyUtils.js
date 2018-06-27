@@ -1,3 +1,5 @@
+import { memoize } from 'lodash';
+
 import { EMBLEM, HUNTER, TITAN, WARLOCK, NO_CLASS } from 'app/lib/destinyEnums';
 import { getLower } from 'src/lib/utils';
 // import CLASS_OVERRIDES from 'app/extraData/classOverrides';
@@ -9,6 +11,15 @@ export const isOrnament = item =>
   item.plug &&
   item.plug.plugCategoryIdentifier &&
   item.plug.plugCategoryIdentifier.includes('skins');
+
+export const makeTypeShort = memoize(type => {
+  const match = type.match(/Destiny(\w+)Definition/);
+  return match ? match[1] : type;
+});
+
+export const bungieUrl = path => {
+  return path.includes('//bungie.net/') ? path : `https://bungie.net${path}`;
+};
 
 function classFromString(str) {
   const results = str.match(/hunter|titan|warlock/);

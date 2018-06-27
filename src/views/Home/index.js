@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { memoize } from 'lodash';
+import { memoize, toPairs } from 'lodash';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { setBulkDefinitions } from 'src/store/definitions';
 import { getAllDefinitions } from 'src/lib/definitions';
+import { makeTypeShort } from 'src/lib/destinyUtils';
 
 import SearchHeader from 'src/components/SearchHeader';
 import DataView from 'src/components/DataView';
@@ -13,7 +14,23 @@ import Item from 'src/components/Item';
 import lookup from './lookup';
 import s from './styles.styl';
 
-const values = memoize(defs => Object.values(defs));
+const getComparableName = memoize(item => {
+  const name = item && item.displayProperties && item.displayProperties.name;
+  return name ? name.toLowerCase() : name;
+});
+
+const makeAllDefsArray = memoize(allDefs => {
+  return toPairs(allDefs).reduce((acc, [type, defs]) => {
+    return [
+      ...acc,
+      ...toPairs(defs).map(([key, def]) => ({
+        type, // definition type
+        key, // definition key, like hash
+        def // the definition item itself
+      }))
+    ];
+  }, []);
+});
 
 function parsePathSegment(segment) {
   const [type, hash] = segment.split(':');
@@ -29,25 +46,16 @@ function parsePath(splat) {
 }
 
 class HomeView extends Component {
-  state = { loading: true, views: [] };
+  state = { loading: true, views: [], searchTerm: '', results: null };
 
   componentDidMount() {
-    // let _resolve;
-    // this.defsPromise = new Promise(resolve => {
-    //   _resolve = resolve;
-    // });
-
-    // this.defsPromise.resolve = _resolve;
-
     if (this.props.routeParams.splat) {
       this.updateViews();
     }
 
     getAllDefinitions().then(defs => {
       this.setState({ loading: false });
-      console.log('Got defintions, dispatching them now', defs);
       this.props.setBulkDefinitions(defs);
-      // this.defsPromise.resolve();
     });
   }
 
@@ -60,14 +68,30 @@ class HomeView extends Component {
   updateViews() {
     const segments = parsePath(this.props.routeParams.splat);
     this.setState({ views: segments });
-
-    // this.defsPromise.then(() => {
-    //   this.setState({ views: segments });
-    // });
   }
 
-  pathForItem = (shortType, item) => {
+  onSearchChange = ev => {
+    const searchTerm = ev.target.value;
+    const comparableSearchTerm = searchTerm && searchTerm.toLowerCase();
+    let results = [];
+
+    if (searchTerm.length > 2) {
+      const allDefs = makeAllDefsArray(this.props.definitions);
+      results = allDefs.filter(obj => {
+        const comparableName = getComparableName(obj.def);
+        return (
+          obj.key === searchTerm ||
+          (comparableName && comparableName.includes(comparableSearchTerm))
+        );
+      });
+    }
+
+    this.setState({ searchTerm, results });
+  };
+
+  pathForItem = (type, item) => {
     let url = '';
+    const shortType = makeTypeShort(type);
 
     if (this.props.routeParams.splat) {
       url = `${this.props.location.pathname}/${shortType}:${item.hash}`;
@@ -106,32 +130,30 @@ class HomeView extends Component {
     }
 
     const item = defs[hash];
-
-    return {
-      definitionType: shortType,
-      item
-    };
+    return { definitionType: shortType, item };
   };
 
   render() {
-    const { loading, views } = this.state;
-    const items = values(
-      this.props.definitions.DestinyInventoryItemDefinition || {}
-    ).slice(0, 100);
+    const { loading, views, searchTerm, results } = this.state;
+    const items = results || [];
 
     return (
       <div className={s.root}>
-        <SearchHeader />
+        <SearchHeader
+          onSearchChange={this.onSearchChange}
+          searchValue={searchTerm}
+        />
 
         <div className={s.body}>
           {loading && <h1>Loading...</h1>}
 
           <div className={s.items}>
-            {items.map(item => (
+            {items.map(obj => (
               <Item
-                key={item.hash}
+                key={`${obj.type}:${obj.key}`}
                 className={s.item}
-                item={item}
+                item={obj.def}
+                type={obj.type}
                 pathForItem={this.pathForItem}
               />
             ))}
