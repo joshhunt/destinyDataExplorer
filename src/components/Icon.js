@@ -2,7 +2,10 @@ import React from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-library.add(require('@fortawesome/pro-light-svg-icons/faBook').faBook);
+library.add(
+  require('@fortawesome/pro-light-svg-icons/faBook').faBook,
+  require('@fortawesome/pro-light-svg-icons/faThLarge').faThLarge
+);
 
 export default function Icon({ icon, name, brand, light, solid, ...props }) {
   let prefix = 'far';

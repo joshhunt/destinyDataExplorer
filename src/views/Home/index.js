@@ -32,6 +32,28 @@ const makeAllDefsArray = memoize(allDefs => {
   }, []);
 });
 
+const MAX_RANDOM_ITEMS = 100;
+
+const getRandomItems = memoize(allDefs => {
+  let n = MAX_RANDOM_ITEMS;
+  const arr = makeAllDefsArray(allDefs).filter(obj => {
+    return (
+      obj.def && obj.def.displayProperties && obj.def.displayProperties.hasIcon
+    );
+  });
+  var result = new Array(n),
+    len = arr.length,
+    taken = new Array(len);
+  if (n > len) return [];
+  while (n--) {
+    var x = Math.floor(Math.random() * len);
+    result[n] = arr[x in taken ? taken[x] : x];
+    taken[x] = --len in taken ? taken[len] : len;
+  }
+  console.log('result:', result);
+  return result;
+});
+
 function parsePathSegment(segment) {
   const [type, hash] = segment.split(':');
   return { type: `Destiny${type}Definition`, shortType: type, hash };
@@ -77,13 +99,16 @@ class HomeView extends Component {
 
     if (searchTerm.length > 2) {
       const allDefs = makeAllDefsArray(this.props.definitions);
-      results = allDefs.filter(obj => {
-        const comparableName = getComparableName(obj.def);
-        return (
-          obj.key === searchTerm ||
-          (comparableName && comparableName.includes(comparableSearchTerm))
-        );
-      });
+      results = allDefs
+        .filter(obj => {
+          const comparableName = getComparableName(obj.def);
+          return (
+            obj.key === searchTerm ||
+            obj.type.toLowerCase().includes(comparableSearchTerm) ||
+            (comparableName && comparableName.includes(comparableSearchTerm))
+          );
+        })
+        .slice(0, 150);
     }
 
     this.setState({ searchTerm, results });
@@ -135,7 +160,11 @@ class HomeView extends Component {
 
   render() {
     const { loading, views, searchTerm, results } = this.state;
-    const items = results || [];
+    let items = results || [];
+
+    if (items.length < 1) {
+      items = getRandomItems(this.props.definitions);
+    }
 
     return (
       <div className={s.root}>

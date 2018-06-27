@@ -22,7 +22,8 @@ function makeItemTypeName(item, type) {
 const NO_ICON = '/img/misc/missing_icon_d2.png';
 
 const SUBSTITUTE_ICON = {
-  DestinyLoreDefinition: 'book'
+  DestinyLoreDefinition: 'book',
+  DestinyItemCategoryDefinition: 'th-large'
 };
 
 function SubstituteIcon({ type }) {
@@ -30,7 +31,7 @@ function SubstituteIcon({ type }) {
 
   return sub ? (
     <div className={s.substituteIcon}>
-      <Icon name="book" light />
+      <Icon name={sub} light />
     </div>
   ) : (
     <BungieImage className={s.icon} src={NO_ICON} />
@@ -38,11 +39,11 @@ function SubstituteIcon({ type }) {
 }
 
 export default function Item({ className, item, type, pathForItem }) {
-  const {
-    displayProperties: { name, icon: _icon }
-  } = item;
-
-  const icon = _icon || NO_ICON;
+  const name = (item.displayProperties && item.displayProperties.name) || (
+    <em>No name</em>
+  );
+  const icon =
+    (item.displayProperties && item.displayProperties.icon) || NO_ICON;
 
   return (
     <Link to={pathForItem(type, item)} className={cx(s.root, className)}>

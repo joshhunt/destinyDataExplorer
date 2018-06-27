@@ -78,13 +78,14 @@ export default class DataView extends Component {
       >
         <div className={s.data} style={{ left: 100 * depth }}>
           <h2>
-            {item.displayProperties.hasIcon && (
-              <BungieImage
-                className={s.titleIcon}
-                alt=""
-                src={item.displayProperties.icon}
-              />
-            )}
+            {item.displayProperties &&
+              item.displayProperties.hasIcon && (
+                <BungieImage
+                  className={s.titleIcon}
+                  alt=""
+                  src={item.displayProperties.icon}
+                />
+              )}
             {displayname} <code className={s.hash}>{item.hash}</code>
           </h2>
           <h3>{type}</h3>
