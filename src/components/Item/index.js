@@ -6,6 +6,7 @@ import { CLASSES } from 'app/lib/destinyEnums';
 import { makeTypeShort } from 'src/lib/destinyUtils';
 
 import BungieImage from 'src/components/BungieImage';
+import Icon from 'src/components/Icon';
 
 import s from './styles.styl';
 
@@ -18,17 +19,39 @@ function makeItemTypeName(item, type) {
   return official ? `${shortType}: ${klass}${official}` : shortType;
 }
 
+const NO_ICON = '/img/misc/missing_icon_d2.png';
+
+const SUBSTITUTE_ICON = {
+  DestinyLoreDefinition: 'book'
+};
+
+function SubstituteIcon({ type }) {
+  const sub = SUBSTITUTE_ICON[type];
+
+  return sub ? (
+    <div className={s.substituteIcon}>
+      <Icon name="book" light />
+    </div>
+  ) : (
+    <BungieImage className={s.icon} src={NO_ICON} />
+  );
+}
+
 export default function Item({ className, item, type, pathForItem }) {
   const {
     displayProperties: { name, icon: _icon }
   } = item;
 
-  const icon = _icon || '/img/misc/missing_icon_d2.png';
+  const icon = _icon || NO_ICON;
 
   return (
     <Link to={pathForItem(type, item)} className={cx(s.root, className)}>
       <div className={s.accessory}>
-        <BungieImage className={s.icon} src={icon} />
+        {icon === NO_ICON ? (
+          <SubstituteIcon type={type} />
+        ) : (
+          <BungieImage className={s.icon} src={icon} />
+        )}
       </div>
 
       <div className={s.main}>

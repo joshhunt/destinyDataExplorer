@@ -4,12 +4,12 @@
   "private": true,
   "dependencies": {
     "@destiny-item-manager/zip.js": "github:DestinyItemManager/zip.js",
-    "@fortawesome/fontawesome": "^1.1.5",
-    "@fortawesome/fontawesome-free-brands": "^5.0.9",
-    "@fortawesome/fontawesome-pro-light": "^5.0.9",
-    "@fortawesome/fontawesome-pro-regular": "^5.0.9",
-    "@fortawesome/fontawesome-pro-solid": "^5.0.9",
-    "@fortawesome/react-fontawesome": "^0.0.18",
+    "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
+    "@fortawesome/pro-light-svg-icons": "^5.1.0-11",
+    "@fortawesome/pro-regular-svg-icons": "^5.1.0-11",
+    "@fortawesome/pro-solid-svg-icons": "^5.1.0-11",
+    "@fortawesome/react-fontawesome": "^0.1.0-11",
     "async": "^2.6.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
@@ -44,7 +44,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@sentry/cli": "^1.30.0",
     "autoprefixer": "^7.2.2",
     "ava": "^1.0.0-beta.3",
     "babel-plugin-lodash": "^3.3.2",

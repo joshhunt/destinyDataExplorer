@@ -10,9 +10,21 @@
 .items
   display: flex
   flex-wrap: wrap
+  padding: 10px
 
 .item
   min-width: 200px
-  flex: 1 0 20%
+  flex: 0 0 auto
   padding: 5px
+  width: 20%
+
+  @media screen and (max-width: 1020px)
+    width: 25%
+
+  @media screen and (max-width: 820px)
+    width: 33.3333%
+
+  @media screen and (max-width: 620px)
+    width: auto
+    flex: 1 0 50%
 

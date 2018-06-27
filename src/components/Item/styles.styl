@@ -1,3 +1,6 @@
+$iconSize = 50px
+$substituteColour = #494A4C
+
 .root
   content: 'hello'
   display: flex
@@ -8,10 +11,21 @@
   margin-right: 10px
 
 .icon
-  height: 50px
+  height: $iconSize
+
+.substituteIcon
+  height: $iconSize
+  width: $iconSize
+  display: flex
+  align-items: center
+  justify-content: center
+  border: 2px solid $substituteColour
+  color: lighten($substituteColour , 50%)
+  font-size: 20px
 
 .main
 .name
+.itemType
   white-space: nowrap
   overflow: auto
   text-overflow: ellipsis
