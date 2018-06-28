@@ -1,4 +1,4 @@
-import { memoize } from 'lodash';
+import { memoize, toPairs } from 'lodash';
 
 import { EMBLEM, HUNTER, TITAN, WARLOCK, NO_CLASS } from 'app/lib/destinyEnums';
 import { getLower } from 'src/lib/utils';
@@ -74,3 +74,37 @@ export function getNameForItem(item, noQuotes) {
 
   return foundName ? `"${foundName}"` : '';
 }
+
+export const makeAllDefsArray = memoize(allDefs => {
+  return toPairs(allDefs).reduce((acc, [type, defs]) => {
+    return [
+      ...acc,
+      ...toPairs(defs).map(([key, def]) => ({
+        type, // definition type
+        key, // definition key, like hash
+        def // the definition item itself
+      }))
+    ];
+  }, []);
+});
+
+const MAX_RANDOM_ITEMS = 100;
+export const getRandomItems = memoize(allDefs => {
+  let n = MAX_RANDOM_ITEMS;
+  const arr = makeAllDefsArray(allDefs).filter(obj => {
+    return (
+      obj.def && obj.def.displayProperties && obj.def.displayProperties.hasIcon
+    );
+  });
+
+  var result = new Array(n),
+    len = arr.length,
+    taken = new Array(len);
+  if (n > len) return [];
+  while (n--) {
+    var x = Math.floor(Math.random() * len);
+    result[n] = arr[x in taken ? taken[x] : x];
+    taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
+});

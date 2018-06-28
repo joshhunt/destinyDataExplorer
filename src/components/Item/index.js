@@ -23,7 +23,8 @@ const NO_ICON = '/img/misc/missing_icon_d2.png';
 
 const SUBSTITUTE_ICON = {
   DestinyLoreDefinition: 'book',
-  DestinyItemCategoryDefinition: 'th-large'
+  DestinyItemCategoryDefinition: 'th-large',
+  DestinyInventoryBucketDefinition: 'shopping-basket'
 };
 
 function SubstituteIcon({ type }) {

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { memoize, toPairs } from 'lodash';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { setBulkDefinitions } from 'src/store/definitions';
 import { getAllDefinitions } from 'src/lib/definitions';
-import { makeTypeShort } from 'src/lib/destinyUtils';
+import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
+import search from 'src/lib/search';
 
 import SearchHeader from 'src/components/SearchHeader';
 import DataView from 'src/components/DataView';
@@ -13,46 +13,6 @@ import Item from 'src/components/Item';
 
 import lookup from './lookup';
 import s from './styles.styl';
-
-const getComparableName = memoize(item => {
-  const name = item && item.displayProperties && item.displayProperties.name;
-  return name ? name.toLowerCase() : name;
-});
-
-const makeAllDefsArray = memoize(allDefs => {
-  return toPairs(allDefs).reduce((acc, [type, defs]) => {
-    return [
-      ...acc,
-      ...toPairs(defs).map(([key, def]) => ({
-        type, // definition type
-        key, // definition key, like hash
-        def // the definition item itself
-      }))
-    ];
-  }, []);
-});
-
-const MAX_RANDOM_ITEMS = 100;
-
-const getRandomItems = memoize(allDefs => {
-  let n = MAX_RANDOM_ITEMS;
-  const arr = makeAllDefsArray(allDefs).filter(obj => {
-    return (
-      obj.def && obj.def.displayProperties && obj.def.displayProperties.hasIcon
-    );
-  });
-  var result = new Array(n),
-    len = arr.length,
-    taken = new Array(len);
-  if (n > len) return [];
-  while (n--) {
-    var x = Math.floor(Math.random() * len);
-    result[n] = arr[x in taken ? taken[x] : x];
-    taken[x] = --len in taken ? taken[len] : len;
-  }
-  console.log('result:', result);
-  return result;
-});
 
 function parsePathSegment(segment) {
   const [type, hash] = segment.split(':');
@@ -93,25 +53,34 @@ class HomeView extends Component {
   }
 
   onSearchChange = ev => {
+    const MAX_RESULTS = 150;
     const searchTerm = ev.target.value;
-    const comparableSearchTerm = searchTerm && searchTerm.toLowerCase();
-    let results = [];
 
-    if (searchTerm.length > 2) {
-      const allDefs = makeAllDefsArray(this.props.definitions);
-      results = allDefs
-        .filter(obj => {
-          const comparableName = getComparableName(obj.def);
-          return (
-            obj.key === searchTerm ||
-            obj.type.toLowerCase().includes(comparableSearchTerm) ||
-            (comparableName && comparableName.includes(comparableSearchTerm))
-          );
-        })
-        .slice(0, 150);
+    const newState = {
+      searchTerm,
+      results: [],
+      moreResults: false,
+      noResults: false,
+      totalResults: 0
+    };
+
+    if (!searchTerm || searchTerm.length === 0) {
+      this.setState(newState);
+      return;
     }
 
-    this.setState({ searchTerm, results });
+    const results = search(searchTerm, this.props.definitions);
+    newState.results = results;
+    newState.totalResults = results.length;
+
+    if (results.length > MAX_RESULTS) {
+      newState.moreResults = true;
+      newState.results = results.slice(0, MAX_RESULTS);
+    } else if (results.length === 0) {
+      newState.noResults = true;
+    }
+
+    this.setState(newState);
   };
 
   pathForItem = (type, item) => {
@@ -159,10 +128,19 @@ class HomeView extends Component {
   };
 
   render() {
-    const { loading, views, searchTerm, results } = this.state;
+    const {
+      loading,
+      views,
+      searchTerm,
+      results,
+      moreResults,
+      noResults,
+      totalResults
+    } = this.state;
+
     let items = results || [];
 
-    if (items.length < 1) {
+    if (items.length < 1 && !noResults) {
       items = getRandomItems(this.props.definitions);
     }
 
@@ -175,6 +153,7 @@ class HomeView extends Component {
 
         <div className={s.body}>
           {loading && <h1>Loading...</h1>}
+          {noResults && <h2>No results</h2>}
 
           <div className={s.items}>
             {items.map(obj => (
@@ -187,6 +166,13 @@ class HomeView extends Component {
               />
             ))}
           </div>
+
+          {moreResults && (
+            <h2>
+              {totalResults - results.length} more results hidden for
+              performance.
+            </h2>
+          )}
         </div>
 
         <ReactCSSTransitionGroup

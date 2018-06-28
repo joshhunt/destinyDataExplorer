@@ -37,7 +37,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "serve": "serve -s build",
-    "test": "ava",
+    "test": "react-app-rewired test --env=jsdom",
     "deploy": "yarn run build && yarn run upload",
     "upload": "env AWS_PROFILE=money aws s3 sync build/ s3://destinysets.com/ --region=ap-southeast-2 --acl public-read",
     "generate-autotrack": "autotrack -o public/autotrack.build.js -p clean-url-tracker,url-change-tracker",
