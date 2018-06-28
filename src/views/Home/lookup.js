@@ -14,7 +14,8 @@ export default [
     'itemList',
     'emblemHash',
     'plugHash',
-    'questlineItemHash'
+    'questlineItemHash',
+    'summaryItemHash'
   ]),
 
   src('DestinyInventoryBucketDefinition', [

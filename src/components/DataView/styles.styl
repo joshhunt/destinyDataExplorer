@@ -15,6 +15,16 @@ $duration = 200ms
   margin-right: .75ch
   vertical-align: middle
 
+.code
+  font-size: 13px
+  border-radius: 3px
+  font-family: monospace
+  font-weight: 400
+  margin-left: 1em
+  padding: 3px 5px
+  background: lighten(#0D2B35, 5%)
+  border: 1px solid lighten(#0D2B35, 15%)
+
 .data
   position: absolute
   overflow: auto
@@ -26,7 +36,9 @@ $duration = 200ms
   box-shadow: 0 0px 20px rgba(black,0.3);
   will-change: transform
 
-
+.itemDescription
+  max-width: 600px
+  white-space: pre-wrap
 
 // JSON values
 .jsonLinkedValue
@@ -38,16 +50,6 @@ $duration = 200ms
   max-height: 50px
   display: inline-block
   margin-right: 1ch
-
-.hash
-  font-size: 13px
-  border-radius: 3px
-  font-family: monospace
-  font-weight: 400
-  margin-left: 1em
-  padding: 3px 5px
-  background: lighten(#0D2B35, 5%)
-  border: 1px solid lighten(#0D2B35, 15%)
 
 :global(.global-dataview-animation-enter)
   .root

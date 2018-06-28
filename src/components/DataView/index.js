@@ -86,9 +86,9 @@ export default class DataView extends Component {
                   src={item.displayProperties.icon}
                 />
               )}
-            {displayname} <code className={s.hash}>{item.hash}</code>
+            {displayname} <code className={s.code}>{item.hash}</code>{' '}
+            <code className={s.code}>{type}</code>
           </h2>
-          <h3>{type}</h3>
 
           {item.displayProperties &&
             item.displayProperties.description && (

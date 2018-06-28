@@ -1,5 +1,6 @@
 import { memoize } from 'lodash';
 import { makeAllDefsArray } from './destinyUtils';
+import SEARCH_FUNCTIONS from './searchFns';
 
 const getComparableName = memoize(item => {
   const name = item && item.displayProperties && item.displayProperties.name;
@@ -7,6 +8,7 @@ const getComparableName = memoize(item => {
 });
 
 const last = arr => arr[arr.length - 1];
+const INCLUDE_CLASSIFIED = 'include:classified';
 
 const fallbackSearchFunction = {
   filterFn: (obj, searchTerm, comparableSearchTerm) => {
@@ -20,20 +22,6 @@ const fallbackSearchFunction = {
   }
 };
 
-const SEARCH_FUNCTIONS = [
-  {
-    regex: /itemcategory:(\d+)/,
-    parseInt: true,
-    filterFn: (obj, categoryHash) => {
-      return (
-        obj.def &&
-        obj.def.itemCategoryHashes &&
-        obj.def.itemCategoryHashes.includes(categoryHash)
-      );
-    }
-  }
-];
-
 export default function search(_searchTerm, definitions) {
   if (_searchTerm.length < 3) {
     return [];
@@ -41,13 +29,18 @@ export default function search(_searchTerm, definitions) {
 
   const allDefs = makeAllDefsArray(definitions);
   const searchTerm = _searchTerm.toLowerCase();
+  let queries = tokenize(searchTerm); // eslint-disable-line
+
+  // if (queries.includes(INCLUDE_CLASSIFIED)) {
+  //   queries = queries.filter(q => q !== INCLUDE_CLASSIFIED);
+  // } else {
+  //   queries.push('not:classified');
+  // }
 
   const results = tokenize(searchTerm).reduce((acc, query) => {
     let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
       query.match(searchFn.regex)
     );
-
-    console.log({ query, searchFn });
 
     let params = [];
 

@@ -56,10 +56,12 @@ class HomeView extends Component {
     const MAX_RESULTS = 150;
     const searchTerm = ev.target.value;
 
+    const empty = [];
+
     const newState = {
       searchTerm,
-      results: [],
-      moreResults: false,
+      results: empty,
+      allResults: empty,
       noResults: false,
       totalResults: 0
     };
@@ -71,16 +73,21 @@ class HomeView extends Component {
 
     const results = search(searchTerm, this.props.definitions);
     newState.results = results;
-    newState.totalResults = results.length;
+    newState.allResults = newState.results;
 
     if (results.length > MAX_RESULTS) {
-      newState.moreResults = true;
       newState.results = results.slice(0, MAX_RESULTS);
     } else if (results.length === 0) {
       newState.noResults = true;
     }
 
     this.setState(newState);
+  };
+
+  displayAllResults = () => {
+    this.setState({
+      results: this.state.allResults
+    });
   };
 
   pathForItem = (type, item) => {
@@ -133,9 +140,8 @@ class HomeView extends Component {
       views,
       searchTerm,
       results,
-      moreResults,
-      noResults,
-      totalResults
+      allResults,
+      noResults
     } = this.state;
 
     let items = results || [];
@@ -167,12 +173,17 @@ class HomeView extends Component {
             ))}
           </div>
 
-          {moreResults && (
-            <h2>
-              {totalResults - results.length} more results hidden for
-              performance.
-            </h2>
-          )}
+          {results &&
+            allResults &&
+            results !== allResults && (
+              <h2>
+                {allResults.length - results.length} more results hidden for
+                performance.{' '}
+                <button onClick={this.displayAllResults}>
+                  Display all anyway
+                </button>
+              </h2>
+            )}
         </div>
 
         <ReactCSSTransitionGroup
