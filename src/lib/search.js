@@ -68,7 +68,6 @@ export default function search(_searchTerm, definitions) {
 }
 
 function push(arr, thing) {
-  // console.log('Pusing', thing);
   arr.push(thing);
   return arr;
 }
