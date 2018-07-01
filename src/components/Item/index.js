@@ -39,7 +39,14 @@ function SubstituteIcon({ type }) {
   );
 }
 
-export default function Item({ className, item, type, pathForItem }) {
+export default function Item({
+  className,
+  entry,
+  pathForItem,
+  onClick,
+  isCollected
+}) {
+  const { def: item, type } = entry;
   const name = (item.displayProperties && item.displayProperties.name) || (
     <em>No name</em>
   );
@@ -47,7 +54,11 @@ export default function Item({ className, item, type, pathForItem }) {
     (item.displayProperties && item.displayProperties.icon) || NO_ICON;
 
   return (
-    <Link to={pathForItem(type, item)} className={cx(s.root, className)}>
+    <Link
+      to={pathForItem(type, item)}
+      className={cx(s.root, className, isCollected && s.collected)}
+      onClick={ev => onClick(ev, entry)}
+    >
       <div className={s.accessory}>
         {icon === NO_ICON ? (
           <SubstituteIcon type={type} />

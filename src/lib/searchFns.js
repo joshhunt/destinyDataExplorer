@@ -43,27 +43,27 @@ const anyItemCategory = (...hashes) => obj => {
 const tierType = hash => obj =>
   obj.def && obj.def.inventory && obj.def.inventory.tierTypeHash === hash;
 
-const isWeapon = itemCategory(enums.WEAPON);
-const isArmor = itemCategory(enums.ARMOR);
-const isLegendary = tierType(enums.LEGENDARY);
-const isExotic = tierType(enums.EXOTIC);
-const isArmorOrnament = itemCategory(enums.ARMOR_MODS_ORNAMENTS);
-const isWeaponOrnament = itemCategory(enums.WEAPON_MODS_ORNAMENTS);
-
 export default [
   $(/itemcategory:(\d+)/i, true, isItemCategoryHash),
   $('hunter', classType(enums.HUNTER)),
   $('warlock', classType(enums.WARLOCK)),
   $('titan', classType(enums.TITAN)),
-  $('weapon', isWeapon),
-  $('armor', isArmor),
-  $('legendary', isLegendary),
-  $('exotic', isExotic),
-  $('armorornament', isArmorOrnament),
-  $('weaponornament', isWeaponOrnament),
+
+  $('legendary', tierType(enums.LEGENDARY)),
+  $('exotic', tierType(enums.EXOTIC)),
+  $('uncommon', tierType(enums.UNCOMMON)),
+  $('rare', tierType(enums.RARE)),
+  $('common', tierType(enums.COMMON)),
+
   $('kinetic', itemCategory(enums.KINETIC_WEAPON)),
   $('energy', itemCategory(enums.ENERGY_WEAPON)),
   $('power', itemCategory(enums.POWER_WEAPON)),
+
+  $('weapon', itemCategory(enums.WEAPON)),
+  $('armor', itemCategory(enums.ARMOR)),
+
+  $('armorornament', itemCategory(enums.ARMOR_MODS_ORNAMENTS)),
+  $('weaponornament', itemCategory(enums.WEAPON_MODS_ORNAMENTS)),
   $('dummy', itemCategory(enums.DUMMIES)),
   $('ghost', itemCategory(enums.GHOST)),
   $('sparrow', itemCategory(enums.SPARROW)),
@@ -77,6 +77,9 @@ export default [
   $('shader', itemCategory(enums.SHADER)),
   $('oldemote', itemCategory(enums.EMOTES)),
   $('emote', allItemCategories(enums.EMOTES, enums.MODS2)),
+
+  $('emblem', itemCategory(enums.EMBLEM)),
+  $('classitem', itemCategory(enums.CLASS_ITEMS)),
 
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
   $('classified', obj => obj.def && obj.def.redacted)

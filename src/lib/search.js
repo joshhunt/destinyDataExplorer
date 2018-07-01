@@ -8,7 +8,7 @@ const getComparableName = memoize(item => {
 });
 
 const last = arr => arr[arr.length - 1];
-const INCLUDE_CLASSIFIED = 'include:classified';
+// const INCLUDE_CLASSIFIED = 'include:classified';
 
 const fallbackSearchFunction = {
   filterFn: (obj, searchTerm, comparableSearchTerm) => {

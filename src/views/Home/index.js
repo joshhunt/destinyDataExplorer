@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import {
+  toggleCollectMode,
+  toggleSearchHelp,
+  addCollectedItem,
+  removeCollectedItem
+} from 'src/store/app';
 import { setBulkDefinitions } from 'src/store/definitions';
 import { getAllDefinitions } from 'src/lib/definitions';
 import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
@@ -134,7 +140,33 @@ class HomeView extends Component {
     return { definitionType: shortType, item };
   };
 
+  onItemClick = (ev, entry) => {
+    if (this.props.collectModeEnabled) {
+      ev.preventDefault();
+
+      if (entry.type !== 'DestinyInventoryItemDefinition') {
+        return;
+      }
+
+      const entryToAdd = { ...entry, def: undefined };
+
+      if (this.props.collectedItems[entry.dxId]) {
+        this.props.removeCollectedItem(entryToAdd);
+      } else {
+        this.props.addCollectedItem(entryToAdd);
+      }
+    }
+  };
+
   render() {
+    const {
+      collectModeEnabled,
+      searchHelpEnabled,
+      toggleCollectMode,
+      toggleSearchHelp,
+      collectedItems
+    } = this.props;
+
     const {
       loading,
       views,
@@ -155,6 +187,10 @@ class HomeView extends Component {
         <SearchHeader
           onSearchChange={this.onSearchChange}
           searchValue={searchTerm}
+          toggleCollectMode={toggleCollectMode}
+          collectModeEnabled={collectModeEnabled}
+          searchHelpEnabled={searchHelpEnabled}
+          toggleSearchHelp={toggleSearchHelp}
         />
 
         <div className={s.body}>
@@ -162,15 +198,18 @@ class HomeView extends Component {
           {noResults && <h2>No results</h2>}
 
           <div className={s.items}>
-            {items.map(obj => (
-              <Item
-                key={`${obj.type}:${obj.key}`}
-                className={s.item}
-                item={obj.def}
-                type={obj.type}
-                pathForItem={this.pathForItem}
-              />
-            ))}
+            {items.map(obj => {
+              return (
+                <Item
+                  key={obj.dxId}
+                  entry={obj}
+                  className={s.item}
+                  pathForItem={this.pathForItem}
+                  onClick={this.onItemClick}
+                  isCollected={collectedItems[obj.dxId]}
+                />
+              );
+            })}
           </div>
 
           {results &&
@@ -215,10 +254,19 @@ class HomeView extends Component {
 
 function mapStateToProps(state) {
   return {
-    definitions: state.definitions
+    definitions: state.definitions,
+    collectModeEnabled: state.app.collectModeEnabled,
+    searchHelpEnabled: state.app.searchHelpEnabled,
+    collectedItems: state.app.collectedItems
   };
 }
 
-const mapDispatchToActions = { setBulkDefinitions };
+const mapDispatchToActions = {
+  setBulkDefinitions,
+  toggleCollectMode,
+  toggleSearchHelp,
+  addCollectedItem,
+  removeCollectedItem
+};
 
 export default connect(mapStateToProps, mapDispatchToActions)(HomeView);

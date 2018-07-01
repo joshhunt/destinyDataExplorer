@@ -1,3 +1,5 @@
+import { makePayloadAction } from './utils';
+
 export const SET_BULK_DEFINITIONS = 'Set bulk definitions';
 
 export default function definitionsReducer(state = {}, { type, payload }) {
@@ -13,6 +15,4 @@ export default function definitionsReducer(state = {}, { type, payload }) {
   }
 }
 
-export function setBulkDefinitions(payload) {
-  return { type: SET_BULK_DEFINITIONS, payload };
-}
+export const setBulkDefinitions = makePayloadAction(SET_BULK_DEFINITIONS);

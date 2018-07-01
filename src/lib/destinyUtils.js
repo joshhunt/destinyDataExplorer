@@ -80,6 +80,7 @@ export const makeAllDefsArray = memoize(allDefs => {
     return [
       ...acc,
       ...toPairs(defs).map(([key, def]) => ({
+        dxId: `${type}:${key}`, // Data Explorer-specific ID, (hopefully) globally unique across all entries
         type, // definition type
         key, // definition key, like hash
         def // the definition item itself

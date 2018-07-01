@@ -1,10 +1,13 @@
-.root
+$bg = #16171A
+$textColor = #FFFFFF
+
+.main
   display: flex
   align-items: center
-  background: rgba(white, .05)
+  background: $bg
   font-size: 20px
   padding: 15px
-  color: rgba(white, .8)
+  color: textColor
 
 .searchField
   flex: 1 0 auto
@@ -19,3 +22,47 @@
 .logo
   height: 1.3em
   margin-right: .5em
+
+._buttonBase
+  height: 33px
+  width: 33px
+  cursor: pointer
+  transition: 100ms ease-in-out
+  outline: none !important
+
+.bigButton
+  composes: _buttonBase
+  background: #2E2F31
+  font-size: 20px
+  color: $textColor
+  border: 1px solid #2E2F31
+  border-radius: 2px
+
+  &:hover
+    background: #393A3C
+    border-color: #393A3C
+
+.buttonInner
+  width: 100%
+  height: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+
+.bigButtonActive
+  composes: bigButton
+  background: $textColor !important
+  border-color: $textColor !important
+  color: #2E2F31 !important
+
+.subtleButton
+  composes: _buttonBase
+  font-size: 15px
+  background: none
+  color: rgba(white, .5)
+  border: none
+  margin-right: 10px
+
+.subtleButtonActive
+  composes: subtleButton
+  color: rgba(white, .95)
