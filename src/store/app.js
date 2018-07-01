@@ -2,7 +2,7 @@ import { uniq } from 'lodash';
 import { makeSimpleAction, makePayloadAction, toggle } from './utils';
 
 const INITIAL_STATE = {
-  collectModeEnabled: true,
+  collectModeEnabled: false,
   searchHelpEnabled: false,
   collectedItems: {}
 };

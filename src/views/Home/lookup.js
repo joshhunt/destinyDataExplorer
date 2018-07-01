@@ -15,7 +15,8 @@ export default [
     'emblemHash',
     'plugHash',
     'questlineItemHash',
-    'summaryItemHash'
+    'summaryItemHash',
+    'displayItemHash'
   ]),
 
   src('DestinyInventoryBucketDefinition', [
@@ -38,6 +39,10 @@ export default [
   ]),
 
   src('DestinyActivityTypeDefinition', ['activityTypeHash']),
+
+  src('DestinyVendorGroupDefinition', ['vendorGroupHash']),
+
+  src('DestinyFactionDefinition', ['factionHash']),
 
   src('DestinyActivityDefinition', [
     'activityHash',

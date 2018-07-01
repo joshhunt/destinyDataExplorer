@@ -59,10 +59,14 @@ $textColor = #FFFFFF
   composes: _buttonBase
   font-size: 15px
   background: none
-  color: rgba(white, .5)
+  color: rgba(white, .4)
   border: none
   margin-right: 10px
+  transition: 100ms ease-in-out
+
+  &:hover
+    color: rgba(white, .6)
 
 .subtleButtonActive
   composes: subtleButton
-  color: rgba(white, .95)
+  color: rgba(white, .95) !important
