@@ -1,3 +1,5 @@
+$collectDrawerWidth = 270px
+
 .root
   height: 100vh // TODO: not going to be full height properly
   display: flex
@@ -7,8 +9,17 @@
   position: relative
   z-index: 1
   flex: 1
-  overflow: scroll
+  display: flex
+
+.main
+  height: 100%
+  width: 100%
   padding: 10px
+  overflow: scroll
+  // transition: width 250ms ease-in-out
+
+  // &.collectDrawerOpen
+  //   width: "calc(100% - %s)" % $collectDrawerWidth
 
 .items
   display: flex
@@ -30,3 +41,15 @@
     width: auto
     flex: 1 0 50%
 
+.collectDrawer
+  width: $collectDrawerWidth
+  height: 100%
+  padding: 10px
+
+.collectDrawerInner
+  width: 100%
+  height: 100%
+  padding: 10px
+  background: rgba(white, .075)
+  border-radius: 2px
+  overflow: scroll

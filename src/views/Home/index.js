@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import cx from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import {
@@ -13,6 +14,7 @@ import { getAllDefinitions } from 'src/lib/definitions';
 import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
 import search from 'src/lib/search';
 
+import CollectDrawer from 'src/components/CollectDrawer';
 import SearchHeader from 'src/components/SearchHeader';
 import DataView from 'src/components/DataView';
 import Item from 'src/components/Item';
@@ -164,7 +166,8 @@ class HomeView extends Component {
       searchHelpEnabled,
       toggleCollectMode,
       toggleSearchHelp,
-      collectedItems
+      collectedItems,
+      definitions
     } = this.props;
 
     const {
@@ -194,35 +197,51 @@ class HomeView extends Component {
         />
 
         <div className={s.body}>
-          {loading && <h1>Loading...</h1>}
-          {noResults && <h2>No results</h2>}
+          <div
+            className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
+          >
+            {loading && <h1>Loading...</h1>}
+            {noResults && <h2>No results</h2>}
+            <div className={s.items}>
+              {items.map(obj => {
+                return (
+                  <Item
+                    key={obj.dxId}
+                    entry={obj}
+                    className={s.item}
+                    pathForItem={this.pathForItem}
+                    onClick={this.onItemClick}
+                    isCollected={collectedItems[obj.dxId]}
+                  />
+                );
+              })}
+            </div>
 
-          <div className={s.items}>
-            {items.map(obj => {
-              return (
-                <Item
-                  key={obj.dxId}
-                  entry={obj}
-                  className={s.item}
-                  pathForItem={this.pathForItem}
-                  onClick={this.onItemClick}
-                  isCollected={collectedItems[obj.dxId]}
-                />
-              );
-            })}
+            {results &&
+              allResults &&
+              results !== allResults && (
+                <h2>
+                  {allResults.length - results.length} more results hidden for
+                  performance.{' '}
+                  <button onClick={this.displayAllResults}>
+                    Display all anyway
+                  </button>
+                </h2>
+              )}
           </div>
 
-          {results &&
-            allResults &&
-            results !== allResults && (
-              <h2>
-                {allResults.length - results.length} more results hidden for
-                performance.{' '}
-                <button onClick={this.displayAllResults}>
-                  Display all anyway
-                </button>
-              </h2>
-            )}
+          {collectModeEnabled && (
+            <div className={s.side}>
+              <div className={s.collectDrawer}>
+                <div className={s.collectDrawerInner}>
+                  <CollectDrawer
+                    items={collectedItems}
+                    definitions={definitions}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <ReactCSSTransitionGroup
