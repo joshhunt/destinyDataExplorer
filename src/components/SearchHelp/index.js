@@ -70,10 +70,35 @@ const HELP_TEXT = [
   }
 ];
 
-export default function SearchHelp() {
+export default function SearchHelp({ definitions }) {
+  console.log('definitions:', definitions);
   return (
     <div className={s.root}>
-      <div className={s.inner}>
+      <div className={s.one}>
+        <h2 className={s.title}>Supported tables</h2>
+        <table className={s.table}>
+          <thead className={s.tableHeader}>
+            <tr>
+              <td className={s.filterCell}>Table name</td>
+              <td className={s.descriptionCell}>Items</td>
+            </tr>
+          </thead>
+
+          <tbody>
+            {Object.keys(definitions).map((tableName, index) => (
+              <tr key={index} className={s.row}>
+                <td className={s.filterCell}>{tableName}</td>
+                <td className={s.descriptionCell}>
+                  {Object.keys(definitions[tableName]).length}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className={s.two}>
+        <h2 className={s.title}>Filters</h2>
         <table className={s.table}>
           <thead className={s.tableHeader}>
             <tr>

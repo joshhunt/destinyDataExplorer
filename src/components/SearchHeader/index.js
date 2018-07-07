@@ -2,11 +2,13 @@ import React from 'react';
 
 import Icon from 'src/components/Icon';
 import SearchHelp from 'src/components/SearchHelp';
+import Modal from 'src/components/Modal';
 
 import s from './styles.styl';
 import logo from './logo.svg';
 
 export default function SearchHeader({
+  definitions,
   onSearchChange,
   searchValue,
   collectModeEnabled,
@@ -51,7 +53,9 @@ export default function SearchHeader({
         </button>
       </div>
 
-      {searchHelpEnabled && <SearchHelp />}
+      <Modal isOpen={searchHelpEnabled} onRequestClose={toggleSearchHelp}>
+        <SearchHelp definitions={definitions} />
+      </Modal>
     </div>
   );
 }

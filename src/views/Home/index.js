@@ -198,6 +198,7 @@ class HomeView extends Component {
     return (
       <div className={s.root}>
         <SearchHeader
+          definitions={this.props.definitions}
           onSearchChange={this.onSearchChange}
           searchValue={searchTerm}
           toggleCollectMode={toggleCollectMode}
