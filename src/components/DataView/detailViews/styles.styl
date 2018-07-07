@@ -5,6 +5,9 @@
 .section + .section
   margin-top: 15px
 
+.title
+  margin: 0 0 5px 0
+
 .sectionTitle
   border-bottom: 1px solid rgba(white, .3)
   font-size: 16px
@@ -30,9 +33,19 @@
     width: auto
     flex: 1 0 50%
 
-// .sectionItemList
-//   margin: -5px
+.socket
+  composes: item
+  margin: 5px
+  background: rgba(black, .15)
 
+  .item
+    padding: 0
+
+.socketAlts
+  opacity: .6
+
+  .item
+    padding-top: 5px
 
 :global
   .react-tabs__tab
