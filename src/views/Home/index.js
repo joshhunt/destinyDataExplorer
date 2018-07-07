@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { isString } from 'lodash';
 import cx from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -71,7 +72,7 @@ class HomeView extends Component {
 
   onSearchChange = ev => {
     const MAX_RESULTS = 150;
-    const searchTerm = ev.target.value;
+    const searchTerm = isString(ev) ? ev : ev.target.value;
 
     const empty = [];
 
@@ -99,6 +100,10 @@ class HomeView extends Component {
     }
 
     this.setState(newState);
+
+    if (this.props.searchHelpEnabled) {
+      this.props.toggleSearchHelp();
+    }
   };
 
   displayAllResults = () => {

@@ -54,7 +54,7 @@ export default function SearchHeader({
       </div>
 
       <Modal isOpen={searchHelpEnabled} onRequestClose={toggleSearchHelp}>
-        <SearchHelp definitions={definitions} />
+        <SearchHelp definitions={definitions} setSearchValue={onSearchChange} />
       </Modal>
     </div>
   );

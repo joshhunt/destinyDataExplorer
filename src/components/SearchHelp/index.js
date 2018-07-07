@@ -70,7 +70,7 @@ const HELP_TEXT = [
   }
 ];
 
-export default function SearchHelp({ definitions }) {
+export default function SearchHelp({ definitions, setSearchValue }) {
   console.log('definitions:', definitions);
   return (
     <div className={s.root}>
@@ -87,7 +87,12 @@ export default function SearchHelp({ definitions }) {
           <tbody>
             {Object.keys(definitions).map((tableName, index) => (
               <tr key={index} className={s.row}>
-                <td className={s.filterCell}>{tableName}</td>
+                <td
+                  className={s.tableNameCell}
+                  onClick={() => setSearchValue(tableName)}
+                >
+                  {tableName}
+                </td>
                 <td className={s.descriptionCell}>
                   {Object.keys(definitions[tableName]).length}
                 </td>

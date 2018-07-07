@@ -15,7 +15,6 @@ function ImageValue({ value }) {
   return (
     <a href={bungieUrl(value)} className={s.jsonLinkedValue}>
       <BungieImage className={s.jsonImage} src={value} alt="preview" />
-      "{value}"
     </a>
   );
 }
