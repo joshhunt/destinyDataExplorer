@@ -1,6 +1,5 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { groupBy } from 'lodash';
 import 'react-tabs/style/react-tabs.css';
 
 import Item from 'src/components/Item';
