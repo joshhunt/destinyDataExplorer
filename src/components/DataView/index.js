@@ -7,7 +7,15 @@ import JSONTree from 'react-json-tree';
 import BungieImage from 'src/components/BungieImage';
 import { getNameForItem, bungieUrl } from 'src/lib/destinyUtils';
 
+import Vendor from './detailViews/Vendor';
+import InventoryItem from './detailViews/InventoryItem';
+
 import s from './styles.styl';
+
+const DETAIL_VIEWS = {
+  DestinyVendorDefinition: Vendor,
+  DestinyInventoryItemDefinition: InventoryItem
+};
 
 const isImage = value => isString(value) && value.match(/\.(png|jpg|jpeg)$/);
 
@@ -61,8 +69,18 @@ export default class DataView extends Component {
   };
 
   render() {
-    const { type, item, className, depth } = this.props;
+    const {
+      type,
+      item,
+      className,
+      depth,
+      definitions,
+      pathForItem
+    } = this.props;
     const displayname = getNameForItem(item, true) || <em>No name</em>;
+
+    const DetailView = DETAIL_VIEWS[type];
+    console.log({ DetailView, type });
 
     return (
       <div
@@ -90,6 +108,14 @@ export default class DataView extends Component {
                 {item.displayProperties.description}
               </p>
             )}
+
+          {DetailView && (
+            <DetailView
+              item={item}
+              definitions={definitions}
+              pathForItem={pathForItem}
+            />
+          )}
 
           <JSONTree data={item} valueRenderer={this.valueRenderer} />
         </div>

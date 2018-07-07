@@ -57,7 +57,7 @@ export default function Item({
     <Link
       to={pathForItem(type, item)}
       className={cx(s.root, className, isCollected && s.collected)}
-      onClick={ev => onClick(ev, entry)}
+      onClick={ev => onClick && onClick(ev, entry)}
     >
       <div className={s.accessory}>
         {icon === NO_ICON ? (

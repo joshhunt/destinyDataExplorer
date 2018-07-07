@@ -277,6 +277,7 @@ class HomeView extends Component {
               this.props.definitions[type] && (
                 <div key={`${type}:${hash}`}>
                   <DataView
+                    definitions={definitions}
                     depth={index + 1}
                     className={s.dataView}
                     item={this.props.definitions[type][hash]}

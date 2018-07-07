@@ -1,0 +1,45 @@
+.root
+  padding: 10px
+  background: rgba(black,.15)
+
+.section + .section
+  margin-top: 15px
+
+.sectionTitle
+  border-bottom: 1px solid rgba(white, .3)
+  font-size: 16px
+
+.sectionItemList
+  display: flex
+  flex-wrap: wrap
+
+.item
+  font-size: 14px
+  min-width: 200px
+  flex: 0 0 auto
+  padding: 5px
+  width: 16%
+
+  @media screen and (max-width: 1020px)
+    width: 25%
+
+  @media screen and (max-width: 820px)
+    width: 33.3333%
+
+  @media screen and (max-width: 620px)
+    width: auto
+    flex: 1 0 50%
+
+// .sectionItemList
+//   margin: -5px
+
+
+:global
+  .react-tabs__tab
+    padding: 5px 10px
+
+  .react-tabs__tab--selected
+    background: rgba(white, .1)
+    color: inherit
+    border-radius: 3px 3px 0 0
+    border-bottom: 1px solid #1D434B
