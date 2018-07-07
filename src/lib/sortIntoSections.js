@@ -1,4 +1,4 @@
-import { get, uniqBy, groupBy, sortBy, mapValues } from 'lodash';
+import { get, groupBy, sortBy, mapValues } from 'lodash';
 
 import {
   HUNTER,

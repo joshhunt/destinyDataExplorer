@@ -16,7 +16,6 @@ db.version(1).stores({
 
 function fetchManifestDBPath() {
   return getDestiny('/platform/Destiny2/Manifest/').then(data => {
-    console.log('Got Manifest manifest back', data);
     const englishUrl = data.mobileWorldContentPaths.en;
     return englishUrl;
   });
@@ -131,7 +130,7 @@ function allDataFromRemote(dbPath) {
     });
 }
 
-export function getAllDefinitions() {
+export function getAllDefinitions(progressCb) {
   return fetchManifestDBPath()
     .then(dbPath => {
       return Promise.all([db.allData.get(dbPath), Promise.resolve(dbPath)]);
@@ -140,6 +139,8 @@ export function getAllDefinitions() {
       if (cachedData) {
         return cachedData.data;
       }
+
+      progressCb({ updating: true });
 
       return allDataFromRemote(dbPath).then(allData => {
         db.allData.put({ key: dbPath, data: allData });

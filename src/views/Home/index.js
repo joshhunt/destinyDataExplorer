@@ -14,6 +14,7 @@ import { getAllDefinitions } from 'src/lib/definitions';
 import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
 import search from 'src/lib/search';
 
+import Loading from 'src/components/Loading';
 import CollectDrawer from 'src/components/CollectDrawer';
 import SearchHeader from 'src/components/SearchHeader';
 import DataView from 'src/components/DataView';
@@ -36,14 +37,22 @@ function parsePath(splat) {
 }
 
 class HomeView extends Component {
-  state = { loading: true, views: [], searchTerm: '', results: null };
+  state = {
+    loading: true,
+    updating: false,
+    views: [],
+    searchTerm: '',
+    results: null
+  };
 
   componentDidMount() {
     if (this.props.routeParams.splat) {
       this.updateViews();
     }
 
-    getAllDefinitions().then(defs => {
+    getAllDefinitions(({ updating }) => {
+      this.setState({ updating });
+    }).then(defs => {
       this.setState({ loading: false });
       this.props.setBulkDefinitions(defs);
     });
@@ -172,6 +181,7 @@ class HomeView extends Component {
 
     const {
       loading,
+      updating,
       views,
       searchTerm,
       results,
@@ -200,8 +210,15 @@ class HomeView extends Component {
           <div
             className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
           >
-            {loading && <h1>Loading...</h1>}
+            {loading && (
+              <Loading
+                children={
+                  updating ? 'Downloading new data from Bungie...' : null
+                }
+              />
+            )}
             {noResults && <h2>No results</h2>}
+
             <div className={s.items}>
               {items.map(obj => {
                 return (

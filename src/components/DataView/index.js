@@ -27,7 +27,6 @@ function toTitleCase(str) {
 export default class DataView extends Component {
   rootClick = ev => {
     if (ev.target === this.ref) {
-      console.log('close it');
       this.props.onRequestClose && this.props.onRequestClose();
     }
   };
@@ -60,10 +59,6 @@ export default class DataView extends Component {
         {`<${toTitleCase(definitionType)} ${displayName} ${prettyValue}>`}
       </Link>
     );
-  };
-
-  onItemClick = (...args) => {
-    console.log('onItemClick', args);
   };
 
   render() {

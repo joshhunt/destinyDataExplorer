@@ -1,4 +1,3 @@
-import { uniq } from 'lodash';
 import { makeSimpleAction, makePayloadAction, toggle } from './utils';
 
 const INITIAL_STATE = {
@@ -13,7 +12,6 @@ const ADD_COLLECTED_ITEM = 'Add collected item';
 const REMOVE_COLLECTED_ITEM = 'Remove collected item';
 
 export default function appReducer(state = INITIAL_STATE, action) {
-  console.log('action:', action);
   switch (action.type) {
     case TOGGLE_COLLECT_MODE:
       return toggle(state, 'collectModeEnabled');
