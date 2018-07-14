@@ -6,6 +6,20 @@ const isItemCategoryHash = (obj, hash) =>
   obj.def.itemCategoryHashes &&
   obj.def.itemCategoryHashes.includes(hash);
 
+const hasPerk = (obj, hash) => {
+  const item = obj.def;
+
+  if (!(item && item.sockets)) {
+    return false;
+  }
+
+  const it = item.sockets.socketEntries.find(socket => {
+    return socket.singleInitialItemHash === hash;
+  });
+
+  return !!it;
+};
+
 const classType = value => obj => obj.def.classType === value;
 
 const $ = (term, secondArg, filterFn) => {
@@ -45,6 +59,7 @@ const tierType = hash => obj =>
 
 export default [
   $(/itemcategory:(\d+)/i, true, isItemCategoryHash),
+  $(/hasperk:(\d+)/i, true, hasPerk),
   $('hunter', classType(enums.HUNTER)),
   $('warlock', classType(enums.WARLOCK)),
   $('titan', classType(enums.TITAN)),

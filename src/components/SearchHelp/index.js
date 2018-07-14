@@ -29,6 +29,11 @@ const HELP_TEXT = [
       'Partial-match search on data types / tables from mobileWorldContent e.g. "Item" for all items from the DestinyInventoryItemDefintions table'
   },
   {
+    filter: 'hasPerk:[perkItemHash]',
+    description:
+      'Searches items that has the specified perk. Note: the hash must be the InventoryItem representation of the perk, not the SandboxPerk. e.g. hasPerk:216781713'
+  },
+  {
     filter: list('is:hunter', 'is:titan', 'is:warlock'),
     description: 'Searches items based on class'
   },
