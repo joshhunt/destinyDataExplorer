@@ -80,7 +80,6 @@ export default class DataView extends Component {
     const displayname = getNameForItem(item, true) || <em>No name</em>;
 
     const DetailView = DETAIL_VIEWS[type];
-    console.log({ DetailView, type });
 
     return (
       <div
@@ -98,7 +97,8 @@ export default class DataView extends Component {
                   src={item.displayProperties.icon}
                 />
               )}
-            {displayname} <code className={s.code}>{item.hash}</code>{' '}
+            {displayname}{' '}
+            {item.hash && <code className={s.code}>{item.hash}</code>}{' '}
             <code className={s.code}>{type}</code>
           </h2>
 

@@ -1,10 +1,11 @@
 import { memoize } from 'lodash';
 import { makeAllDefsArray } from './destinyUtils';
 import SEARCH_FUNCTIONS from './searchFns';
+import normalizeText from 'normalize-text';
 
 const getComparableName = memoize(item => {
   const name = item && item.displayProperties && item.displayProperties.name;
-  return name ? name.toLowerCase() : name;
+  return name ? normalizeText(name) : name;
 });
 
 const last = arr => arr[arr.length - 1];
