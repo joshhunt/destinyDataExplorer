@@ -50,7 +50,9 @@ export default function Item({
   const { def: item, type } = entry;
   const name = getNameForItem(item, true) || <em>No name</em>;
   const icon =
-    (item.displayProperties && item.displayProperties.icon) || NO_ICON;
+    (item.displayProperties && item.displayProperties.icon) ||
+    item.iconImage ||
+    NO_ICON;
 
   return (
     <Link

@@ -82,6 +82,12 @@ export default class DataView extends Component {
 
     const DetailView = DETAIL_VIEWS[type];
 
+    const icon =
+      (item.displayProperties &&
+        item.displayProperties.hasIcon &&
+        item.displayProperties.icon) ||
+      item.iconImage;
+
     return (
       <div
         className={cx(s.root, className)}
@@ -90,14 +96,7 @@ export default class DataView extends Component {
       >
         <div className={s.data} style={{ left: 100 * depth }}>
           <h2>
-            {item.displayProperties &&
-              item.displayProperties.hasIcon && (
-                <BungieImage
-                  className={s.titleIcon}
-                  alt=""
-                  src={item.displayProperties.icon}
-                />
-              )}
+            {icon && <BungieImage className={s.titleIcon} alt="" src={icon} />}
             {displayname}{' '}
             {item.hash && <code className={s.code}>{item.hash}</code>}{' '}
             <code className={s.code}>{type}</code>
