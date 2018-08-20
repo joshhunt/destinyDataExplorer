@@ -14,6 +14,8 @@ db.version(1).stores({
   allData: '&key, data'
 });
 
+const REVISION = 'rev2';
+
 function fetchManifestDBPath() {
   return getDestiny('/platform/Destiny2/Manifest/').then(data => {
     const englishUrl = data.mobileWorldContentPaths.en;
@@ -138,7 +140,8 @@ function allDataFromRemote(dbPath) {
 export function getAllDefinitions(progressCb) {
   return fetchManifestDBPath()
     .then(dbPath => {
-      return Promise.all([db.allData.get(dbPath), Promise.resolve(dbPath)]);
+      const key = `${REVISION}:${dbPath}`;
+      return Promise.all([db.allData.get(key), Promise.resolve(dbPath)]);
     })
     .then(([cachedData, dbPath]) => {
       if (cachedData) {
@@ -147,8 +150,9 @@ export function getAllDefinitions(progressCb) {
 
       progressCb({ updating: true });
 
+      const key = `${REVISION}:${dbPath}`;
       return allDataFromRemote(dbPath).then(allData => {
-        db.allData.put({ key: dbPath, data: allData });
+        db.allData.put({ key, data: allData });
 
         return allData;
       });
