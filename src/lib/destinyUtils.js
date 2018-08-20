@@ -76,6 +76,8 @@ export function getNameForItem(item, noQuotes) {
     foundName = item.progressDescription;
   } else if (item.statName) {
     foundName = item.statName;
+  } else if (item.tierName) {
+    foundName = item.tierName;
   }
 
   if (noQuotes) {

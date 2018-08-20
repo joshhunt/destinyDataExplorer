@@ -67,6 +67,8 @@ export default [
     'parentCategoryHashes'
   ]),
 
+  src('DestinyMedalTierDefinition', ['medalTierHash']),
+
   src('DestinyLoreDefinition', ['loreHash']),
   src('DestinyRaceDefinition', ['raceHash']),
   src('DestinyClassDefinition', ['classHash']),
