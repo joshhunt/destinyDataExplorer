@@ -38,6 +38,10 @@ const HELP_TEXT = [
     description: 'Searches items based on class'
   },
   {
+    filter: 'is:medal',
+    description: 'Returns HistoricalStats for medals'
+  },
+  {
     filter: list(
       'is:legendary',
       'is:exotic',

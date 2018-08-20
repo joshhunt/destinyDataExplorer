@@ -96,6 +96,8 @@ export default [
   $('emblem', itemCategory(enums.EMBLEM)),
   $('classitem', itemCategory(enums.CLASS_ITEMS)),
 
+  $('medal', obj => obj.def && obj.def.medalTierIdentifier),
+
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
   $('classified', obj => obj.def && obj.def.redacted)
 ];
