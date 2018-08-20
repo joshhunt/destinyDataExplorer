@@ -53,10 +53,16 @@ class HomeView extends Component {
 
     getAllDefinitions(({ updating }) => {
       this.setState({ updating });
-    }).then(defs => {
-      this.setState({ loading: false });
-      this.props.setBulkDefinitions(defs);
-    });
+    })
+      .then(defs => {
+        this.setState({ loading: false });
+        this.props.setBulkDefinitions(defs);
+      })
+      .catch(err => {
+        console.log('omg error');
+        console.error(err);
+        this.setState({ error: true, loading: false, updating: false });
+      });
   }
 
   componentDidUpdate(prevProps) {
@@ -73,6 +79,7 @@ class HomeView extends Component {
   onSearchChange = ev => {
     const MAX_RESULTS = 150;
     const searchTerm = isString(ev) ? ev : ev.target.value;
+    console.log('searchTerm:', searchTerm);
 
     const empty = [];
 
@@ -112,14 +119,17 @@ class HomeView extends Component {
     });
   };
 
-  pathForItem = (type, item) => {
+  pathForItem = (type, obj) => {
+    // TODO: some places in the code pass through a definition item directly rather than one of our
+    // 'obj' wrappers
     let url = '';
     const shortType = makeTypeShort(type);
+    const key = obj.def ? obj.key : obj.hash;
 
     if (this.props.routeParams.splat) {
-      url = `${this.props.location.pathname}/${shortType}:${item.hash}`;
+      url = `${this.props.location.pathname}/${shortType}:${key}`;
     } else {
-      url = `/i/${shortType}:${item.hash}`;
+      url = `/i/${shortType}:${key}`;
     }
 
     return url;
@@ -191,7 +201,8 @@ class HomeView extends Component {
       searchTerm,
       results,
       allResults,
-      noResults
+      noResults,
+      error
     } = this.state;
 
     let items = results || [];
@@ -223,6 +234,7 @@ class HomeView extends Component {
                 }
               />
             )}
+            {error && <Loading noSpin children="Error loading manifest" />}
             {noResults && <h2>No results</h2>}
 
             <div className={s.items}>

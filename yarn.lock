@@ -297,43 +297,43 @@
   version "1.0.0"
   resolved "https://codeload.github.com/DestinyItemManager/zip.js/tar.gz/6931dae24f729399100ee7a6fe5dce43007581f0"
 
-"@fortawesome/fontawesome-common-types@^0.2.0-9":
-  version "0.2.0"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.0.tgz#6bcf6481030f59e7ffd1a40a67cd464d47780f6a"
+"@fortawesome/fontawesome-common-types@^0.2.2":
+  version "0.2.2"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.2.tgz#7fd64eacf7f64e4d7619d21b0b2f2467f5a70611"
 
-"@fortawesome/fontawesome-svg-core@^1.2.0-14":
-  version "1.2.0-14"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.0-14.tgz#48100da29b39658fad374ebd1386161ab35af564"
+"@fortawesome/fontawesome-svg-core@1.2.2":
+  version "1.2.2"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.2.tgz#b431e7efb3e3a1887e596daa6ed0d241d2d1aea5"
   dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.0-9"
+    "@fortawesome/fontawesome-common-types" "^0.2.2"
 
-"@fortawesome/free-solid-svg-icons@^5.1.0-11":
-  version "5.1.0-11"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.1.0-11.tgz#4a346eaada93276edb133b140492e8d7cfa2aa47"
+"@fortawesome/free-solid-svg-icons@5.2.0":
+  version "5.2.0"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.2.0.tgz#b51c1d49278ef538a97c0ce9575a1b54cc1a52dc"
   dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.0-9"
+    "@fortawesome/fontawesome-common-types" "^0.2.2"
 
-"@fortawesome/pro-light-svg-icons@^5.1.0-11":
-  version "5.1.0-11"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/pro-light-svg-icons/-/pro-light-svg-icons-5.1.0-11.tgz#137f2c35b03fb5d8510ee42bbf8c5f2a0d6424f2"
+"@fortawesome/pro-light-svg-icons@5.2.0":
+  version "5.2.0"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/pro-light-svg-icons/-/pro-light-svg-icons-5.2.0.tgz#03eee61be292249939c424452982b2ec34496b00"
   dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.0-9"
+    "@fortawesome/fontawesome-common-types" "^0.2.2"
 
-"@fortawesome/pro-regular-svg-icons@^5.1.0-11":
-  version "5.1.0-11"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/pro-regular-svg-icons/-/pro-regular-svg-icons-5.1.0-11.tgz#0828391b2ee0323ce7e7941aa14437bcd5bff32b"
+"@fortawesome/pro-regular-svg-icons@5.2.0":
+  version "5.2.0"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/pro-regular-svg-icons/-/pro-regular-svg-icons-5.2.0.tgz#829129b77976294133961fef73a6d3566827d347"
   dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.0-9"
+    "@fortawesome/fontawesome-common-types" "^0.2.2"
 
-"@fortawesome/pro-solid-svg-icons@^5.1.0-11":
-  version "5.1.0-11"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/pro-solid-svg-icons/-/pro-solid-svg-icons-5.1.0-11.tgz#be3503ec5f02b8faac150f19ee527154cd7b7197"
+"@fortawesome/pro-solid-svg-icons@5.2.0":
+  version "5.2.0"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/pro-solid-svg-icons/-/pro-solid-svg-icons-5.2.0.tgz#8ccca8eda13b0242e9d3c6a0698699ab86881a70"
   dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.0-9"
+    "@fortawesome/fontawesome-common-types" "^0.2.2"
 
-"@fortawesome/react-fontawesome@^0.1.0-11":
-  version "0.1.0-11"
-  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.0-11.tgz#83299a5c09bec79522abba33e93bff796f2f6d4e"
+"@fortawesome/react-fontawesome@0.1.2":
+  version "0.1.2"
+  resolved "https://npm.fontawesome.com/7F10CA2F-21F6-4CEE-84B6-D37F1A7FCFF6/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.2.tgz#baad4a6508867567aea20c1551bf62ff090d8121"
   dependencies:
     humps "^2.0.1"
     prop-types "^15.5.10"
@@ -5273,7 +5273,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-"lodash@>=3.5 <5", lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0:
+"lodash@>=3.5 <5", lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -5774,6 +5774,12 @@ normalize-range@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
 
+normalize-text@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/normalize-text/-/normalize-text-0.4.2.tgz#08236be94a6b6afabf918a727fe8f40725bdf027"
+  dependencies:
+    uncouple "^0.3.1"
+
 normalize-url@^1.4.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-1.9.1.tgz#2cc0d66b31ea23036458436e3620d85954c66c3c"
@@ -5851,7 +5857,7 @@ object-hash@^1.1.4:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-1.3.0.tgz#76d9ba6ff113cf8efc0d996102851fe6723963e2"
 
-object-keys@^1.0.8:
+object-keys@^1.0.12, object-keys@^1.0.8:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
 
@@ -6844,6 +6850,14 @@ react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
+react-mentions@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-mentions/-/react-mentions-2.0.1.tgz#20fbdce39ffa5d3acbbcde6deeaf37e638ab89ad"
+  dependencies:
+    lodash "^4.5.1"
+    prop-types "^15.5.8"
+    substyle "^6.0.0"
+
 react-modal@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.5.1.tgz#33d38527def90ea324848f7d63e53acc4468a451"
@@ -7050,6 +7064,20 @@ recast@^0.11.17:
     esprima "~3.1.0"
     private "~0.1.5"
     source-map "~0.5.0"
+
+reconstruct-descriptors@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/reconstruct-descriptors/-/reconstruct-descriptors-0.2.1.tgz#c216c7aa0e37fb04dae5050b4bc5b42c9b552d0b"
+  dependencies:
+    object.getownpropertydescriptors "^2.0.3"
+    reconstruct "^0.2.1"
+
+reconstruct@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/reconstruct/-/reconstruct-0.2.1.tgz#829becfd959d8085055efa1e4d99803869de9b1e"
+  dependencies:
+    object-assign "^4.1.1"
+    object-keys "^1.0.12"
 
 recursive-readdir@2.2.1:
   version "2.2.1"
@@ -7940,6 +7968,16 @@ stylus@^0.54.5:
     sax "0.5.x"
     source-map "0.1.x"
 
+substyle@^6.0.0:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/substyle/-/substyle-6.2.1.tgz#5ac9d809dcddb0f9d287929e9dd46e6d596e31f3"
+  dependencies:
+    hoist-non-react-statics "^1.2.0"
+    invariant "^2.2.0"
+    lodash "^4.3.0"
+    prop-types "^15.5.8"
+    warning "^2.1.0"
+
 supertap@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/supertap/-/supertap-1.0.0.tgz#bd9751c7fafd68c68cf8222a29892206a119fa9e"
@@ -8283,6 +8321,12 @@ uid2@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/uid2/-/uid2-0.0.3.tgz#483126e11774df2f71b8b639dcd799c376162b82"
 
+uncouple@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/uncouple/-/uncouple-0.3.1.tgz#90d81f8b76e39f380919741dc0904fd610b9a837"
+  dependencies:
+    reconstruct-descriptors "^0.2.1"
+
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-1.0.4.tgz#2619800c4c825800efdd8343af7dd9933cbe2818"
@@ -8510,6 +8554,12 @@ walker@~1.0.5:
   resolved "https://registry.yarnpkg.com/walker/-/walker-1.0.7.tgz#2f7f9b8fd10d677262b18a884e28d19618e028fb"
   dependencies:
     makeerror "1.0.x"
+
+warning@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-2.1.0.tgz#21220d9c63afc77a8c92111e011af705ce0c6901"
+  dependencies:
+    loose-envify "^1.0.0"
 
 warning@^3.0.0:
   version "3.0.0"

@@ -1,3 +1,4 @@
+import React from 'react';
 import { memoize, toPairs } from 'lodash';
 
 import { EMBLEM, HUNTER, TITAN, WARLOCK, NO_CLASS } from 'app/lib/destinyEnums';
@@ -16,6 +17,13 @@ export const makeTypeShort = memoize(type => {
   const match = type.match(/Destiny(\w+)Definition/);
   return match ? match[1] : type;
 });
+
+export const getName = item => {
+  return (
+    (item.displayProperties && item.displayProperties.name) ||
+    item.statName || <em>No name</em>
+  );
+};
 
 export const bungieUrl = path => {
   return path.includes('//bungie.net/') ? path : `https://bungie.net${path}`;
@@ -66,6 +74,8 @@ export function getNameForItem(item, noQuotes) {
     foundName = item.displayProperties.name;
   } else if (item.progressDescription) {
     foundName = item.progressDescription;
+  } else if (item.statName) {
+    foundName = item.statName;
   }
 
   if (noQuotes) {

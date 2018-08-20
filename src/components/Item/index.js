@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { Link } from 'react-router';
 
 import { CLASSES } from 'app/lib/destinyEnums';
-import { makeTypeShort } from 'src/lib/destinyUtils';
+import { makeTypeShort, getNameForItem } from 'src/lib/destinyUtils';
 
 import BungieImage from 'src/components/BungieImage';
 import Icon from 'src/components/Icon';
@@ -24,7 +24,8 @@ const NO_ICON = '/img/misc/missing_icon_d2.png';
 const SUBSTITUTE_ICON = {
   DestinyLoreDefinition: 'book',
   DestinyItemCategoryDefinition: 'th-large',
-  DestinyInventoryBucketDefinition: 'shopping-basket'
+  DestinyInventoryBucketDefinition: 'shopping-basket',
+  DestinyHistoricalStatsDefinition: 'trophy'
 };
 
 function SubstituteIcon({ type }) {
@@ -47,15 +48,13 @@ export default function Item({
   isCollected
 }) {
   const { def: item, type } = entry;
-  const name = (item.displayProperties && item.displayProperties.name) || (
-    <em>No name</em>
-  );
+  const name = getNameForItem(item, true) || <em>No name</em>;
   const icon =
     (item.displayProperties && item.displayProperties.icon) || NO_ICON;
 
   return (
     <Link
-      to={pathForItem(type, item)}
+      to={pathForItem(type, entry)}
       className={cx(s.root, className, isCollected && s.collected)}
       onClick={ev => onClick && onClick(ev, entry)}
     >

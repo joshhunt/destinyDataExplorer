@@ -1,24 +1,29 @@
-import { memoize } from 'lodash';
 import { makeAllDefsArray } from './destinyUtils';
 import SEARCH_FUNCTIONS from './searchFns';
 import normalizeText from 'normalize-text';
 
-const getComparableName = memoize(item => {
-  const name = item && item.displayProperties && item.displayProperties.name;
-  return name ? normalizeText(name) : name;
-});
+window.normalizeText = normalizeText;
 
 const last = arr => arr[arr.length - 1];
 // const INCLUDE_CLASSIFIED = 'include:classified';
 
+const matches = (string, searchTerm) => {
+  return (
+    string && string.toLowerCase && normalizeText(string).includes(searchTerm)
+  );
+};
+
 const fallbackSearchFunction = {
   filterFn: (obj, searchTerm, comparableSearchTerm) => {
-    const comparableName = getComparableName(obj.def);
+    const displayName =
+      obj.def && obj.def.displayProperties && obj.def.displayProperties.name;
 
     return (
       obj.key === searchTerm ||
-      obj.type.toLowerCase().includes(comparableSearchTerm) ||
-      (comparableName && comparableName.includes(comparableSearchTerm))
+      matches(obj.type, comparableSearchTerm) ||
+      matches(displayName, comparableSearchTerm) ||
+      matches(obj.def.statId, comparableSearchTerm) ||
+      matches(obj.def.statName, comparableSearchTerm)
     );
   }
 };

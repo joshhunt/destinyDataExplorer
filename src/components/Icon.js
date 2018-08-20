@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 library.add(
   require('@fortawesome/pro-light-svg-icons/faBook').faBook,
+  require('@fortawesome/pro-light-svg-icons/faTrophy').faTrophy,
   require('@fortawesome/pro-light-svg-icons/faThLarge').faThLarge,
   require('@fortawesome/pro-light-svg-icons/faShoppingBasket').faShoppingBasket,
   require('@fortawesome/pro-regular-svg-icons/faPlus').faPlus,

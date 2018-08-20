@@ -78,6 +78,7 @@ export default class DataView extends Component {
       pathForItem
     } = this.props;
     const displayname = getNameForItem(item, true) || <em>No name</em>;
+    const isPerk = !!item.plug;
 
     const DetailView = DETAIL_VIEWS[type];
 
@@ -100,6 +101,7 @@ export default class DataView extends Component {
             {displayname}{' '}
             {item.hash && <code className={s.code}>{item.hash}</code>}{' '}
             <code className={s.code}>{type}</code>
+            {isPerk && <code className={s.code}>Perk</code>}
           </h2>
 
           {item.displayProperties &&

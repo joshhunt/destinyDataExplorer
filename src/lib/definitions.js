@@ -122,7 +122,12 @@ function allDataFromRemote(dbPath) {
 
       const allData = allTables.reduce((acc, tableName) => {
         console.log('Getting all records for', tableName);
-        acc[tableName] = getAllRecords(db, tableName);
+        const records = getAllRecords(db, tableName);
+
+        if (records) {
+          acc[tableName] = records;
+        }
+
         return acc;
       }, {});
 

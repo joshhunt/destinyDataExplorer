@@ -9,17 +9,22 @@ function importAsmJs() {
 }
 
 export function getAllRecords(db, table) {
-  const rows = db.exec(`SELECT json FROM ${table}`);
+  const rows = db.exec(`SELECT * FROM ${table}`);
   const result = {};
 
-  if (!rows[0]) {
+  window.__rows = rows;
+
+  const data = rows.filter(Boolean)[0];
+
+  if (!data) {
     return null;
   }
 
-  rows[0].values.forEach(row => {
-    const obj = JSON.parse(row);
-    result[obj.hash] = obj;
+  data.values.forEach(([key, json]) => {
+    const obj = JSON.parse(json);
+    result[obj.hash || key] = obj;
   });
+
   return result;
 }
 
