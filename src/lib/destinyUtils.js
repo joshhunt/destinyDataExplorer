@@ -70,14 +70,16 @@ export const getItemClass = item => {
 export function getNameForItem(item, noQuotes) {
   let foundName;
 
-  if (item.displayProperties && item.displayProperties.name) {
-    foundName = item.displayProperties.name;
-  } else if (item.progressDescription) {
-    foundName = item.progressDescription;
-  } else if (item.statName) {
-    foundName = item.statName;
-  } else if (item.tierName) {
-    foundName = item.tierName;
+  if (item) {
+    if (item.displayProperties && item.displayProperties.name) {
+      foundName = item.displayProperties.name;
+    } else if (item.progressDescription) {
+      foundName = item.progressDescription;
+    } else if (item.statName) {
+      foundName = item.statName;
+    } else if (item.tierName) {
+      foundName = item.tierName;
+    }
   }
 
   if (noQuotes) {
