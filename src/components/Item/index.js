@@ -48,6 +48,12 @@ export default function Item({
   isCollected
 }) {
   const { def: item, type } = entry;
+
+  if (!item) {
+    console.warn('Item is empty for entry', entry);
+    return null;
+  }
+
   const name = getNameForItem(item, true) || <em>No name</em>;
   const icon =
     (item.displayProperties && item.displayProperties.icon) ||
