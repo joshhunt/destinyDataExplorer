@@ -59,14 +59,17 @@ function Sockets({ item, definitions, pathForItem }) {
                 return (
                   <div className={s.socket}>
                     <div className={s.socketMain}>
-                      <Item
-                        pathForItem={pathForItem}
-                        className={s.item}
-                        entry={{
-                          type: 'DestinyInventoryItemDefinition',
-                          def: socketItem
-                        }}
-                      />
+                      {socketItem && (
+                        <Item
+                          pathForItem={pathForItem}
+                          className={s.item}
+                          entry={{
+                            type: 'DestinyInventoryItemDefinition',
+                            def: socketItem,
+                            key: socketItem.hash
+                          }}
+                        />
+                      )}
                     </div>
 
                     <div className={s.socketAlts}>
@@ -86,14 +89,17 @@ function Sockets({ item, definitions, pathForItem }) {
                           }
 
                           return (
-                            <Item
-                              pathForItem={pathForItem}
-                              className={s.item}
-                              entry={{
-                                type: 'DestinyInventoryItemDefinition',
-                                def: reusablePlugItem
-                              }}
-                            />
+                            reusablePlugItem && (
+                              <Item
+                                pathForItem={pathForItem}
+                                className={s.item}
+                                entry={{
+                                  type: 'DestinyInventoryItemDefinition',
+                                  def: reusablePlugItem,
+                                  key: reusablePlugItem.hash
+                                }}
+                              />
+                            )
                           );
                         })}
                     </div>
