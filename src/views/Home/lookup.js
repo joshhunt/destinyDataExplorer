@@ -12,7 +12,11 @@ export default [
     'parentNodeHashes'
   ]),
 
-  src('DestinyCollectibleDefinition', ['collectableHash']),
+  src('DestinyCollectibleDefinition', ['collectibleHash']),
+
+  src('DestinyMaterialRequirementSetDefinition', [
+    'acquireMaterialRequirementHash'
+  ]),
 
   src('DestinyInventoryItemDefinition', [
     'itemHash',

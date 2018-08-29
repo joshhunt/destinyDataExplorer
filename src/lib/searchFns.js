@@ -57,6 +57,11 @@ const anyItemCategory = (...hashes) => obj => {
 const tierType = hash => obj =>
   obj.def && obj.def.inventory && obj.def.inventory.tierTypeHash === hash;
 
+const sourceString = matching => obj =>
+  obj.def &&
+  obj.def.sourceString &&
+  obj.def.sourceString.toLowerCase().includes(matching);
+
 export default [
   $(/itemcategory:(\d+)/i, true, isItemCategoryHash),
   $(/hasperk:(\d+)/i, true, hasPerk),
@@ -97,6 +102,8 @@ export default [
   $('classitem', itemCategory(enums.CLASS_ITEMS)),
 
   $('medal', obj => obj.def && obj.def.medalTierIdentifier),
+
+  $(/from:lastwish/, sourceString('last wish')),
 
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
   $('classified', obj => obj.def && obj.def.redacted)

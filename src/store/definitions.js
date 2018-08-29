@@ -8,6 +8,8 @@ export default function definitionsReducer(state = {}, { type, payload }) {
     case SET_BULK_DEFINITIONS: {
       const filteded = pickBy(payload, defs => defs);
 
+      delete filteded.DestinyCollectibleDefinition;
+
       return {
         ...state,
         ...filteded
