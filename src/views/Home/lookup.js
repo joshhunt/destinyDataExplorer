@@ -6,6 +6,11 @@ const src = (type, fields) => {
 };
 
 export default [
+  src('DestinyPresentationNodeDefinition', [
+    'presentationNodeHash',
+    'parentNodeHashes'
+  ]),
+
   src('DestinyInventoryItemDefinition', [
     'itemHash',
     'singleInitialItemHash',
