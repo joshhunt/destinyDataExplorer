@@ -8,8 +8,11 @@ const src = (type, fields) => {
 export default [
   src('DestinyPresentationNodeDefinition', [
     'presentationNodeHash',
+    'parentPresentationNodeHashes',
     'parentNodeHashes'
   ]),
+
+  src('DestinyCollectibleDefinition', ['collectableHash']),
 
   src('DestinyInventoryItemDefinition', [
     'itemHash',
