@@ -104,6 +104,10 @@ export default [
   $('medal', obj => obj.def && obj.def.medalTierIdentifier),
 
   $(/from:lastwish/, sourceString('last wish')),
+  $(
+    /temp:hastitle/,
+    obj => obj.def && obj.def.titleInfo && obj.def.titleInfo.hasTitle
+  ),
 
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
   $('classified', obj => obj.def && obj.def.redacted)
