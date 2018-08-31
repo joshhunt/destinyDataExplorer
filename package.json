@@ -13,6 +13,7 @@
     "async": "^2.6.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "blueimp-md5": "^2.10.0",
     "classnames": "^2.2.5",
     "dexie": "^2.0.1",
     "file-loader": "^1.1.11",

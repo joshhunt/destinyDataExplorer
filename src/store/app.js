@@ -22,6 +22,7 @@ export default function appReducer(state = INITIAL_STATE, action) {
     case ADD_COLLECTED_ITEM:
       return {
         ...state,
+        collectModeEnabled: true,
         collectedItems: {
           ...state.collectedItems,
           [action.payload.dxId]: action.payload

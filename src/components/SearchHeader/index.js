@@ -31,6 +31,18 @@ export default function SearchHeader({
           onChange={onSearchChange}
         />
 
+        {/*<button
+          className={s.filterButton}
+          onClick={toggleCollectMode}
+          title={
+            collectModeEnabled ? 'Disable collect mode' : 'Enable collect mode'
+          }
+        >
+          <div className={s.buttonInner}>
+            <Icon className={s.filterIcon} name="sliders-v" /> Filters
+          </div>
+        </button>*/}
+
         <button
           className={searchHelpEnabled ? s.subtleButtonActive : s.subtleButton}
           onClick={toggleSearchHelp}

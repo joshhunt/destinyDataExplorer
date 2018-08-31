@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import copy from 'src/lib/copyToClipboard';
 import sortIntoSections from 'src/lib/sortIntoSections';
 import BungieImage from 'src/components/BungieImage';
+import Icon from 'src/components/Icon';
 
 import s from './styles.styl';
 
@@ -30,7 +31,7 @@ export default class CollectDrawer extends Component {
   }
 
   render() {
-    const { definitions, items } = this.props;
+    const { definitions, items, removeItem } = this.props;
 
     if (!hasDefs(definitions)) {
       return null;
@@ -62,7 +63,17 @@ export default class CollectDrawer extends Component {
                         className={s.image}
                         src={def.displayProperties.icon}
                       />
-                      <span>{def.displayProperties.name}</span>
+
+                      <span className={s.itemMain}>
+                        {def.displayProperties.name}
+                      </span>
+
+                      <button
+                        className={s.closeButton}
+                        onClick={() => removeItem(entry)}
+                      >
+                        <Icon icon="times" />
+                      </button>
                     </div>
                   );
                 })}

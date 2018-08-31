@@ -16,6 +16,10 @@
   display: flex
   flex-wrap: wrap
 
+.itemList
+  display: flex
+  flex-wrap: wrap
+
 .item
   font-size: 14px
   min-width: 200px
@@ -49,6 +53,26 @@
 
   .item
     padding-top: 5px
+
+.button
+  cursor: pointer
+  transition: 100ms ease-in-out
+  outline: none !important
+  background: rgba(white, .07)
+  color: white
+  border: none
+  font-size: inherit
+  color: $textColor
+  border-radius: 2px
+
+  &:hover
+    background: rgba(white, .14)
+
+.smallButton
+  composes: button
+  font-size: .8em
+  vertical-align: top
+  margin-left: 10px
 
 :global
   .react-tabs__tab

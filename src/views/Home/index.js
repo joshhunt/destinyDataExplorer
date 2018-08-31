@@ -272,6 +272,7 @@ class HomeView extends Component {
                   <CollectDrawer
                     items={collectedItems}
                     definitions={definitions}
+                    removeItem={this.props.removeCollectedItem}
                   />
                 </div>
               </div>

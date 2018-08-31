@@ -9,12 +9,14 @@ import { getNameForItem, bungieUrl } from 'src/lib/destinyUtils';
 
 import Vendor from './detailViews/Vendor';
 import InventoryItem from './detailViews/InventoryItem';
+import PresentationNode from './detailViews/PresentationNode';
 
 import s from './styles.styl';
 
 const DETAIL_VIEWS = {
   DestinyVendorDefinition: Vendor,
-  DestinyInventoryItemDefinition: InventoryItem
+  DestinyInventoryItemDefinition: InventoryItem,
+  DestinyPresentationNodeDefinition: PresentationNode
 };
 
 const isImage = value => isString(value) && value.match(/\.(png|jpg|jpeg)$/);
