@@ -24,4 +24,32 @@ export default {
 
     return bubble && `<"${bubble.displayProperties.name}" ${prettyValue}>`;
   }
+  
+  locationHash(prettyValue, rawValue, itemPath, item, definitions) {
+    const location = rawValue && definitions.DestinyLocationDefinition[rawValue];
+    const vendor = location && location.vendorHash && definitions.DestinyVendorDefinition[location.vendorHash];
+    
+    const locationRelease = location && location.locationReleases[0];
+  
+    const destination = locationRelease && definitions.DestinyDestinationDefinition[locationRelease.destinationHash];
+    const bubble = destination && destination.bubbles.find(bub => (bub.hash = locationRelease.activityBubbleName));
+  
+    const activity = locationRelease && definitions.DestinyActivityDefinition[locationRelease.activityHash];
+  
+    const strings = [];
+    const vendorString = activity && `<Activity "${activity.displayProperties.name}" ${location.activityHash}>`;
+    if (vendorString) strings.push(vendorString);
+
+    const activityString = vendor && `<Vendor "${vendor.displayProperties.name}" ${location.vendorHash}>`;
+    if (activityString) strings.push(activityString);
+  
+    const bubbleString = bubble && `<Bubble "${bubble.displayProperties.name}" ${locationRelease.activityBubbleName}>`;
+    if (bubbleString) strings.push(bubbleString);
+
+    const destinationString = destination && `<Destination "${destination.displayProperties.name}" ${locationRelease.destinationHash}>`;
+    if (destinationString) strings.push(destinationString);
+
+    strings.push(`${prettyValue}`);
+    return '<Location '+strings.join(' ')+'>';
+  }
 };
