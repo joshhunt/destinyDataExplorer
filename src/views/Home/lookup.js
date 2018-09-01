@@ -81,6 +81,7 @@ export default [
 
   src('DestinyMedalTierDefinition', ['medalTierHash']),
 
+  src('DestinyLocationDefinition', ['locationHash']),
   src('DestinyLoreDefinition', ['loreHash']),
   src('DestinyRaceDefinition', ['raceHash']),
   src('DestinyClassDefinition', ['classHash']),
