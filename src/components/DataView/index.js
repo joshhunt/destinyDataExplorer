@@ -11,6 +11,7 @@ import Vendor from './detailViews/Vendor';
 import InventoryItem from './detailViews/InventoryItem';
 import PresentationNode from './detailViews/PresentationNode';
 
+import specialValueOverrides from './specialValueOverrides';
 import s from './styles.styl';
 
 const DETAIL_VIEWS = {
@@ -45,30 +46,23 @@ export default class DataView extends Component {
       return <ImageValue value={rawValue} />;
     }
 
+    const overrideFn = specialValueOverrides[itemPath[0]];
+    if (overrideFn) {
+      const specialValue = overrideFn(
+        prettyValue,
+        rawValue,
+        itemPath,
+        this.props.item,
+        this.props.definitions
+      );
+
+      if (specialValue) {
+        return specialValue;
+      }
+    }
+
     const { item, definitionType } =
       this.props.lookupLinkedItem(itemPath, rawValue) || {};
-
-    // For lowlines - this hard codes getting the display name for bubbles on
-    // DestinyLocationDefinitions from the data in their related DestinationDefinition
-    if (itemPath[0] === 'activityBubbleName') {
-      const locationReleaseIndex = itemPath[1];
-      const locationRelease =
-        this.props.item.locationReleases &&
-        this.props.item.locationReleases[locationReleaseIndex];
-
-      const destination =
-        locationRelease &&
-        this.props.definitions.DestinyDestinationDefinition[
-          locationRelease.destinationHash
-        ];
-
-      const bubble =
-        destination && destination.bubbles.find(bub => (bub.hash = rawValue));
-
-      return bubble
-        ? `<"${bubble.displayProperties.name}" ${prettyValue}>`
-        : prettyValue;
-    }
 
     if (!definitionType) {
       return prettyValue;
