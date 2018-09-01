@@ -48,6 +48,28 @@ export default class DataView extends Component {
     const { item, definitionType } =
       this.props.lookupLinkedItem(itemPath, rawValue) || {};
 
+    // For lowlines - this hard codes getting the display name for bubbles on
+    // DestinyLocationDefinitions from the data in their related DestinationDefinition
+    if (itemPath[0] === 'activityBubbleName') {
+      const locationReleaseIndex = itemPath[1];
+      const locationRelease =
+        this.props.item.locationReleases &&
+        this.props.item.locationReleases[locationReleaseIndex];
+
+      const destination =
+        locationRelease &&
+        this.props.definitions.DestinyDestinationDefinition[
+          locationRelease.destinationHash
+        ];
+
+      const bubble =
+        destination && destination.bubbles.find(bub => (bub.hash = rawValue));
+
+      return bubble
+        ? `<"${bubble.displayProperties.name}" ${prettyValue}>`
+        : prettyValue;
+    }
+
     if (!definitionType) {
       return prettyValue;
     } else if (!item) {
