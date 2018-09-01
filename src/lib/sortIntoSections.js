@@ -78,8 +78,10 @@ function scoreItem(item) {
   }
 }
 
-function sortArmor(items) {
-  return sortBy(items, item => {
+function sortArmor(objs, definitions) {
+  console.log('sorting objs!', objs);
+  return sortBy(objs, obj => {
+    const item = definitions.DestinyInventoryItemDefinition[obj.key];
     const rarity =
       (item.inventory && RARITY_SCORE[item.inventory.tierTypeHash]) || 0;
     return rarity + scoreItem(item);
@@ -140,9 +142,15 @@ export default function sortItems(_entries, definitions, justHashes = false) {
 
   const sections = [
     { name: 'Weapons', items: sectionItems.weapon },
-    { name: 'Hunter armor', items: sortArmor(sectionItems[HUNTER]) },
-    { name: 'Titan armor', items: sortArmor(sectionItems[TITAN]) },
-    { name: 'Warlock armor', items: sortArmor(sectionItems[WARLOCK]) },
+    {
+      name: 'Hunter armor',
+      items: sortArmor(sectionItems[HUNTER], definitions)
+    },
+    { name: 'Titan armor', items: sortArmor(sectionItems[TITAN], definitions) },
+    {
+      name: 'Warlock armor',
+      items: sortArmor(sectionItems[WARLOCK], definitions)
+    },
     { name: 'Emotes', items: sectionItems.emotes },
     { name: 'Ghosts', items: sectionItems.ghosts },
     { name: 'Ships', items: sectionItems.ships },

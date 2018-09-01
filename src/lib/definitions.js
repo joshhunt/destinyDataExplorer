@@ -16,10 +16,25 @@ db.version(1).stores({
 
 const REVISION = 'rev2';
 
+const LANGUAGE =
+  [
+    'en',
+    'fr',
+    'es',
+    'de',
+    'it',
+    'ja',
+    'pt-br',
+    'es-mx',
+    'ru',
+    'pl',
+    'ko',
+    'zh-cht'
+  ].find(lang => window.location.search.includes(lang)) || 'en';
+
 function fetchManifestDBPath() {
   return getDestiny('/platform/Destiny2/Manifest/').then(data => {
-    const englishUrl = data.mobileWorldContentPaths.en;
-    return englishUrl;
+    return data.mobileWorldContentPaths[LANGUAGE];
   });
 }
 

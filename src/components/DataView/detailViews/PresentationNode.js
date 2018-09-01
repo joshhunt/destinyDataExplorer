@@ -56,6 +56,7 @@ function RecursiveItemsBySource({
     .map(([sourceString, items]) => {
       return { sourceString, items: uniqBy(items, c => c.itemHash) };
     })
+    // .filter(({ sourceString }) => sourceString.includes('Nightfall'))
     .sort((a, b) => (a.sourceString > b.sourceString ? 1 : -1));
 
   return (
@@ -164,10 +165,10 @@ class PresentationNode extends Component {
       <div>
         {definitions.DestinyCollectibleDefinition && (
           <p>
-          <button onClick={this.toggle} className={s.button}>
-            {showRecursiveItemSources ? 'Hide' : 'View'} collectibles
-            recursively
-          </button>
+            <button onClick={this.toggle} className={s.button}>
+              {showRecursiveItemSources ? 'Hide' : 'View'} collectibles
+              recursively
+            </button>
           </p>
         )}
 
