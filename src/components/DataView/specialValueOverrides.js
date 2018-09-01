@@ -37,16 +37,15 @@ export default {
     const activity = locationRelease && definitions.DestinyActivityDefinition[locationRelease.activityHash];
   
     const strings = [];
-    const vendorString = activity && `<Activity "${activity.displayProperties.name}" ${location.activityHash}>`;
+    
+    const vendorString = vendor && `-Vendor "${vendor.displayProperties.name}" ${location.vendorHash}-`;
+    const activityString = activity && `-Activity "${activity.displayProperties.name}" ${locationRelease.activityHash}-`;
+    const bubbleString = bubble && `-Bubble "${bubble.displayProperties.name}" ${locationRelease.activityBubbleName}-`;
+    const destinationString = destination && `-Destination "${destination.displayProperties.name}" ${locationRelease.destinationHash}-`;
+    
     if (vendorString) strings.push(vendorString);
-
-    const activityString = vendor && `<Vendor "${vendor.displayProperties.name}" ${location.vendorHash}>`;
-    if (activityString) strings.push(activityString);
-  
-    const bubbleString = bubble && `<Bubble "${bubble.displayProperties.name}" ${locationRelease.activityBubbleName}>`;
+    if (activityString && (!destinationString || destination.displayProperties.name != activity.displayProperties.name)) strings.push(activityString);
     if (bubbleString) strings.push(bubbleString);
-
-    const destinationString = destination && `<Destination "${destination.displayProperties.name}" ${locationRelease.destinationHash}>`;
     if (destinationString) strings.push(destinationString);
 
     strings.push(`${prettyValue}`);
