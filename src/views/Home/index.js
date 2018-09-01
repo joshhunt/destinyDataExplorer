@@ -151,10 +151,18 @@ class HomeView extends Component {
   lookupLinkedItem = (keyPath, hash) => {
     const [fieldName, parentFieldName] = keyPath;
 
-    const { type: definitionType, shortType } =
+    let { type: definitionType, shortType } =
       lookup.find(data => data.fields.includes(fieldName)) ||
       lookup.find(data => data.fields.includes(parentFieldName)) ||
       {};
+
+    if (!definitionType) {
+      // TODO: guess items in array using parentFieldName e.g. itemCategoryHashes
+      const matchedGuess = fieldName.match(/(\w+)Hash/);
+      shortType =
+        matchedGuess && matchedGuess[1].replace(/^\w/, c => c.toUpperCase());
+      definitionType = `Destiny${shortType}Definition`;
+    }
 
     const defs = this.props.definitions[definitionType];
 

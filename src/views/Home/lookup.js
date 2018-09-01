@@ -7,19 +7,15 @@ const src = (type, fields) => {
 
 export default [
   src('DestinyPresentationNodeDefinition', [
-    'presentationNodeHash',
     'parentPresentationNodeHashes',
     'parentNodeHashes'
   ]),
-
-  src('DestinyCollectibleDefinition', ['collectibleHash']),
 
   src('DestinyMaterialRequirementSetDefinition', [
     'acquireMaterialRequirementHash'
   ]),
 
   src('DestinyInventoryItemDefinition', [
-    'itemHash',
     'singleInitialItemHash',
     'plugItemHash',
     'previewItemOverrideHash',
@@ -37,11 +33,7 @@ export default [
     'recoveryBucketTypeHash'
   ]),
 
-  src('DestinyVendorDefinition', [
-    'kioskItems',
-    'vendorHash',
-    'previewVendorHash'
-  ]),
+  src('DestinyVendorDefinition', ['kioskItems', 'previewVendorHash']),
 
   src('DestinyActivityModeDefinition', [
     'currentActivityModeHash',
@@ -50,51 +42,27 @@ export default [
     'parentHashes'
   ]),
 
-  src('DestinyActivityTypeDefinition', ['activityTypeHash']),
-
-  src('DestinyVendorGroupDefinition', ['vendorGroupHash']),
-
-  src('DestinyFactionDefinition', ['factionHash']),
-
   src('DestinyActivityDefinition', [
-    'activityHash',
     'defaultFreeroamActivityHash',
     'currentActivityHash',
     'currentPlaylistActivityHash'
   ]),
-
-  src('DestinyPlaceDefinition', 'placeHash'),
-  src('DestinyActivityGraphDefinition', 'activityGraphHash'),
-
-  src('DestinyDestinationDefinition', 'destinationHash'),
 
   src('DestinyProgressionLevelRequirementDefinition', [
     'progressionLevelRequirementHash'
   ]),
 
   src('DestinyItemCategoryDefinition', [
-    'categoryHash',
     'itemCategoryHashes',
     'groupedCategoryHashes',
     'parentCategoryHashes'
   ]),
 
   src('DestinyMedalTierDefinition', ['medalTierHash']),
-
-  src('DestinyLocationDefinition', ['locationHash']),
-  src('DestinyLoreDefinition', ['loreHash']),
-  src('DestinyRaceDefinition', ['raceHash']),
-  src('DestinyClassDefinition', ['classHash']),
-  src('DestinyGenderDefinition', ['genderHash']),
   src('DestinySandboxPerkDefinition', ['perkHash']),
-  src('DestinyStatGroupDefinition', ['statGroupHash']),
-  src('DestinyDamageTypeDefinition', ['damageTypeHash']),
-  src('DestinySocketTypeDefinition', ['socketTypeHash']),
-  src('DestinyTalentGridDefinition', ['talentGridHash']),
   src('DestinyItemTierTypeDefinition', ['tierTypeHash']),
-  src('DestinyProgressionDefinition', ['progressionHash']),
   src('DestinyPlugSetDefinition', ['reusablePlugSetHash']),
-  src('DestinyStatDefinition', ['statHash', 'statTypeHash']),
-  src('DestinySocketCategoryDefinition', ['socketCategoryHash']),
+
+  src('DestinyStatDefinition', ['statTypeHash', 'primaryBaseStatHash']),
   src('DestinyObjectiveDefinition', ['objectiveHashes', 'emblemObjectiveHash'])
 ];
