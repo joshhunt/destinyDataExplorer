@@ -23,7 +23,7 @@ export default {
       destination && destination.bubbles.find(bub => (bub.hash = rawValue));
 
     return bubble && `<"${bubble.displayProperties.name}" ${prettyValue}>`;
-  }
+  },
   
   locationHash(prettyValue, rawValue, itemPath, item, definitions) {
     const location = rawValue && definitions.DestinyLocationDefinition[rawValue];
