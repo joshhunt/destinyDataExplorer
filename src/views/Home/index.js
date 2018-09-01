@@ -296,7 +296,7 @@ class HomeView extends Component {
           {views.map(
             ({ type, hash }, index) =>
               this.props.definitions[type] && (
-                <div key={`${type}:${hash}`}>
+                <div key={index}>
                   <DataView
                     definitions={definitions}
                     depth={index + 1}
