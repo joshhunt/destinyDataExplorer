@@ -16,6 +16,7 @@ export default [
   ]),
 
   src('DestinyInventoryItemDefinition', [
+    'itemHash',
     'singleInitialItemHash',
     'plugItemHash',
     'previewItemOverrideHash',
