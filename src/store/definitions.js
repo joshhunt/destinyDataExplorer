@@ -12,10 +12,10 @@ export default function definitionsReducer(state = {}, { type, payload }) {
     case SET_BULK_DEFINITIONS: {
       const filtered = pickBy(payload, defs => defs);
 
-      if (md5(window.location.search) !== '0667ec7bd7d01ec391820d300bccc61b') {
-        console.warn('---');
-        delete filtered.DestinyCollectibleDefinition;
-      }
+      // if (md5(window.location.search) !== '0667ec7bd7d01ec391820d300bccc61b') {
+      //   console.warn('---');
+      //   delete filtered.DestinyCollectibleDefinition;
+      // }
 
       return {
         ...state,
