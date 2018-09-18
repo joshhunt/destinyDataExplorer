@@ -70,7 +70,7 @@ export default {
     const showActivityString =
       activityString &&
       (!destinationString ||
-        destination.displayProperties.name != activity.displayProperties.name);
+        destination.displayProperties.name !== activity.displayProperties.name);
 
     const strings = [
       vendorString,
