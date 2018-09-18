@@ -11,8 +11,8 @@ import {
   removeCollectedItem
 } from 'src/store/app';
 import { setBulkDefinitions } from 'src/store/definitions';
+import { setFilterString } from 'src/store/filter';
 import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
-import search from 'src/lib/search';
 
 import Loading from 'src/components/Loading';
 import CollectDrawer from 'src/components/CollectDrawer';
@@ -20,6 +20,7 @@ import SearchHeader from 'src/components/SearchHeader';
 import DataView from 'src/components/DataView';
 import Item from 'src/components/Item';
 
+import { filteredItemsSelector } from './selectors';
 import lookup from './lookup';
 import s from './styles.styl';
 
@@ -63,40 +64,8 @@ class HomeView extends Component {
   }
 
   onSearchChange = ev => {
-    const MAX_RESULTS = 150;
     const searchTerm = isString(ev) ? ev : ev.target.value;
-    console.log('searchTerm:', searchTerm);
-
-    const empty = [];
-
-    const newState = {
-      searchTerm,
-      results: empty,
-      allResults: empty,
-      noResults: false,
-      totalResults: 0
-    };
-
-    if (!searchTerm || searchTerm.length === 0) {
-      this.setState(newState);
-      return;
-    }
-
-    const results = search(searchTerm, this.props.definitions);
-    newState.results = results;
-    newState.allResults = newState.results;
-
-    if (results.length > MAX_RESULTS) {
-      newState.results = results.slice(0, MAX_RESULTS);
-    } else if (results.length === 0) {
-      newState.noResults = true;
-    }
-
-    this.setState(newState);
-
-    if (this.props.searchHelpEnabled) {
-      this.props.toggleSearchHelp();
-    }
+    this.props.setFilterString(searchTerm);
   };
 
   displayAllResults = () => {
@@ -187,21 +156,16 @@ class HomeView extends Component {
       collectedItems,
       definitions,
       definitionsError,
-      definitionsStatus
+      definitionsStatus,
+      searchString,
+      filterResults
     } = this.props;
 
-    const {
-      updating,
-      views,
-      searchTerm,
-      results,
-      allResults,
-      noResults
-    } = this.state;
+    const { views } = this.state;
 
-    let items = results || [];
+    let items = filterResults.results || [];
 
-    if (items.length < 1 && !noResults) {
+    if (items.length < 1 && !filterResults.noResults) {
       items = getRandomItems(this.props.definitions);
     }
 
@@ -210,7 +174,7 @@ class HomeView extends Component {
         <SearchHeader
           definitions={this.props.definitions}
           onSearchChange={this.onSearchChange}
-          searchValue={searchTerm}
+          searchValue={searchString || ''}
           toggleCollectMode={toggleCollectMode}
           collectModeEnabled={collectModeEnabled}
           searchHelpEnabled={searchHelpEnabled}
@@ -222,16 +186,14 @@ class HomeView extends Component {
             className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
           >
             {definitionsStatus && (
-              <Loading
-                children={
-                  updating ? 'Downloading new data from Bungie...' : null
-                }
-              />
+              <Loading children={'Downloading new data from Bungie...'} />
             )}
+
             {definitionsError && (
               <Loading noSpin children="Error loading manifest" />
             )}
-            {noResults && <h2>No results</h2>}
+
+            {filterResults.noResults && <h2>No results</h2>}
 
             <div className={s.items}>
               {items.map(obj => {
@@ -248,12 +210,13 @@ class HomeView extends Component {
               })}
             </div>
 
-            {results &&
-              allResults &&
-              results !== allResults && (
+            {filterResults.results &&
+              filterResults.allResults &&
+              filterResults.results !== filterResults.allResults && (
                 <h2>
-                  {allResults.length - results.length} more results hidden for
-                  performance.{' '}
+                  {filterResults.allResults.length -
+                    filterResults.results.length}{' '}
+                  more results hidden for performance.{' '}
                   <button onClick={this.displayAllResults}>
                     Display all anyway
                   </button>
@@ -306,6 +269,8 @@ class HomeView extends Component {
 
 function mapStateToProps(state) {
   return {
+    filterResults: filteredItemsSelector(state),
+    searchString: state.filter.searchString,
     definitionsError: state.definitions.error,
     definitionsStatus: state.definitions.status,
     definitions: state.definitions,
@@ -316,6 +281,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToActions = {
+  setFilterString,
   setBulkDefinitions,
   toggleCollectMode,
   toggleSearchHelp,

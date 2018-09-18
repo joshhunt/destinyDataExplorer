@@ -29,19 +29,9 @@ const fallbackSearchFunction = {
 };
 
 export default function search(_searchTerm, definitions) {
-  if (_searchTerm.length < 3) {
-    return [];
-  }
-
   const allDefs = makeAllDefsArray(definitions);
   const searchTerm = _searchTerm.toLowerCase();
   let queries = tokenize(searchTerm); // eslint-disable-line
-
-  // if (queries.includes(INCLUDE_CLASSIFIED)) {
-  //   queries = queries.filter(q => q !== INCLUDE_CLASSIFIED);
-  // } else {
-  //   queries.push('not:classified');
-  // }
 
   const results = tokenize(searchTerm).reduce((acc, query) => {
     let searchFn = SEARCH_FUNCTIONS.find(searchFn =>

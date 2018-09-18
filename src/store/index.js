@@ -2,6 +2,7 @@ import { createStore, combineReducers } from 'redux';
 import { mapValues } from 'lodash';
 
 import app from './app';
+import filter from './filter';
 import { fasterGetDefinitions } from 'src/lib/definitions';
 
 import definitions, {
@@ -13,7 +14,8 @@ import definitions, {
 
 const rootReducer = combineReducers({
   app,
-  definitions
+  definitions,
+  filter
 });
 
 function sanitiseDefintionsState(defintionsState) {
