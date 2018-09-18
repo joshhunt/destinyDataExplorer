@@ -1,25 +1,33 @@
 import { pickBy } from 'lodash';
-import md5 from 'blueimp-md5';
-
 import { makePayloadAction } from './utils';
 
-window.__md5 = md5;
-
 export const SET_BULK_DEFINITIONS = 'Set bulk definitions';
+export const DEFINITIONS_ERROR = 'Definitions error';
+export const DEFINITIONS_STATUS = 'Definitions status';
 
 export default function definitionsReducer(state = {}, { type, payload }) {
   switch (type) {
+    case DEFINITIONS_ERROR: {
+      return {
+        ...state,
+        error: true
+      };
+    }
+
+    case DEFINITIONS_STATUS: {
+      return {
+        ...state,
+        status: payload.status
+      };
+    }
+
     case SET_BULK_DEFINITIONS: {
       const filtered = pickBy(payload, defs => defs);
 
-      // if (md5(window.location.search) !== '0667ec7bd7d01ec391820d300bccc61b') {
-      //   console.warn('---');
-      //   delete filtered.DestinyCollectibleDefinition;
-      // }
-
       return {
         ...state,
-        ...filtered
+        ...filtered,
+        error: false
       };
     }
 
@@ -29,3 +37,5 @@ export default function definitionsReducer(state = {}, { type, payload }) {
 }
 
 export const setBulkDefinitions = makePayloadAction(SET_BULK_DEFINITIONS);
+export const definitionsStatus = makePayloadAction(DEFINITIONS_STATUS);
+export const definitionsError = makePayloadAction(DEFINITIONS_ERROR);

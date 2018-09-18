@@ -11,7 +11,6 @@ import {
   removeCollectedItem
 } from 'src/store/app';
 import { setBulkDefinitions } from 'src/store/definitions';
-import { getAllDefinitions } from 'src/lib/definitions';
 import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
 import search from 'src/lib/search';
 
@@ -50,19 +49,6 @@ class HomeView extends Component {
     if (this.props.routeParams.splat) {
       this.updateViews();
     }
-
-    getAllDefinitions(({ updating }) => {
-      this.setState({ updating });
-    })
-      .then(defs => {
-        this.setState({ loading: false });
-        this.props.setBulkDefinitions(defs);
-      })
-      .catch(err => {
-        console.log('omg error');
-        console.error(err);
-        this.setState({ error: true, loading: false, updating: false });
-      });
   }
 
   componentDidUpdate(prevProps) {
@@ -199,18 +185,18 @@ class HomeView extends Component {
       toggleCollectMode,
       toggleSearchHelp,
       collectedItems,
-      definitions
+      definitions,
+      definitionsError,
+      definitionsStatus
     } = this.props;
 
     const {
-      loading,
       updating,
       views,
       searchTerm,
       results,
       allResults,
-      noResults,
-      error
+      noResults
     } = this.state;
 
     let items = results || [];
@@ -235,14 +221,16 @@ class HomeView extends Component {
           <div
             className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
           >
-            {loading && (
+            {definitionsStatus && (
               <Loading
                 children={
                   updating ? 'Downloading new data from Bungie...' : null
                 }
               />
             )}
-            {error && <Loading noSpin children="Error loading manifest" />}
+            {definitionsError && (
+              <Loading noSpin children="Error loading manifest" />
+            )}
             {noResults && <h2>No results</h2>}
 
             <div className={s.items}>
@@ -318,6 +306,8 @@ class HomeView extends Component {
 
 function mapStateToProps(state) {
   return {
+    definitionsError: state.definitions.error,
+    definitionsStatus: state.definitions.status,
     definitions: state.definitions,
     collectModeEnabled: state.app.collectModeEnabled,
     searchHelpEnabled: state.app.searchHelpEnabled,
