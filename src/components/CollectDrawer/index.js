@@ -22,8 +22,13 @@ export default class CollectDrawer extends Component {
 
     (jason.match(/(\d{5,})(,?)/g) || []).forEach(match => {
       const hash = +match.match(/\d+/)[0];
+      const collectionEntry =
+        items[`DestinyInventoryItemDefinition:${hash}`] || {};
       const item = definitions.DestinyInventoryItemDefinition[hash];
-      const newline = match + ' // ' + item.displayProperties.name;
+      const newline =
+        match +
+        ' // ' +
+        (collectionEntry.forceName || item.displayProperties.name);
       jason = jason.replace(match, newline);
     });
 

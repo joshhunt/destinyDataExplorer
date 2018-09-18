@@ -151,7 +151,8 @@ class PresentationNode extends Component {
         this.props.addCollectedItem({
           dxId: `DestinyInventoryItemDefinition:${col.itemHash}`,
           type: `DestinyInventoryItemDefinition`,
-          key: col.itemHash
+          key: col.itemHash,
+          forceName: col.displayProperties && col.displayProperties.name
         });
       }
     });
