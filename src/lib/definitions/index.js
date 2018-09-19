@@ -14,12 +14,10 @@ const log = require('app/lib/log')('definitions');
 
 const VERSION = 'v1';
 
-const db = new Dexie('destinyManifest');
+Dexie.delete('destinyManifest');
+
+const db = new Dexie('destinyDefinitions');
 db.version(1).stores({
-  manifestBlob: '&key, data',
-  allData: '&key, data'
-});
-db.version(3).stores({
   manifestBlob: '&key, data',
   allData: '&key, data'
 });
