@@ -21,7 +21,8 @@ function GearsetItemList({ item, definitions, pathForItem }) {
               className={s.item}
               entry={{
                 type: 'DestinyInventoryItemDefinition',
-                def: gearSetItem
+                def: gearSetItem,
+                key: gearSetItem.hash
               }}
             />
           );

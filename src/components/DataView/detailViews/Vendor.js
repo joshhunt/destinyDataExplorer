@@ -26,7 +26,8 @@ function CategoryListing({ item, definitions, pathForItem, categories }) {
                     className={s.item}
                     entry={{
                       type: 'DestinyInventoryItemDefinition',
-                      def: vendorItem
+                      def: vendorItem,
+                      key: vendorItem.hash
                     }}
                   />
                 );
