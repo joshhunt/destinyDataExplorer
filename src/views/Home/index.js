@@ -69,9 +69,7 @@ class HomeView extends Component {
   };
 
   displayAllResults = () => {
-    this.setState({
-      results: this.state.allResults
-    });
+    this.setState({ displayAllResults: true });
   };
 
   pathForItem = (type, obj) => {
@@ -165,7 +163,9 @@ class HomeView extends Component {
 
     let items = filterResults.results || [];
 
-    if (items.length < 1 && !filterResults.noResults) {
+    if (filterResults.allResults && this.state.displayAllResults) {
+      items = filterResults.allResults;
+    } else if (items.length < 1 && !filterResults.noResults) {
       items = getRandomItems(this.props.definitions);
     }
 
@@ -212,15 +212,20 @@ class HomeView extends Component {
 
             {filterResults.results &&
               filterResults.allResults &&
-              filterResults.results !== filterResults.allResults && (
-                <h2>
-                  {filterResults.allResults.length -
-                    filterResults.results.length}{' '}
-                  more results hidden for performance.{' '}
-                  <button onClick={this.displayAllResults}>
-                    Display all anyway
-                  </button>
-                </h2>
+              items !== filterResults.allResults && (
+                <div className={s.moreResultsWrap}>
+                  <div className={s.moreResults}>
+                    {filterResults.allResults.length -
+                      filterResults.results.length}{' '}
+                    more results hidden for performance.{' '}
+                    <button
+                      onClick={this.displayAllResults}
+                      className={s.moreResultsButton}
+                    >
+                      Display all anyway
+                    </button>
+                  </div>
+                </div>
               )}
           </div>
 
