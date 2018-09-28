@@ -26,8 +26,7 @@ export function getAllRecords(db, table) {
 
   data.values.forEach(([key, json]) => {
     const obj = JSON.parse(json);
-    const adjustedKey = parseInt(key, 10) >>> 0;
-    result[obj.hash || adjustedKey] = obj;
+    result[obj.hash || key] = obj;
   });
 
   return result;

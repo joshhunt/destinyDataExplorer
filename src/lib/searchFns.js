@@ -1,5 +1,6 @@
 import { isString, intersection } from 'lodash';
 import * as enums from './destinyEnums';
+import { matches } from './search';
 
 const isItemCategoryHash = (obj, hash) =>
   obj.def &&
@@ -18,6 +19,10 @@ const hasPerk = (obj, hash) => {
   });
 
   return !!it;
+};
+
+const isDefinition = (obj, definitionName) => {
+  return matches(obj.type, definitionName);
 };
 
 const classType = value => obj => obj.def.classType === value;
@@ -65,6 +70,7 @@ const sourceString = matching => obj =>
 export default [
   $(/itemcategory:(\d+)/i, true, isItemCategoryHash),
   $(/hasperk:(\d+)/i, true, hasPerk),
+  $(/data:(\w+)/i, false, isDefinition),
   $('hunter', classType(enums.HUNTER)),
   $('warlock', classType(enums.WARLOCK)),
   $('titan', classType(enums.TITAN)),
