@@ -2,6 +2,8 @@ import { makeAllDefsArray } from './destinyUtils';
 import SEARCH_FUNCTIONS from './searchFns';
 import normalizeText from 'normalize-text';
 
+import { FILTERS } from 'src/components/Filters';
+
 const last = arr => arr[arr.length - 1];
 // const INCLUDE_CLASSIFIED = 'include:classified';
 
@@ -31,7 +33,7 @@ export default function search(_searchTerm, filterOptions, definitions) {
   const searchTerm = _searchTerm.toLowerCase();
   let queries = tokenize(searchTerm); // eslint-disable-line
 
-  const results = tokenize(searchTerm).reduce((acc, query) => {
+  let results = tokenize(searchTerm).reduce((acc, query) => {
     let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
       query.match(searchFn.regex)
     );
@@ -50,6 +52,17 @@ export default function search(_searchTerm, filterOptions, definitions) {
 
     return acc.filter(obj => searchFn.filterFn(obj, ...params));
   }, allDefs);
+
+  const filterOptionsArr = Object.entries(filterOptions).map(
+    ([key, value]) => ({ key, value })
+  );
+
+  console.log({ filterOptionsArr });
+
+  results = filterOptionsArr.reduce((acc, filterOptionSet) => {
+    const filterFn = FILTERS[filterOptionSet.key].searchFn;
+    console.log({ filterFn });
+  }, results);
 
   return results;
 }

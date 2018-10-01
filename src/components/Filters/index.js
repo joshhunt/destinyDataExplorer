@@ -9,7 +9,7 @@ import s from './styles.styl';
 
 const DROPDOWN = 'dropdown';
 
-const FILTERS = {
+export const FILTERS = {
   [DROPDOWN]: {
     searchFn: (obj, filterValue) => {},
     renderer: ({ data, onChange }) => (
