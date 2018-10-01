@@ -7,7 +7,7 @@ window.normalizeText = normalizeText;
 const last = arr => arr[arr.length - 1];
 // const INCLUDE_CLASSIFIED = 'include:classified';
 
-const matches = (string, searchTerm) => {
+export const matches = (string, searchTerm) => {
   return (
     string && string.toLowerCase && normalizeText(string).includes(searchTerm)
   );

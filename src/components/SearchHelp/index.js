@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { isObject } from 'lodash';
 
 import s from './styles.styl';
 
@@ -80,7 +81,10 @@ const HELP_TEXT = [
 ];
 
 export default function SearchHelp({ definitions, setSearchValue }) {
-  console.log('definitions:', definitions);
+  const defsData = Object.entries(definitions)
+    .map(([tableName, entries]) => ({ tableName, entries }))
+    .filter(({ entries }) => isObject(entries));
+
   return (
     <div className={s.root}>
       <div className={s.one}>
@@ -94,19 +98,21 @@ export default function SearchHelp({ definitions, setSearchValue }) {
           </thead>
 
           <tbody>
-            {Object.keys(definitions).map((tableName, index) => (
-              <tr key={index} className={s.row}>
-                <td
-                  className={s.tableNameCell}
-                  onClick={() => setSearchValue(tableName)}
-                >
-                  {tableName}
-                </td>
-                <td className={s.descriptionCell}>
-                  {Object.keys(definitions[tableName]).length}
-                </td>
-              </tr>
-            ))}
+            {defsData.map(({ tableName, entries }, index) => {
+              return (
+                <tr key={index} className={s.row}>
+                  <td
+                    className={s.tableNameCell}
+                    onClick={() => setSearchValue(tableName)}
+                  >
+                    {tableName}
+                  </td>
+                  <td className={s.descriptionCell}>
+                    {Object.keys(entries).length}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
