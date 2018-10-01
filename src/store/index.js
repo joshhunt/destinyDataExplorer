@@ -1,5 +1,6 @@
 import { createStore, combineReducers } from 'redux';
 import { mapValues } from 'lodash';
+import querystring from 'querystring';
 
 import app from './app';
 import filter from './filter';
@@ -41,7 +42,8 @@ const store = (window.__store = createStore(
     })
 ));
 
-const LANG_CODE = 'en';
+const qs = querystring.parse(window.location.search.substr(1));
+const LANG_CODE = qs.lang || 'en';
 
 fasterGetDefinitions(
   LANG_CODE,

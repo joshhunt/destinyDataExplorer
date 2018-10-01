@@ -6,8 +6,9 @@ const MAX_RESULTS = 150;
 
 export const filteredItemsSelector = createSelector(
   state => state.filter.searchString,
+  state => state.filter,
   state => state.definitions,
-  (searchString, definitions) => {
+  (searchString, filterOptions, definitions) => {
     if (
       !searchString ||
       searchString.length < 3 ||
@@ -18,7 +19,7 @@ export const filteredItemsSelector = createSelector(
     }
 
     const payload = {};
-    payload.results = search(searchString, definitions);
+    payload.results = search(searchString, filterOptions, definitions);
     payload.allResults = payload.results;
 
     if (payload.results.length > MAX_RESULTS) {

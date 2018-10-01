@@ -2,12 +2,10 @@ import { makeAllDefsArray } from './destinyUtils';
 import SEARCH_FUNCTIONS from './searchFns';
 import normalizeText from 'normalize-text';
 
-window.normalizeText = normalizeText;
-
 const last = arr => arr[arr.length - 1];
 // const INCLUDE_CLASSIFIED = 'include:classified';
 
-const matches = (string, searchTerm) => {
+export const matches = (string, searchTerm) => {
   return (
     string && string.toLowerCase && normalizeText(string).includes(searchTerm)
   );
@@ -28,7 +26,7 @@ const fallbackSearchFunction = {
   }
 };
 
-export default function search(_searchTerm, definitions) {
+export default function search(_searchTerm, filterOptions, definitions) {
   const allDefs = makeAllDefsArray(definitions);
   const searchTerm = _searchTerm.toLowerCase();
   let queries = tokenize(searchTerm); // eslint-disable-line
