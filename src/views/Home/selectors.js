@@ -9,9 +9,12 @@ export const filteredItemsSelector = createSelector(
   state => state.filter,
   state => state.definitions,
   (searchString, filterOptions, definitions) => {
+    const hasSearchQuery =
+      (searchString && searchString.length > 2) ||
+      Object.keys(filterOptions).length > 0;
+
     if (
-      !searchString ||
-      searchString.length < 3 ||
+      !hasSearchQuery ||
       !definitions ||
       !definitions.DestinyInventoryItemDefinition
     ) {

@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 };
 
 const TOGGLE_COLLECT_MODE = 'Toggle collect mode';
-const TOGGLE_FILTER_DRAWER = 'Toggle searchHelp';
+const TOGGLE_FILTER_DRAWER = 'Toggle filter drawer';
 const ADD_COLLECTED_ITEM = 'Add collected item';
 const REMOVE_COLLECTED_ITEM = 'Remove collected item';
 

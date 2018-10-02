@@ -30,28 +30,32 @@ const fallbackSearchFunction = {
 
 export default function search(_searchTerm, filterOptions, definitions) {
   const allDefs = makeAllDefsArray(definitions);
-  const searchTerm = _searchTerm.toLowerCase();
-  let queries = tokenize(searchTerm); // eslint-disable-line
+  const searchTerm = _searchTerm && _searchTerm.toLowerCase();
+  const queries = searchTerm && tokenize(searchTerm);
 
-  let results = tokenize(searchTerm).reduce((acc, query) => {
-    let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
-      query.match(searchFn.regex)
-    );
+  let results = allDefs;
 
-    let params = [];
+  if (queries) {
+    results = queries.reduce((acc, query) => {
+      let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
+        query.match(searchFn.regex)
+      );
 
-    if (searchFn) {
-      const match = query.match(searchFn.regex);
-      const param = match[1];
-      param && params.push(searchFn.parseInt ? parseInt(param, 10) : param);
-    } else {
-      const comparableQuery = query.toLowerCase();
-      searchFn = fallbackSearchFunction;
-      params = [query, comparableQuery];
-    }
+      let params = [];
 
-    return acc.filter(obj => searchFn.filterFn(obj, ...params));
-  }, allDefs);
+      if (searchFn) {
+        const match = query.match(searchFn.regex);
+        const param = match[1];
+        param && params.push(searchFn.parseInt ? parseInt(param, 10) : param);
+      } else {
+        const comparableQuery = query.toLowerCase();
+        searchFn = fallbackSearchFunction;
+        params = [query, comparableQuery];
+      }
+
+      return acc.filter(obj => searchFn.filterFn(obj, ...params));
+    }, allDefs);
+  }
 
   const filterOptionsArr = Object.entries(filterOptions).map(
     ([key, value]) => ({ key, value })
@@ -60,8 +64,13 @@ export default function search(_searchTerm, filterOptions, definitions) {
   console.log({ filterOptionsArr });
 
   results = filterOptionsArr.reduce((acc, filterOptionSet) => {
-    const filterFn = FILTERS[filterOptionSet.key].searchFn;
-    console.log({ filterFn });
+    const filterDef = FILTERS.find(f => f.id === filterOptionSet.key);
+
+    if (!filterDef) {
+      return acc;
+    }
+
+    return acc.filter(obj => filterDef.searchFn(obj, filterOptionSet.value));
   }, results);
 
   return results;

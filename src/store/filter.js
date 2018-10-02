@@ -1,3 +1,4 @@
+import { pickBy } from 'lodash';
 import { makePayloadAction } from './utils';
 
 export const SET_FILTER_STRING = 'Set filter string';
@@ -13,10 +14,18 @@ export default function filterReducer(state = {}, { type, payload }) {
     }
 
     case SET_FILTER_VALUE: {
-      return {
+      const draft = {
         ...state,
         ...payload
       };
+
+      const final = pickBy(draft, value => {
+        return value !== null && value !== 'null';
+      });
+
+      console.log({ draft, final });
+
+      return final;
     }
 
     default:
