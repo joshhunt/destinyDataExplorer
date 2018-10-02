@@ -6,12 +6,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import {
   toggleCollectMode,
-  toggleSearchHelp,
+  toggleFilterDrawer,
   addCollectedItem,
   removeCollectedItem
 } from 'src/store/app';
 import { setBulkDefinitions } from 'src/store/definitions';
-import { setFilterString } from 'src/store/filter';
+import { setFilterString, setFilterValue } from 'src/store/filter';
 import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
 
 import Loading from 'src/components/Loading';
@@ -148,15 +148,15 @@ class HomeView extends Component {
   render() {
     const {
       collectModeEnabled,
-      searchHelpEnabled,
+      filterDrawerVisible,
       toggleCollectMode,
-      toggleSearchHelp,
+      toggleFilterDrawer,
       collectedItems,
       definitions,
       definitionsError,
       definitionsStatus,
-      searchString,
-      filterResults
+      filterResults,
+      filter
     } = this.props;
 
     const { views } = this.state;
@@ -172,13 +172,14 @@ class HomeView extends Component {
     return (
       <div className={s.root}>
         <SearchHeader
+          filter={filter}
+          setFilterValue={this.props.setFilterValue}
           definitions={this.props.definitions}
           onSearchChange={this.onSearchChange}
-          searchValue={searchString || ''}
           toggleCollectMode={toggleCollectMode}
           collectModeEnabled={collectModeEnabled}
-          searchHelpEnabled={searchHelpEnabled}
-          toggleSearchHelp={toggleSearchHelp}
+          filterDrawerVisible={filterDrawerVisible}
+          toggleFilterDrawer={toggleFilterDrawer}
         />
 
         <div className={s.body}>
@@ -189,9 +190,8 @@ class HomeView extends Component {
               <Loading children={'Downloading new data from Bungie...'} />
             )}
 
-            {definitionsError && (
-              <Loading noSpin children="Error loading manifest" />
-            )}
+            {definitionsError &&
+              false && <Loading noSpin children="Error loading manifest" />}
 
             {filterResults.noResults && <h2>No results</h2>}
 
@@ -275,21 +275,22 @@ class HomeView extends Component {
 function mapStateToProps(state) {
   return {
     filterResults: filteredItemsSelector(state),
-    searchString: state.filter.searchString,
+    filter: state.filter,
     definitionsError: state.definitions.error,
     definitionsStatus: state.definitions.status,
     definitions: state.definitions,
     collectModeEnabled: state.app.collectModeEnabled,
-    searchHelpEnabled: state.app.searchHelpEnabled,
+    filterDrawerVisible: state.app.filterDrawerVisible,
     collectedItems: state.app.collectedItems
   };
 }
 
 const mapDispatchToActions = {
   setFilterString,
+  setFilterValue,
   setBulkDefinitions,
   toggleCollectMode,
-  toggleSearchHelp,
+  toggleFilterDrawer,
   addCollectedItem,
   removeCollectedItem
 };
