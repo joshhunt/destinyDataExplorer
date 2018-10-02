@@ -50,6 +50,11 @@ function SearchHeader({
 
           {filterArr.map(filterOpt => {
             const filterDef = FILTERS_BY_ID[filterOpt.key];
+
+            if (!filterDef) {
+              return null;
+            }
+
             const values = isArray(filterOpt.value)
               ? filterOpt.value
               : [filterOpt.value];
