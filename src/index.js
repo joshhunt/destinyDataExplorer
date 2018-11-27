@@ -1,5 +1,6 @@
 import 'app/lib/autotrack.build';
 import 'app/lib/ls';
+import _ from 'lodash'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,6 +8,8 @@ import { AppContainer } from 'react-hot-loader';
 
 import AppRouter from './AppRouter';
 import './index.styl';
+
+window.lodash = _;
 
 const render = App => {
   ReactDOM.render(
