@@ -26,7 +26,9 @@ export const getName = item => {
 };
 
 export const bungieUrl = path => {
-  return path.includes('//bungie.net/') ? path : `https://bungie.net${path}`;
+  return path && path.includes && path.includes('//bungie.net/')
+    ? path
+    : `https://bungie.net${path}`;
 };
 
 function classFromString(str) {
