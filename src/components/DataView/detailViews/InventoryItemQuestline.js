@@ -87,7 +87,7 @@ function QuestlineBody({ item, definitions, pathForItem }) {
                         className={s.boringLink}
                         to={pathForItem('Objective', objective)}
                       >
-                        {objective.progressDescription}
+                        {objective.progressDescription || objective.hash}
                       </Link>
                       : {objective.completionValue}
                     </li>
