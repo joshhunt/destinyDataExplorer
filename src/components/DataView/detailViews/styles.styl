@@ -5,8 +5,51 @@
 .section + .section
   margin-top: 15px
 
+
+.description
+  max-width: 600px
+  white-space: pre-wrap
+
+.small
+  font-size: .9em
+  line-height: 1.2
+  margin-top: 5px
+
+.toggleButton
+  composes: filterButton from 'src/components/SearchHeader/styles.styl'
+  background: rgba(white, .07)
+  border: none
+
+  &:hover
+    background: rgba(white, .1)
+
+.toggleButtonActive
+  composes: toggleButton
+  background: rgba(white, 1)
+  color: black
+
+  &:hover
+    background: rgba(white, .9)
+
+.boringLink
+  color: inherit
+
 .title
   margin: 0 0 5px 0
+
+.boringList
+  margin-top: 5px
+  padding-left: 1ch
+  // margin-left: 0
+  // padding-left: 0
+  list-style-type: none
+
+  li
+    margin-left: 0
+    padding-left: 0
+
+    &:before
+      content: '- '
 
 .sectionTitle
   border-bottom: 1px solid rgba(white, .3)

@@ -2,6 +2,7 @@ import React from 'react';
 import 'react-tabs/style/react-tabs.css';
 
 import Item from 'src/components/Item';
+import Questline, { ViewParentQuestline } from './InventoryItemQuestline';
 
 import s from './styles.styl';
 
@@ -118,28 +119,30 @@ function Sockets({ item, definitions, pathForItem }) {
 export default function InventoryItem({ item, definitions, pathForItem }) {
   const hasGearset = item.gearset && item.gearset.itemList.length > 0;
   const hasSockets = !!item.sockets;
+  const isQuestline = item.setData && item.setData.setType === 'quest_global';
+  console.log({ isQuestline, item });
 
-  if (!(hasGearset || hasSockets)) {
+  const views = [
+    hasGearset && GearsetItemList,
+    hasSockets && Sockets,
+    isQuestline && Questline,
+    item.objectives && item.objectives.questlineItemHash && ViewParentQuestline
+  ].filter(Boolean);
+
+  if (!views.length) {
     return null;
   }
 
   return (
     <div className={s.root}>
-      {hasGearset && (
-        <GearsetItemList
+      {views.map((View, index) => (
+        <View
+          key={index}
           item={item}
           definitions={definitions}
           pathForItem={pathForItem}
         />
-      )}
-
-      {hasSockets && (
-        <Sockets
-          item={item}
-          definitions={definitions}
-          pathForItem={pathForItem}
-        />
-      )}
+      ))}
     </div>
   );
 }
