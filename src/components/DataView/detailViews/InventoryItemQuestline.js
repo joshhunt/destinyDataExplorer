@@ -74,26 +74,31 @@ function QuestlineBody({ item, definitions, pathForItem }) {
                 {def.displayProperties.description}
               </div>
 
-              <div>
-                <br />
-                <strong>Objectives:</strong>
-              </div>
+              {def.objectives &&
+                def.objectives.objectiveHashes && (
+                  <Fragment>
+                    <div>
+                      <br />
+                      <strong>Objectives:</strong>
+                    </div>
 
-              <ul className={s.boringList}>
-                {def.objectives.objectiveHashes.map(objectiveHash =>
-                  withObjectiveDef(objectiveHash, objective => (
-                    <li key={objectiveHash}>
-                      <Link
-                        className={s.boringLink}
-                        to={pathForItem('Objective', objective)}
-                      >
-                        {objective.progressDescription || objective.hash}
-                      </Link>
-                      : {objective.completionValue}
-                    </li>
-                  ))
+                    <ul className={s.boringList}>
+                      {def.objectives.objectiveHashes.map(objectiveHash =>
+                        withObjectiveDef(objectiveHash, objective => (
+                          <li key={objectiveHash}>
+                            <Link
+                              className={s.boringLink}
+                              to={pathForItem('Objective', objective)}
+                            >
+                              {objective.progressDescription || objective.hash}
+                            </Link>
+                            : {objective.completionValue}
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </Fragment>
                 )}
-              </ul>
             </div>
           </div>
         ))
