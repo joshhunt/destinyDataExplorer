@@ -2,9 +2,12 @@
   padding: 10px
   background: rgba(black,.15)
 
-.section + .section
-  margin-top: 15px
+.section
+  margin-bottom: 15px
 
+.inlineSection
+  composes: section
+  // display: inline-block
 
 .description
   max-width: 600px
@@ -22,6 +25,9 @@
 
   &:hover
     background: rgba(white, .1)
+
+  &:active
+    background: rgba(white, .2)
 
 .toggleButtonActive
   composes: toggleButton
@@ -86,6 +92,9 @@
   background: rgba(black, .15)
   width: calc(20% - 10px)
   border-radius: 2px
+  // transition: all 250ms ease
+  max-height: 320px
+  overflow: auto
 
   .item
     padding: 0

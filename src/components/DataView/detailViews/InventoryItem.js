@@ -45,7 +45,7 @@ function Sockets({ item, definitions, pathForItem }) {
           ];
 
         return (
-          <div className={s.section}>
+          <div className={s.inlineSection}>
             <div className={s.sectionTitle}>
               {socketCategoryDef.displayProperties.name}
             </div>
@@ -75,7 +75,7 @@ function Sockets({ item, definitions, pathForItem }) {
                     </div>
 
                     <div className={s.socketAlts}>
-                      {socketEntry.reusablePlugItems
+                      {[...socketEntry.reusablePlugItems, ...socketEntry.randomizedPlugItems]
                         .filter(
                           h =>
                             h.plugItemHash !== socketEntry.singleInitialItemHash

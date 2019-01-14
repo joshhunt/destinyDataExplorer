@@ -83,3 +83,20 @@ $duration = 200ms
   .data
     transform: translate(100%)
     transition: transform $duration
+
+
+.rawJsonTextarea
+  width: 100%
+  height: 1px
+  font-family: "Roboto Mono"
+  background: transparent
+  font-size: 13px
+  color: #268AD1
+
+  &::selection { background: rgba(white, .15) }
+
+.button
+  composes: toggleButton from './detailViews/styles.styl'
+
+.jsonParent > *
+  user-select: initial !important
