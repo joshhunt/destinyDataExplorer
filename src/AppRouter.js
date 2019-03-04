@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import Home from './views/Home';
+import DefinitionDiffs from './views/DefinitionDiffs';
 
 export default class AppRouter extends Component {
   render() {
@@ -14,6 +15,7 @@ export default class AppRouter extends Component {
         <Router history={browserHistory}>
           <Route path="/" component={Home} />
           <Route path="/i/*" component={Home} />
+          <Route path="/diffs" component={DefinitionDiffs} />
         </Router>
       </Provider>
     );
