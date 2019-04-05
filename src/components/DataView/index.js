@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router';
-import { isString, memoize } from 'lodash';
-import cx from 'classnames';
-import JSONTree from 'react-json-tree';
+import React, { Component } from "react";
+import { Link } from "react-router";
+import { isString, memoize, get } from "lodash";
+import cx from "classnames";
+import JSONTree from "react-json-tree";
 
-import BungieImage from 'src/components/BungieImage';
-import { getNameForItem, bungieUrl } from 'src/lib/destinyUtils';
-import copyToClipboard from 'src/lib/copyToClipboard';
+import BungieImage from "src/components/BungieImage";
+import { getNameForItem, bungieUrl } from "src/lib/destinyUtils";
+import copyToClipboard from "src/lib/copyToClipboard";
 
-import Vendor from './detailViews/Vendor';
-import InventoryItem from './detailViews/InventoryItem';
-import PresentationNode from './detailViews/PresentationNode';
+import Vendor from "./detailViews/Vendor";
+import InventoryItem from "./detailViews/InventoryItem";
+import PresentationNode from "./detailViews/PresentationNode";
+import AnyObjectives from "./detailViews/AnyObjectives";
 
-import specialValueOverrides from './specialValueOverrides';
-import s from './styles.styl';
+import specialValueOverrides from "./specialValueOverrides";
+import s from "./styles.styl";
 
 const DETAIL_VIEWS = {
   DestinyVendorDefinition: Vendor,
@@ -21,7 +22,7 @@ const DETAIL_VIEWS = {
   DestinyPresentationNodeDefinition: PresentationNode
 };
 
-const stringifyJSON = memoize(obj => JSON.stringify(obj, null, 2))
+const stringifyJSON = memoize(obj => JSON.stringify(obj, null, 2));
 
 const isImage = value => isString(value) && value.match(/\.(png|jpg|jpeg)$/);
 
@@ -41,7 +42,7 @@ export default class DataView extends Component {
   state = {
     rawJSON: false,
     textAreaHeight: 1
-  }
+  };
 
   rootClick = ev => {
     if (ev.target === this.ref) {
@@ -97,22 +98,22 @@ export default class DataView extends Component {
   toggleRawJSON = () => {
     this.setState({
       rawJSON: !this.state.rawJSON
-    })
-  }
+    });
+  };
 
-  getTextareaRef = (ref) => {
+  getTextareaRef = ref => {
     if (ref) {
       setTimeout(() => {
         this.setState({
           textAreaHeight: ref.scrollHeight + 2
-        })
-      }, 1)
+        });
+      }, 1);
     }
-  }
+  };
 
   copyJSON = () => {
-    copyToClipboard(stringifyJSON(this.props.item))
-  }
+    copyToClipboard(stringifyJSON(this.props.item));
+  };
 
   render() {
     const {
@@ -146,18 +147,17 @@ export default class DataView extends Component {
         <div className={s.data} style={{ left: 100 * depth }}>
           <h2>
             {icon && <BungieImage className={s.titleIcon} alt="" src={icon} />}
-            {displayname}{' '}
-            {item.hash && <code className={s.code}>{item.hash}</code>}{' '}
+            {displayname}{" "}
+            {item.hash && <code className={s.code}>{item.hash}</code>}{" "}
             <code className={s.code}>{type}</code>
             {isPerk && <code className={s.code}>Perk</code>}
           </h2>
 
-          {item.displayProperties &&
-            item.displayProperties.description && (
-              <p className={s.itemDescription}>
-                {item.displayProperties.description}
-              </p>
-            )}
+          {item.displayProperties && item.displayProperties.description && (
+            <p className={s.itemDescription}>
+              {item.displayProperties.description}
+            </p>
+          )}
 
           {DetailView && (
             <DetailView
@@ -167,17 +167,38 @@ export default class DataView extends Component {
             />
           )}
 
-          {
-            rawJSON
-            ?
-              <div>
-                <textarea style={{height: textAreaHeight}} ref={this.getTextareaRef} className={s.rawJsonTextarea} value={stringifyJSON(item)} readOnly />
-              </div>
-            : <div className={s.jsonParent}><JSONTree data={item} valueRenderer={this.valueRenderer} style={{background: 'red'}} /></div>
-          }
+          <AnyObjectives
+            item={item}
+            definitions={definitions}
+            pathForItem={pathForItem}
+          />
 
-          <button className={s.button} onClick={this.toggleRawJSON}>View raw JSON</button>
-          <button className={s.button} onClick={this.copyJSON}>Copy JSON</button>
+          {rawJSON ? (
+            <div>
+              <textarea
+                style={{ height: textAreaHeight }}
+                ref={this.getTextareaRef}
+                className={s.rawJsonTextarea}
+                value={stringifyJSON(item)}
+                readOnly
+              />
+            </div>
+          ) : (
+            <div className={s.jsonParent}>
+              <JSONTree
+                data={item}
+                valueRenderer={this.valueRenderer}
+                style={{ background: "red" }}
+              />
+            </div>
+          )}
+
+          <button className={s.button} onClick={this.toggleRawJSON}>
+            View raw JSON
+          </button>
+          <button className={s.button} onClick={this.copyJSON}>
+            Copy JSON
+          </button>
         </div>
       </div>
     );
