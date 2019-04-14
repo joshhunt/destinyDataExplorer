@@ -1,6 +1,7 @@
 import { isString, intersection } from 'lodash';
 import * as enums from './destinyEnums';
 import { matches } from './search';
+import { getLower } from 'app/lib/utils';
 
 const isItemCategoryHash = (obj, hash) =>
   obj.def &&
@@ -108,6 +109,10 @@ export default [
   $('classitem', itemCategory(enums.CLASS_ITEMS)),
 
   $('medal', obj => obj.def && obj.def.medalTierIdentifier),
+
+  $(/sourceString:(.+)/i, false, (obj, term) =>
+    getLower(obj, 'def.inventory.stackUniqueLabel', '').includes(term)
+  ),
 
   $(/from:lastwish/, sourceString('last wish')),
   $(
