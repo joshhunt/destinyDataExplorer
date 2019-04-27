@@ -1,7 +1,7 @@
-import { isString, intersection } from 'lodash';
-import * as enums from './destinyEnums';
-import { matches } from './search';
-import { getLower } from 'app/lib/utils';
+import { isString, intersection } from "lodash";
+import * as enums from "./destinyEnums";
+import { matches } from "./search";
+import { getLower } from "app/lib/utils";
 
 const isItemCategoryHash = (obj, hash) =>
   obj.def &&
@@ -22,6 +22,22 @@ const hasPerk = (obj, hash) => {
   return !!it;
 };
 
+const hasRandomPerk = (obj, hash) => {
+  const item = obj.def;
+
+  if (!(item && item.sockets)) {
+    return false;
+  }
+
+  const it = item.sockets.socketEntries.find(socket => {
+    return socket.randomizedPlugItems.find(
+      randomPlugItem => (randomPlugItem.plugItemHash = hash)
+    );
+  });
+
+  return !!it;
+};
+
 const isDefinition = (obj, definitionName) => {
   return matches(obj.type, definitionName);
 };
@@ -30,7 +46,7 @@ const classType = value => obj => obj.def.classType === value;
 
 const $ = (term, secondArg, filterFn) => {
   const regex = isString(term)
-    ? new RegExp(`^is:${term.toLowerCase()}$`, 'i')
+    ? new RegExp(`^is:${term.toLowerCase()}$`, "i")
     : term;
 
   return filterFn
@@ -71,55 +87,56 @@ const sourceString = matching => obj =>
 export default [
   $(/itemcategory:(\d+)/i, true, isItemCategoryHash),
   $(/hasperk:(\d+)/i, true, hasPerk),
+  $(/hasrandomperk:(\d+)/i, true, hasRandomPerk),
   $(/data:(\w+)/i, false, isDefinition),
-  $('hunter', classType(enums.HUNTER)),
-  $('warlock', classType(enums.WARLOCK)),
-  $('titan', classType(enums.TITAN)),
+  $("hunter", classType(enums.HUNTER)),
+  $("warlock", classType(enums.WARLOCK)),
+  $("titan", classType(enums.TITAN)),
 
-  $('legendary', tierType(enums.LEGENDARY)),
-  $('exotic', tierType(enums.EXOTIC)),
-  $('uncommon', tierType(enums.UNCOMMON)),
-  $('rare', tierType(enums.RARE)),
-  $('common', tierType(enums.COMMON)),
+  $("legendary", tierType(enums.LEGENDARY)),
+  $("exotic", tierType(enums.EXOTIC)),
+  $("uncommon", tierType(enums.UNCOMMON)),
+  $("rare", tierType(enums.RARE)),
+  $("common", tierType(enums.COMMON)),
 
-  $('kinetic', itemCategory(enums.KINETIC_WEAPON)),
-  $('energy', itemCategory(enums.ENERGY_WEAPON)),
-  $('power', itemCategory(enums.POWER_WEAPON)),
+  $("kinetic", itemCategory(enums.KINETIC_WEAPON)),
+  $("energy", itemCategory(enums.ENERGY_WEAPON)),
+  $("power", itemCategory(enums.POWER_WEAPON)),
 
-  $('weapon', itemCategory(enums.WEAPON)),
-  $('armor', itemCategory(enums.ARMOR)),
+  $("weapon", itemCategory(enums.WEAPON)),
+  $("armor", itemCategory(enums.ARMOR)),
 
-  $('armorornament', itemCategory(enums.ARMOR_MODS_ORNAMENTS)),
-  $('weaponornament', itemCategory(enums.WEAPON_MODS_ORNAMENTS)),
-  $('dummy', itemCategory(enums.DUMMIES)),
-  $('ghost', itemCategory(enums.GHOST)),
-  $('sparrow', itemCategory(enums.SPARROW)),
-  $('ship', itemCategory(enums.SHIP)),
-  $('shader', itemCategory(enums.SHADER)),
-  $('gear', anyItemCategory(enums.ARMOR, enums.WEAPON, enums.GHOST)),
+  $("armorornament", itemCategory(enums.ARMOR_MODS_ORNAMENTS)),
+  $("weaponornament", itemCategory(enums.WEAPON_MODS_ORNAMENTS)),
+  $("dummy", itemCategory(enums.DUMMIES)),
+  $("ghost", itemCategory(enums.GHOST)),
+  $("sparrow", itemCategory(enums.SPARROW)),
+  $("ship", itemCategory(enums.SHIP)),
+  $("shader", itemCategory(enums.SHADER)),
+  $("gear", anyItemCategory(enums.ARMOR, enums.WEAPON, enums.GHOST)),
 
-  $('ghost', itemCategory(enums.GHOST)),
-  $('sparrow', itemCategory(enums.SPARROW)),
-  $('ship', itemCategory(enums.SHIP)),
-  $('shader', itemCategory(enums.SHADER)),
-  $('oldemote', itemCategory(enums.EMOTES)),
-  $('emote', allItemCategories(enums.EMOTES, enums.MODS2)),
+  $("ghost", itemCategory(enums.GHOST)),
+  $("sparrow", itemCategory(enums.SPARROW)),
+  $("ship", itemCategory(enums.SHIP)),
+  $("shader", itemCategory(enums.SHADER)),
+  $("oldemote", itemCategory(enums.EMOTES)),
+  $("emote", allItemCategories(enums.EMOTES, enums.MODS2)),
 
-  $('emblem', itemCategory(enums.EMBLEM)),
-  $('classitem', itemCategory(enums.CLASS_ITEMS)),
+  $("emblem", itemCategory(enums.EMBLEM)),
+  $("classitem", itemCategory(enums.CLASS_ITEMS)),
 
-  $('medal', obj => obj.def && obj.def.medalTierIdentifier),
+  $("medal", obj => obj.def && obj.def.medalTierIdentifier),
 
   $(/sourceString:(.+)/i, false, (obj, term) =>
-    getLower(obj, 'def.inventory.stackUniqueLabel', '').includes(term)
+    getLower(obj, "def.inventory.stackUniqueLabel", "").includes(term)
   ),
 
-  $(/from:lastwish/, sourceString('last wish')),
+  $(/from:lastwish/, sourceString("last wish")),
   $(
     /temp:hastitle/,
     obj => obj.def && obj.def.titleInfo && obj.def.titleInfo.hasTitle
   ),
 
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
-  $('classified', obj => obj.def && obj.def.redacted)
+  $("classified", obj => obj.def && obj.def.redacted)
 ];
