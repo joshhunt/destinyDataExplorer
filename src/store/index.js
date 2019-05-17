@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import { createStore, combineReducers } from "redux";
 import { mapValues } from "lodash";
 import querystring from "querystring";
+=======
+import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import { mapValues } from "lodash";
+import querystring from "querystring";
+import reduxThunk from "redux-thunk";
+>>>>>>> wip worker search
 
 import app from "./app";
 import filter from "./filter";
@@ -30,17 +37,22 @@ function sanitiseDefintionsState(defintionsState) {
   );
 }
 
-const store = (window.__store = createStore(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ &&
-    window.__REDUX_DEVTOOLS_EXTENSION__({
-      actionsBlacklist: [SET_BULK_DEFINITIONS],
-      stateSanitizer: state => ({
-        ...state,
-        definitions: sanitiseDefintionsState(state.definitions)
+const composeEnhancers =
+  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        actionsBlacklist: [SET_BULK_DEFINITIONS],
+        stateSanitizer: state => ({
+          ...state,
+          definitions: sanitiseDefintionsState(state.definitions)
+        })
       })
-    })
-));
+    : compose;
+
+const enhancer = composeEnhancers(applyMiddleware(reduxThunk));
+
+const store = createStore(rootReducer, enhancer);
+
+window.__store = store;
 
 const qs = querystring.parse(window.location.search.substr(1));
 const LANG_CODE = qs.lang || "en";

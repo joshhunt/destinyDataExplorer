@@ -2,10 +2,10 @@ import { makeAllDefsArray } from "./destinyUtils";
 import SEARCH_FUNCTIONS from "./searchFns";
 import normalizeText from "normalize-text";
 
-import { FILTERS } from "src/components/Filters";
+// import { FILTERS } from "src/components/Filters";
+const FILTERS = [];
 
 const last = arr => arr[arr.length - 1];
-// const INCLUDE_CLASSIFIED = 'include:classified';
 
 export const matches = (string, searchTerm) => {
   return (

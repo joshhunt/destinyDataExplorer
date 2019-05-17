@@ -21,6 +21,7 @@
     "imports-loader": "^0.8.0",
     "lodash": "^4.17.4",
     "normalize-text": "^0.4.2",
+    "promise-worker": "^2.0.1",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-app-rewire-hot-loader": "^1.0.0",
@@ -38,8 +39,10 @@
     "react-toggled": "^1.2.7",
     "react-virtualized": "^9.19.1",
     "redux": "^3.7.2",
+    "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
-    "sql.js": "github:DestinyItemManager/sql.js"
+    "sql.js": "github:DestinyItemManager/sql.js",
+    "worker-loader": "^2.0.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

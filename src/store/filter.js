@@ -1,8 +1,11 @@
-import { pickBy } from 'lodash';
-import { makePayloadAction } from './utils';
+import { pickBy } from "lodash";
 
-export const SET_FILTER_STRING = 'Set filter string';
-export const SET_FILTER_VALUE = 'Set filter value';
+import search from "src/lib/workerSearch";
+import { makePayloadAction } from "./utils";
+
+export const SET_FILTER_STRING = "Set filter string";
+export const SET_FILTER_VALUE = "Set filter value";
+export const SET_SEARCH_RESULTS = "Set search results";
 
 export default function filterReducer(state = {}, { type, payload }) {
   switch (type) {
@@ -13,6 +16,13 @@ export default function filterReducer(state = {}, { type, payload }) {
       };
     }
 
+    case SET_SEARCH_RESULTS: {
+      return {
+        ...state,
+        results: payload
+      };
+    }
+
     case SET_FILTER_VALUE: {
       const draft = {
         ...state,
@@ -20,10 +30,8 @@ export default function filterReducer(state = {}, { type, payload }) {
       };
 
       const final = pickBy(draft, value => {
-        return value !== null && value !== 'null';
+        return value !== null && value !== "null";
       });
-
-      console.log({ draft, final });
 
       return final;
     }
@@ -33,5 +41,27 @@ export default function filterReducer(state = {}, { type, payload }) {
   }
 }
 
-export const setFilterString = makePayloadAction(SET_FILTER_STRING);
+// export const setFilterString = makePayloadAction(SET_FILTER_STRING);
 export const setFilterValue = makePayloadAction(SET_FILTER_VALUE);
+
+export const setFilterString = filterString => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    dispatch({
+      type: SET_FILTER_STRING,
+      payload: filterString
+    });
+
+    window.requestAnimationFrame(() => {
+      search(filterString, state.definitions)
+        .then(results => {
+          dispatch({
+            type: SET_SEARCH_RESULTS,
+            payload: results
+          });
+        })
+        .catch(err => console.error(err));
+    });
+  };
+};

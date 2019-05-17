@@ -1,6 +1,4 @@
-import { createSelector } from 'reselect';
-
-import search from 'src/lib/search';
+import { createSelector } from "reselect";
 
 const MAX_RESULTS = 150;
 
@@ -8,7 +6,8 @@ export const filteredItemsSelector = createSelector(
   state => state.filter.searchString,
   state => state.filter,
   state => state.definitions,
-  (searchString, filterOptions, definitions) => {
+  state => state.filter.results,
+  (searchString, filterOptions, definitions, results) => {
     const hasSearchQuery =
       (searchString && searchString.length > 2) ||
       Object.keys(filterOptions).length > 0;
@@ -16,13 +15,21 @@ export const filteredItemsSelector = createSelector(
     if (
       !hasSearchQuery ||
       !definitions ||
-      !definitions.DestinyInventoryItemDefinition
+      !definitions.DestinyInventoryItemDefinition ||
+      !results
     ) {
       return {};
     }
 
+    const mappedResults = results
+      .map(obj => ({
+        ...obj,
+        def: definitions[obj.type] && definitions[obj.type][obj.key]
+      }))
+      .filter(obj => obj.def);
+
     const payload = {};
-    payload.results = search(searchString, filterOptions, definitions);
+    payload.results = mappedResults;
     payload.allResults = payload.results;
 
     if (payload.results.length > MAX_RESULTS) {
