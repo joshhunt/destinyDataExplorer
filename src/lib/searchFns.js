@@ -1,4 +1,4 @@
-import { isString, intersection } from "lodash";
+import { get, isString, intersection } from "lodash";
 import * as enums from "./destinyEnums";
 import { matches } from "./search";
 import { getLower } from "app/lib/utils";
@@ -129,6 +129,19 @@ export default [
 
   $(/sourceString:(.+)/i, false, (obj, term) =>
     getLower(obj, "def.inventory.stackUniqueLabel", "").includes(term)
+  ),
+
+  $(
+    /hasParent:(.+)/i,
+    false,
+    (obj, term) =>
+      (obj.type === "DestinyRecordDefinition" ||
+        obj.type === "DestinyCollectibleDefinition") &&
+      get(
+        obj,
+        "def.presentationInfo.parentPresentationNodeHashes",
+        []
+      ).includes(parseInt(term, 10))
   ),
 
   $(/from:lastwish/, sourceString("last wish")),
