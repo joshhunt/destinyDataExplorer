@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router';
-import { isString, memoize } from 'lodash';
-import cx from 'classnames';
-import JSONTree from 'react-json-tree';
+import React, { Component } from "react";
+import { Link } from "react-router";
+import { isString, memoize } from "lodash";
+import cx from "classnames";
+import JSONTree from "react-json-tree";
 
-import BungieImage from 'src/components/BungieImage';
-import { getNameForItem, bungieUrl } from 'src/lib/destinyUtils';
-import copyToClipboard from 'src/lib/copyToClipboard';
+import BungieImage from "src/components/BungieImage";
+import { getNameForItem, bungieUrl } from "src/lib/destinyUtils";
+import copyToClipboard from "src/lib/copyToClipboard";
 
-import Vendor from './detailViews/Vendor';
-import InventoryItem from './detailViews/InventoryItem';
-import PresentationNode from './detailViews/PresentationNode';
-import AnyObjectives from './detailViews/AnyObjectives';
+import Vendor from "./detailViews/Vendor";
+import InventoryItem from "./detailViews/InventoryItem";
+import PresentationNode from "./detailViews/PresentationNode";
+import AnyObjectives from "./detailViews/AnyObjectives";
 
-import specialValueOverrides from './specialValueOverrides';
-import s from './styles.styl';
+import specialValueOverrides from "./specialValueOverrides";
+import s from "./styles.styl";
 
 const DETAIL_VIEWS = {
   DestinyVendorDefinition: Vendor,
@@ -125,6 +125,12 @@ export default class DataView extends Component {
       pathForItem
     } = this.props;
 
+    if (!item) {
+      return (
+        <div>Item not found. perhaps new definitions are still loading?</div>
+      );
+    }
+
     const { rawJSON, textAreaHeight } = this.state;
 
     const displayname = getNameForItem(item, true) || <em>No name</em>;
@@ -147,8 +153,8 @@ export default class DataView extends Component {
         <div className={s.data} style={{ left: 100 * depth }}>
           <h2>
             {icon && <BungieImage className={s.titleIcon} alt="" src={icon} />}
-            {displayname}{' '}
-            {item.hash && <code className={s.code}>{item.hash}</code>}{' '}
+            {displayname}{" "}
+            {item.hash && <code className={s.code}>{item.hash}</code>}{" "}
             <code className={s.code}>{type}</code>
             {isPerk && <code className={s.code}>Perk</code>}
           </h2>
@@ -188,7 +194,7 @@ export default class DataView extends Component {
               <JSONTree
                 data={item}
                 valueRenderer={this.valueRenderer}
-                style={{ background: 'red' }}
+                style={{ background: "red" }}
               />
             </div>
           )}

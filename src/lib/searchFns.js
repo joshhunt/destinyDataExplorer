@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { isString, intersection, isNumber } from "lodash";
+=======
+import { get, isString, intersection } from "lodash";
+>>>>>>> ea20814e327ece6e49c0df5cc5f896fda9fcc795
 import * as enums from "./destinyEnums";
 import { matches } from "./search";
 import { getLower } from "app/lib/utils";
@@ -146,6 +150,19 @@ export default [
 
     return valueFromKey === searchValue;
   }),
+
+  $(
+    /hasParent:(.+)/i,
+    false,
+    (obj, term) =>
+      (obj.type === "DestinyRecordDefinition" ||
+        obj.type === "DestinyCollectibleDefinition") &&
+      get(
+        obj,
+        "def.presentationInfo.parentPresentationNodeHashes",
+        []
+      ).includes(parseInt(term, 10))
+  ),
 
   $(/from:lastwish/, sourceString("last wish")),
   $(

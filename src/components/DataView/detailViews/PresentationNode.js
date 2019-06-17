@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { flatMapDeep, groupBy, uniqBy } from 'lodash';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { flatMapDeep, groupBy, uniqBy } from "lodash";
+import { connect } from "react-redux";
 
-import { addCollectedItem } from 'src/store/app';
+import { addCollectedItem } from "src/store/app";
 
-import Item from 'src/components/Item';
+import Item from "src/components/Item";
 
-import s from './styles.styl';
+import s from "./styles.styl";
 
 function deepCollectiblesFromPresentationNodes(node, definitions) {
   if (!node || !node.children) {
@@ -50,7 +50,7 @@ function RecursiveItemsBySource({
   const itemsBySource = Object.entries(
     groupBy(
       deepCollectiblesFromPresentationNodes(item, definitions),
-      'sourceString'
+      "sourceString"
     )
   )
     .map(([sourceString, items]) => {
@@ -85,7 +85,7 @@ function RecursiveItemsBySource({
                   pathForItem={pathForItem}
                   className={s.item}
                   entry={{
-                    type: 'DestinyCollectibleDefinition',
+                    type: "DestinyCollectibleDefinition",
                     def: collectible,
                     key: collectible.hash
                   }}
@@ -142,12 +142,12 @@ class PresentationNode extends Component {
   };
 
   addCollectiblesListToCollection = collectiblesList => {
-    console.log('want to add', `collectiblesList`);
+    console.log("want to add", `collectiblesList`);
 
     collectiblesList.forEach(col => {
-      console.log(' - ', col);
+      console.log(" - ", col);
       if (col.itemHash) {
-        console.log('   - yes');
+        console.log("   - yes");
         this.props.addCollectedItem({
           dxId: `DestinyInventoryItemDefinition:${col.itemHash}`,
           type: `DestinyInventoryItemDefinition`,
@@ -167,33 +167,36 @@ class PresentationNode extends Component {
         {definitions.DestinyCollectibleDefinition && (
           <p>
             <button onClick={this.toggle} className={s.button}>
-              {showRecursiveItemSources ? 'Hide' : 'View'} collectibles
+              {showRecursiveItemSources ? "Hide" : "View"} collectibles
               recursively
             </button>
           </p>
         )}
 
-        <Children
-          items={item.children.presentationNodes}
-          childDefinitionType="DestinyPresentationNodeDefinition"
-          definitions={definitions}
-          pathForItem={pathForItem}
-        />
+        {item.children && (
+          <div>
+            <Children
+              items={item.children.presentationNodes}
+              childDefinitionType="DestinyPresentationNodeDefinition"
+              definitions={definitions}
+              pathForItem={pathForItem}
+            />
 
-        <Children
-          items={item.children.collectibles}
-          childDefinitionType="DestinyCollectibleDefinition"
-          definitions={definitions}
-          pathForItem={pathForItem}
-        />
+            <Children
+              items={item.children.collectibles}
+              childDefinitionType="DestinyCollectibleDefinition"
+              definitions={definitions}
+              pathForItem={pathForItem}
+            />
 
-        <Children
-          items={item.children.records}
-          childDefinitionType="DestinyRecordDefinition"
-          definitions={definitions}
-          pathForItem={pathForItem}
-        />
-
+            <Children
+              items={item.children.records}
+              childDefinitionType="DestinyRecordDefinition"
+              definitions={definitions}
+              pathForItem={pathForItem}
+            />
+          </div>
+        )}
         {showRecursiveItemSources && (
           <RecursiveItemsBySource
             {...{ item, definitions, pathForItem }}
@@ -207,4 +210,7 @@ class PresentationNode extends Component {
   }
 }
 
-export default connect(null, { addCollectedItem })(PresentationNode);
+export default connect(
+  null,
+  { addCollectedItem }
+)(PresentationNode);
