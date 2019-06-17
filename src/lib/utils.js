@@ -1,5 +1,6 @@
-import { get } from 'lodash';
+import { get } from "lodash";
 
-export function getLower(obj, path, fallback = '') {
-  return get(obj, path, fallback).toLowerCase();
+export function getLower(obj, path, fallback = "") {
+  const g = get(obj, path, fallback);
+  return g.toLowerCase ? g.toLowerCase() : g;
 }

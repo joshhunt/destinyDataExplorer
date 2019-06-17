@@ -1,4 +1,4 @@
-import { isString, intersection } from "lodash";
+import { isString, intersection, isNumber } from "lodash";
 import * as enums from "./destinyEnums";
 import { matches } from "./search";
 import { getLower } from "app/lib/utils";
@@ -127,9 +127,25 @@ export default [
 
   $("medal", obj => obj.def && obj.def.medalTierIdentifier),
 
+  $(
+    "perk",
+    obj => obj.def && obj.def.perks && obj.def.plug && obj.def.perks.length > 0
+  ),
+
   $(/sourceString:(.+)/i, false, (obj, term) =>
     getLower(obj, "def.inventory.stackUniqueLabel", "").includes(term)
   ),
+
+  $(/=(.+):(.+)/, false, (obj, searchKey, searchValue) => {
+    const searchValueAsNumber = parseInt(searchValue, 10);
+    const valueFromKey = getLower(obj.def, searchKey);
+
+    if (isNumber(searchValueAsNumber)) {
+      return valueFromKey === searchValueAsNumber;
+    }
+
+    return valueFromKey === searchValue;
+  }),
 
   $(/from:lastwish/, sourceString("last wish")),
   $(

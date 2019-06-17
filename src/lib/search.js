@@ -1,8 +1,8 @@
-import { makeAllDefsArray } from './destinyUtils';
-import SEARCH_FUNCTIONS from './searchFns';
-import normalizeText from 'normalize-text';
+import { makeAllDefsArray } from "./destinyUtils";
+import SEARCH_FUNCTIONS from "./searchFns";
+import normalizeText from "normalize-text";
 
-import { FILTERS } from 'src/components/Filters';
+import { FILTERS } from "src/components/Filters";
 
 const last = arr => arr[arr.length - 1];
 // const INCLUDE_CLASSIFIED = 'include:classified';
@@ -46,7 +46,10 @@ export default function search(_searchTerm, filterOptions, definitions) {
       if (searchFn) {
         const match = query.match(searchFn.regex);
         const param = match[1];
+        const param2 = match[2];
         param && params.push(searchFn.parseInt ? parseInt(param, 10) : param);
+        param2 &&
+          params.push(searchFn.parseInt ? parseInt(param2, 10) : param2);
       } else {
         const comparableQuery = query.toLowerCase();
         searchFn = fallbackSearchFunction;
@@ -82,7 +85,7 @@ function push(arr, thing) {
 }
 
 export function tokenize(searchTerm) {
-  const phrases = searchTerm.split(' ').filter(s => s.length > 0);
+  const phrases = searchTerm.split(" ").filter(s => s.length > 0);
   const collection = [];
 
   let running = true;
@@ -98,7 +101,7 @@ export function tokenize(searchTerm) {
 
     push(collection, word);
 
-    if (word.includes(':')) {
+    if (word.includes(":")) {
       index += 1;
       continue; // return and run the next iteration
     }
@@ -114,7 +117,7 @@ export function tokenize(searchTerm) {
         break;
       }
 
-      if (innerWord.includes(':')) {
+      if (innerWord.includes(":")) {
         innerRunning = false;
         break;
       }

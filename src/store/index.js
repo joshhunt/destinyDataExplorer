@@ -1,17 +1,17 @@
-import { createStore, combineReducers } from 'redux';
-import { mapValues } from 'lodash';
-import querystring from 'querystring';
+import { createStore, combineReducers } from "redux";
+import { mapValues } from "lodash";
+import querystring from "querystring";
 
-import app from './app';
-import filter from './filter';
-import { fasterGetDefinitions } from 'src/lib/definitions';
+import app from "./app";
+import filter from "./filter";
+import { fasterGetDefinitions } from "src/lib/definitions";
 
 import definitions, {
   setBulkDefinitions,
   definitionsStatus,
   definitionsError,
   SET_BULK_DEFINITIONS
-} from './definitions';
+} from "./definitions";
 
 const rootReducer = combineReducers({
   app,
@@ -43,7 +43,12 @@ const store = (window.__store = createStore(
 ));
 
 const qs = querystring.parse(window.location.search.substr(1));
-const LANG_CODE = qs.lang || 'en';
+const LANG_CODE = qs.lang || "en";
+
+store.subscribe(() => {
+  window.__state = store.getState();
+  window.__definitions = window.__state.definitions;
+});
 
 fasterGetDefinitions(
   LANG_CODE,
@@ -53,7 +58,7 @@ fasterGetDefinitions(
   },
   (err, data) => {
     if (err) {
-      console.error('Error loading definitions:', err);
+      console.error("Error loading definitions:", err);
       store.dispatch(definitionsError(err));
       return;
     }
