@@ -1,13 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import cx from 'classnames';
-import Select from 'react-select';
-import { intersection } from 'lodash';
+import React from "react";
+import { connect } from "react-redux";
+import cx from "classnames";
+import Select from "react-select";
+import { intersection } from "lodash";
 
-import Icon from 'src/components/Icon';
-import { setFilterValue } from 'src/store/filter';
+import Icon from "src/components/Icon";
+import { setFilterValue } from "src/store/filter";
 
-import s from './styles.styl';
+import s from "./styles.styl";
 
 const FILTER_OPTION_RENDERERS = {
   select({ data, onChange, value }) {
@@ -44,8 +44,19 @@ function selectDataFromDefs(defs) {
 
 export const FILTERS = [
   {
-    label: 'Item category',
-    id: 'itemCategoryHash',
+    label: "Table name",
+    id: "tableName",
+    renderer: FILTER_OPTION_RENDERERS.select,
+    searchFn: (obj, filterValue) => {
+      return obj.type === filterValue.value;
+    },
+    data: definitions =>
+      Object.keys(definitions).map(n => ({ value: n, label: n }))
+  },
+
+  {
+    label: "Item category",
+    id: "itemCategoryHash",
     renderer: FILTER_OPTION_RENDERERS.multiSelect,
     searchFn: (obj, filterValue) => {
       const filterValues = filterValue.map(f => f.value);
@@ -60,8 +71,8 @@ export const FILTERS = [
       selectDataFromDefs(definitions.DestinyItemCategoryDefinition)
   },
   {
-    label: 'Item tier',
-    id: 'itemTier',
+    label: "Item tier",
+    id: "itemTier",
     renderer: FILTER_OPTION_RENDERERS.select,
     searchFn: (obj, filterValue) =>
       obj.def.inventory && obj.def.inventory.tierTypeHash === filterValue.value,
@@ -70,21 +81,21 @@ export const FILTERS = [
   },
 
   {
-    label: 'Item class',
-    id: 'itemClass',
+    label: "Item class",
+    id: "itemClass",
     renderer: FILTER_OPTION_RENDERERS.select,
     searchFn: (obj, filterValue) =>
       !obj.def.redacted && obj.def.classType === filterValue.value,
     data: () => [
-      { value: 0, label: 'Titan' },
-      { value: 1, label: 'Hunter' },
-      { value: 2, label: 'Warlock' }
+      { value: 0, label: "Titan" },
+      { value: 1, label: "Hunter" },
+      { value: 2, label: "Warlock" }
     ]
   },
 
   {
-    label: 'Damage type',
-    id: 'damageType',
+    label: "Damage type",
+    id: "damageType",
     renderer: FILTER_OPTION_RENDERERS.select,
     searchFn: (obj, filterValue) =>
       obj.def.damageTypeHashes &&
@@ -140,4 +151,7 @@ const mapDispatchToActions = {
   setFilterValue
 };
 
-export default connect(mapStateToProps, mapDispatchToActions)(Filters);
+export default connect(
+  mapStateToProps,
+  mapDispatchToActions
+)(Filters);

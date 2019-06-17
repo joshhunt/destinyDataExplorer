@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { isString, intersection, isNumber } from "lodash";
-=======
-import { get, isString, intersection } from "lodash";
->>>>>>> ea20814e327ece6e49c0df5cc5f896fda9fcc795
+import { get, isString, intersection, isNumber } from "lodash";
 import * as enums from "./destinyEnums";
 import { matches } from "./search";
 import { getLower } from "app/lib/utils";

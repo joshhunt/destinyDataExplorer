@@ -35,6 +35,8 @@ export default function search(_searchTerm, filterOptions, definitions) {
 
   let results = allDefs;
 
+  console.log("allDefs:", allDefs);
+
   if (queries) {
     results = queries.reduce((acc, query) => {
       let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
