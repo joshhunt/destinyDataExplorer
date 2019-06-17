@@ -140,6 +140,10 @@ export default [
     const searchValueAsNumber = parseInt(searchValue, 10);
     const valueFromKey = getLower(obj.def, searchKey);
 
+    if (obj.key === "48090081") {
+      debugger;
+    }
+
     if (isNumber(searchValueAsNumber)) {
       return valueFromKey === searchValueAsNumber;
     }

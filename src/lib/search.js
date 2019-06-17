@@ -35,8 +35,6 @@ export default function search(_searchTerm, filterOptions, definitions) {
 
   let results = allDefs;
 
-  console.log("allDefs:", allDefs);
-
   if (queries) {
     results = queries.reduce((acc, query) => {
       let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
@@ -65,8 +63,6 @@ export default function search(_searchTerm, filterOptions, definitions) {
   const filterOptionsArr = Object.entries(filterOptions).map(
     ([key, value]) => ({ key, value })
   );
-
-  console.log({ filterOptionsArr });
 
   results = filterOptionsArr.reduce((acc, filterOptionSet) => {
     const filterDef = FILTERS.find(f => f.id === filterOptionSet.key);
