@@ -9,20 +9,44 @@ const promiseWorker = new PromiseWorker(worker);
 
 const sentDefinitions = new WeakMap();
 
+function deferred() {
+  const dfd = {};
+  dfd.promise = new Promise((resolve, reject) => {
+    dfd.resolve = resolve;
+    dfd.reject = reject;
+  });
+
+  return dfd;
+}
+
 function toWorker(type, payload) {
   return promiseWorker.postMessage({ type, payload });
 }
 
 export function sendDefinitions(definitions) {
-  sentDefinitions.set(definitions, true);
-  return toWorker(SEND_DEFINITIONS, definitions);
-}
+  console.log(">>> sending definitions", definitions);
 
-export default async function search(searchString, definitions) {
-  if (!sentDefinitions.has(definitions)) {
-    console.log("Definitions not send, sending them now");
-    await sendDefinitions(definitions);
+  const existingPromise = sentDefinitions.get(definitions);
+
+  if (existingPromise) {
+    return existingPromise;
   }
 
-  return toWorker(SEARCH, searchString);
+  const dfd = deferred();
+  sentDefinitions.set(definitions, dfd.promise);
+
+  return toWorker(SEND_DEFINITIONS, definitions)
+    .then(() => dfd.resolve())
+    .then(() => dfd.promise);
+}
+
+export default async function search(filterPayload, definitions) {
+  if (!sentDefinitions.has(definitions)) {
+    console.log("Definitions not send, sending them now");
+    sendDefinitions(definitions);
+  }
+
+  await sentDefinitions.get(definitions);
+
+  return toWorker(SEARCH, filterPayload);
 }

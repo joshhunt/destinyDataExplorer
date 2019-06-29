@@ -1,17 +1,12 @@
-<<<<<<< HEAD
-import { createStore, combineReducers } from "redux";
-import { mapValues } from "lodash";
-import querystring from "querystring";
-=======
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { mapValues } from "lodash";
 import querystring from "querystring";
 import reduxThunk from "redux-thunk";
->>>>>>> wip worker search
 
-import app from "./app";
+import app, { startingSearchWorker, startingSearchWorkerSuccess } from "./app";
 import filter from "./filter";
 import { fasterGetDefinitions } from "src/lib/definitions";
+import { sendDefinitions } from "src/lib/workerSearch";
 
 import definitions, {
   setBulkDefinitions,
@@ -78,6 +73,18 @@ fasterGetDefinitions(
     if (data && data.definitions) {
       store.dispatch(definitionsStatus({ status: null }));
       store.dispatch(setBulkDefinitions(data.definitions));
+
+      store.dispatch(startingSearchWorker());
+
+      window.setTimeout(() => {
+        window.requestAnimationFrame(() => {
+          const defs = store.getState().definitions;
+
+          sendDefinitions(defs).then(() => {
+            store.dispatch(startingSearchWorkerSuccess());
+          });
+        });
+      }, 1000);
     }
   }
 );

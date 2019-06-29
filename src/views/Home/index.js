@@ -1,31 +1,31 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { isString } from 'lodash';
-import cx from 'classnames';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { isString } from "lodash";
+import cx from "classnames";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
 import {
   toggleCollectMode,
   toggleFilterDrawer,
   addCollectedItem,
   removeCollectedItem
-} from 'src/store/app';
-import { setBulkDefinitions } from 'src/store/definitions';
-import { setFilterString, setFilterValue } from 'src/store/filter';
-import { makeTypeShort, getRandomItems } from 'src/lib/destinyUtils';
+} from "src/store/app";
+import { setBulkDefinitions } from "src/store/definitions";
+import { setFilterString, setFilterValue } from "src/store/filter";
+import { makeTypeShort, getRandomItems } from "src/lib/destinyUtils";
 
-import Loading from 'src/components/Loading';
-import CollectDrawer from 'src/components/CollectDrawer';
-import SearchHeader from 'src/components/SearchHeader';
-import DataView from 'src/components/DataView';
-import Item from 'src/components/Item';
+import Loading from "src/components/Loading";
+import CollectDrawer from "src/components/CollectDrawer";
+import SearchHeader from "src/components/SearchHeader";
+import DataView from "src/components/DataView";
+import Item from "src/components/Item";
 
-import { filteredItemsSelector } from './selectors';
-import lookup from './lookup';
-import s from './styles.styl';
+import { filteredItemsSelector } from "./selectors";
+import lookup from "./lookup";
+import s from "./styles.styl";
 
 function parsePathSegment(segment) {
-  const [type, hash] = segment.split(':');
+  const [type, hash] = segment.split(":");
   return { type: `Destiny${type}Definition`, shortType: type, hash };
 }
 
@@ -34,7 +34,7 @@ function parsePath(splat) {
     return [];
   }
 
-  return splat.split('/').map(parsePathSegment);
+  return splat.split("/").map(parsePathSegment);
 }
 
 class HomeView extends Component {
@@ -42,7 +42,7 @@ class HomeView extends Component {
     loading: true,
     updating: false,
     views: [],
-    searchTerm: '',
+    searchTerm: "",
     results: null
   };
 
@@ -75,7 +75,7 @@ class HomeView extends Component {
   pathForItem = (type, obj) => {
     // TODO: some places in the code pass through a definition item directly rather than one of our
     // 'obj' wrappers
-    let url = '';
+    let url = "";
     const shortType = makeTypeShort(type);
     const key = obj.def ? obj.key : obj.hash;
 
@@ -94,9 +94,9 @@ class HomeView extends Component {
 
     const newPath =
       newViews.length === 0
-        ? '/'
-        : '/i/' +
-          newViews.map(view => `${view.shortType}:${view.hash}`).join('/');
+        ? "/"
+        : "/i/" +
+          newViews.map(view => `${view.shortType}:${view.hash}`).join("/");
 
     this.props.router.push(newPath);
   };
@@ -131,7 +131,7 @@ class HomeView extends Component {
     if (this.props.collectModeEnabled) {
       ev.preventDefault();
 
-      if (entry.type !== 'DestinyInventoryItemDefinition') {
+      if (entry.type !== "DestinyInventoryItemDefinition") {
         return;
       }
 
@@ -156,7 +156,8 @@ class HomeView extends Component {
       definitionsError,
       definitionsStatus,
       filterResults,
-      filter
+      filter,
+      searchIsReady
     } = this.props;
 
     const { views } = this.state;
@@ -172,9 +173,8 @@ class HomeView extends Component {
     return (
       <div className={s.root}>
         <SearchHeader
-          filter={filter}
+          searchIsReady={searchIsReady}
           setFilterValue={this.props.setFilterValue}
-          definitions={this.props.definitions}
           onSearchChange={this.onSearchChange}
           toggleCollectMode={toggleCollectMode}
           collectModeEnabled={collectModeEnabled}
@@ -187,11 +187,12 @@ class HomeView extends Component {
             className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
           >
             {definitionsStatus && (
-              <Loading children={'Downloading new data from Bungie...'} />
+              <Loading children={"Downloading new data from Bungie..."} />
             )}
 
-            {definitionsError &&
-              false && <Loading noSpin children="Error loading manifest" />}
+            {definitionsError && false && (
+              <Loading noSpin children="Error loading manifest" />
+            )}
 
             {filterResults.noResults && <h2>No results</h2>}
 
@@ -216,8 +217,8 @@ class HomeView extends Component {
                 <div className={s.moreResultsWrap}>
                   <div className={s.moreResults}>
                     {filterResults.allResults.length -
-                      filterResults.results.length}{' '}
-                    more results hidden for performance.{' '}
+                      filterResults.results.length}{" "}
+                    more results hidden for performance.{" "}
                     <button
                       onClick={this.displayAllResults}
                       className={s.moreResultsButton}
@@ -281,7 +282,8 @@ function mapStateToProps(state) {
     definitions: state.definitions,
     collectModeEnabled: state.app.collectModeEnabled,
     filterDrawerVisible: state.app.filterDrawerVisible,
-    collectedItems: state.app.collectedItems
+    collectedItems: state.app.collectedItems,
+    searchIsReady: state.app.searchIsReady
   };
 }
 
@@ -295,4 +297,7 @@ const mapDispatchToActions = {
   removeCollectedItem
 };
 
-export default connect(mapStateToProps, mapDispatchToActions)(HomeView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToActions
+)(HomeView);

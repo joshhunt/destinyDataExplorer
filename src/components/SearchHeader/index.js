@@ -1,20 +1,19 @@
-import React from 'react';
-import { keyBy, isArray } from 'lodash';
-import { connect } from 'react-redux';
+import React from "react";
+import { keyBy, isArray } from "lodash";
+import { connect } from "react-redux";
 
-import { FILTERS } from 'src/components/Filters';
+import { FILTERS } from "src/lib/search/guiSearchFilters";
 
-import Modal from 'src/components/Modal';
-import Icon from 'src/components/Icon';
-import Filters from 'src/components/Filters';
+import Modal from "src/components/Modal";
+import Icon from "src/components/Icon";
+import Filters from "src/components/Filters";
 
-import s from './styles.styl';
-import logo from './logo.svg';
+import s from "./styles.styl";
+import logo from "./logo.svg";
 
-const FILTERS_BY_ID = keyBy(FILTERS, 'id');
+const FILTERS_BY_ID = keyBy(FILTERS, "id");
 
 function SearchHeader({
-  definitions,
   onSearchChange,
   collectModeEnabled,
   toggleCollectMode,
@@ -22,13 +21,17 @@ function SearchHeader({
   toggleSearchHelp,
   setFilterValue,
   toggleFilterDrawer,
-  filter,
-  defs
+  filters,
+  searchString,
+  defs,
+  searchIsReady
 }) {
-  const filterArr = Object.entries(filter).map(([key, value]) => ({
-    key,
-    value
-  }));
+  const filterArr = Object.entries(filters)
+    .map(([key, value]) => ({
+      key,
+      value
+    }))
+    .filter(v => v.value);
 
   return (
     <div className={s.root}>
@@ -42,10 +45,15 @@ function SearchHeader({
         <div className={s.mainMain}>
           <input
             type="text"
-            value={filter.searchString || ''}
-            placeholder="Search by item name or hash"
+            value={searchString || ""}
+            placeholder={
+              searchIsReady
+                ? "Search by item name or hash"
+                : "Loading search..."
+            }
             className={s.searchField}
             onChange={onSearchChange}
+            disabled={!searchIsReady}
           />
 
           {filterArr.map(filterOpt => {
@@ -59,6 +67,8 @@ function SearchHeader({
               ? filterOpt.value
               : [filterOpt.value];
 
+            console.log({ values, filterOpt });
+
             const texts = values.map(value => {
               const valueLabel = filterDef
                 .data(defs)
@@ -69,7 +79,7 @@ function SearchHeader({
 
             return (
               <div className={s.appliedFilter} key={filterOpt.key}>
-                {filterDef.label}: {texts.join(' & ')}
+                {filterDef.label}: {texts.join(" & ")}
                 <button
                   className={s.closeButton}
                   onClick={() => setFilterValue({ [filterOpt.key]: null })}
@@ -92,7 +102,7 @@ function SearchHeader({
           className={collectModeEnabled ? s.bigButtonActive : s.bigButton}
           onClick={toggleCollectMode}
           title={
-            collectModeEnabled ? 'Disable collect mode' : 'Enable collect mode'
+            collectModeEnabled ? "Disable collect mode" : "Enable collect mode"
           }
         >
           <div className={s.buttonInner}>
@@ -126,7 +136,9 @@ function SearchHeader({
 }
 
 const mapStateToProps = state => ({
-  defs: state.definitions
+  defs: state.definitions,
+  filters: state.filter.filters,
+  searchString: state.filter.searchString
 });
 
 export default connect(mapStateToProps)(SearchHeader);

@@ -1,11 +1,25 @@
-import { makeAllDefsArray } from "./destinyUtils";
+import { makeAllDefsArray } from "../destinyUtils";
 import SEARCH_FUNCTIONS from "./searchFns";
-import normalizeText from "normalize-text";
+import _normalizeText from "normalize-text";
 
-// import { FILTERS } from "src/components/Filters";
-const FILTERS = [];
+import { FILTERS } from "src/lib/search/guiSearchFilters";
 
 const last = arr => arr[arr.length - 1];
+
+const normalizeTextCache = new Map();
+
+const normalizeText = string => {
+  const cached = normalizeTextCache.get(string);
+
+  if (cached) {
+    return cached;
+  }
+
+  const result = _normalizeText(string);
+  normalizeTextCache.set(string, result);
+
+  return result;
+};
 
 export const matches = (string, searchTerm) => {
   return (

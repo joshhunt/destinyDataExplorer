@@ -1,6 +1,6 @@
 import { get, isString, intersection, isNumber } from "lodash";
-import * as enums from "./destinyEnums";
-import { matches } from "./search";
+import * as enums from "../destinyEnums";
+import { matches } from ".";
 import { getLower } from "app/lib/utils";
 
 const isItemCategoryHash = (obj, hash) =>
@@ -132,7 +132,7 @@ export default [
     obj => obj.def && obj.def.perks && obj.def.plug && obj.def.perks.length > 0
   ),
 
-  $(/sourceString:(.+)/i, false, (obj, term) =>
+  $(/stackUniqueLabel:(.+)/i, false, (obj, term) =>
     getLower(obj, "def.inventory.stackUniqueLabel", "").includes(term)
   ),
 

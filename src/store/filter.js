@@ -7,7 +7,14 @@ export const SET_FILTER_STRING = "Set filter string";
 export const SET_FILTER_VALUE = "Set filter value";
 export const SET_SEARCH_RESULTS = "Set search results";
 
-export default function filterReducer(state = {}, { type, payload }) {
+const INITIAL_STATE = {
+  filters: {}
+};
+
+export default function filterReducer(
+  state = INITIAL_STATE,
+  { type, payload }
+) {
   switch (type) {
     case SET_FILTER_STRING: {
       return {
@@ -26,14 +33,17 @@ export default function filterReducer(state = {}, { type, payload }) {
     case SET_FILTER_VALUE: {
       const draft = {
         ...state,
-        ...payload
+        filters: {
+          ...state.filters,
+          ...payload
+        }
       };
 
-      const final = pickBy(draft, value => {
+      draft.filters = pickBy(draft.filters, value => {
         return value !== null && value !== "null";
       });
 
-      return final;
+      return draft;
     }
 
     default:
@@ -41,27 +51,38 @@ export default function filterReducer(state = {}, { type, payload }) {
   }
 }
 
+const raf = () =>
+  new Promise(resolve => window.requestAnimationFrame(() => resolve()));
+
+async function doSearch(dispatch, getState) {
+  const state = getState();
+
+  await raf();
+
+  const searchPayload = {
+    searchString: state.filter.searchString,
+    filters: state.filter.filters
+  };
+
+  const results = await search(searchPayload, state.definitions);
+
+  dispatch({
+    type: SET_SEARCH_RESULTS,
+    payload: results
+  });
+}
+
 // export const setFilterString = makePayloadAction(SET_FILTER_STRING);
-export const setFilterValue = makePayloadAction(SET_FILTER_VALUE);
-
-export const setFilterString = filterString => {
+export const setFilterValue = filterValue => {
   return (dispatch, getState) => {
-    const state = getState();
+    dispatch(makePayloadAction(SET_FILTER_VALUE)(filterValue));
+    doSearch(dispatch, getState);
+  };
+};
 
-    dispatch({
-      type: SET_FILTER_STRING,
-      payload: filterString
-    });
-
-    window.requestAnimationFrame(() => {
-      search(filterString, state.definitions)
-        .then(results => {
-          dispatch({
-            type: SET_SEARCH_RESULTS,
-            payload: results
-          });
-        })
-        .catch(err => console.error(err));
-    });
+export const setFilterString = searchString => {
+  return (dispatch, getState) => {
+    dispatch(makePayloadAction(SET_FILTER_STRING)(searchString));
+    doSearch(dispatch, getState);
   };
 };
