@@ -50,7 +50,22 @@ const store = createStore(rootReducer, enhancer);
 window.__store = store;
 
 const qs = querystring.parse(window.location.search.substr(1));
-const LANG_CODE = qs.lang || "en";
+const languages = [
+  'de',
+  'en',
+  'es',
+  'es-mx',
+  'fr',
+  'it',
+  'ja',
+  'ko',
+  'pl',
+  'pt-br',
+  'ru',
+  'zh-chs',
+  'zh-cht'
+];
+const LANG_CODE = languages.includes(qs.lang) ? qs.lang : "en";
 
 store.subscribe(() => {
   window.__state = store.getState();
