@@ -1,4 +1,5 @@
 import { makeSimpleAction, makePayloadAction, toggle } from "./utils";
+import { getDestiny } from "src/lib/destiny";
 
 const INITIAL_STATE = {
   collectModeEnabled: false,
@@ -12,11 +13,26 @@ const TOGGLE_FILTER_DRAWER = "Toggle filter drawer";
 const ADD_COLLECTED_ITEM = "Add collected item";
 const REMOVE_COLLECTED_ITEM = "Remove collected item";
 
+const SET_BUNGIE_SETTINGS = "Set Bungie.net settings";
+const SET_ACTIVE_LANGUAGE = "Set active language";
+
 const STARTING_SEARCH_WORKER = "Starting search worker";
 const STARTING_SEARCH_WORKER_SUCCESS = "Starting search worker - SUCCESS";
 
 export default function appReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case SET_BUNGIE_SETTINGS:
+      return {
+        ...state,
+        bungieSettings: action.payload
+      };
+
+    case SET_ACTIVE_LANGUAGE:
+      return {
+        ...state,
+        activeLanguage: action.payload
+      };
+
     case TOGGLE_COLLECT_MODE:
       return toggle(state, "collectModeEnabled");
 
@@ -68,3 +84,15 @@ export const startingSearchWorkerSuccess = makeSimpleAction(
 
 export const addCollectedItem = makePayloadAction(ADD_COLLECTED_ITEM);
 export const removeCollectedItem = makePayloadAction(REMOVE_COLLECTED_ITEM);
+
+export const setActiveLanguage = makePayloadAction(SET_ACTIVE_LANGUAGE);
+
+export const fetchBungieSettings = () => dispatch => {
+  getDestiny("/Platform/Settings/").then(settings => {
+    console.log("settings:", settings);
+    dispatch({
+      type: SET_BUNGIE_SETTINGS,
+      payload: settings
+    });
+  });
+};

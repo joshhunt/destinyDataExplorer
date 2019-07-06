@@ -64,7 +64,7 @@ async function doSearch(dispatch, getState) {
     filters: state.filter.filters
   };
 
-  const results = await search(searchPayload, state.definitions);
+  const results = await search(searchPayload, state.definitions.definitions);
 
   dispatch({
     type: SET_SEARCH_RESULTS,

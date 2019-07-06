@@ -1,62 +1,62 @@
 /* global zip */
-import Dexie from 'dexie';
-import axios from 'axios';
-import { every } from 'lodash';
+import Dexie from "dexie";
+import axios from "axios";
+import { every } from "lodash";
 
-import 'imports-loader?this=>window!@destiny-item-manager/zip.js'; // eslint-disable-line
-import inflate from 'file-loader!@destiny-item-manager/zip.js/WebContent/inflate.js'; // eslint-disable-line
-import zipWorker from 'file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js'; // eslint-disable-line
+import "imports-loader?this=>window!@destiny-item-manager/zip.js"; // eslint-disable-line
+import inflate from "file-loader!@destiny-item-manager/zip.js/WebContent/inflate.js"; // eslint-disable-line
+import zipWorker from "file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js"; // eslint-disable-line
 
-import { requireDatabase, getAllRecords } from './database';
-import { getDestiny } from 'app/lib/destiny';
+import { requireDatabase, getAllRecords } from "./database";
+import { getDestiny } from "app/lib/destiny";
 
-const log = require('app/lib/log')('definitions');
+const log = require("app/lib/log")("definitions");
 
-const VERSION = 'v1';
+const VERSION = "v1";
 
-Dexie.delete('destinyManifest');
+Dexie.delete("destinyManifest");
 
-const db = new Dexie('destinyDefinitions');
+const db = new Dexie("destinyDefinitions");
 db.version(1).stores({
-  manifestBlob: '&key, data',
-  allData: '&key, data'
+  manifestBlob: "&key, data",
+  allData: "&key, data"
 });
 
-export const STATUS_DOWNLOADING = 'downloading';
-export const STATUS_EXTRACTING_TABLES = 'extracting tables';
-export const STATUS_UNZIPPING = 'unzipping';
-export const STATUS_DONE = 'done';
+export const STATUS_DOWNLOADING = "downloading";
+export const STATUS_EXTRACTING_TABLES = "extracting tables";
+export const STATUS_UNZIPPING = "unzipping";
+export const STATUS_DONE = "done";
 
 function fetchManifestDBPath(language) {
-  log('Requesting manifest for language', language);
+  log("Requesting manifest for language", language);
 
-  return getDestiny('/Platform/Destiny2/Manifest/', { _noAuth: true }).then(
+  return getDestiny("/Platform/Destiny2/Manifest/", { _noAuth: true }).then(
     data => {
-      log('Manifest returned from Bungie', data);
+      log("Manifest returned from Bungie", data);
       return data.mobileWorldContentPaths[language];
     }
   );
 }
 
 function onDownloadProgress(progress) {
-  const perc = Math.round(progress.loaded / progress.total * 100);
+  const perc = Math.round((progress.loaded / progress.total) * 100);
   log(`Definitions archive download progress ${perc}% . `);
 }
 
 function requestDefinitionsArchive(dbPath) {
-  log('Requesting fresh definitions archive', { dbPath });
+  log("Requesting fresh definitions archive", { dbPath });
 
   return db.manifestBlob.get(dbPath).then(cachedValue => {
     if (cachedValue) {
-      log('Archive was already cached, returning that');
+      log("Archive was already cached, returning that");
       return cachedValue.data;
     }
 
     return axios(`https://www.bungie.net${dbPath}`, {
-      responseType: 'blob',
+      responseType: "blob",
       onDownloadProgress
     }).then(resp => {
-      log('Finished downloading definitions archive, storing it in db');
+      log("Finished downloading definitions archive, storing it in db");
       db.manifestBlob.put({ key: dbPath, data: resp.data });
       return resp.data;
     });
@@ -64,7 +64,7 @@ function requestDefinitionsArchive(dbPath) {
 }
 
 function unzipManifest(blob) {
-  log('Unzipping definitions archive');
+  log("Unzipping definitions archive");
 
   return new Promise((resolve, reject) => {
     zip.useWebWorkers = true;
@@ -76,13 +76,13 @@ function unzipManifest(blob) {
         // get all entries from the zip
         zipReader.getEntries(entries => {
           if (!entries.length) {
-            log('Zip archive is empty. Something went wrong');
-            const err = new Error('Definitions archive is empty');
+            log("Zip archive is empty. Something went wrong");
+            const err = new Error("Definitions archive is empty");
             return reject(err);
           }
 
-          log('Found', entries.length, 'entries within definitions archive');
-          log('Loading first file...', entries[0].filename);
+          log("Found", entries.length, "entries within definitions archive");
+          log("Loading first file...", entries[0].filename);
 
           entries[0].getData(new zip.BlobWriter(), blob => {
             resolve(blob);
@@ -99,12 +99,12 @@ function unzipManifest(blob) {
 function loadDefinitions(dbPath, progressCb) {
   return requestDefinitionsArchive(dbPath)
     .then(data => {
-      log('Successfully downloaded definitions archive');
+      log("Successfully downloaded definitions archive");
       progressCb({ status: STATUS_UNZIPPING });
       return unzipManifest(data);
     })
     .then(manifestBlob => {
-      log('Successfully unzipped definitions archive');
+      log("Successfully unzipped definitions archive");
       return manifestBlob;
     });
 }
@@ -113,8 +113,8 @@ function openDBFromBlob(SQLLib, blob) {
   const url = window.URL.createObjectURL(blob);
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'arraybuffer';
+    xhr.open("GET", url, true);
+    xhr.responseType = "arraybuffer";
     xhr.onload = function(e) {
       const uInt8Array = new Uint8Array(this.response);
       resolve(new SQLLib.Database(uInt8Array));
@@ -136,11 +136,11 @@ function allDataFromRemote(dbPath, tablesNames, progressCb) {
   ])
     .then(([SQLLib, databaseBlob]) => {
       progressCb({ status: STATUS_EXTRACTING_TABLES });
-      log('Loaded both SQL library and definitions database');
+      log("Loaded both SQL library and definitions database");
       return openDBFromBlob(SQLLib, databaseBlob);
     })
     .then(db => {
-      log('Opened database as SQLite DB object');
+      log("Opened database as SQLite DB object");
 
       const tablesToRequest =
         tablesNames ||
@@ -148,10 +148,10 @@ function allDataFromRemote(dbPath, tablesNames, progressCb) {
           .exec(`SELECT name FROM sqlite_master WHERE type='table';`)[0]
           .values.map(a => a[0]);
 
-      log('Extracting tables from definitions database', tablesToRequest);
+      log("Extracting tables from definitions database", tablesToRequest);
 
       const allData = tablesToRequest.reduce((acc, tableName) => {
-        log('Getting all records for', tableName);
+        log("Getting all records for", tableName);
 
         return {
           ...acc,
@@ -175,7 +175,7 @@ function cleanUpPreviousVersions(dbPath, keyToKeep) {
     .primaryKeys()
     .then(keys => {
       const toDelete = keys.filter(key => !key.includes(keyToKeep));
-      log('Deleting stale manifest data', toDelete);
+      log("Deleting stale manifest data", toDelete);
       return db.allData.bulkDelete(toDelete);
     });
 
@@ -184,7 +184,7 @@ function cleanUpPreviousVersions(dbPath, keyToKeep) {
     .primaryKeys()
     .then(keys => {
       const toDelete = keys.filter(key => !key.includes(dbPath));
-      log('Deleting stale manifest data', toDelete);
+      log("Deleting stale manifest data", toDelete);
       return db.manifestBlob.bulkDelete(toDelete);
     });
 }
@@ -194,14 +194,18 @@ function includesAllRequestedTables(data, requested) {
   return every(requested, n => cachedTables.includes(n));
 }
 
+const noop = () => {};
+
 export function fasterGetDefinitions(
   language,
   requestedTableNames,
-  progressCb,
+  _progressCb,
   dataCb
 ) {
   const versionId = `${VERSION}:`;
   let earlyCache;
+
+  const progressCb = _progressCb || noop;
 
   db.allData
     .toCollection()
@@ -215,25 +219,25 @@ export function fasterGetDefinitions(
         found &&
         includesAllRequestedTables(found.data, requestedTableNames)
       ) {
-        log('Returning early cached definitions early');
+        log("Returning early cached definitions early");
         earlyCache = found;
         dataCb(null, { definitions: found.data });
       }
 
-      log('Requesting current definitions database path');
+      log("Requesting current definitions database path");
       return fetchManifestDBPath(language).then(dbPath => {
         if (earlyCache && earlyCache.key.includes(dbPath)) {
-          log('The cached definitions are the latest. We are done here');
+          log("The cached definitions are the latest. We are done here");
           return dataCb(null, { done: true });
         }
 
-        progressCb && progressCb({ status: STATUS_DOWNLOADING });
+        progressCb({ status: STATUS_DOWNLOADING });
 
         allDataFromRemote(dbPath, requestedTableNames, progressCb).then(
           definitions => {
-            log('Successfully got requested definitions');
+            log("Successfully got requested definitions");
 
-            const key = [VERSION, dbPath].join(':');
+            const key = [VERSION, dbPath].join(":");
             db.allData.put({ key, data: definitions });
 
             cleanUpPreviousVersions(dbPath, key);
@@ -244,7 +248,7 @@ export function fasterGetDefinitions(
       });
     })
     .catch(err => {
-      log('Error loading definitions', err);
+      log("Error loading definitions", err);
       dataCb(err);
     });
 }

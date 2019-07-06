@@ -1,9 +1,9 @@
-import { pickBy } from 'lodash';
-import { makePayloadAction } from './utils';
+import { pickBy } from "lodash";
+import { makePayloadAction } from "./utils";
 
-export const SET_BULK_DEFINITIONS = 'Set bulk definitions';
-export const DEFINITIONS_ERROR = 'Definitions error';
-export const DEFINITIONS_STATUS = 'Definitions status';
+export const SET_BULK_DEFINITIONS = "Set bulk definitions";
+export const DEFINITIONS_ERROR = "Definitions error";
+export const DEFINITIONS_STATUS = "Definitions status";
 
 export default function definitionsReducer(state = {}, { type, payload }) {
   switch (type) {
@@ -26,7 +26,7 @@ export default function definitionsReducer(state = {}, { type, payload }) {
 
       return {
         ...state,
-        ...filtered,
+        definitions: filtered,
         error: false
       };
     }

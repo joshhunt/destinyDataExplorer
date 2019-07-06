@@ -77,7 +77,7 @@ function Filters({
 }
 
 const mapStateToProps = state => ({
-  definitions: state.definitions,
+  definitions: state.definitions.definitions,
   filters: state.filter
 });
 const mapDispatchToActions = {

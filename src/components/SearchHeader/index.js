@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 
 import { FILTERS } from "src/lib/search/guiSearchFilters";
 
+import { setActiveLanguage as _setActiveLanguage } from "src/store/app";
+
 import Modal from "src/components/Modal";
 import Icon from "src/components/Icon";
 import Filters from "src/components/Filters";
@@ -18,11 +20,13 @@ function SearchHeader({
   collectModeEnabled,
   toggleCollectMode,
   filterDrawerVisible,
-  toggleSearchHelp,
+  languages,
   setFilterValue,
   toggleFilterDrawer,
+  setActiveLanguage,
   filters,
   searchString,
+  activeLanguage,
   defs,
   searchIsReady
 }) {
@@ -91,6 +95,22 @@ function SearchHeader({
           })}
         </div>
 
+        <div className={s.languageButton}>
+          <div className={s.buttonInner}>{activeLanguage}</div>
+
+          <select
+            className={s.languageDropdown}
+            onChange={ev => setActiveLanguage(ev.target.value)}
+            value={activeLanguage}
+          >
+            {languages.map(lang => (
+              <option key={lang.identifier} value={lang.identifier}>
+                {lang.displayName}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button className={s.filterButton} onClick={toggleFilterDrawer}>
           <div className={s.buttonInner}>
             <Icon className={s.filterIcon} name="sliders-v" />
@@ -136,9 +156,16 @@ function SearchHeader({
 }
 
 const mapStateToProps = state => ({
-  defs: state.definitions,
+  defs: state.definitions.definitions,
   filters: state.filter.filters,
-  searchString: state.filter.searchString
+  searchString: state.filter.searchString,
+  languages:
+    (state.app.bungieSettings && state.app.bungieSettings.userContentLocales) ||
+    [],
+  activeLanguage: state.app.activeLanguage
 });
 
-export default connect(mapStateToProps)(SearchHeader);
+export default connect(
+  mapStateToProps,
+  { setActiveLanguage: _setActiveLanguage }
+)(SearchHeader);

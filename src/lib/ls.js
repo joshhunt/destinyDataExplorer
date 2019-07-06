@@ -1,7 +1,8 @@
 // eslint-disable-next-line
 const keys = {
-  DESTINY_PROFILE: 'd2Profile',
-  DEBUG: 'debug'
+  DESTINY_PROFILE: "d2Profile",
+  LANGUAGE: "language",
+  DEBUG: "debug"
 };
 
 let LOCAL_STORAGE;
@@ -27,7 +28,7 @@ const localStoragePolyfill = {
 };
 
 function init() {
-  const testKey = '_testKey';
+  const testKey = "_testKey";
 
   // We can't reliably feature detect for localStorage, the only
   // way is just to try to use it and see what happens
@@ -36,7 +37,7 @@ function init() {
     window.localStorage.removeItem(testKey);
     LOCAL_STORAGE = window.localStorage;
   } catch (e) {
-    console.log('Local storage unavailable, using fallback');
+    console.log("Local storage unavailable, using fallback");
     LOCAL_STORAGE = localStoragePolyfill;
   }
 }
@@ -73,4 +74,12 @@ export function set(key, value) {
     LOCAL_STORAGE = localStoragePolyfill;
     LOCAL_STORAGE.setItem(key, jason);
   }
+}
+
+export function setLanguage(lang) {
+  return set(keys.LANGUAGE, lang);
+}
+
+export function getLanguage() {
+  return get(keys.LANGUAGE);
 }

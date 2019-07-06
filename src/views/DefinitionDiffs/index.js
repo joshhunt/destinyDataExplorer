@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { format } from 'date-fns';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { format } from "date-fns";
 
-import { get } from 'src/lib/destiny';
+import { get } from "src/lib/destiny";
 
-import { makeTypeShort } from 'src/lib/destinyUtils';
+import { makeTypeShort } from "src/lib/destinyUtils";
 
-import Item from 'src/components/Item';
+import Item from "src/components/Item";
 
-import s from './styles.styl';
+import s from "./styles.styl";
 
-const DATE_FORMAT = 'ddd do MMM, YYYY - h:mm a';
-const LATEST = '$LATEST';
+const DATE_FORMAT = "ddd do MMM, YYYY - h:mm a";
+const LATEST = "$LATEST";
 
 class DefinitionDiff extends Component {
   state = { version: LATEST, versions: [], diffs: {} };
 
   componentDidMount() {
-    get('https://destiny.plumbing/history.json').then(data => {
+    get("https://destiny.plumbing/history.json").then(data => {
       this.setState({
         versions: data.sort(
           (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
@@ -35,7 +35,7 @@ class DefinitionDiff extends Component {
   };
 
   getDiffForTable(table, version = LATEST) {
-    const versionKey = version === LATEST ? '' : `versions/${version}/`;
+    const versionKey = version === LATEST ? "" : `versions/${version}/`;
     const url = `https://destiny.plumbing/${versionKey}en/diff/${table}/friendly.json`;
 
     get(url)
@@ -71,7 +71,7 @@ class DefinitionDiff extends Component {
   pathForItem = (type, obj) => {
     // TODO: some places in the code pass through a definition item directly rather than one of our
     // 'obj' wrappers
-    let url = '';
+    let url = "";
     const shortType = makeTypeShort(type);
     const key = obj.def ? obj.key : obj.hash;
 
@@ -136,8 +136,8 @@ class DefinitionDiff extends Component {
                           onClick={() => this.setCurrentTable(tableName)}
                           style={{
                             textDecoration:
-                              tableName === currentTable && 'underline',
-                            color: tableName === currentTable && '#f1c40f'
+                              tableName === currentTable && "underline",
+                            color: tableName === currentTable && "#f1c40f"
                           }}
                         >
                           {tableName}
@@ -202,57 +202,57 @@ class DefinitionDiff extends Component {
 
 function mapStateToProps(state) {
   return {
-    definitions: state.definitions
+    definitions: state.definitions.definitions
   };
 }
 
 export default connect(mapStateToProps)(DefinitionDiff);
 
 const DEFINITION_TABLES = [
-  'DestinyEnemyRaceDefinition',
-  'DestinyPlaceDefinition',
-  'DestinyActivityDefinition',
-  'DestinyActivityTypeDefinition',
-  'DestinyClassDefinition',
-  'DestinyGenderDefinition',
-  'DestinyInventoryBucketDefinition',
-  'DestinyRaceDefinition',
-  'DestinyTalentGridDefinition',
-  'DestinyUnlockDefinition',
-  'DestinyMaterialRequirementSetDefinition',
-  'DestinySandboxPerkDefinition',
-  'DestinyStatGroupDefinition',
-  'DestinyFactionDefinition',
-  'DestinyVendorGroupDefinition',
-  'DestinyItemCategoryDefinition',
-  'DestinyDamageTypeDefinition',
-  'DestinyActivityModeDefinition',
-  'DestinyMedalTierDefinition',
-  'DestinyAchievementDefinition',
-  'DestinyActivityGraphDefinition',
-  'DestinyCollectibleDefinition',
-  'DestinyStatDefinition',
-  'DestinyItemTierTypeDefinition',
-  'DestinyPresentationNodeDefinition',
-  'DestinyRecordDefinition',
-  'DestinyBondDefinition',
-  'DestinyDestinationDefinition',
-  'DestinyEquipmentSlotDefinition',
-  'DestinyInventoryItemDefinition',
-  'DestinyLocationDefinition',
-  'DestinyLoreDefinition',
-  'DestinyObjectiveDefinition',
-  'DestinyProgressionDefinition',
-  'DestinyProgressionLevelRequirementDefinition',
-  'DestinySackRewardItemListDefinition',
-  'DestinySandboxPatternDefinition',
-  'DestinySocketCategoryDefinition',
-  'DestinySocketTypeDefinition',
-  'DestinyVendorDefinition',
-  'DestinyMilestoneDefinition',
-  'DestinyActivityModifierDefinition',
-  'DestinyReportReasonCategoryDefinition',
-  'DestinyPlugSetDefinition',
-  'DestinyChecklistDefinition',
-  'DestinyHistoricalStatsDefinition'
+  "DestinyEnemyRaceDefinition",
+  "DestinyPlaceDefinition",
+  "DestinyActivityDefinition",
+  "DestinyActivityTypeDefinition",
+  "DestinyClassDefinition",
+  "DestinyGenderDefinition",
+  "DestinyInventoryBucketDefinition",
+  "DestinyRaceDefinition",
+  "DestinyTalentGridDefinition",
+  "DestinyUnlockDefinition",
+  "DestinyMaterialRequirementSetDefinition",
+  "DestinySandboxPerkDefinition",
+  "DestinyStatGroupDefinition",
+  "DestinyFactionDefinition",
+  "DestinyVendorGroupDefinition",
+  "DestinyItemCategoryDefinition",
+  "DestinyDamageTypeDefinition",
+  "DestinyActivityModeDefinition",
+  "DestinyMedalTierDefinition",
+  "DestinyAchievementDefinition",
+  "DestinyActivityGraphDefinition",
+  "DestinyCollectibleDefinition",
+  "DestinyStatDefinition",
+  "DestinyItemTierTypeDefinition",
+  "DestinyPresentationNodeDefinition",
+  "DestinyRecordDefinition",
+  "DestinyBondDefinition",
+  "DestinyDestinationDefinition",
+  "DestinyEquipmentSlotDefinition",
+  "DestinyInventoryItemDefinition",
+  "DestinyLocationDefinition",
+  "DestinyLoreDefinition",
+  "DestinyObjectiveDefinition",
+  "DestinyProgressionDefinition",
+  "DestinyProgressionLevelRequirementDefinition",
+  "DestinySackRewardItemListDefinition",
+  "DestinySandboxPatternDefinition",
+  "DestinySocketCategoryDefinition",
+  "DestinySocketTypeDefinition",
+  "DestinyVendorDefinition",
+  "DestinyMilestoneDefinition",
+  "DestinyActivityModifierDefinition",
+  "DestinyReportReasonCategoryDefinition",
+  "DestinyPlugSetDefinition",
+  "DestinyChecklistDefinition",
+  "DestinyHistoricalStatsDefinition"
 ];

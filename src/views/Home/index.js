@@ -8,7 +8,8 @@ import {
   toggleCollectMode,
   toggleFilterDrawer,
   addCollectedItem,
-  removeCollectedItem
+  removeCollectedItem,
+  fetchBungieSettings
 } from "src/store/app";
 import { setBulkDefinitions } from "src/store/definitions";
 import { setFilterString, setFilterValue } from "src/store/filter";
@@ -50,6 +51,8 @@ class HomeView extends Component {
     if (this.props.routeParams.splat) {
       this.updateViews();
     }
+
+    this.props.fetchBungieSettings();
   }
 
   componentDidUpdate(prevProps) {
@@ -156,7 +159,6 @@ class HomeView extends Component {
       definitionsError,
       definitionsStatus,
       filterResults,
-      filter,
       searchIsReady
     } = this.props;
 
@@ -279,7 +281,7 @@ function mapStateToProps(state) {
     filter: state.filter,
     definitionsError: state.definitions.error,
     definitionsStatus: state.definitions.status,
-    definitions: state.definitions,
+    definitions: state.definitions.definitions,
     collectModeEnabled: state.app.collectModeEnabled,
     filterDrawerVisible: state.app.filterDrawerVisible,
     collectedItems: state.app.collectedItems,
@@ -294,7 +296,8 @@ const mapDispatchToActions = {
   toggleCollectMode,
   toggleFilterDrawer,
   addCollectedItem,
-  removeCollectedItem
+  removeCollectedItem,
+  fetchBungieSettings
 };
 
 export default connect(

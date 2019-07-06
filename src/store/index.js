@@ -3,8 +3,13 @@ import { mapValues } from "lodash";
 import querystring from "querystring";
 import reduxThunk from "redux-thunk";
 
-import app, { startingSearchWorker, startingSearchWorkerSuccess } from "./app";
+import app, {
+  startingSearchWorker,
+  startingSearchWorkerSuccess,
+  setActiveLanguage
+} from "./app";
 import filter from "./filter";
+import { setLanguage, getLanguage } from "src/lib/ls";
 import { fasterGetDefinitions } from "src/lib/definitions";
 import { sendDefinitions } from "src/lib/workerSearch";
 
@@ -38,7 +43,7 @@ const composeEnhancers =
         actionsBlacklist: [SET_BULK_DEFINITIONS],
         stateSanitizer: state => ({
           ...state,
-          definitions: sanitiseDefintionsState(state.definitions)
+          definitions: sanitiseDefintionsState(state.definitions.definitions)
         })
       })
     : compose;
@@ -51,57 +56,82 @@ window.__store = store;
 
 const qs = querystring.parse(window.location.search.substr(1));
 const languages = [
-  'de',
-  'en',
-  'es',
-  'es-mx',
-  'fr',
-  'it',
-  'ja',
-  'ko',
-  'pl',
-  'pt-br',
-  'ru',
-  'zh-chs',
-  'zh-cht'
+  "de",
+  "en",
+  "es",
+  "es-mx",
+  "fr",
+  "it",
+  "ja",
+  "ko",
+  "pl",
+  "pt-br",
+  "ru",
+  "zh-chs",
+  "zh-cht"
 ];
-const LANG_CODE = languages.includes(qs.lang) ? qs.lang : "en";
+const baseLang = qs.lang || getLanguage();
+const LANG_CODE = languages.includes(baseLang) ? baseLang : "en";
 
+let prevState = store.getState();
 store.subscribe(() => {
-  window.__state = store.getState();
-  window.__definitions = window.__state.definitions;
+  const newState = store.getState();
+  window.__state = newState;
+  window.__definitions = newState.definitions.definitions;
+
+  const toDispatch = [];
+
+  if (prevState.app.activeLanguage !== newState.app.activeLanguage) {
+    if (prevState.app.activeLanguage) {
+      toDispatch.push(definitionsStatus({ status: "loading new language" }));
+    }
+
+    setLanguage(newState.app.activeLanguage);
+    loadDefinitions(newState.app.activeLanguage);
+  }
+
+  prevState = newState;
+
+  toDispatch.forEach(action => store.dispatch(action));
 });
 
-fasterGetDefinitions(
-  LANG_CODE,
-  null,
-  data => {
-    store.dispatch(definitionsStatus(data));
-  },
-  (err, data) => {
-    if (err) {
-      console.error("Error loading definitions:", err);
-      store.dispatch(definitionsError(err));
-      return;
-    }
+store.dispatch(setActiveLanguage(LANG_CODE));
 
-    if (data && data.definitions) {
-      store.dispatch(definitionsStatus({ status: null }));
-      store.dispatch(setBulkDefinitions(data.definitions));
+function loadDefinitions(langCode) {
+  fasterGetDefinitions(
+    langCode,
+    null,
+    data => {
+      store.dispatch(definitionsStatus(data));
+    },
+    (err, data) => {
+      if (err) {
+        console.error("Error loading definitions:", err);
+        store.dispatch(definitionsError(err));
+        return;
+      }
 
-      store.dispatch(startingSearchWorker());
+      if (data && data.done) {
+        store.dispatch(definitionsStatus({ status: null }));
+      }
 
-      window.setTimeout(() => {
-        window.requestAnimationFrame(() => {
-          const defs = store.getState().definitions;
+      if (data && data.definitions) {
+        store.dispatch(setBulkDefinitions(data.definitions));
 
-          sendDefinitions(defs).then(() => {
-            store.dispatch(startingSearchWorkerSuccess());
+        store.dispatch(startingSearchWorker());
+
+        window.setTimeout(() => {
+          window.requestAnimationFrame(() => {
+            const defs = store.getState().definitions.definitions;
+
+            sendDefinitions(defs).then(() => {
+              store.dispatch(startingSearchWorkerSuccess());
+            });
           });
-        });
-      }, 1000);
+        }, 1000);
+      }
     }
-  }
-);
+  );
+}
 
 export default store;

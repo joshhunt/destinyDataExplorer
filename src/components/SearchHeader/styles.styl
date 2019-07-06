@@ -20,6 +20,10 @@ $textColor = #FFFFFF
   border: none
   outline: none !important
   margin-left: 15px
+  
+.logoish
+  display: flex
+  align-items: center
 
 .logo
   height: 1.3em
@@ -59,9 +63,25 @@ $textColor = #FFFFFF
 
 .filterButton
   composes: bigButton
+  padding: 1px 7px 2px 7px
   width: auto
   font-size: 15px
   margin-right: 1em
+
+.languageButton
+  composes: filterButton
+  background: none
+  border: none
+  position: relative
+  overflow: hidden
+
+.languageDropdown
+  position: absolute
+  top: 0
+  left: 0
+  bottom: 0
+  height: 100%
+  opacity: 0
 
 .filterIcon
   font-size: 1em
