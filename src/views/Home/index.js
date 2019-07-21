@@ -254,7 +254,7 @@ class HomeView extends Component {
         >
           {views.map(
             ({ type, hash }, index) =>
-              this.props.definitions[type] && (
+              this.props.definitions && this.props.definitions[type] && (
                 <div key={index}>
                   <DataView
                     definitions={definitions}
