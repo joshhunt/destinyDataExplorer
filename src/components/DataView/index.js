@@ -16,6 +16,20 @@ import AnyObjectives from "./detailViews/AnyObjectives";
 import specialValueOverrides from "./specialValueOverrides";
 import s from "./styles.styl";
 
+import apispec from "./apispec.json";
+
+window.__apispec = apispec;
+
+const RE = /Destiny(\w+)Definition/;
+
+Object.keys(apispec.definitions).forEach(key => {
+  const segments = key.split(".");
+  const lastSegment = segments[segments.length - 1];
+  if (lastSegment.match(RE)) {
+    window.__apispec.definitions[lastSegment] = apispec.definitions[key];
+  }
+});
+
 const DETAIL_VIEWS = {
   DestinyVendorDefinition: Vendor,
   DestinyInventoryItemDefinition: InventoryItem,
@@ -54,6 +68,38 @@ export default class DataView extends Component {
     if (isImage(rawValue)) {
       return <ImageValue value={rawValue} />;
     }
+
+    const currentDefinitionType = this.props.type;
+    const definitionSpec = apispec.definitions[currentDefinitionType];
+
+    const helpfulPath = [...itemPath];
+    helpfulPath.reverse();
+    helpfulPath.shift();
+
+    let currentSpec = definitionSpec;
+    if (definitionSpec) {
+      helpfulPath.forEach(pathElement => {
+        const potentialNewSpec =
+          currentSpec &&
+          currentSpec.properties &&
+          currentSpec.properties[pathElement];
+        currentSpec = potentialNewSpec || currentSpec;
+
+        if (currentSpec && currentSpec.$ref) {
+          const [, keyA, keyB] = currentSpec.$ref.split("/");
+          currentSpec = apispec[keyA][keyB];
+        }
+      });
+    }
+
+    console.log({
+      prettyValue,
+      rawValue,
+      itemPath,
+      definitionSpec,
+      helpfulPath,
+      currentSpec
+    });
 
     const overrideFn = specialValueOverrides[itemPath[0]];
     if (overrideFn) {
