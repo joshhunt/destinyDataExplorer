@@ -15,6 +15,14 @@ import logo from "./logo.svg";
 
 const FILTERS_BY_ID = keyBy(FILTERS, "id");
 
+const getPlaceholder = (defs, isReady) => {
+  if (!defs) {
+    return "Loading data...";
+  }
+
+  return isReady ? "Search by item name or hash" : "Loading search...";
+};
+
 function SearchHeader({
   onSearchChange,
   collectModeEnabled,
@@ -30,6 +38,7 @@ function SearchHeader({
   defs,
   searchIsReady
 }) {
+  console.log("defs:", defs);
   const filterArr = Object.entries(filters)
     .map(([key, value]) => ({
       key,
@@ -50,14 +59,10 @@ function SearchHeader({
           <input
             type="text"
             value={searchString || ""}
-            placeholder={
-              searchIsReady
-                ? "Search by item name or hash"
-                : "Loading search..."
-            }
+            placeholder={getPlaceholder(defs, searchIsReady)}
             className={s.searchField}
             onChange={onSearchChange}
-            disabled={!searchIsReady}
+            disabled={!defs}
           />
 
           {filterArr.map(filterOpt => {
@@ -93,6 +98,12 @@ function SearchHeader({
               </div>
             );
           })}
+
+          {!searchIsReady && (
+            <span className={s.loadingSpinner}>
+              <Icon name="spinner-third" className={s.spinnerIcon} spin />
+            </span>
+          )}
         </div>
 
         <div className={s.languageButton}>

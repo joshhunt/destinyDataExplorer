@@ -26,6 +26,11 @@ function toWorker(type, payload) {
 export function sendDefinitions(definitions) {
   console.log(">>> sending definitions", definitions);
 
+  if (!definitions) {
+    console.log("    definitions are empty, aborting");
+    return;
+  }
+
   const existingPromise = sentDefinitions.get(definitions);
 
   if (existingPromise) {
