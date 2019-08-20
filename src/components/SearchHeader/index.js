@@ -38,7 +38,6 @@ function SearchHeader({
   defs,
   searchIsReady
 }) {
-  console.log("defs:", defs);
   const filterArr = Object.entries(filters)
     .map(([key, value]) => ({
       key,

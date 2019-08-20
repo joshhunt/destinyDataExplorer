@@ -283,8 +283,19 @@ function specForPropertyPath(currentDefinitionType, itemPath) {
 
     currentSpec = potentialNewSpec || currentSpec;
 
-    if (currentSpec && currentSpec.$ref) {
-      const [, keyA, keyB] = currentSpec.$ref.split("/");
+    if (!currentSpec) {
+      return;
+    }
+
+    const ref =
+      currentSpec.$ref ||
+      (currentSpec.allOf && currentSpec.allOf[0].$ref) ||
+      (currentSpec.additionalProperties &&
+        currentSpec.additionalProperties.$ref) ||
+      (currentSpec.items && currentSpec.items.$ref);
+
+    if (ref) {
+      const [, keyA, keyB] = ref.split("/");
       currentSpec = apispec[keyA][keyB];
     }
   });
