@@ -22,7 +22,6 @@ import DataView from "src/components/DataView";
 import Item from "src/components/Item";
 
 import { filteredItemsSelector } from "./selectors";
-import lookup from "./lookup";
 import s from "./styles.styl";
 
 function parsePathSegment(segment) {
@@ -102,32 +101,6 @@ class HomeView extends Component {
           newViews.map(view => `${view.shortType}:${view.hash}`).join("/");
 
     this.props.router.push(newPath);
-  };
-
-  lookupLinkedItem = (keyPath, hash) => {
-    const [fieldName, parentFieldName] = keyPath;
-
-    let { type: definitionType, shortType } =
-      lookup.find(data => data.fields.includes(fieldName)) ||
-      lookup.find(data => data.fields.includes(parentFieldName)) ||
-      {};
-
-    if (!definitionType) {
-      // TODO: guess items in array using parentFieldName e.g. itemCategoryHashes
-      const matchedGuess = fieldName.match && fieldName.match(/(\w+)Hash/);
-      shortType =
-        matchedGuess && matchedGuess[1].replace(/^\w/, c => c.toUpperCase());
-      definitionType = `Destiny${shortType}Definition`;
-    }
-
-    const defs = this.props.definitions[definitionType];
-
-    if (!defs) {
-      return null;
-    }
-
-    const item = defs[hash];
-    return { definitionType: shortType, item };
   };
 
   onItemClick = (ev, entry) => {
@@ -254,7 +227,8 @@ class HomeView extends Component {
         >
           {views.map(
             ({ type, hash }, index) =>
-              this.props.definitions && this.props.definitions[type] && (
+              this.props.definitions &&
+              this.props.definitions[type] && (
                 <div key={index}>
                   <DataView
                     definitions={definitions}
@@ -263,7 +237,6 @@ class HomeView extends Component {
                     item={this.props.definitions[type][hash]}
                     type={type}
                     onRequestClose={this.popView}
-                    lookupLinkedItem={this.lookupLinkedItem}
                     pathForItem={this.pathForItem}
                   />
                 </div>

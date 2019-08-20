@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React, { Fragment, Component } from "react";
 import { Link } from "react-router";
 import { isString, memoize } from "lodash";
 import cx from "classnames";
 import JSONTree from "react-json-tree";
 
+import { makeTypeShort } from "src/lib/destinyUtils";
 import BungieImage from "src/components/BungieImage";
 import { getNameForItem, bungieUrl } from "src/lib/destinyUtils";
 import copyToClipboard from "src/lib/copyToClipboard";
@@ -22,11 +23,38 @@ window.__apispec = apispec;
 
 const RE = /Destiny(\w+)Definition/;
 
-Object.keys(apispec.definitions).forEach(key => {
-  const segments = key.split(".");
+const SPEC_DEBUG = !!window.localStorage.getItem("specdebug");
+
+const definitionNameFromRef = ref => {
+  const segments = ref.split(".");
   const lastSegment = segments[segments.length - 1];
-  if (lastSegment.match(RE)) {
-    window.__apispec.definitions[lastSegment] = apispec.definitions[key];
+  const match = lastSegment.match(RE);
+  return match && match[0];
+};
+
+function Decorate({ spec, children }) {
+  if (!spec || !SPEC_DEBUG) {
+    return children;
+  }
+
+  const mapped = spec["x-mapped-definition"];
+  const mappedRef = mapped && mapped.$ref;
+  const mappedTableName = mappedRef && definitionNameFromRef(mappedRef);
+
+  return (
+    <Fragment>
+      {children}
+      <button onClick={() => console.log(spec)} className={s.debugButton}>
+        {mappedTableName && <span>{mappedTableName} - </span>} log spec
+      </button>
+    </Fragment>
+  );
+}
+
+Object.keys(apispec.definitions).forEach(key => {
+  const tableName = definitionNameFromRef(key);
+  if (tableName) {
+    apispec.definitions[tableName] = apispec.definitions[key];
   }
 });
 
@@ -70,36 +98,8 @@ export default class DataView extends Component {
     }
 
     const currentDefinitionType = this.props.type;
-    const definitionSpec = apispec.definitions[currentDefinitionType];
 
-    const helpfulPath = [...itemPath];
-    helpfulPath.reverse();
-    helpfulPath.shift();
-
-    let currentSpec = definitionSpec;
-    if (definitionSpec) {
-      helpfulPath.forEach(pathElement => {
-        const potentialNewSpec =
-          currentSpec &&
-          currentSpec.properties &&
-          currentSpec.properties[pathElement];
-        currentSpec = potentialNewSpec || currentSpec;
-
-        if (currentSpec && currentSpec.$ref) {
-          const [, keyA, keyB] = currentSpec.$ref.split("/");
-          currentSpec = apispec[keyA][keyB];
-        }
-      });
-    }
-
-    console.log({
-      prettyValue,
-      rawValue,
-      itemPath,
-      definitionSpec,
-      helpfulPath,
-      currentSpec
-    });
+    const currentSpec = specForPropertyPath(currentDefinitionType, itemPath);
 
     const overrideFn = specialValueOverrides[itemPath[0]];
     if (overrideFn) {
@@ -117,27 +117,36 @@ export default class DataView extends Component {
     }
 
     const { item, definitionType } =
-      this.props.lookupLinkedItem(itemPath, rawValue) || {};
+      lookupLinkedItemWithSpec(
+        currentDefinitionType,
+        itemPath,
+        rawValue,
+        this.props.definitions
+      ) || {};
 
     if (!definitionType) {
-      return prettyValue;
+      return <Decorate spec={currentSpec}>{prettyValue}</Decorate>;
     } else if (!item) {
       return (
-        <span
-          className={s.jsonNonLinkedValue}
-        >{`<${definitionType} ${prettyValue}>`}</span>
+        <Decorate spec={currentSpec}>
+          <span
+            className={s.jsonNonLinkedValue}
+          >{`<${definitionType} ${prettyValue}>`}</span>
+        </Decorate>
       );
     }
 
     const displayName = getNameForItem(item);
 
     return (
-      <Link
-        to={this.props.pathForItem(definitionType, item)}
-        className={s.jsonLinkedValue}
-      >
-        {`<${toTitleCase(definitionType)} ${displayName} ${prettyValue}>`}
-      </Link>
+      <Decorate spec={currentSpec}>
+        <Link
+          to={this.props.pathForItem(definitionType, item)}
+          className={s.jsonLinkedValue}
+        >
+          {`${toTitleCase(definitionType)} ${displayName} ${prettyValue}`}
+        </Link>
+      </Decorate>
     );
   };
 
@@ -255,4 +264,60 @@ export default class DataView extends Component {
       </div>
     );
   }
+}
+
+function specForPropertyPath(currentDefinitionType, itemPath) {
+  let currentSpec = apispec.definitions[currentDefinitionType];
+
+  if (!currentSpec) {
+    return null;
+  }
+
+  const helpfulPath = [...itemPath];
+  helpfulPath.reverse();
+  helpfulPath.shift();
+
+  helpfulPath.forEach(pathElement => {
+    const potentialNewSpec =
+      currentSpec.properties && currentSpec.properties[pathElement];
+
+    currentSpec = potentialNewSpec || currentSpec;
+
+    if (currentSpec && currentSpec.$ref) {
+      const [, keyA, keyB] = currentSpec.$ref.split("/");
+      currentSpec = apispec[keyA][keyB];
+    }
+  });
+
+  return currentSpec;
+}
+
+function linkedDefinitionTableName(currentDefinitionType, itemPath) {
+  const spec = specForPropertyPath(currentDefinitionType, itemPath);
+  const mapped = spec && spec["x-mapped-definition"];
+  const mappedRef = mapped && mapped.$ref;
+  return mappedRef && definitionNameFromRef(mappedRef);
+}
+
+function lookupLinkedItemWithSpec(
+  currentDefinitionType,
+  itemPath,
+  rawValue,
+  definitions
+) {
+  const linkedTableName = linkedDefinitionTableName(
+    currentDefinitionType,
+    itemPath
+  );
+
+  const linkedItem =
+    linkedTableName &&
+    definitions[linkedTableName] &&
+    definitions[linkedTableName][rawValue];
+
+  if (!linkedItem) {
+    return null;
+  }
+
+  return { item: linkedItem, definitionType: makeTypeShort(linkedTableName) };
 }
