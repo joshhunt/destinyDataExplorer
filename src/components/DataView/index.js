@@ -116,6 +116,16 @@ export default class DataView extends Component {
       }
     }
 
+    const enumDef = findEnumValue(currentDefinitionType, itemPath, rawValue);
+
+    if (enumDef) {
+      return (
+        <Decorate spec={currentSpec}>{`<enum "${
+          enumDef.identifier
+        }" ${prettyValue}>`}</Decorate>
+      );
+    }
+
     const { item, definitionType } =
       lookupLinkedItemWithSpec(
         currentDefinitionType,
@@ -144,7 +154,7 @@ export default class DataView extends Component {
           to={this.props.pathForItem(definitionType, item)}
           className={s.jsonLinkedValue}
         >
-          {`${toTitleCase(definitionType)} ${displayName} ${prettyValue}`}
+          {`<${toTitleCase(definitionType)} ${displayName} ${prettyValue}>`}
         </Link>
       </Decorate>
     );
@@ -331,4 +341,36 @@ function lookupLinkedItemWithSpec(
   }
 
   return { item: linkedItem, definitionType: makeTypeShort(linkedTableName) };
+}
+
+function findEnumValue(currentDefinitionType, itemPath, enumValue) {
+  const spec = specForPropertyPath(currentDefinitionType, itemPath);
+
+  if (!spec) {
+    return null;
+  }
+
+  const enumRef = spec["x-enum-reference"];
+
+  if (!enumRef) {
+    return;
+  }
+
+  const segments = enumRef.$ref.split("/");
+  const lastSegment = segments[segments.length - 1];
+
+  const lastSegmentSegments = lastSegment.split(".");
+  const enumName = lastSegmentSegments[lastSegmentSegments.length - 1];
+
+  const enumSpec = apispec.definitions[lastSegment];
+
+  if (!enumSpec) {
+    return;
+  }
+
+  const found = enumSpec["x-enum-values"].find(
+    e => Number(e.numericValue) === enumValue
+  );
+
+  return found && { ...found, enumName };
 }
