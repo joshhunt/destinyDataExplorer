@@ -26,6 +26,8 @@
     "promise-worker": "^2.0.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-hot-loader": "^4.0.0",
+    "react-app-polyfill": "^1.0.2",
+    "react-dev-utils": "^9.0.3",
     "react-json-tree": "^0.11.0",
     "react-lazyload": "^2.3.0",
     "react-mentions": "^2.0.1",
