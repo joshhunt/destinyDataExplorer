@@ -120,9 +120,9 @@ export default class DataView extends Component {
 
     if (enumDef) {
       return (
-        <Decorate spec={currentSpec}>{`<enum "${
-          enumDef.identifier
-        }" ${prettyValue}>`}</Decorate>
+        <Decorate
+          spec={currentSpec}
+        >{`<enum "${enumDef.identifier}" ${prettyValue}>`}</Decorate>
       );
     }
 

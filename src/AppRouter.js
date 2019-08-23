@@ -1,12 +1,12 @@
 // eslint-disable no-console
-import React, { Component } from 'react';
-import { isString } from 'lodash';
-import { Router, Route, browserHistory } from 'react-router';
-import { Provider } from 'react-redux';
+import React, { Component } from "react";
+import { isString } from "lodash";
+import { Router, Route, browserHistory } from "react-router";
+import { Provider } from "react-redux";
 
-import store from './store';
-import Home from './views/Home';
-import DefinitionDiffs from './views/DefinitionDiffs';
+import store from "./store";
+import Home from "./views/Home";
+import DefinitionDiffs from "./views/DefinitionDiffs";
 
 export default class AppRouter extends Component {
   render() {
@@ -35,7 +35,7 @@ if (module.hot) {
       args &&
       args.length === 1 &&
       isString(args[0]) &&
-      args[0].indexOf('You cannot change <Router routes>;') > -1
+      args[0].indexOf("You cannot change <Router routes>;") > -1
     ) {
       // React route changed
     } else {
