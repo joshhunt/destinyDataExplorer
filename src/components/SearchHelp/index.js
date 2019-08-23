@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
-import { isObject } from 'lodash';
+import React, { Fragment } from "react";
+import { isObject } from "lodash";
 
-import s from './styles.module.scss';
+import s from "./styles.module.scss";
 
 const list = (...arr) => (
   <Fragment>
@@ -16,67 +16,67 @@ const list = (...arr) => (
 
 const HELP_TEXT = [
   {
-    filter: 'Hash',
-    description: 'Searches entries whos hash/key matches the text'
+    filter: "Hash",
+    description: "Searches entries whos hash/key matches the text"
   },
   {
-    filter: 'Entry name',
+    filter: "Entry name",
     description:
       'Partial-match search on entry names e.g. "Tesseract" for "Tesseract Trace IV" items'
   },
   {
-    filter: 'Data type',
+    filter: "Data type",
     description:
       'Partial-match search on data types / tables from mobileWorldContent e.g. "Item" for all items from the DestinyInventoryItemDefintions table'
   },
   {
-    filter: 'hasPerk:[perkItemHash]',
+    filter: "hasPerk:[perkItemHash]",
     description:
-      'Searches items that has the specified perk. Note: the hash must be the InventoryItem representation of the perk, not the SandboxPerk. e.g. hasPerk:216781713'
+      "Searches items that has the specified perk. Note: the hash must be the InventoryItem representation of the perk, not the SandboxPerk. e.g. hasPerk:216781713"
   },
   {
-    filter: list('is:hunter', 'is:titan', 'is:warlock'),
-    description: 'Searches items based on class'
+    filter: list("is:hunter", "is:titan", "is:warlock"),
+    description: "Searches items based on class"
   },
   {
-    filter: 'is:medal',
-    description: 'Returns HistoricalStats for medals'
-  },
-  {
-    filter: list(
-      'is:legendary',
-      'is:exotic',
-      'is:uncommon',
-      'is:rare',
-      'is:common'
-    ),
-    description: 'Searches by item rarity'
-  },
-  {
-    filter: list('is:kinetic', 'is:energy', 'is:power'),
-    description: 'Searches weapons by damage type'
+    filter: "is:medal",
+    description: "Returns HistoricalStats for medals"
   },
   {
     filter: list(
-      'is:weapon',
-      'is:armor',
-      'is:armorornament',
-      'is:weaponornament',
-      'is:dummy',
-      'is:ghost',
-      'is:sparrow',
-      'is:ship',
-      'is:shader',
-      'is:gear',
-      'is:ghost',
-      'is:sparrow',
-      'is:ship',
-      'is:shader',
-      'is:emote',
-      'is:emblem',
-      'is:classitem'
+      "is:legendary",
+      "is:exotic",
+      "is:uncommon",
+      "is:rare",
+      "is:common"
     ),
-    description: 'Searches by basic item type'
+    description: "Searches by item rarity"
+  },
+  {
+    filter: list("is:kinetic", "is:energy", "is:power"),
+    description: "Searches weapons by damage type"
+  },
+  {
+    filter: list(
+      "is:weapon",
+      "is:armor",
+      "is:armorornament",
+      "is:weaponornament",
+      "is:dummy",
+      "is:ghost",
+      "is:sparrow",
+      "is:ship",
+      "is:shader",
+      "is:gear",
+      "is:ghost",
+      "is:sparrow",
+      "is:ship",
+      "is:shader",
+      "is:emote",
+      "is:emblem",
+      "is:classitem"
+    ),
+    description: "Searches by basic item type"
   }
 ];
 
