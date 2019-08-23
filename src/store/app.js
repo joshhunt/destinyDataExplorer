@@ -1,5 +1,5 @@
 import { makeSimpleAction, makePayloadAction, toggle } from "./utils";
-import { getDestiny } from "src/lib/destiny";
+import { getDestiny } from "lib/destiny";
 
 const INITIAL_STATE = {
   collectModeEnabled: false,

@@ -3,8 +3,8 @@ export const HUNTER = 1;
 export const WARLOCK = 2;
 export const NO_CLASS = 3;
 
-export const FILTER_SHOW_COLLECTED = 'showCollected';
-export const FILTER_SHOW_PS4_EXCLUSIVES = 'ps4Exclusives';
+export const FILTER_SHOW_COLLECTED = "showCollected";
+export const FILTER_SHOW_PS4_EXCLUSIVES = "ps4Exclusives";
 
 // itemCategoryHashes
 export const CLASS_ITEMS = 49;
@@ -57,15 +57,15 @@ export const STAT_BLACKLIST = [
 ];
 
 export const PLATFORMS = {
-  [XBOX]: 'Xbox',
-  [PLAYSTATION]: 'PlayStation',
-  [PC_BLIZZARD]: 'PC (Battle.net)',
-  [TIGERDEMON]: 'TigerDemon',
-  [BUNGIENEXT]: 'BungieNext'
+  [XBOX]: "Xbox",
+  [PLAYSTATION]: "PlayStation",
+  [PC_BLIZZARD]: "PC (Battle.net)",
+  [TIGERDEMON]: "TigerDemon",
+  [BUNGIENEXT]: "BungieNext"
 };
 
 export const CLASSES = {
-  [WARLOCK]: 'Warlock',
-  [TITAN]: 'Titan',
-  [HUNTER]: 'Hunter'
+  [WARLOCK]: "Warlock",
+  [TITAN]: "Titan",
+  [HUNTER]: "Hunter"
 };

@@ -2,15 +2,15 @@ import React from "react";
 import { keyBy, isArray } from "lodash";
 import { connect } from "react-redux";
 
-import { FILTERS } from "src/lib/search/guiSearchFilters";
+import { FILTERS } from "lib/search/guiSearchFilters";
 
-import { setActiveLanguage as _setActiveLanguage } from "src/store/app";
+import { setActiveLanguage as _setActiveLanguage } from "store/app";
 
-import Modal from "src/components/Modal";
-import Icon from "src/components/Icon";
-import Filters from "src/components/Filters";
+import Modal from "components/Modal";
+import Icon from "components/Icon";
+import Filters from "components/Filters";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 import logo from "./logo.svg";
 
 const FILTERS_BY_ID = keyBy(FILTERS, "id");

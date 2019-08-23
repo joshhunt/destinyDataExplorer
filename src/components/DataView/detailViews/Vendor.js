@@ -1,10 +1,10 @@
-import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import React from "react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.scss";
 
-import Item from 'src/components/Item';
+import Item from "components/Item";
 
-import s from './styles.styl';
+import s from "./styles.module.scss";
 
 function CategoryListing({ item, definitions, pathForItem, categories }) {
   return (
@@ -25,7 +25,7 @@ function CategoryListing({ item, definitions, pathForItem, categories }) {
                     pathForItem={pathForItem}
                     className={s.item}
                     entry={{
-                      type: 'DestinyInventoryItemDefinition',
+                      type: "DestinyInventoryItemDefinition",
                       def: vendorItem,
                       key: vendorItem.hash
                     }}

@@ -2,7 +2,7 @@ import { makeAllDefsArray } from "../destinyUtils";
 import SEARCH_FUNCTIONS from "./searchFns";
 import _normalizeText from "normalize-text";
 
-import { FILTERS } from "src/lib/search/guiSearchFilters";
+import { FILTERS } from "lib/search/guiSearchFilters";
 
 const last = arr => arr[arr.length - 1];
 

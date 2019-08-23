@@ -8,9 +8,9 @@ import inflate from "file-loader!@destiny-item-manager/zip.js/WebContent/inflate
 import zipWorker from "file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js"; // eslint-disable-line
 
 import { requireDatabase, getAllRecords } from "./database";
-import { getDestiny } from "app/lib/destiny";
+import { getDestiny } from "lib/destiny";
 
-const log = require("app/lib/log")("definitions");
+const log = require("lib/log")("definitions");
 
 const VERSION = "v1";
 

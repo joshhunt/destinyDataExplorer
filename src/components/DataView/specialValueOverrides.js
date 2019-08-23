@@ -53,19 +53,13 @@ export default {
       `Vendor "${vendor.displayProperties.name}" ${location.vendorHash}`;
     const activityString =
       activity &&
-      `Activity "${activity.displayProperties.name}" ${
-        locationRelease.activityHash
-      }`;
+      `Activity "${activity.displayProperties.name}" ${locationRelease.activityHash}`;
     const bubbleString =
       bubble &&
-      `Bubble "${bubble.displayProperties.name}" ${
-        locationRelease.activityBubbleName
-      }`;
+      `Bubble "${bubble.displayProperties.name}" ${locationRelease.activityBubbleName}`;
     const destinationString =
       destination &&
-      `Destination "${destination.displayProperties.name}" ${
-        locationRelease.destinationHash
-      }`;
+      `Destination "${destination.displayProperties.name}" ${locationRelease.destinationHash}`;
 
     const showActivityString =
       activityString &&
@@ -80,6 +74,6 @@ export default {
     ].filter(Boolean);
 
     strings.push(`${prettyValue}`);
-    return '<Location ' + strings.join(', ') + '>';
+    return "<Location " + strings.join(", ") + ">";
   }
 };

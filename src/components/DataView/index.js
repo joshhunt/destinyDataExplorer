@@ -4,10 +4,10 @@ import { isString, memoize } from "lodash";
 import cx from "classnames";
 import JSONTree from "react-json-tree";
 
-import { makeTypeShort } from "src/lib/destinyUtils";
-import BungieImage from "src/components/BungieImage";
-import { getNameForItem, bungieUrl } from "src/lib/destinyUtils";
-import copyToClipboard from "src/lib/copyToClipboard";
+import { makeTypeShort } from "lib/destinyUtils";
+import BungieImage from "components/BungieImage";
+import { getNameForItem, bungieUrl } from "lib/destinyUtils";
+import copyToClipboard from "lib/copyToClipboard";
 
 import Vendor from "./detailViews/Vendor";
 import InventoryItem from "./detailViews/InventoryItem";
@@ -15,7 +15,7 @@ import PresentationNode from "./detailViews/PresentationNode";
 import AnyObjectives from "./detailViews/AnyObjectives";
 
 import specialValueOverrides from "./specialValueOverrides";
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 import apispec from "./apispec.json";
 
@@ -120,9 +120,9 @@ export default class DataView extends Component {
 
     if (enumDef) {
       return (
-        <Decorate spec={currentSpec}>{`<enum "${
-          enumDef.identifier
-        }" ${prettyValue}>`}</Decorate>
+        <Decorate
+          spec={currentSpec}
+        >{`<enum "${enumDef.identifier}" ${prettyValue}>`}</Decorate>
       );
     }
 

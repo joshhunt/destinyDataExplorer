@@ -1,7 +1,7 @@
 import { get, isString, intersection, isNumber } from "lodash";
 import * as enums from "../destinyEnums";
 import { matches } from ".";
-import { getLower } from "app/lib/utils";
+import { getLower } from "lib/utils";
 
 const isItemCategoryHash = (obj, hash) =>
   obj.def &&

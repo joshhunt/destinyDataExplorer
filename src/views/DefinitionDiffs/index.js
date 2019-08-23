@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { format } from "date-fns";
 
-import { get } from "src/lib/destiny";
+import { get } from "lib/destiny";
+import { makeTypeShort } from "lib/destinyUtils";
 
-import { makeTypeShort } from "src/lib/destinyUtils";
+import Item from "components/Item";
 
-import Item from "src/components/Item";
-
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const DATE_FORMAT = "ddd do MMM, YYYY - h:mm a";
 const LATEST = "$LATEST";

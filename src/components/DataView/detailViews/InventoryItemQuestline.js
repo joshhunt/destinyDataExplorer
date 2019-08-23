@@ -2,10 +2,10 @@ import React, { Component, Fragment } from "react";
 import { memoize } from "lodash";
 import { Link } from "react-router";
 
-import Item from "src/components/Item";
+import Item from "components/Item";
 import ObjectiveList from "./ObjectiveList";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const _withDef = memoize(defs => (itemHash, cb) => cb(defs[itemHash]));
 
@@ -39,9 +39,7 @@ class Toggleable extends Component {
 export default function Questline(props) {
   return (
     <Toggleable
-      buttonTitle={`View Questline - ${
-        props.item.setData.itemList.length
-      } steps`}
+      buttonTitle={`View Questline - ${props.item.setData.itemList.length} steps`}
     >
       <QuestlineBody {...props} />
     </Toggleable>

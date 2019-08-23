@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router";
 import { memoize } from "lodash";
 
-import BungieImage from "src/components/BungieImage";
+import BungieImage from "components/BungieImage";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const _withDef = memoize(defs => (itemHash, cb) => cb(defs[itemHash]));
 

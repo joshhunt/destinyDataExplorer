@@ -1,31 +1,31 @@
-import React from 'react';
-import cx from 'classnames';
-import { Link } from 'react-router';
+import React from "react";
+import cx from "classnames";
+import { Link } from "react-router";
 
-import { CLASSES } from 'app/lib/destinyEnums';
-import { makeTypeShort, getNameForItem } from 'src/lib/destinyUtils';
+import { CLASSES } from "lib/destinyEnums";
+import { makeTypeShort, getNameForItem } from "lib/destinyUtils";
 
-import BungieImage from 'src/components/BungieImage';
-import Icon from 'src/components/Icon';
+import BungieImage from "components/BungieImage";
+import Icon from "components/Icon";
 
-import s from './styles.styl';
+import s from "./styles.module.scss";
 
 function makeItemTypeName(item, type) {
   const shortType = makeTypeShort(type);
   const _klass = CLASSES[item.classType];
-  const klass = _klass ? `${_klass} ` : '';
+  const klass = _klass ? `${_klass} ` : "";
   const official = item.itemTypeName || item.itemTypeDisplayName;
 
   return official ? `${shortType}: ${klass}${official}` : shortType;
 }
 
-const NO_ICON = '/img/misc/missing_icon_d2.png';
+const NO_ICON = "/img/misc/missing_icon_d2.png";
 
 const SUBSTITUTE_ICON = {
-  DestinyLoreDefinition: 'book',
-  DestinyItemCategoryDefinition: 'th-large',
-  DestinyInventoryBucketDefinition: 'shopping-basket',
-  DestinyHistoricalStatsDefinition: 'trophy'
+  DestinyLoreDefinition: "book",
+  DestinyItemCategoryDefinition: "th-large",
+  DestinyInventoryBucketDefinition: "shopping-basket",
+  DestinyHistoricalStatsDefinition: "trophy"
 };
 
 function SubstituteIcon({ type }) {
@@ -50,7 +50,7 @@ export default function Item({
   const { def: item, type } = entry;
 
   if (!item) {
-    console.warn('Item is empty for entry', entry);
+    console.warn("Item is empty for entry", entry);
     return null;
   }
 

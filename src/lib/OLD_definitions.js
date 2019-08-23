@@ -1,45 +1,45 @@
-import Dexie from 'dexie';
-import axios from 'axios';
+import Dexie from "dexie";
+import axios from "axios";
 
-import 'imports-loader?this=>window!@destiny-item-manager/zip.js'; // eslint-disable-line
-import inflate from 'file-loader!@destiny-item-manager/zip.js/WebContent/inflate.js'; // eslint-disable-line
-import zipWorker from 'file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js'; // eslint-disable-line
+import "imports-loader?this=>window!@destiny-item-manager/zip.js"; // eslint-disable-line
+import inflate from "file-loader!@destiny-item-manager/zip.js/WebContent/inflate.js"; // eslint-disable-line
+import zipWorker from "file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js"; // eslint-disable-line
 
-import { requireDatabase, getAllRecords } from './database';
-import { getDestiny } from './destiny';
+import { requireDatabase, getAllRecords } from "./database";
+import { getDestiny } from "./destiny";
 
-const db = new Dexie('destinyManifest');
+const db = new Dexie("destinyManifest");
 db.version(1).stores({
-  manifestBlob: '&key, data',
-  allData: '&key, data'
+  manifestBlob: "&key, data",
+  allData: "&key, data"
 });
 
-const REVISION = 'rev2';
+const REVISION = "rev2";
 
 const LANGUAGE =
   [
-    'en',
-    'fr',
-    'es',
-    'de',
-    'it',
-    'ja',
-    'pt-br',
-    'es-mx',
-    'ru',
-    'pl',
-    'ko',
-    'zh-cht'
-  ].find(lang => window.location.search.includes(lang)) || 'en';
+    "en",
+    "fr",
+    "es",
+    "de",
+    "it",
+    "ja",
+    "pt-br",
+    "es-mx",
+    "ru",
+    "pl",
+    "ko",
+    "zh-cht"
+  ].find(lang => window.location.search.includes(lang)) || "en";
 
 function fetchManifestDBPath() {
-  return getDestiny('/platform/Destiny2/Manifest/').then(data => {
+  return getDestiny("/platform/Destiny2/Manifest/").then(data => {
     return data.mobileWorldContentPaths[LANGUAGE];
   });
 }
 
 function fetchManifest(dbPath) {
-  console.log('Requesting manifest from', dbPath);
+  console.log("Requesting manifest from", dbPath);
 
   return db.manifestBlob.get(dbPath).then(cachedValue => {
     if (cachedValue) {
@@ -47,15 +47,15 @@ function fetchManifest(dbPath) {
     }
 
     return axios(`https://www.bungie.net${dbPath}`, {
-      responseType: 'blob',
+      responseType: "blob",
       onDownloadProgress(progress) {
         console.log(
-          `Progress ${Math.round(progress.loaded / progress.total * 100)}%`
+          `Progress ${Math.round((progress.loaded / progress.total) * 100)}%`
         );
       }
     }).then(resp => {
-      console.log('Finished loading manifest');
-      console.log('Storing in db', { key: dbPath, data: resp.data });
+      console.log("Finished loading manifest");
+      console.log("Storing in db", { key: dbPath, data: resp.data });
       db.manifestBlob.put({ key: dbPath, data: resp.data });
       return resp.data;
     });
@@ -63,7 +63,7 @@ function fetchManifest(dbPath) {
 }
 
 function unzipManifest(blob) {
-  console.log('Unzipping file...');
+  console.log("Unzipping file...");
   return new Promise((resolve, reject) => {
     zip.useWebWorkers = true; // eslint-disable-line  no-undef
 
@@ -79,8 +79,8 @@ function unzipManifest(blob) {
         // get all entries from the zip
         zipReader.getEntries(entries => {
           if (entries.length) {
-            console.log('Found', entries.length, 'entries within zip file');
-            console.log('Loading first file...', entries[0].filename);
+            console.log("Found", entries.length, "entries within zip file");
+            console.log("Loading first file...", entries[0].filename);
 
             // eslint-disable-next-line no-undef
             entries[0].getData(new zip.BlobWriter(), blob => {
@@ -99,11 +99,11 @@ function unzipManifest(blob) {
 function loadManifest(dbPath) {
   return fetchManifest(dbPath)
     .then(data => {
-      console.log('Got a blob db', data);
+      console.log("Got a blob db", data);
       return unzipManifest(data);
     })
     .then(manifestBlob => {
-      console.log('Got unziped db', manifestBlob);
+      console.log("Got unziped db", manifestBlob);
       return manifestBlob;
     });
 }
@@ -112,8 +112,8 @@ function openDBFromBlob(SQLLib, blob) {
   const url = window.URL.createObjectURL(blob);
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'arraybuffer';
+    xhr.open("GET", url, true);
+    xhr.responseType = "arraybuffer";
     xhr.onload = function(e) {
       const uInt8Array = new Uint8Array(this.response);
       resolve(new SQLLib.Database(uInt8Array));
@@ -125,20 +125,20 @@ function openDBFromBlob(SQLLib, blob) {
 function allDataFromRemote(dbPath) {
   return Promise.all([requireDatabase(), loadManifest(dbPath)])
     .then(([SQLLib, manifestBlob]) => {
-      console.log('Loaded both SQL library and manifest blob');
+      console.log("Loaded both SQL library and manifest blob");
       return openDBFromBlob(SQLLib, manifestBlob);
     })
     .then(db => {
-      console.log('Got proper SQLite DB', db);
+      console.log("Got proper SQLite DB", db);
 
       const allTables = db
         .exec(`SELECT name FROM sqlite_master WHERE type='table';`)[0]
         .values.map(a => a[0]);
 
-      console.log('All tables', allTables);
+      console.log("All tables", allTables);
 
       const allData = allTables.reduce((acc, tableName) => {
-        console.log('Getting all records for', tableName);
+        console.log("Getting all records for", tableName);
         const records = getAllRecords(db, tableName);
 
         if (records) {

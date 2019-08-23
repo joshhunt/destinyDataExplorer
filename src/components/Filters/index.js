@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import cx from "classnames";
 import Select from "react-select";
 
-import Icon from "src/components/Icon";
-import { setFilterValue } from "src/store/filter";
+import Icon from "components/Icon";
+import { setFilterValue } from "store/filter";
 import {
   FILTER_OPTION_RENDERERS as FILTER_OPTION_RENDERER_TYPES,
   FILTERS
-} from "src/lib/search/guiSearchFilters";
+} from "lib/search/guiSearchFilters";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const FILTER_OPTION_RENDERERS = {
   [FILTER_OPTION_RENDERER_TYPES.SELECT]: ({ data, onChange, value }) => {

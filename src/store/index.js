@@ -9,9 +9,9 @@ import app, {
   setActiveLanguage
 } from "./app";
 import filter from "./filter";
-import { setLanguage, getLanguage } from "src/lib/ls";
-import { fasterGetDefinitions } from "src/lib/definitions";
-import { sendDefinitions } from "src/lib/workerSearch";
+import { setLanguage, getLanguage } from "lib/ls";
+import { fasterGetDefinitions } from "lib/definitions";
+import { sendDefinitions } from "lib/workerSearch";
 
 import definitions, {
   setBulkDefinitions,
