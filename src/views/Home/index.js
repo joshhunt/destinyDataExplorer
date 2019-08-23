@@ -22,7 +22,7 @@ import DataView from "components/DataView";
 import Item from "components/Item";
 
 import { filteredItemsSelector } from "./selectors";
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 function parsePathSegment(segment) {
   const [type, hash] = segment.split(":");

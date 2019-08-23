@@ -5,7 +5,7 @@ import sortIntoSections from "lib/sortIntoSections";
 import BungieImage from "components/BungieImage";
 import Icon from "components/Icon";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const hasDefs = defs => defs && Object.keys(defs).length > 0;
 

@@ -1,10 +1,10 @@
 import React from "react";
-import "react-tabs/style/react-tabs.css";
+import "react-tabs/style/react-tabs.scss";
 
 import Item from "components/Item";
 import Questline, { ViewParentQuestline } from "./InventoryItemQuestline";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 function GearsetItemList({ item, definitions, pathForItem }) {
   return (

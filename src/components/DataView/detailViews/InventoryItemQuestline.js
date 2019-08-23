@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import Item from "components/Item";
 import ObjectiveList from "./ObjectiveList";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const _withDef = memoize(defs => (itemHash, cb) => cb(defs[itemHash]));
 

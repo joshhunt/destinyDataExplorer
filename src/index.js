@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import { AppContainer } from "react-hot-loader";
 
 import AppRouter from "./AppRouter";
-import "./index.styl";
+import "./index.module.scss";
 
 window.lodash = _;
 

@@ -4,7 +4,7 @@ import { memoize } from "lodash";
 
 import BungieImage from "components/BungieImage";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const _withDef = memoize(defs => (itemHash, cb) => cb(defs[itemHash]));
 

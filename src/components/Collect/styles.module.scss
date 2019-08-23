@@ -1,0 +1,54 @@
+.root {
+  font-size: 14px;
+}
+
+.item {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 3px;
+  display: flex;
+}
+
+.image {
+  height: 25px;
+  margin-right: 0.5ch;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.itemMain {
+  flex: 1;
+}
+
+.closeButton {
+  color: white;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 150ms ease-in-out;
+
+  &:hover {
+    background: rgba(white, 0.1);
+  }
+}
+
+.heading {
+  margin: 0 0 10px 0;
+}
+
+.section {
+  margin-bottom: 15px;
+}
+
+.sectionTitle {
+  margin: 0 0 4px 0;
+  border-bottom: 1px solid rgba(white, 0.3);
+}
+
+.info {
+  text-align: center;
+}
