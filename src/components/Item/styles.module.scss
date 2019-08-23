@@ -59,7 +59,9 @@ $substituteColour: #494a4c;
   font-size: 20px;
 }
 
-.main .name .itemType {
+.main,
+.name,
+.itemType {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
