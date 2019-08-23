@@ -1,11 +1,11 @@
-import sqlWasmPath from 'file-loader!sql.js/js/sql-wasm.js'; // eslint-disable-line
-import sqlWasmBinaryPath from '!!file-loader!sql.js/js/sql-optimized-wasm-raw.wasm'; // eslint-disable-line
+import sqlWasmPath from "file-loader!sql.js/js/sql-wasm.js"; // eslint-disable-line
+import sqlWasmBinaryPath from "!!file-loader!sql.js/js/sql-optimized-wasm-raw.wasm"; // eslint-disable-line
 
 function importAsmJs() {
   delete window.Module;
   delete window.SQL;
-  console.log('Using asm.js SQLite');
-  return import(/* webpackChunkName: "sqlLib" */ 'sql.js');
+  console.log("Using asm.js SQLite");
+  return import(/* webpackChunkName: "sqlLib" */ "sql.js");
 }
 
 export function getAllRecords(db, table) {
@@ -29,12 +29,12 @@ export function getAllRecords(db, table) {
 }
 
 export function requireDatabase() {
-  if (!(typeof WebAssembly === 'object')) {
-    console.log('Browser does not support WebAssembly');
+  if (!(typeof WebAssembly === "object")) {
+    console.log("Browser does not support WebAssembly");
     return importAsmJs();
   }
 
-  console.log('Browser supports WebAssembly');
+  console.log("Browser supports WebAssembly");
 
   return new Promise((resolve, reject) => {
     let loaded = false;
@@ -52,16 +52,16 @@ export function requireDatabase() {
           try {
             // Do a self-test
             const db = new window.SQL.Database();
-            db.run('CREATE TABLE hello (a int, b char);');
+            db.run("CREATE TABLE hello (a int, b char);");
             db.run("INSERT INTO hello VALUES (0, 'hello');");
-            db.exec('SELECT * FROM hello');
+            db.exec("SELECT * FROM hello");
           } catch (e) {
-            console.error('Failed to load WASM SQLite, falling back', e);
+            console.error("Failed to load WASM SQLite, falling back", e);
             importAsmJs().then(resolve, reject);
             return;
           }
 
-          console.info('Using WASM SQLite');
+          console.info("Using WASM SQLite");
           resolve(window.SQL);
           delete window.SQL;
         }
@@ -78,9 +78,9 @@ export function requireDatabase() {
       }
     }, 10000);
 
-    const head = document.getElementsByTagName('head')[0];
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
+    const head = document.getElementsByTagName("head")[0];
+    const script = document.createElement("script");
+    script.type = "text/javascript";
     script.src = sqlWasmPath;
     script.async = true;
     head.appendChild(script);

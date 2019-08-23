@@ -39,9 +39,7 @@ class Toggleable extends Component {
 export default function Questline(props) {
   return (
     <Toggleable
-      buttonTitle={`View Questline - ${
-        props.item.setData.itemList.length
-      } steps`}
+      buttonTitle={`View Questline - ${props.item.setData.itemList.length} steps`}
     >
       <QuestlineBody {...props} />
     </Toggleable>
