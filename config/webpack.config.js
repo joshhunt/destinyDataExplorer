@@ -314,6 +314,16 @@ module.exports = function(webpackEnv) {
       ]
     },
     module: {
+      defaultRules: [
+        {
+          type: "javascript/auto",
+          resolve: {}
+        },
+        {
+          test: /\.json$/i,
+          type: "json"
+        }
+      ],
       strictExportPresence: true,
       rules: [
         // Disable require.ensure as it's not a standard language feature.
