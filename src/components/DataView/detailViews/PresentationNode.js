@@ -6,7 +6,7 @@ import { addCollectedItem } from "store/app";
 
 import Item from "components/Item";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 function deepCollectiblesFromPresentationNodes(node, definitions) {
   if (!node || !node.children) {

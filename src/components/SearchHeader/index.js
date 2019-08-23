@@ -10,7 +10,7 @@ import Modal from "components/Modal";
 import Icon from "components/Icon";
 import Filters from "components/Filters";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 import logo from "./logo.svg";
 
 const FILTERS_BY_ID = keyBy(FILTERS, "id");

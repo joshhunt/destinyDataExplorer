@@ -7,7 +7,7 @@ import { makeTypeShort } from "lib/destinyUtils";
 
 import Item from "components/Item";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const DATE_FORMAT = "ddd do MMM, YYYY - h:mm a";
 const LATEST = "$LATEST";

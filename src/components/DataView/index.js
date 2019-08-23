@@ -15,7 +15,7 @@ import PresentationNode from "./detailViews/PresentationNode";
 import AnyObjectives from "./detailViews/AnyObjectives";
 
 import specialValueOverrides from "./specialValueOverrides";
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 import apispec from "./apispec.json";
 

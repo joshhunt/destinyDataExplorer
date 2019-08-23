@@ -2,7 +2,7 @@ import React from "react";
 
 import Icon from "components/Icon";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 export default function Loading({ children, noSpin }) {
   return (

@@ -1,0 +1,24 @@
+.root {
+  position: fixed;
+  z-index: 9999999;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  text-align: center;
+  background: #bdc3c7;
+  color: #090b0e;
+  box-shadow: 0 0 20px -5px rgba(black, 0.75);
+}
+
+.text {
+  font-size: 24px;
+}
+
+.icon {
+  margin-right: 0.25ch;
+}

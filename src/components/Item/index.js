@@ -8,7 +8,7 @@ import { makeTypeShort, getNameForItem } from "lib/destinyUtils";
 import BungieImage from "components/BungieImage";
 import Icon from "components/Icon";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 function makeItemTypeName(item, type) {
   const shortType = makeTypeShort(type);

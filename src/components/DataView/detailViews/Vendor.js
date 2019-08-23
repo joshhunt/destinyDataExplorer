@@ -1,10 +1,10 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
+import "react-tabs/style/react-tabs.scss";
 
 import Item from "components/Item";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 function CategoryListing({ item, definitions, pathForItem, categories }) {
   return (
