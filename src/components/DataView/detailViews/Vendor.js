@@ -11,7 +11,7 @@ function CategoryListing({ item, definitions, pathForItem, categories }) {
     <div>
       {categories.map(category => {
         return (
-          <div className={s.section}>
+          <div key={category.categoryId} className={s.section}>
             <div className={s.sectionTitle}>{category.categoryId}</div>
             <div className={s.sectionItemList}>
               {category.vendorItemIndexes.map(itemIndex => {
@@ -24,10 +24,10 @@ function CategoryListing({ item, definitions, pathForItem, categories }) {
                   <Item
                     pathForItem={pathForItem}
                     className={s.item}
+                    key={`${vendorItem.hash}${itemIndex}${category.categoryId}`}
                     entry={{
                       type: "DestinyInventoryItemDefinition",
-                      def: vendorItem,
-                      key: vendorItem.hash
+                      def: vendorItem
                     }}
                   />
                 );
@@ -73,7 +73,7 @@ export default function Vendor({ item, definitions, pathForItem }) {
         <TabPanel>
           {item.displayCategories.map(displayCategory => {
             return (
-              <div className={s.section}>
+              <div key= {displayCategory.displayProperties.name} className={s.section}>
                 <div className={s.sectionTitle}>
                   {displayCategory.displayProperties.name}
                 </div>
