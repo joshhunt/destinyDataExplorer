@@ -1,6 +1,6 @@
 import { pickBy } from "lodash";
 
-import search from "src/lib/workerSearch";
+import search from "lib/workerSearch";
 import { makePayloadAction } from "./utils";
 
 export const SET_FILTER_STRING = "Set filter string";

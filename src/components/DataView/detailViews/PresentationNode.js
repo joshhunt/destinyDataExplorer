@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { flatMapDeep, groupBy, uniqBy } from "lodash";
 import { connect } from "react-redux";
 
-import { addCollectedItem } from "src/store/app";
+import { addCollectedItem } from "store/app";
 
-import Item from "src/components/Item";
+import Item from "components/Item";
 
 import s from "./styles.styl";
 

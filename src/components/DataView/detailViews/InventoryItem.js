@@ -1,10 +1,10 @@
-import React from 'react';
-import 'react-tabs/style/react-tabs.css';
+import React from "react";
+import "react-tabs/style/react-tabs.css";
 
-import Item from 'src/components/Item';
-import Questline, { ViewParentQuestline } from './InventoryItemQuestline';
+import Item from "components/Item";
+import Questline, { ViewParentQuestline } from "./InventoryItemQuestline";
 
-import s from './styles.styl';
+import s from "./styles.styl";
 
 function GearsetItemList({ item, definitions, pathForItem }) {
   return (
@@ -21,7 +21,7 @@ function GearsetItemList({ item, definitions, pathForItem }) {
               pathForItem={pathForItem}
               className={s.item}
               entry={{
-                type: 'DestinyInventoryItemDefinition',
+                type: "DestinyInventoryItemDefinition",
                 def: gearSetItem,
                 key: gearSetItem.hash
               }}
@@ -66,7 +66,7 @@ function Sockets({ item, definitions, pathForItem }) {
                           pathForItem={pathForItem}
                           className={s.item}
                           entry={{
-                            type: 'DestinyInventoryItemDefinition',
+                            type: "DestinyInventoryItemDefinition",
                             def: socketItem,
                             key: socketItem.hash
                           }}
@@ -75,7 +75,10 @@ function Sockets({ item, definitions, pathForItem }) {
                     </div>
 
                     <div className={s.socketAlts}>
-                      {[...socketEntry.reusablePlugItems, ...socketEntry.randomizedPlugItems]
+                      {[
+                        ...socketEntry.reusablePlugItems,
+                        ...socketEntry.randomizedPlugItems
+                      ]
                         .filter(
                           h =>
                             h.plugItemHash !== socketEntry.singleInitialItemHash
@@ -96,7 +99,7 @@ function Sockets({ item, definitions, pathForItem }) {
                                 pathForItem={pathForItem}
                                 className={s.item}
                                 entry={{
-                                  type: 'DestinyInventoryItemDefinition',
+                                  type: "DestinyInventoryItemDefinition",
                                   def: reusablePlugItem,
                                   key: reusablePlugItem.hash
                                 }}
@@ -119,7 +122,7 @@ function Sockets({ item, definitions, pathForItem }) {
 export default function InventoryItem({ item, definitions, pathForItem }) {
   const hasGearset = item.gearset && item.gearset.itemList.length > 0;
   const hasSockets = !!item.sockets;
-  const isQuestline = item.setData && item.setData.setType === 'quest_global';
+  const isQuestline = item.setData && item.setData.setType === "quest_global";
   console.log({ isQuestline, item });
 
   const views = [

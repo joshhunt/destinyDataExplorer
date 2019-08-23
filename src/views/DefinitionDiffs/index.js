@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { format } from "date-fns";
 
-import { get } from "src/lib/destiny";
+import { get } from "lib/destiny";
+import { makeTypeShort } from "lib/destinyUtils";
 
-import { makeTypeShort } from "src/lib/destinyUtils";
-
-import Item from "src/components/Item";
+import Item from "components/Item";
 
 import s from "./styles.styl";
 

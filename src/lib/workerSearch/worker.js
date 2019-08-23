@@ -1,7 +1,7 @@
 // worker.js
 import registerPromiseWorker from "promise-worker/register";
 
-import search from "src/lib/search";
+import search from "lib/search";
 
 import { SEND_DEFINITIONS, SEARCH } from "./constants";
 

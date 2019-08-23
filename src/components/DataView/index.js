@@ -4,10 +4,10 @@ import { isString, memoize } from "lodash";
 import cx from "classnames";
 import JSONTree from "react-json-tree";
 
-import { makeTypeShort } from "src/lib/destinyUtils";
-import BungieImage from "src/components/BungieImage";
-import { getNameForItem, bungieUrl } from "src/lib/destinyUtils";
-import copyToClipboard from "src/lib/copyToClipboard";
+import { makeTypeShort } from "lib/destinyUtils";
+import BungieImage from "components/BungieImage";
+import { getNameForItem, bungieUrl } from "lib/destinyUtils";
+import copyToClipboard from "lib/copyToClipboard";
 
 import Vendor from "./detailViews/Vendor";
 import InventoryItem from "./detailViews/InventoryItem";

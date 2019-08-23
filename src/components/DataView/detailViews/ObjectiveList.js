@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import { memoize } from "lodash";
 
-import BungieImage from "src/components/BungieImage";
+import BungieImage from "components/BungieImage";
 
 import s from "./styles.styl";
 

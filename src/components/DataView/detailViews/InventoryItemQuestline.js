@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { memoize } from "lodash";
 import { Link } from "react-router";
 
-import Item from "src/components/Item";
+import Item from "components/Item";
 import ObjectiveList from "./ObjectiveList";
 
 import s from "./styles.styl";

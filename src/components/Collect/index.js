@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import copy from 'src/lib/copyToClipboard';
-import sortIntoSections from 'src/lib/sortIntoSections';
-import BungieImage from 'src/components/BungieImage';
-import Icon from 'src/components/Icon';
+import copy from "lib/copyToClipboard";
+import sortIntoSections from "lib/sortIntoSections";
+import BungieImage from "components/BungieImage";
+import Icon from "components/Icon";
 
-import s from './styles.styl';
+import s from "./styles.styl";
 
 const hasDefs = defs => defs && Object.keys(defs).length > 0;
 
@@ -27,7 +27,7 @@ export default class CollectDrawer extends Component {
       const item = definitions.DestinyInventoryItemDefinition[hash];
       const newline =
         match +
-        ' // ' +
+        " // " +
         (collectionEntry.forceName || item.displayProperties.name);
       jason = jason.replace(match, newline);
     });

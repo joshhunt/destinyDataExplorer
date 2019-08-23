@@ -1,6 +1,6 @@
-import { has } from 'lodash';
+import { has } from "lodash";
 
-const log = require('src/lib/log')('http');
+const log = require("lib/log")("http");
 
 export function get(url, opts) {
   return fetch(url, opts).then(res => res.json());
@@ -11,15 +11,15 @@ export function getDestiny(_pathname, opts = {}, postBody) {
   const { pathname } = new URL(url);
 
   opts.headers = opts.headers || {};
-  opts.headers['x-api-key'] = process.env.REACT_APP_API_KEY;
+  opts.headers["x-api-key"] = process.env.REACT_APP_API_KEY;
 
   if (postBody) {
-    opts.method = 'POST';
-    if (typeof postBody === 'string') {
-      opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    opts.method = "POST";
+    if (typeof postBody === "string") {
+      opts.headers["Content-Type"] = "application/x-www-form-urlencoded";
       opts.body = postBody;
     } else {
-      opts.headers['Content-Type'] = 'application/json';
+      opts.headers["Content-Type"] = "application/json";
       opts.body = JSON.stringify(postBody);
     }
   }
@@ -29,18 +29,18 @@ export function getDestiny(_pathname, opts = {}, postBody) {
   return get(url, opts).then(resp => {
     log(`RESPONSE: ${pathname}`, resp);
 
-    if (resp.ErrorStatus === 'DestinyAccountNotFound') {
+    if (resp.ErrorStatus === "DestinyAccountNotFound") {
       return null;
     }
 
-    if (has(resp, 'ErrorCode') && resp.ErrorCode !== 1) {
-      const cleanedUrl = url.replace(/\/\d+\//g, '/_/');
+    if (has(resp, "ErrorCode") && resp.ErrorCode !== 1) {
+      const cleanedUrl = url.replace(/\/\d+\//g, "/_/");
       const err = new Error(
-        'Bungie API Error ' +
+        "Bungie API Error " +
           resp.ErrorStatus +
-          ' - ' +
+          " - " +
           resp.Message +
-          '\nURL: ' +
+          "\nURL: " +
           cleanedUrl
       );
 

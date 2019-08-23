@@ -1,4 +1,4 @@
-import { get, groupBy, sortBy, mapValues } from 'lodash';
+import { get, groupBy, sortBy, mapValues } from "lodash";
 
 import {
   HUNTER,
@@ -27,7 +27,7 @@ import {
   UNCOMMON,
   RARE,
   COMMON
-} from 'src/lib/destinyEnums';
+} from "lib/destinyEnums";
 
 const tierTypeNameValue = {
   Common: 4,
@@ -50,17 +50,17 @@ const RARITY_SCORE = {
 };
 
 function scoreItem(item) {
-  const plugCategoryIdentifier = get(item, 'plug.plugCategoryIdentifier');
+  const plugCategoryIdentifier = get(item, "plug.plugCategoryIdentifier");
   if (isArmorOrnament(item) && plugCategoryIdentifier) {
-    if (plugCategoryIdentifier.includes('head')) {
+    if (plugCategoryIdentifier.includes("head")) {
       return 1;
-    } else if (plugCategoryIdentifier.includes('arms')) {
+    } else if (plugCategoryIdentifier.includes("arms")) {
       return 2;
-    } else if (plugCategoryIdentifier.includes('chest')) {
+    } else if (plugCategoryIdentifier.includes("chest")) {
       return 3;
-    } else if (plugCategoryIdentifier.includes('legs')) {
+    } else if (plugCategoryIdentifier.includes("legs")) {
       return 4;
-    } else if (plugCategoryIdentifier.includes('class')) {
+    } else if (plugCategoryIdentifier.includes("class")) {
       return 5;
     }
   }
@@ -79,7 +79,7 @@ function scoreItem(item) {
 }
 
 function sortArmor(objs, definitions) {
-  console.log('sorting objs!', objs);
+  console.log("sorting objs!", objs);
   return sortBy(objs, obj => {
     const item = definitions.DestinyInventoryItemDefinition[obj.key];
     const rarity =
@@ -103,25 +103,25 @@ function getItemCategory(entry, definitions) {
       return HUNTER;
     }
   } else if (hasCategory(item, WEAPON)) {
-    return 'weapon';
+    return "weapon";
   } else if (hasCategory(item, GHOST)) {
-    return 'ghosts';
+    return "ghosts";
   } else if (hasCategory(item, EMOTES)) {
-    return 'emotes';
+    return "emotes";
   } else if (hasCategory(item, SHIP)) {
-    return 'ships';
+    return "ships";
   } else if (hasCategory(item, SPARROW)) {
-    return 'sparrows';
+    return "sparrows";
   } else if (hasCategory(item, EMBLEM)) {
-    return 'emblems';
+    return "emblems";
   } else if (hasCategory(item, SHADER)) {
-    return 'shaders';
+    return "shaders";
   } else if (hasCategory(item, ARMOR)) {
     return item.classType;
   } else if (hasCategory(item, WEAPON_MODS_ORNAMENTS)) {
-    return 'weaponOrnaments';
+    return "weaponOrnaments";
   } else {
-    return 'other';
+    return "other";
   }
 }
 
@@ -141,24 +141,24 @@ export default function sortItems(_entries, definitions, justHashes = false) {
   });
 
   const sections = [
-    { name: 'Weapons', items: sectionItems.weapon },
+    { name: "Weapons", items: sectionItems.weapon },
     {
-      name: 'Hunter armor',
+      name: "Hunter armor",
       items: sortArmor(sectionItems[HUNTER], definitions)
     },
-    { name: 'Titan armor', items: sortArmor(sectionItems[TITAN], definitions) },
+    { name: "Titan armor", items: sortArmor(sectionItems[TITAN], definitions) },
     {
-      name: 'Warlock armor',
+      name: "Warlock armor",
       items: sortArmor(sectionItems[WARLOCK], definitions)
     },
-    { name: 'Emotes', items: sectionItems.emotes },
-    { name: 'Ghosts', items: sectionItems.ghosts },
-    { name: 'Ships', items: sectionItems.ships },
-    { name: 'Sparrows', items: sectionItems.sparrows },
-    { name: 'Emblems', items: sectionItems.emblems },
-    { name: 'Shaders', items: sectionItems.shaders },
-    { name: 'Weapon Ornaments', items: sectionItems.weaponOrnaments },
-    { name: 'Other', items: sectionItems.other }
+    { name: "Emotes", items: sectionItems.emotes },
+    { name: "Ghosts", items: sectionItems.ghosts },
+    { name: "Ships", items: sectionItems.ships },
+    { name: "Sparrows", items: sectionItems.sparrows },
+    { name: "Emblems", items: sectionItems.emblems },
+    { name: "Shaders", items: sectionItems.shaders },
+    { name: "Weapon Ornaments", items: sectionItems.weaponOrnaments },
+    { name: "Other", items: sectionItems.other }
   ]
     .filter(({ items }) => {
       return items && items.length > 0;

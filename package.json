@@ -22,10 +22,7 @@
     "lodash": "^4.17.4",
     "normalize-text": "^0.4.2",
     "promise-worker": "^2.0.1",
-    "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",
-    "react-app-rewire-hot-loader": "^1.0.0",
-    "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0",
     "react-json-tree": "^0.11.0",
     "react-lazyload": "^2.3.0",
@@ -33,7 +30,9 @@
     "react-modal": "^3.5.1",
     "react-redux": "^5.0.7",
     "react-router": "3.2.0",
-    "react-scripts": "1.0.17",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.1",
     "react-select": "^2.0.0",
     "react-tabs": "^2.2.2",
     "react-toggled": "^1.2.7",
@@ -45,12 +44,10 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "serve": "serve -s build",
-    "test": "react-app-rewired test --env=jsdom",
-    "deploy": "yarn run build && yarn run upload",
-    "upload": "env AWS_PROFILE=money aws s3 sync build/ s3://destinysets.com/ --region=ap-southeast-2 --acl public-read",
+    "test": "react-scripts test",
     "generate-autotrack": "autotrack -o public/autotrack.build.js -p clean-url-tracker,url-change-tracker",
     "eject": "react-scripts eject"
   },
@@ -59,15 +56,21 @@
     "ava": "^1.0.0-beta.3",
     "babel-plugin-lodash": "^3.3.2",
     "postcss-loader": "^2.0.9",
-    "react-app-rewired": "1.3.8",
     "stylus": "^0.54.5",
     "stylus-loader": "3.0.2",
     "unused-files-webpack-plugin": "^3.4.0",
     "webpack-visualizer-plugin": "^0.1.11"
   },
-  "ava": {
-    "files": [
-      "tests/*.js"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

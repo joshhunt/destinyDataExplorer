@@ -10,16 +10,16 @@ import {
   addCollectedItem,
   removeCollectedItem,
   fetchBungieSettings
-} from "src/store/app";
-import { setBulkDefinitions } from "src/store/definitions";
-import { setFilterString, setFilterValue } from "src/store/filter";
-import { makeTypeShort, getRandomItems } from "src/lib/destinyUtils";
+} from "store/app";
+import { setBulkDefinitions } from "store/definitions";
+import { setFilterString, setFilterValue } from "store/filter";
+import { makeTypeShort, getRandomItems } from "lib/destinyUtils";
 
-import Loading from "src/components/Loading";
-import CollectDrawer from "src/components/CollectDrawer";
-import SearchHeader from "src/components/SearchHeader";
-import DataView from "src/components/DataView";
-import Item from "src/components/Item";
+import Loading from "components/Loading";
+import CollectDrawer from "components/Collect";
+import SearchHeader from "components/SearchHeader";
+import DataView from "components/DataView";
+import Item from "components/Item";
 
 import { filteredItemsSelector } from "./selectors";
 import s from "./styles.styl";
