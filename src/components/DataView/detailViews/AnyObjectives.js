@@ -3,7 +3,7 @@ import { get } from "lodash";
 
 import ObjectiveList from "./ObjectiveList";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 function WrappedObjectiveList({
   title,

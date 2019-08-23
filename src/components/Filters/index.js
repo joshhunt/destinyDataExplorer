@@ -10,7 +10,7 @@ import {
   FILTERS
 } from "lib/search/guiSearchFilters";
 
-import s from "./styles.styl";
+import s from "./styles.module.scss";
 
 const FILTER_OPTION_RENDERERS = {
   [FILTER_OPTION_RENDERER_TYPES.SELECT]: ({ data, onChange, value }) => {

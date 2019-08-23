@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { isObject } from 'lodash';
 
-import s from './styles.styl';
+import s from './styles.module.scss';
 
 const list = (...arr) => (
   <Fragment>
