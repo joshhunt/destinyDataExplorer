@@ -117,10 +117,10 @@ function Children({ items, definitions, childDefinitionType, pathForItem }) {
             <Item
               pathForItem={pathForItem}
               className={s.item}
+              key={hash}
               entry={{
                 type: childDefinitionType,
-                def: child,
-                key: child && child.hash
+                def: child
               }}
             />
           );

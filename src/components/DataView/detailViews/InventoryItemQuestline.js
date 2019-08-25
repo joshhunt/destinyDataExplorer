@@ -54,8 +54,8 @@ function QuestlineBody({ item, definitions, pathForItem }) {
       <br />
       {item.setData.itemList.map((listItem, index) =>
         withItemDef(listItem.itemHash, def => (
-          <div className={s.section}>
-            <div key={listItem.trackingValue} className={s.sectionTitle}>
+          <div key={`${listItem.itemHash}${index}`} className={s.section}>
+            <div className={s.sectionTitle}>
               <strong>
                 {index + 1}.{" "}
                 <Link
@@ -108,8 +108,7 @@ export function ViewParentQuestline({ item, definitions, pathForItem }) {
         className={s.item}
         entry={{
           type: "DestinyInventoryItemDefinition",
-          def: parentQuestItem,
-          key: parentQuestItem.hash
+          def: parentQuestItem
         }}
       />
     </Fragment>

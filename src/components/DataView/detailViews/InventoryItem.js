@@ -20,10 +20,10 @@ function GearsetItemList({ item, definitions, pathForItem }) {
             <Item
               pathForItem={pathForItem}
               className={s.item}
+              key={gearSetItem.hash}
               entry={{
                 type: "DestinyInventoryItemDefinition",
-                def: gearSetItem,
-                key: gearSetItem.hash
+                def: gearSetItem
               }}
             />
           );
@@ -45,7 +45,7 @@ function Sockets({ item, definitions, pathForItem }) {
           ];
 
         return (
-          <div className={s.inlineSection}>
+          <div key={socketCategory.socketCategoryHash} className={s.inlineSection}>
             <div className={s.sectionTitle}>
               {socketCategoryDef.displayProperties.name}
             </div>
@@ -59,7 +59,7 @@ function Sockets({ item, definitions, pathForItem }) {
                   ];
 
                 return (
-                  <div className={s.socket}>
+                  <div key={socketEntry.singleInitialItemHash} className={s.socket}>
                     <div className={s.socketMain}>
                       {socketItem && (
                         <Item
@@ -68,7 +68,6 @@ function Sockets({ item, definitions, pathForItem }) {
                           entry={{
                             type: "DestinyInventoryItemDefinition",
                             def: socketItem,
-                            key: socketItem.hash
                           }}
                         />
                       )}
@@ -98,10 +97,10 @@ function Sockets({ item, definitions, pathForItem }) {
                               <Item
                                 pathForItem={pathForItem}
                                 className={s.item}
+                                key={hash.plugItemHash}
                                 entry={{
                                   type: "DestinyInventoryItemDefinition",
                                   def: reusablePlugItem,
-                                  key: reusablePlugItem.hash
                                 }}
                               />
                             )
