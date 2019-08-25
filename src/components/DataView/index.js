@@ -159,6 +159,20 @@ export default class DataView extends Component {
       </Decorate>
     );
   };
+  getItemString = (type, data, itemType, itemString)=> {
+      if ("colorHash" in data && data.alpha) return (
+        <span>
+            <span
+              className={s.swatch}
+              style={{'backgroundColor': `rgba(${data.red},${data.green},${data.blue},${data.alpha})`}}
+              />
+            {itemType} {itemString}
+        </span>
+        );
+      return (
+        <span>{itemType} {itemString}</span>
+        );
+  };
 
   toggleRawJSON = () => {
     this.setState({
@@ -259,6 +273,7 @@ export default class DataView extends Component {
               <JSONTree
                 data={item}
                 valueRenderer={this.valueRenderer}
+                getItemString={this.getItemString}
                 style={{ background: "red" }}
               />
             </div>
