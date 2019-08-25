@@ -128,3 +128,11 @@ $duration: 200ms;
 .jsonParent > * {
   user-select: initial !important;
 }
+
+.swatch {
+  height: 1.3em;
+  width: 3em;
+  margin-bottom: -.2em;
+  display: inline-block;
+  border: 1px solid #000;
+}
