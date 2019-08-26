@@ -20,7 +20,6 @@
     "file-loader": "^1.1.11",
     "imports-loader": "^0.8.0",
     "lodash": "^4.17.4",
-    "mini-css-extract-plugin": "0.5.0",
     "node-sass": "^4.12.0",
     "normalize-text": "^0.4.2",
     "promise-worker": "^2.0.1",
@@ -55,16 +54,7 @@
     "generate-autotrack": "autotrack -o public/autotrack.build.js -p clean-url-tracker,url-change-tracker",
     "eject": "react-scripts eject"
   },
-  "devDependencies": {
-    "autoprefixer": "^7.2.2",
-    "ava": "^1.0.0-beta.3",
-    "babel-plugin-lodash": "^3.3.2",
-    "postcss-loader": "^2.0.9",
-    "stylus": "^0.54.5",
-    "stylus-loader": "3.0.2",
-    "unused-files-webpack-plugin": "^3.4.0",
-    "webpack-visualizer-plugin": "^0.1.11"
-  },
+  "devDependencies": {},
   "browserslist": {
     "production": [
       ">0.2%",
