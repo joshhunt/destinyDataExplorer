@@ -1,0 +1,29 @@
+$bg: #34495e;
+$textColor: #ecf0f1;
+
+$brand: #1abc9c;
+
+.header {
+  display: flex;
+  background: $bg;
+  padding: 20px;
+}
+
+.logo {
+  background: $brand;
+  color: $bg;
+  font-style: cursive;
+}
+
+.input {
+  flex: 1 1 100%;
+}
+
+.button {
+  background: #f1c40f;
+  color: $bg;
+
+  &:hover {
+    background: #3498db;
+  }
+}
