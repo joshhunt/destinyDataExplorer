@@ -1,14 +1,7 @@
-import "lib/autotrack.build";
-import "lib/ls";
-
 import React from "react";
 import ReactDOM from "react-dom";
 
-import AppRouter from "./AppRouter";
+import Home from "./views/Home";
 import "./index.module.scss";
 
-const render = App => {
-  ReactDOM.render(<App />, document.getElementById("root"));
-};
-
-render(AppRouter);
+ReactDOM.render(<Home />, document.getElementById("root"));
