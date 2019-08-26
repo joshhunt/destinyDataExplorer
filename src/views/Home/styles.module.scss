@@ -1,0 +1,4 @@
+.toggleButton {
+  // Commenting out this line will fix everything
+  composes: filterButton from "../../components/SearchHeader/styles.module.scss";
+}

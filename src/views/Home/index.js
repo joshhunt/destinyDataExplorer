@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import SearchHeader from "components/SearchHeader";
-import "components/DataView/detailViews/styles.module.scss";
+import "./styles.module.scss";
 
 class HomeView extends Component {
   render() {
