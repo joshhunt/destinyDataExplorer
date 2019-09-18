@@ -79,7 +79,7 @@ class HomeView extends Component {
     // 'obj' wrappers
     let url = "";
     const shortType = makeTypeShort(type);
-    const key = obj.def ? obj.key : obj.hash;
+    const key = obj.def ? obj.key || obj.def.hash : obj.hash;
 
     if (this.props.routeParams.splat) {
       url = `${this.props.location.pathname}/${shortType}:${key}`;
