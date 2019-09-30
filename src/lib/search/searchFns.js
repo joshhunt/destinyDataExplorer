@@ -166,6 +166,11 @@ export default [
     obj => obj.def && obj.def.titleInfo && obj.def.titleInfo.hasTitle
   ),
 
+  $(/deep:(.+)/, false, (obj, term) => {
+    const str = JSON.stringify(obj.def);
+    return str.includes(term);
+  }),
+
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
   $("classified", obj => obj.def && obj.def.redacted)
 ];
