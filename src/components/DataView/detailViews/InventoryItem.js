@@ -45,7 +45,10 @@ function Sockets({ item, definitions, pathForItem }) {
           ];
 
         return (
-          <div key={socketCategory.socketCategoryHash} className={s.inlineSection}>
+          <div
+            key={socketCategory.socketCategoryHash}
+            className={s.inlineSection}
+          >
             <div className={s.sectionTitle}>
               {socketCategoryDef.displayProperties.name}
             </div>
@@ -59,7 +62,7 @@ function Sockets({ item, definitions, pathForItem }) {
                   ];
 
                 return (
-                  <div key={socketEntry.singleInitialItemHash} className={s.socket}>
+                  <div key={index} className={s.socket}>
                     <div className={s.socketMain}>
                       {socketItem && (
                         <Item
@@ -67,7 +70,7 @@ function Sockets({ item, definitions, pathForItem }) {
                           className={s.item}
                           entry={{
                             type: "DestinyInventoryItemDefinition",
-                            def: socketItem,
+                            def: socketItem
                           }}
                         />
                       )}
@@ -76,7 +79,7 @@ function Sockets({ item, definitions, pathForItem }) {
                     <div className={s.socketAlts}>
                       {[
                         ...socketEntry.reusablePlugItems,
-                        ...socketEntry.randomizedPlugItems
+                        ...(socketEntry.randomizedPlugItems || [])
                       ]
                         .filter(
                           h =>
@@ -100,7 +103,7 @@ function Sockets({ item, definitions, pathForItem }) {
                                 key={hash.plugItemHash}
                                 entry={{
                                   type: "DestinyInventoryItemDefinition",
-                                  def: reusablePlugItem,
+                                  def: reusablePlugItem
                                 }}
                               />
                             )
