@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { flatMapDeep, groupBy, uniqBy } from "lodash";
 import { connect } from "react-redux";
 
@@ -47,6 +47,19 @@ function RecursiveItemsBySource({
   pathForItem,
   addCollectiblesListToCollection
 }) {
+  const [newSourceStrings, setNewSourceStrings] = useState([]);
+  const [showOnlyNew, setShowOnlyNew] = useState(true);
+
+  useEffect(() => {
+    fetch(
+      "https://s3.amazonaws.com/destiny.plumbing/en/diff/collectibleSourceStrings.json"
+    )
+      .then(r => r.json())
+      .then(data => {
+        setNewSourceStrings(data.new);
+      });
+  }, []);
+
   const itemsBySource = Object.entries(
     groupBy(
       deepCollectiblesFromPresentationNodes(item, definitions),
@@ -61,40 +74,56 @@ function RecursiveItemsBySource({
 
   return (
     <div>
-      {itemsBySource.map((itemSet, index) => (
-        <div className={s.section} key={index}>
-          <div className={s.sectionTitle}>
-            {itemSet.sourceString.length > 1 ? (
-              itemSet.sourceString
-            ) : (
-              <em>Unknown source</em>
-            )}
+      <button onClick={() => setShowOnlyNew(!showOnlyNew)} className={s.button}>
+        {showOnlyNew ? "Show all sources" : "Show only new sources"}
+      </button>
+      <br />
 
-            <button
-              className={s.smallButton}
-              onClick={() => addCollectiblesListToCollection(itemSet.items)}
-            >
-              Add items to collection
-            </button>
-          </div>
+      {itemsBySource
+        .filter(itemSet => {
+          if (showOnlyNew) {
+            return (
+              itemSet.sourceString &&
+              newSourceStrings.includes(itemSet.sourceString)
+            );
+          } else {
+            return true;
+          }
+        })
+        .map((itemSet, index) => (
+          <div className={s.section} key={index}>
+            <div className={s.sectionTitle}>
+              {itemSet.sourceString.length > 1 ? (
+                itemSet.sourceString
+              ) : (
+                <em>Unknown source</em>
+              )}
 
-          <div className={s.itemList}>
-            {itemSet.items.map(collectible => {
-              return (
-                <Item
-                  pathForItem={pathForItem}
-                  className={s.item}
-                  entry={{
-                    type: "DestinyCollectibleDefinition",
-                    def: collectible,
-                    key: collectible.hash
-                  }}
-                />
-              );
-            })}
+              <button
+                className={s.smallButton}
+                onClick={() => addCollectiblesListToCollection(itemSet.items)}
+              >
+                Add items to collection
+              </button>
+            </div>
+
+            <div className={s.itemList}>
+              {itemSet.items.map(collectible => {
+                return (
+                  <Item
+                    pathForItem={pathForItem}
+                    className={s.item}
+                    entry={{
+                      type: "DestinyCollectibleDefinition",
+                      def: collectible,
+                      key: collectible.hash
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }
