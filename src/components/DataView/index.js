@@ -17,7 +17,7 @@ import AnyObjectives from "./detailViews/AnyObjectives";
 import specialValueOverrides from "./specialValueOverrides";
 import s from "./styles.module.scss";
 
-import apispec from "./apispec.json";
+import apispec from "bungie-api/openapi-2.json";
 
 window.__apispec = apispec;
 
@@ -159,19 +159,24 @@ export default class DataView extends Component {
       </Decorate>
     );
   };
-  getItemString = (type, data, itemType, itemString)=> {
-      if ("colorHash" in data && data.alpha) return (
-        <span>
-            <span
-              className={s.swatch}
-              style={{'backgroundColor': `rgba(${data.red},${data.green},${data.blue},${data.alpha})`}}
-              />
-            {itemType} {itemString}
-        </span>
-        );
+  getItemString = (type, data, itemType, itemString) => {
+    if ("colorHash" in data && data.alpha)
       return (
-        <span>{itemType} {itemString}</span>
-        );
+        <span>
+          <span
+            className={s.swatch}
+            style={{
+              backgroundColor: `rgba(${data.red},${data.green},${data.blue},${data.alpha})`
+            }}
+          />
+          {itemType} {itemString}
+        </span>
+      );
+    return (
+      <span>
+        {itemType} {itemString}
+      </span>
+    );
   };
 
   toggleRawJSON = () => {
