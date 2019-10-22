@@ -1,3 +1,0 @@
-[submodule "src/bungie-api"]
-	path = src/bungie-api
-	url = git@github.com:Bungie-net/api.git

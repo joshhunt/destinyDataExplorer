@@ -61,18 +61,6 @@ function Sockets({ item, definitions, pathForItem }) {
                     socketEntry.singleInitialItemHash
                   ];
 
-                const plugList =
-                  socketEntry.randomizedPlugSetHash &&
-                  definitions.DestinyPlugSetDefinition[
-                    socketEntry.randomizedPlugSetHash
-                  ];
-
-                const plugs = [
-                  ...socketEntry.reusablePlugItems,
-                  ...(socketEntry.randomizedPlugItems || []),
-                  ...(plugList ? plugList.reusablePlugItems : [])
-                ];
-
                 return (
                   <div key={index} className={s.socket}>
                     <div className={s.socketMain}>
@@ -89,7 +77,10 @@ function Sockets({ item, definitions, pathForItem }) {
                     </div>
 
                     <div className={s.socketAlts}>
-                      {plugs
+                      {[
+                        ...socketEntry.reusablePlugItems,
+                        ...(socketEntry.randomizedPlugItems || [])
+                      ]
                         .filter(
                           h =>
                             h.plugItemHash !== socketEntry.singleInitialItemHash
