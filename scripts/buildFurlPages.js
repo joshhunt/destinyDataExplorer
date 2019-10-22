@@ -136,7 +136,7 @@ async function getDefinitions() {
       // `);
 
       const writeFolder = path.resolve(
-        path.join(".", "build", "_pages", shortTableName)
+        path.join(".", "build", "link_previews", shortTableName)
       );
 
       await mkdirp(writeFolder);
