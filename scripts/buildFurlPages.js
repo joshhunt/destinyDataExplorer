@@ -135,9 +135,7 @@ async function getDefinitions() {
       //   <meta name="twitter:data2" value="${item.hash}" />
       // `);
 
-      const writeFolder = path.resolve(
-        path.join(".", "build", "link_previews")
-      );
+      const writeFolder = path.resolve(path.join(".", "build", "i"));
 
       await mkdirp(writeFolder);
 
