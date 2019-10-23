@@ -1,2 +1,5 @@
 [dev]
+  # proxyPort = 4000 # Port that the dev server will be listening on
+  # port = 4001 # Port that the dev server will be listening on
+  # command = "yarn start" # Command to start your dev server
   publish = "build" # If you use a _redirect file, provide the path to your static content folder

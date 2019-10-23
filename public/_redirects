@@ -1,3 +1,5 @@
 /*    /index.html   200
 
-/i/inventoryitem:1996008488 /link_previews/InventoryItem/1996008488 200
+/i/:table::hash /link_previews/:table/:hash.html 200
+/i/:table\::hash /link_previews/:table/:hash.html 200
+/i/:table/hash /link_previews/:table/:hash.html 200
