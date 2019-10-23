@@ -1,0 +1,2 @@
+[dev]
+  publish = "build" # If you use a _redirect file, provide the path to your static content folder
