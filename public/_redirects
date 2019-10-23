@@ -1,5 +1,3 @@
 /*    /index.html   200
 
-/i/:table::hash /link_previews/:table/:hash.html 200
-/i/:table\::hash /link_previews/:table/:hash.html 200
-/i/:table/hash /link_previews/:table/:hash.html 200
+/i/:item /link_previews/:item.html 200

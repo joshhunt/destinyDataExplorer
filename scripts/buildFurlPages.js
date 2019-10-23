@@ -136,12 +136,15 @@ async function getDefinitions() {
       // `);
 
       const writeFolder = path.resolve(
-        path.join(".", "build", "link_previews", shortTableName)
+        path.join(".", "build", "link_previews")
       );
 
       await mkdirp(writeFolder);
 
-      const writePath = path.resolve(writeFolder, `${item.hash}.html`);
+      const writePath = path.resolve(
+        writeFolder,
+        `${shortTableName}:${item.hash}.html`
+      );
 
       console.log(`Writing ${writePath}`);
       await writeFile(writePath, $.html());
