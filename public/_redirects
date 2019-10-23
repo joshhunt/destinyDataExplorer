@@ -1,3 +1,10 @@
 /*    /index.html   200
 
 /i/:item /link_previews/:item.html 200
+/i/:itemA/:item /link_previews/:item.html 200
+/i/:itemA/:itemB/:item /link_previews/:item.html 200
+/i/:itemA/:itemB/:itemC/:item /link_previews/:item.html 200
+/i/:itemA/:itemB/:itemC/:itemD/:item /link_previews/:item.html 200
+/i/:itemA/:itemB/:itemC/:itemD/:itemE/:item /link_previews/:item.html 200
+
+/*    /index.html   200
