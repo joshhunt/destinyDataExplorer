@@ -8,6 +8,14 @@ const INITIAL_STATE = {
   collectedItems: {}
 };
 
+const LANGUAGE_PATCHES = [
+  {
+    "identifier": "zh-chs",
+    "isDefault": false,
+    "displayName": "简体中文"
+  }
+];
+
 const TOGGLE_COLLECT_MODE = "Toggle collect mode";
 const TOGGLE_FILTER_DRAWER = "Toggle filter drawer";
 const ADD_COLLECTED_ITEM = "Add collected item";
@@ -90,6 +98,13 @@ export const setActiveLanguage = makePayloadAction(SET_ACTIVE_LANGUAGE);
 export const fetchBungieSettings = () => dispatch => {
   getDestiny("/Platform/Settings/").then(settings => {
     console.log("settings:", settings);
+    // Patch language list
+    const locales = settings.userContentLocales;
+    const localeIds = locales.map(language => language.identifier);
+    // De-duplicate patches
+    const localePatches = LANGUAGE_PATCHES.filter(patch => localeIds.indexOf(patch.identifier) < 0);
+    settings.userContentLocales = locales.concat(localePatches);
+    console.log("locales: fetched " + locales.length + ", patched " + localePatches.length);
     dispatch({
       type: SET_BUNGIE_SETTINGS,
       payload: settings
