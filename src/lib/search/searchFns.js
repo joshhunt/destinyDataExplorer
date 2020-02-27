@@ -168,7 +168,9 @@ export default [
 
   $(/deep:(.+)/, false, (obj, term) => {
     const str = JSON.stringify(obj.def);
-    return str.includes(term);
+    return /^\d+$/.test(term)
+      ? RegExp("\\b" + term + "\\b").test(str)
+      : str.includes(term);
   }),
 
   $(/not:classified/, obj => obj.def && !obj.def.redacted),
