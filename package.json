@@ -98,6 +98,7 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
+    "update-api-spec": "curl https://raw.githubusercontent.com/Bungie-net/api/master/openapi-2.json > ./src/components/DataView/apispec.json",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build:full": "npm run build",
