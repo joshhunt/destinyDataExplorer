@@ -1,32 +1,40 @@
 import React from "react";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-library.add(
-  require("@fortawesome/pro-light-svg-icons/faBook").faBook,
-  require("@fortawesome/pro-light-svg-icons/faLanguage").faLanguage,
-  require("@fortawesome/pro-regular-svg-icons/faTimes").faTimes,
-  require("@fortawesome/pro-light-svg-icons/faTrophy").faTrophy,
-  require("@fortawesome/pro-light-svg-icons/faThLarge").faThLarge,
-  require("@fortawesome/pro-light-svg-icons/faShoppingBasket").faShoppingBasket,
-  require("@fortawesome/pro-regular-svg-icons/faPlus").faPlus,
-  require("@fortawesome/pro-regular-svg-icons/faSync").faSync,
-  require("@fortawesome/pro-regular-svg-icons/faSpinnerThird").faSpinnerThird,
-  require("@fortawesome/pro-regular-svg-icons/faSlidersV").faSlidersV,
-  require("@fortawesome/pro-regular-svg-icons/faQuestionCircle")
-    .faQuestionCircle
-);
+const Icon = ({ name, solid, regular, light, duotone, brand, ...rest }) => {
+  const prefix =
+    {
+      [solid ? "true" : "false"]: "fas",
+      [regular ? "true" : "false"]: "far",
+      [light ? "true" : "false"]: "fal",
+      [duotone ? "true" : "false"]: "fad",
+      [brand ? "true" : "false"]: "fab"
+    }["true"] || "far";
 
-export default function Icon({ icon, name, brand, light, solid, ...props }) {
-  let prefix = "far";
+  return <span className={`${prefix} fa-${name}`} {...rest}></span>;
+};
 
-  if (brand) {
-    prefix = "fab";
-  } else if (light) {
-    prefix = "fal";
-  } else if (solid) {
-    prefix = "fas";
-  }
+export default Icon;
 
-  return <FontAwesomeIcon icon={[prefix, icon || name]} {...props} />;
-}
+const MembershipType = {
+  Xbox: 1,
+  Playstation: 2,
+  Steam: 3,
+  BattleNet: 4,
+  Stadia: 5
+};
+
+export const PlatformIcon = ({ membershipType, ...rest }) => {
+  const iconMap = {
+    [MembershipType.Xbox]: "xbox",
+    [MembershipType.Playstation]: "playstation",
+    [MembershipType.Steam]: "steam",
+    [MembershipType.BattleNet]: "battle-net",
+    [MembershipType.Stadia]: "google"
+  };
+
+  const type = membershipType.toString
+    ? membershipType.toString()
+    : membershipType;
+
+  return <Icon brand name={iconMap[type]} {...rest} />;
+};

@@ -1,58 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
+    <style>
+      body {
+        background: #090b0e;
+      }
+    </style>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-    <style>body { background: #090B0E; }</style>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="%PUBLIC_URL%/apple-touch-180.png">
-    <link rel="shortcut icon" sizes="16x16" href="%PUBLIC_URL%/favicon-16.png">
-    <link rel="shortcut icon" sizes="32x32" href="%PUBLIC_URL%/favicon-32.png">
-    <link rel="shortcut icon" sizes="196x196" href="%PUBLIC_URL%/android-196.png">
-    <link rel='mask-icon' href='%PUBLIC_URL%/mask-icon.svg' color='#1C203A'>
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="180x180"
+      href="%PUBLIC_URL%/apple-touch-180.png"
+    />
+    <link
+      rel="shortcut icon"
+      sizes="16x16"
+      href="%PUBLIC_URL%/favicon-16.png"
+    />
+    <link
+      rel="shortcut icon"
+      sizes="32x32"
+      href="%PUBLIC_URL%/favicon-32.png"
+    />
+    <link
+      rel="shortcut icon"
+      sizes="196x196"
+      href="%PUBLIC_URL%/android-196.png"
+    />
+    <link rel="mask-icon" href="%PUBLIC_URL%/mask-icon.svg" color="#1C203A" />
 
     <title>Destiny Data Explorer</title>
 
-    <meta name="google-site-verification" content="5bAaEIC4wr4ty_rtU5IZ6fl-I1Zh-4monu1OXOu1AZ4" />
+    <meta
+      name="google-site-verification"
+      content="5bAaEIC4wr4ty_rtU5IZ6fl-I1Zh-4monu1OXOu1AZ4"
+    />
     <script src="https://apis.google.com/js/api.js"></script>
   </head>
   <body>
     <div id="root"></div>
 
     <script>
-    if (window.location.hostname === 'data.destinysets.com') {
-  (function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    (i[r] =
-      i[r] ||
-      function() {
-        (i[r].q = i[r].q || []).push(arguments);
-      }),
-      (i[r].l = 1 * new Date());
-    (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m);
-  })(
-    window,
-    document,
-    'script',
-    'https://www.google-analytics.com/analytics.js',
-    'ga'
-  );
+      if (window.location.hostname === "data.destinysets.com") {
+        (function(i, s, o, g, r, a, m) {
+          i["GoogleAnalyticsObject"] = r;
+          (i[r] =
+            i[r] ||
+            function() {
+              (i[r].q = i[r].q || []).push(arguments);
+            }),
+            (i[r].l = 1 * new Date());
+          (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+          a.async = 1;
+          a.src = g;
+          m.parentNode.insertBefore(a, m);
+        })(
+          window,
+          document,
+          "script",
+          "https://www.google-analytics.com/analytics.js",
+          "ga"
+        );
 
-  ga('create', 'UA-89978211-3', 'auto');
+        ga("create", "UA-89978211-3", "auto");
 
-  ga('require', 'cleanUrlTracker', { stripQuery: true });
-  ga('require', 'urlChangeTracker');
+        ga("require", "cleanUrlTracker", { stripQuery: true });
+        ga("require", "urlChangeTracker");
 
-  ga('send', 'pageview');
-}
-</script>
+        ga("send", "pageview");
+      }
+    </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Titillium+Web"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto+Mono"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/eb61b9b8d1.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

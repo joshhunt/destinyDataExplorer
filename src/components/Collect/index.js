@@ -77,7 +77,7 @@ export default class CollectDrawer extends Component {
                         className={s.closeButton}
                         onClick={() => removeItem(entry)}
                       >
-                        <Icon icon="times" />
+                        <Icon name="times" />
                       </button>
                     </div>
                   );
