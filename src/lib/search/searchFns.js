@@ -167,7 +167,7 @@ export default [
   ),
 
   $(/deep:(.+)/, false, (obj, term) => {
-    const str = JSON.stringify(obj.def);
+    const str = JSON.stringify(obj.def).toLowerCase();
     return str.includes(term);
   }),
 
