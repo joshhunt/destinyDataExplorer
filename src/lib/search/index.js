@@ -4,11 +4,11 @@ import _normalizeText from "normalize-text";
 
 import { FILTERS } from "lib/search/guiSearchFilters";
 
-const last = arr => arr[arr.length - 1];
+const last = (arr) => arr[arr.length - 1];
 
 const normalizeTextCache = new Map();
 
-const normalizeText = string => {
+const normalizeText = (string) => {
   const cached = normalizeTextCache.get(string);
 
   if (cached) {
@@ -37,9 +37,10 @@ const fallbackSearchFunction = {
       matches(obj.type, comparableSearchTerm) ||
       matches(displayName, comparableSearchTerm) ||
       matches(obj.def.statId, comparableSearchTerm) ||
-      matches(obj.def.statName, comparableSearchTerm)
+      matches(obj.def.statName, comparableSearchTerm) ||
+      matches(obj.def.progressDescription, comparableSearchTerm)
     );
-  }
+  },
 };
 
 export default function search(_searchTerm, filterOptions, definitions) {
@@ -51,7 +52,7 @@ export default function search(_searchTerm, filterOptions, definitions) {
 
   if (queries) {
     results = queries.reduce((acc, query) => {
-      let searchFn = SEARCH_FUNCTIONS.find(searchFn =>
+      let searchFn = SEARCH_FUNCTIONS.find((searchFn) =>
         query.match(searchFn.regex)
       );
 
@@ -70,22 +71,22 @@ export default function search(_searchTerm, filterOptions, definitions) {
         params = [query, comparableQuery];
       }
 
-      return acc.filter(obj => searchFn.filterFn(obj, ...params));
+      return acc.filter((obj) => searchFn.filterFn(obj, ...params));
     }, allDefs);
   }
 
-  const filterOptionsArr = Object.entries(filterOptions).map(
-    ([key, value]) => ({ key, value })
-  );
+  const filterOptionsArr = Object.entries(
+    filterOptions
+  ).map(([key, value]) => ({ key, value }));
 
   results = filterOptionsArr.reduce((acc, filterOptionSet) => {
-    const filterDef = FILTERS.find(f => f.id === filterOptionSet.key);
+    const filterDef = FILTERS.find((f) => f.id === filterOptionSet.key);
 
     if (!filterDef) {
       return acc;
     }
 
-    return acc.filter(obj => filterDef.searchFn(obj, filterOptionSet.value));
+    return acc.filter((obj) => filterDef.searchFn(obj, filterOptionSet.value));
   }, results);
 
   return results;
@@ -97,7 +98,7 @@ function push(arr, thing) {
 }
 
 export function tokenize(searchTerm) {
-  const phrases = searchTerm.split(" ").filter(s => s.length > 0);
+  const phrases = searchTerm.split(" ").filter((s) => s.length > 0);
   const collection = [];
 
   let running = true;
