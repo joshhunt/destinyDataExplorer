@@ -126,7 +126,7 @@ const CODE_CSS =
 css.log(`
 ${css("", "font-family: sans-serif")}${css(
   "Welcome to the Destiny Data Explorer!",
-  "font-weight: bold; background: #8e44ad; color: white; padding: 2px"
+  "font-weight: bold; background: #8e44ad; color: white; padding: 2px; font-size: 1.2em"
 )}
 
 There are a few handy utils installed here for more advanced querying. Each of the definitions are available on window:
@@ -140,7 +140,7 @@ Each table has a filter function, to easily filter each of the definitions:
       CODE_CSS
     )}
 
-On the results, you can call .show() to display them in the Data Explorer UI:
+You can call .show() on the results to display them in the Data Explorer UI:
 
     ${css(
       "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656)).show()",
