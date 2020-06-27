@@ -70,7 +70,7 @@ window.__show = (input) => {
     let defs = [];
 
     if (isObject(thing)) {
-      defs.push(makeSearchResults(singleDef));
+      defs.push(makeSearchResults(thing));
     } else {
       const state = store.getState();
 
