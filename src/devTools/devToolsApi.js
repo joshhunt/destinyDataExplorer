@@ -9,7 +9,13 @@ class ResultsArray extends Array {
   }
 }
 
-function filter(store, obj, fn) {
+class DefinitionsTable extends Object {
+  filter(fn) {
+    return filter(this, fn);
+  }
+}
+
+function filter(obj, fn) {
   const errors = [];
   window.$errors = errors;
 
@@ -33,7 +39,6 @@ function filter(store, obj, fn) {
     );
   }
 
-  ResultsArray.store = store;
   return ResultsArray.from(results);
 }
 
@@ -65,6 +70,8 @@ function show(store, _input) {
     type: SET_SEARCH_RESULTS,
     payload: results,
   });
+
+  return _input;
 }
 
 function makeSearchResults(def) {
@@ -81,8 +88,12 @@ function makeSearchResults(def) {
 const prevKeeper = new WeakMap();
 export function connectToWindow(store) {
   window.__store = store;
+
   window.$show = show.bind(null, store);
-  window.$filter = filter.bind(null, store);
+  window.$filter = filter;
+
+  DefinitionsTable.store = store;
+  ResultsArray.store = store;
 
   store.subscribe(
     catchErrors(() => {
@@ -99,9 +110,7 @@ export function connectToWindow(store) {
         Object.entries(newState.definitions.definitions).forEach(
           ([tableName, defs]) => {
             const windowKeyName = `$${tableName}`;
-            window[windowKeyName] = { ...defs };
-
-            window[windowKeyName].filter = filter.bind(null, store, defs);
+            window[windowKeyName] = new DefinitionsTable({ ...defs });
           }
         );
       }
