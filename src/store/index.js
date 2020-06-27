@@ -78,8 +78,11 @@ window.__show = (input) => {
       const state = store.getState();
 
       forEach(state.definitions.definitions, (defsForTable, tableName) => {
+        console.log("defsForTable", defsForTable);
         forEach(defsForTable, (singleDef) => {
+          console.log("    singleDef", singleDef);
           if (singleDef.hash === thing) {
+            console.log("        is match to", thing);
             defs.push(makeSearchResults(singleDef));
           }
         });
