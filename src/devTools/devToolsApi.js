@@ -1,6 +1,7 @@
 import { filter as lodashFilter, isObject, isArray, isString } from "lodash";
 
 import { SET_SEARCH_RESULTS } from "../store/filter";
+import { css } from "./cssLog";
 
 class ResultsArray extends Array {
   show() {
@@ -118,3 +119,33 @@ function catchErrors(fn) {
     }
   };
 }
+
+css.log(`
+${css("", "font-family: sans-serif")}${css(
+  "Welcome to the Destiny Data Explorer!",
+  "font-weight: bold; background: #8e44ad"
+)}
+
+There are a few handy utils installed here for more advanced querying. Each of the definitions are available on window:
+
+    ${css(
+      "window.$DestinyInventoryItemDefinition",
+      "background: black; padding: 2px; display: inline-block"
+    )}
+
+Each table has a filter function, to easily filter each of the definitions:
+
+    ${css(
+      "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656))",
+      "background: black; padding: 2px; display: inline-block"
+    )}
+
+On the results, you can call .show() to display them in the Data Explorer UI:
+
+    ${css(
+      "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656)).show()",
+      "background: black; padding: 2px; display: inline-block"
+    )}
+
+Enjoy :)
+`);
