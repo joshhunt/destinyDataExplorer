@@ -2,11 +2,24 @@ import { filter as lodashFilter, isObject, isArray, isString } from "lodash";
 
 import { SET_SEARCH_RESULTS } from "../store/filter";
 
-function filter(store, obj, fn) {
-  const results = lodashFilter(obj, fn);
-  const resultsWithShowFn = [...results];
+class ResultsArray extends Array {}
 
-  resultsWithShowFn.show = show.bind(null, store, results);
+function filter(store, obj, fn) {
+  const results = lodashFilter(obj, () => {
+    try {
+      return fn(obj);
+    } catch (err) {
+      console.error(
+        "Ignoring error running filter function on definition",
+        obj
+      );
+      console.error(err);
+      return false;
+    }
+  });
+
+  const resultsWithShowFn = ResultsArray.from(results);
+  resultsWithShowFn.__proto__.show = show.bind(null, store, results);
 
   return resultsWithShowFn;
 }
