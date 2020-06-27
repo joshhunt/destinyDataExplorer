@@ -120,31 +120,31 @@ function catchErrors(fn) {
   };
 }
 
+const CODE_CSS =
+  "background: black; padding: 2px; display: inline-block; font-family: monospace";
+
 css.log(`
 ${css("", "font-family: sans-serif")}${css(
   "Welcome to the Destiny Data Explorer!",
-  "font-weight: bold; background: #8e44ad"
+  "font-weight: bold; background: #8e44ad; color: white; padding: 2px"
 )}
 
 There are a few handy utils installed here for more advanced querying. Each of the definitions are available on window:
 
-    ${css(
-      "window.$DestinyInventoryItemDefinition",
-      "background: black; padding: 2px; display: inline-block"
-    )}
+    ${css("window.$DestinyInventoryItemDefinition", CODE_CSS)}
 
 Each table has a filter function, to easily filter each of the definitions:
 
     ${css(
       "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656))",
-      "background: black; padding: 2px; display: inline-block"
+      CODE_CSS
     )}
 
 On the results, you can call .show() to display them in the Data Explorer UI:
 
     ${css(
       "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656)).show()",
-      "background: black; padding: 2px; display: inline-block"
+      CODE_CSS
     )}
 
 Enjoy :)

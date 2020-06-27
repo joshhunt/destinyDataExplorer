@@ -3,7 +3,7 @@ let cssReset =
 let cssCollector = [];
 
 function css(str, cssStr) {
-  cssCollector.push(`${cssStr};${cssReset}`);
+  cssCollector.push(`${cssReset};${cssStr}`);
   cssCollector.push(cssReset);
   return `%c${str}%c`;
 }
