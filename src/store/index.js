@@ -43,7 +43,10 @@ const composeEnhancers =
         actionsBlacklist: [SET_BULK_DEFINITIONS],
         stateSanitizer: (state) => ({
           ...state,
-          definitions: sanitiseDefintionsState(state.definitions.definitions),
+          definitions: {
+            ...state.definitions,
+            definitions: sanitiseDefintionsState(state.definitions.definitions),
+          },
         }),
       })
     : compose;
@@ -74,7 +77,7 @@ window.__show = (input) => {
     } else {
       const state = store.getState();
 
-      forEach(state.definitions, (defs, tableName) => {
+      forEach(state.definitions.definitions, (defs, tableName) => {
         forEach(defs, (singleDef) => {
           if (singleDef.hash === thing) {
             defs.push(makeSearchResults(singleDef));
