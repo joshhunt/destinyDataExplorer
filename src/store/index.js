@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import { mapValues, isObject, forEach } from "lodash";
+import { mapValues, isObject, forEach, isString } from "lodash";
 import querystring from "querystring";
 import reduxThunk from "redux-thunk";
 
@@ -70,26 +70,24 @@ function makeSearchResults(def) {
 
 window.__show = (input) => {
   const results = input.flatMap((thing) => {
-    let defs = [];
+    let innerResults = [];
 
     if (isObject(thing)) {
-      defs.push(makeSearchResults(thing));
+      innerResults.push(makeSearchResults(thing));
     } else {
       const state = store.getState();
+      const hash = isString(thing) ? parseInt(thing) : thing;
 
-      forEach(state.definitions.definitions, (defsForTable, tableName) => {
-        console.log("defsForTable", defsForTable);
-        forEach(defsForTable, (singleDef) => {
-          console.log("    singleDef", singleDef);
-          if (singleDef.hash === thing) {
-            console.log("        is match to", thing);
-            defs.push(makeSearchResults(singleDef));
+      Object.values(state.definitions.definitions).forEach((defsForTable) => {
+        Object.values(defsForTable).forEach((singleDef) => {
+          if (singleDef.hash === hash || singleDef.statId === thing) {
+            innerResults.push(makeSearchResults(singleDef));
           }
         });
       });
     }
 
-    return defs;
+    return innerResults;
   });
 
   store.dispatch({
