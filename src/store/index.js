@@ -1,24 +1,24 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import { mapValues, isObject, isString, isNumber } from "lodash";
+import { mapValues, isObject, forEach } from "lodash";
 import querystring from "querystring";
 import reduxThunk from "redux-thunk";
+
+import { setLanguage, getLanguage } from "lib/ls";
+import { fasterGetDefinitions } from "lib/definitions";
+import { sendDefinitions } from "lib/workerSearch";
 
 import app, {
   startingSearchWorker,
   startingSearchWorkerSuccess,
   setActiveLanguage,
 } from "./app";
-import filter from "./filter";
-import { setLanguage, getLanguage } from "lib/ls";
-import { fasterGetDefinitions } from "lib/definitions";
-import { sendDefinitions } from "lib/workerSearch";
-
 import definitions, {
   setBulkDefinitions,
   definitionsStatus,
   definitionsError,
   SET_BULK_DEFINITIONS,
 } from "./definitions";
+import filter, { SET_SEARCH_RESULTS } from "./filter";
 
 const rootReducer = combineReducers({
   app,
@@ -54,21 +54,41 @@ const store = createStore(rootReducer, enhancer);
 
 window.__store = store;
 
+function makeSearchResults(def) {
+  const hash = def.hash;
+  const type = def.$type;
+
+  return {
+    dxId: `${type}:${hash}`,
+    type: type,
+    key: hash,
+  };
+}
+
 window.__show = (input) => {
-  const results = input.map((thing) => {
-    if (isNumber(thing) || isString(thing)) {
-      // assume it's a hash
-      return { key: thing };
+  const results = input.flatMap((thing) => {
+    let defs = [];
+
+    if (isObject(thing)) {
+      defs.push(makeSearchResults(singleDef));
+    } else {
+      const state = store.getState();
+
+      forEach(state.definitions, (defs, tableName) => {
+        forEach(defs, (singleDef) => {
+          if (singleDef.hash === thing) {
+            defs.push(makeSearchResults(singleDef));
+          }
+        });
+      });
     }
 
-    const hash = input.hash;
-    const type = input.$type;
+    return defs;
+  });
 
-    return {
-      dxId: `${type}:${hash}`,
-      type: type,
-      key: hash,
-    };
+  store.dispatch({
+    type: SET_SEARCH_RESULTS,
+    payload: results,
   });
 };
 
