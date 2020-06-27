@@ -24,7 +24,7 @@ export default function definitionsReducer(state = {}, { type, payload }) {
     case SET_BULK_DEFINITIONS: {
       const filtered = pickBy(payload, (defs) => defs);
       const withIds = mapValues(filtered, (arrOfDefs, defType) =>
-        arrOfDefs.map((v) => ({ ...v, $type: defType }))
+        mapValues(arrOfDefs, (v) => ({ ...v, $type: defType }))
       );
 
       return {

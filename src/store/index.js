@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import { mapValues } from "lodash";
+import { mapValues, isObject, isString, isNumber } from "lodash";
 import querystring from "querystring";
 import reduxThunk from "redux-thunk";
 
@@ -54,7 +54,23 @@ const store = createStore(rootReducer, enhancer);
 
 window.__store = store;
 
-window.__show = (results) => {};
+window.__show = (input) => {
+  const results = input.map((thing) => {
+    if (isNumber(thing) || isString(thing)) {
+      // assume it's a hash
+      return { key: thing };
+    }
+
+    const hash = input.hash;
+    const type = input.$type;
+
+    return {
+      dxId: `${type}:${hash}`,
+      type: type,
+      key: hash,
+    };
+  });
+};
 
 const qs = querystring.parse(window.location.search.substr(1));
 const languages = [
