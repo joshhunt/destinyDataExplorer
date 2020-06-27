@@ -25,7 +25,7 @@ const RE = /Destiny(\w+)Definition/;
 
 const SPEC_DEBUG = !!window.localStorage.getItem("specdebug");
 
-const definitionNameFromRef = ref => {
+const definitionNameFromRef = (ref) => {
   const segments = ref.split(".");
   const lastSegment = segments[segments.length - 1];
   const match = lastSegment.match(RE);
@@ -51,7 +51,7 @@ function Decorate({ spec, children }) {
   );
 }
 
-Object.keys(apispec.definitions).forEach(key => {
+Object.keys(apispec.definitions).forEach((key) => {
   const tableName = definitionNameFromRef(key);
   if (tableName) {
     apispec.definitions[tableName] = apispec.definitions[key];
@@ -61,12 +61,12 @@ Object.keys(apispec.definitions).forEach(key => {
 const DETAIL_VIEWS = {
   DestinyVendorDefinition: Vendor,
   DestinyInventoryItemDefinition: InventoryItem,
-  DestinyPresentationNodeDefinition: PresentationNode
+  DestinyPresentationNodeDefinition: PresentationNode,
 };
 
-const stringifyJSON = memoize(obj => JSON.stringify(obj, null, 2));
+const stringifyJSON = memoize((obj) => JSON.stringify(obj, null, 2));
 
-const isImage = value => isString(value) && value.match(/\.(png|jpg|jpeg)$/);
+const isImage = (value) => isString(value) && value.match(/\.(png|jpg|jpeg)$/);
 
 function ImageValue({ value }) {
   return (
@@ -83,10 +83,10 @@ function toTitleCase(str) {
 export default class DataView extends Component {
   state = {
     rawJSON: false,
-    textAreaHeight: 1
+    textAreaHeight: 1,
   };
 
-  rootClick = ev => {
+  rootClick = (ev) => {
     if (ev.target === this.ref) {
       this.props.onRequestClose && this.props.onRequestClose();
     }
@@ -159,50 +159,56 @@ export default class DataView extends Component {
       </Decorate>
     );
   };
-  getItemString = (type, data, itemType, itemString)=> {
-      if ("colorHash" in data && data.alpha) return (
-        <span>
-            <span
-              className={s.swatch}
-              style={{'backgroundColor': `rgba(${data.red},${data.green},${data.blue},${data.alpha})`}}
-              />
-            {itemType} {itemString}
-        </span>
-        );
+  getItemString = (type, data, itemType, itemString) => {
+    if ("colorHash" in data && data.alpha)
       return (
-        <span>{itemType} {itemString}</span>
-        );
+        <span>
+          <span
+            className={s.swatch}
+            style={{
+              backgroundColor: `rgba(${data.red},${data.green},${data.blue},${data.alpha})`,
+            }}
+          />
+          {itemType} {itemString}
+        </span>
+      );
+    return (
+      <span>
+        {itemType} {itemString}
+      </span>
+    );
   };
 
   toggleRawJSON = () => {
     this.setState({
-      rawJSON: !this.state.rawJSON
+      rawJSON: !this.state.rawJSON,
     });
   };
 
-  getTextareaRef = ref => {
+  getTextareaRef = (ref) => {
     if (ref) {
       setTimeout(() => {
         this.setState({
-          textAreaHeight: ref.scrollHeight + 2
+          textAreaHeight: ref.scrollHeight + 2,
         });
       }, 1);
     }
   };
 
+  getDefinition = () => {
+    const def = { ...this.props.item };
+    delete def.$type;
+    return def;
+  };
+
   copyJSON = () => {
-    copyToClipboard(stringifyJSON(this.props.item));
+    copyToClipboard(stringifyJSON(this.getDefinition()));
   };
 
   render() {
-    const {
-      type,
-      item,
-      className,
-      depth,
-      definitions,
-      pathForItem
-    } = this.props;
+    const { type, className, depth, definitions, pathForItem } = this.props;
+
+    const item = this.getDefinition();
 
     if (!item) {
       return (
@@ -227,7 +233,7 @@ export default class DataView extends Component {
       <div
         className={cx(s.root, className)}
         onClick={this.rootClick}
-        ref={r => (this.ref = r)}
+        ref={(r) => (this.ref = r)}
       >
         <div className={s.data} style={{ left: 100 * depth }}>
           <h2>
@@ -302,7 +308,7 @@ function specForPropertyPath(currentDefinitionType, itemPath) {
   helpfulPath.reverse();
   helpfulPath.shift();
 
-  helpfulPath.forEach(pathElement => {
+  helpfulPath.forEach((pathElement) => {
     const potentialNewSpec =
       currentSpec.properties && currentSpec.properties[pathElement];
 
@@ -384,7 +390,7 @@ function findEnumValue(currentDefinitionType, itemPath, enumValue) {
   }
 
   const found = enumSpec["x-enum-values"].find(
-    e => Number(e.numericValue) === enumValue
+    (e) => Number(e.numericValue) === enumValue
   );
 
   return found && { ...found, enumName };
