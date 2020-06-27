@@ -9,18 +9,28 @@ class ResultsArray extends Array {
 }
 
 function filter(store, obj, fn) {
+  const errors = [];
+  window.$errors = errors;
+
   const results = lodashFilter(obj, (item) => {
     try {
       return fn(item);
     } catch (err) {
-      console.error(
-        "Ignoring error running filter function on definition",
-        item
-      );
-      console.error(err);
+      errors.push({
+        definition: item,
+        error: err,
+      });
       return false;
     }
   });
+
+  if (errors.length) {
+    console.error(
+      "There were",
+      errors.length,
+      "errors during your filter, which were not included. See the errors on window.$errors"
+    );
+  }
 
   ResultsArray.store = store;
   return ResultsArray.from(results);
