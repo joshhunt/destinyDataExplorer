@@ -107,7 +107,7 @@ export default class DataView extends Component {
         prettyValue,
         rawValue,
         itemPath,
-        this.props.item,
+        this.getDefinition(),
         this.props.definitions
       );
 

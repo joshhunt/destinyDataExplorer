@@ -1,7 +1,7 @@
 import { filter as lodashFilter, isObject, isArray, isString } from "lodash";
 
 import { SET_SEARCH_RESULTS } from "../store/filter";
-import { css } from "./cssLog";
+import css from "./cssLog";
 
 class ResultsArray extends Array {
   show() {
