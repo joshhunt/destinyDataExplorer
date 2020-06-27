@@ -1,11 +1,13 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import { mapValues, isObject, forEach, isString } from "lodash";
+import { mapValues } from "lodash";
 import querystring from "querystring";
 import reduxThunk from "redux-thunk";
 
 import { setLanguage, getLanguage } from "lib/ls";
 import { fasterGetDefinitions } from "lib/definitions";
 import { sendDefinitions } from "lib/workerSearch";
+
+import { connectToWindow } from "../devTools/devToolsApi";
 
 import app, {
   startingSearchWorker,
@@ -18,7 +20,7 @@ import definitions, {
   definitionsError,
   SET_BULK_DEFINITIONS,
 } from "./definitions";
-import filter, { SET_SEARCH_RESULTS } from "./filter";
+import filter from "./filter";
 
 const rootReducer = combineReducers({
   app,
@@ -55,46 +57,7 @@ const enhancer = composeEnhancers(applyMiddleware(reduxThunk));
 
 const store = createStore(rootReducer, enhancer);
 
-window.__store = store;
-
-function makeSearchResults(def) {
-  const hash = def.hash;
-  const type = def.$type;
-
-  return {
-    dxId: `${type}:${hash}`,
-    type: type,
-    key: hash,
-  };
-}
-
-window.__show = (input) => {
-  const results = input.flatMap((thing) => {
-    let innerResults = [];
-
-    if (isObject(thing)) {
-      innerResults.push(makeSearchResults(thing));
-    } else {
-      const state = store.getState();
-      const hash = isString(thing) ? parseInt(thing) : thing;
-
-      Object.values(state.definitions.definitions).forEach((defsForTable) => {
-        Object.values(defsForTable).forEach((singleDef) => {
-          if (singleDef.hash === hash || singleDef.statId === thing) {
-            innerResults.push(makeSearchResults(singleDef));
-          }
-        });
-      });
-    }
-
-    return innerResults;
-  });
-
-  store.dispatch({
-    type: SET_SEARCH_RESULTS,
-    payload: results,
-  });
-};
+connectToWindow(store);
 
 const qs = querystring.parse(window.location.search.substr(1));
 const languages = [
@@ -116,11 +79,10 @@ const baseLang = qs.lang || getLanguage();
 const LANG_CODE = languages.includes(baseLang) ? baseLang : "en";
 
 let prevState = store.getState();
+const prevKeeper = new WeakMap();
+
 store.subscribe(() => {
   const newState = store.getState();
-  window.__state = newState;
-  window.__definitions = newState.definitions.definitions;
-
   const toDispatch = [];
 
   if (prevState.app.activeLanguage !== newState.app.activeLanguage) {
