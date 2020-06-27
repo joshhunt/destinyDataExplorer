@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   collectModeEnabled: false,
   filterDrawerVisible: false,
   searchIsReady: false,
-  collectedItems: {}
+  collectedItems: {},
 };
 
 const TOGGLE_COLLECT_MODE = "Toggle collect mode";
@@ -24,13 +24,13 @@ export default function appReducer(state = INITIAL_STATE, action) {
     case SET_BUNGIE_SETTINGS:
       return {
         ...state,
-        bungieSettings: action.payload
+        bungieSettings: action.payload,
       };
 
     case SET_ACTIVE_LANGUAGE:
       return {
         ...state,
-        activeLanguage: action.payload
+        activeLanguage: action.payload,
       };
 
     case TOGGLE_COLLECT_MODE:
@@ -42,13 +42,13 @@ export default function appReducer(state = INITIAL_STATE, action) {
     case STARTING_SEARCH_WORKER:
       return {
         ...state,
-        searchIsReady: false
+        searchIsReady: false,
       };
 
     case STARTING_SEARCH_WORKER_SUCCESS:
       return {
         ...state,
-        searchIsReady: true
+        searchIsReady: true,
       };
 
     case ADD_COLLECTED_ITEM:
@@ -57,8 +57,8 @@ export default function appReducer(state = INITIAL_STATE, action) {
         collectModeEnabled: true,
         collectedItems: {
           ...state.collectedItems,
-          [action.payload.dxId]: action.payload
-        }
+          [action.payload.dxId]: action.payload,
+        },
       };
 
     case REMOVE_COLLECTED_ITEM:
@@ -66,7 +66,7 @@ export default function appReducer(state = INITIAL_STATE, action) {
       delete newCollectedItems[action.payload.dxId];
       return {
         ...state,
-        collectedItems: newCollectedItems
+        collectedItems: newCollectedItems,
       };
 
     default:
@@ -87,12 +87,11 @@ export const removeCollectedItem = makePayloadAction(REMOVE_COLLECTED_ITEM);
 
 export const setActiveLanguage = makePayloadAction(SET_ACTIVE_LANGUAGE);
 
-export const fetchBungieSettings = () => dispatch => {
-  getDestiny("/Platform/Settings/").then(settings => {
-    console.log("settings:", settings);
+export const fetchBungieSettings = () => (dispatch) => {
+  getDestiny("/Platform/Settings/").then((settings) => {
     dispatch({
       type: SET_BUNGIE_SETTINGS,
-      payload: settings
+      payload: settings,
     });
   });
 };
