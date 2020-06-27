@@ -77,8 +77,8 @@ window.__show = (input) => {
     } else {
       const state = store.getState();
 
-      forEach(state.definitions.definitions, (defs, tableName) => {
-        forEach(defs, (singleDef) => {
+      forEach(state.definitions.definitions, (defsForTable, tableName) => {
+        forEach(defsForTable, (singleDef) => {
           if (singleDef.hash === thing) {
             defs.push(makeSearchResults(singleDef));
           }
