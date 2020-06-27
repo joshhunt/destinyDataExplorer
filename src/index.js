@@ -1,4 +1,3 @@
-import "./devTools/devToolsApi"; // must be first
 import "lib/ls";
 
 import React from "react";

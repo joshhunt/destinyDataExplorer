@@ -9,13 +9,13 @@ class ResultsArray extends Array {
 }
 
 function filter(store, obj, fn) {
-  const results = lodashFilter(obj, () => {
+  const results = lodashFilter(obj, (item) => {
     try {
-      return fn(obj);
+      return fn(item);
     } catch (err) {
       console.error(
         "Ignoring error running filter function on definition",
-        obj
+        item
       );
       console.error(err);
       return false;
