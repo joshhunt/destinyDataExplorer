@@ -110,7 +110,11 @@ export function connectToWindow(store) {
         Object.entries(newState.definitions.definitions).forEach(
           ([tableName, defs]) => {
             const windowKeyName = `$${tableName}`;
-            window[windowKeyName] = new DefinitionsTable({ ...defs });
+            window[windowKeyName] = new DefinitionsTable();
+
+            Object.entries(
+              (key, value) => (window[windowKeyName][key] = value)
+            );
           }
         );
       }
