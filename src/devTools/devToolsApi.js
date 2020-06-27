@@ -58,22 +58,38 @@ export function connectToWindow(store) {
   window.$show = show.bind(null, store);
   window.$filter = filter.bind(null, store);
 
-  store.subscribe(() => {
-    const newState = store.getState();
-    window.__state = newState;
-    window.__definitions = newState.definitions.definitions;
+  store.subscribe(
+    catchErrors(() => {
+      const newState = store.getState();
+      window.__state = newState;
+      window.__definitions = newState.definitions.definitions;
 
-    if (!prevKeeper.has(newState.definitions.definitions)) {
-      prevKeeper.set(newState.definitions.definitions, true);
+      if (
+        newState.definitions.definitions &&
+        !prevKeeper.has(newState.definitions.definitions)
+      ) {
+        prevKeeper.set(newState.definitions.definitions, true);
 
-      Object.entries(newState.definitions.definitions).forEach(
-        ([tableName, defs]) => {
-          const windowKeyName = `$${tableName}`;
-          window[windowKeyName] = { ...defs };
+        Object.entries(newState.definitions.definitions).forEach(
+          ([tableName, defs]) => {
+            const windowKeyName = `$${tableName}`;
+            window[windowKeyName] = { ...defs };
 
-          window[windowKeyName].filter = filter.bind(null, store, defs);
-        }
-      );
+            window[windowKeyName].filter = filter.bind(null, store, defs);
+          }
+        );
+      }
+    })
+  );
+}
+
+function catchErrors(fn) {
+  return (...args) => {
+    try {
+      fn(...args);
+    } catch (err) {
+      console.error("Caught error, but continued on");
+      console.error(err);
     }
-  });
+  };
 }
