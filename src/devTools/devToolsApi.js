@@ -28,7 +28,7 @@ function filter(store, obj, fn) {
     console.error(
       "There were",
       errors.length,
-      "errors during your filter, which were not included. See the errors on window.$errors"
+      "items that threw an exception when trying to filter, which have not been included. See all the errors on window.$errors."
     );
   }
 
