@@ -6,7 +6,7 @@ import reduxThunk from "redux-thunk";
 import app, {
   startingSearchWorker,
   startingSearchWorkerSuccess,
-  setActiveLanguage
+  setActiveLanguage,
 } from "./app";
 import filter from "./filter";
 import { setLanguage, getLanguage } from "lib/ls";
@@ -17,13 +17,13 @@ import definitions, {
   setBulkDefinitions,
   definitionsStatus,
   definitionsError,
-  SET_BULK_DEFINITIONS
+  SET_BULK_DEFINITIONS,
 } from "./definitions";
 
 const rootReducer = combineReducers({
   app,
   definitions,
-  filter
+  filter,
 });
 
 function sanitiseDefintionsState(defintionsState) {
@@ -32,7 +32,7 @@ function sanitiseDefintionsState(defintionsState) {
   }
   return mapValues(
     defintionsState,
-    definitions =>
+    (definitions) =>
       `[${Object.keys(definitions || {}).length} definitions hidden]`
   );
 }
@@ -41,10 +41,10 @@ const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         actionsBlacklist: [SET_BULK_DEFINITIONS],
-        stateSanitizer: state => ({
+        stateSanitizer: (state) => ({
           ...state,
-          definitions: sanitiseDefintionsState(state.definitions.definitions)
-        })
+          definitions: sanitiseDefintionsState(state.definitions.definitions),
+        }),
       })
     : compose;
 
@@ -53,6 +53,8 @@ const enhancer = composeEnhancers(applyMiddleware(reduxThunk));
 const store = createStore(rootReducer, enhancer);
 
 window.__store = store;
+
+window.__show = (results) => {};
 
 const qs = querystring.parse(window.location.search.substr(1));
 const languages = [
@@ -68,7 +70,7 @@ const languages = [
   "pt-br",
   "ru",
   "zh-chs",
-  "zh-cht"
+  "zh-cht",
 ];
 const baseLang = qs.lang || getLanguage();
 const LANG_CODE = languages.includes(baseLang) ? baseLang : "en";
@@ -92,7 +94,7 @@ store.subscribe(() => {
 
   prevState = newState;
 
-  toDispatch.forEach(action => store.dispatch(action));
+  toDispatch.forEach((action) => store.dispatch(action));
 });
 
 store.dispatch(setActiveLanguage(LANG_CODE));
@@ -101,7 +103,7 @@ function loadDefinitions(langCode) {
   fasterGetDefinitions(
     langCode,
     null,
-    data => {
+    (data) => {
       store.dispatch(definitionsStatus(data));
     },
     (err, data) => {

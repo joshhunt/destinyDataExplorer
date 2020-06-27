@@ -1,4 +1,4 @@
-import { pickBy } from "lodash";
+import { pickBy, mapValues } from "lodash";
 import { makePayloadAction } from "./utils";
 
 export const SET_BULK_DEFINITIONS = "Set bulk definitions";
@@ -10,24 +10,27 @@ export default function definitionsReducer(state = {}, { type, payload }) {
     case DEFINITIONS_ERROR: {
       return {
         ...state,
-        error: true
+        error: true,
       };
     }
 
     case DEFINITIONS_STATUS: {
       return {
         ...state,
-        status: payload.status
+        status: payload.status,
       };
     }
 
     case SET_BULK_DEFINITIONS: {
-      const filtered = pickBy(payload, defs => defs);
+      const filtered = pickBy(payload, (defs) => defs);
+      const withIds = mapValues(filtered, (arrOfDefs, defType) =>
+        arrOfDefs.map((v) => ({ ...v, $type: defType }))
+      );
 
       return {
         ...state,
-        definitions: filtered,
-        error: false
+        definitions: withIds,
+        error: false,
       };
     }
 
