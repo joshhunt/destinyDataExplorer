@@ -6,6 +6,8 @@ import css from "./cssLog";
 class ResultsArray extends Array {
   show() {
     show(ResultsArray.store, this);
+
+    return this;
   }
 }
 
@@ -65,8 +67,6 @@ function show(store, _input) {
     type: SET_SEARCH_RESULTS,
     payload: results,
   });
-
-  return _input;
 }
 
 function makeSearchResults(def) {
