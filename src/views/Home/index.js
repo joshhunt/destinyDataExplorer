@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isString } from "lodash";
 import cx from "classnames";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import {
   toggleCollectMode,
@@ -228,16 +228,16 @@ class HomeView extends Component {
           )}
         </div>
 
-        <ReactCSSTransitionGroup
-          transitionName="global-dataview-animation"
-          transitionEnterTimeout={200}
-          transitionLeaveTimeout={200}
-        >
+        <TransitionGroup>
           {views.map(
             ({ type, hash }, index) =>
               this.props.definitions &&
               this.props.definitions[type] && (
-                <div key={index}>
+                <CSSTransition
+                  key={index}
+                  classNames="global-dataview-animation"
+                  timeout={{ enter: 200, exit: 200 }}
+                >
                   <DataView
                     definitions={definitions}
                     depth={index + 1}
@@ -247,10 +247,10 @@ class HomeView extends Component {
                     onRequestClose={this.popView}
                     pathForItem={this.pathForItem}
                   />
-                </div>
+                </CSSTransition>
               )
           )}
-        </ReactCSSTransitionGroup>
+        </TransitionGroup>
       </div>
     );
   }

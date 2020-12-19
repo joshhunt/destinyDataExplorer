@@ -81,7 +81,7 @@ $duration: 200ms;
   }
 }
 
-:global(.global-dataview-animation-leave) {
+:global(.global-dataview-animation-exit) {
   .root {
     background: rgba(black, 0.3);
   }
@@ -91,7 +91,7 @@ $duration: 200ms;
   }
 }
 
-:global(.global-dataview-animation-leave.global-dataview-animation-leave-active) {
+:global(.global-dataview-animation-exit.global-dataview-animation-exit-active) {
   .root {
     background: rgba(black, 0);
     transition: background $duration;

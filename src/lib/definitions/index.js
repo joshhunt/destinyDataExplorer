@@ -3,7 +3,7 @@ import Dexie from "dexie";
 import axios from "axios";
 import { every } from "lodash";
 
-import "imports-loader?this=>window!@destiny-item-manager/zip.js"; // eslint-disable-line
+import "imports-loader?wrapper=window!@destiny-item-manager/zip.js"; // eslint-disable-line
 import inflate from "file-loader!@destiny-item-manager/zip.js/WebContent/inflate.js"; // eslint-disable-line
 import zipWorker from "file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js"; // eslint-disable-line
 

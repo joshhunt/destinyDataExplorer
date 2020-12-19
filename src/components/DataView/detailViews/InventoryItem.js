@@ -125,7 +125,6 @@ export default function InventoryItem({ item, definitions, pathForItem }) {
   const hasGearset = item.gearset && item.gearset.itemList.length > 0;
   const hasSockets = !!item.sockets;
   const isQuestline = item.setData && item.setData.setType === "quest_global";
-  console.log({ isQuestline, item });
 
   const views = [
     hasGearset && GearsetItemList,
