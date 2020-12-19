@@ -1,4 +1,4 @@
-export default {
+const specialValueOverrides = {
   // Object keys are the keys of the item that this function should return a special value for
   // Functions receive arguments:
   // - prettyValue: the preset pretty formatted value. Use this when you need to display the value
@@ -77,3 +77,5 @@ export default {
     return "<Location " + strings.join(", ") + ">";
   },
 };
+
+export default specialValueOverrides;

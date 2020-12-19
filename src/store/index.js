@@ -79,7 +79,6 @@ const baseLang = qs.lang || getLanguage();
 const LANG_CODE = languages.includes(baseLang) ? baseLang : "en";
 
 let prevState = store.getState();
-const prevKeeper = new WeakMap();
 
 store.subscribe(() => {
   const newState = store.getState();
