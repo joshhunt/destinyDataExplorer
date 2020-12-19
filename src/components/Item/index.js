@@ -25,7 +25,7 @@ const SUBSTITUTE_ICON = {
   DestinyLoreDefinition: "book",
   DestinyItemCategoryDefinition: "th-large",
   DestinyInventoryBucketDefinition: "shopping-basket",
-  DestinyHistoricalStatsDefinition: "trophy"
+  DestinyHistoricalStatsDefinition: "trophy",
 };
 
 function SubstituteIcon({ type }) {
@@ -45,7 +45,7 @@ export default function Item({
   entry,
   pathForItem,
   onClick,
-  isCollected
+  isCollected,
 }) {
   const { def: item, type } = entry;
 
@@ -64,7 +64,7 @@ export default function Item({
     <Link
       to={pathForItem(type, entry)}
       className={cx(s.root, className, isCollected && s.collected)}
-      onClick={ev => onClick && onClick(ev, entry)}
+      onClick={(ev) => onClick && onClick(ev, entry)}
     >
       <div className={s.accessory}>
         {icon === NO_ICON ? (

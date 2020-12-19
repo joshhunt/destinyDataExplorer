@@ -26,7 +26,7 @@ import {
   LEGENDARY,
   UNCOMMON,
   RARE,
-  COMMON
+  COMMON,
 } from "lib/destinyEnums";
 
 const tierTypeNameValue = {
@@ -34,10 +34,10 @@ const tierTypeNameValue = {
   Uncommon: 3,
   Rare: 2,
   Legendary: 1,
-  Exotic: 0
+  Exotic: 0,
 };
 
-export const isArmorOrnament = item =>
+export const isArmorOrnament = (item) =>
   item.itemCategoryHashes &&
   item.itemCategoryHashes.includes(ARMOR_MODS_ORNAMENTS);
 
@@ -46,7 +46,7 @@ const RARITY_SCORE = {
   [LEGENDARY]: 1000,
   [UNCOMMON]: 10000,
   [RARE]: 100000,
-  [COMMON]: 1000000
+  [COMMON]: 1000000,
 };
 
 function scoreItem(item) {
@@ -79,7 +79,7 @@ function scoreItem(item) {
 }
 
 function sortArmor(items) {
-  return sortBy(items, item => {
+  return sortBy(items, (item) => {
     const rarity = RARITY_SCORE[item.inventory.tierTypeHash] || 0;
     return rarity + scoreItem(item);
   });
@@ -89,9 +89,9 @@ const isCategory = (item, category) =>
   item.itemCategoryHashes.includes(category);
 
 export default function sortItems(_items, verbose = false) {
-  const items = uniqBy(_items, item => item.hash);
+  const items = uniqBy(_items, (item) => item.hash);
 
-  const _sectionItems = groupBy(items, item => {
+  const _sectionItems = groupBy(items, (item) => {
     if (item.itemCategoryHashes.includes(ARMOR_MODS_ORNAMENTS)) {
       if (isCategory(item, ARMOR_MODS_ORNAMENTS_TITAN)) {
         return TITAN;
@@ -123,8 +123,8 @@ export default function sortItems(_items, verbose = false) {
     }
   });
 
-  const sectionItems = mapValues(_sectionItems, items => {
-    return sortBy(items, item => {
+  const sectionItems = mapValues(_sectionItems, (items) => {
+    return sortBy(items, (item) => {
       return tierTypeNameValue[item.inventory.tierTypeName];
     });
   });
@@ -141,20 +141,20 @@ export default function sortItems(_items, verbose = false) {
     { name: "Emblems", items: sectionItems.emblems },
     { name: "Shaders", items: sectionItems.shaders },
     { name: "Weapon Ornaments", items: sectionItems.weaponOrnaments },
-    { name: "Other", items: sectionItems.other }
+    { name: "Other", items: sectionItems.other },
   ]
     .filter(({ items }) => {
       return items && items.length > 0;
     })
-    .map(section => {
+    .map((section) => {
       if (verbose) {
         return section;
       }
 
-      const items = section.items.map(item => item.hash);
+      const items = section.items.map((item) => item.hash);
       return {
         ...section,
-        items
+        items,
       };
     });
 

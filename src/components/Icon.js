@@ -7,7 +7,7 @@ const Icon = ({ name, solid, regular, light, duotone, brand, ...rest }) => {
       [regular ? "true" : "false"]: "far",
       [light ? "true" : "false"]: "fal",
       [duotone ? "true" : "false"]: "fad",
-      [brand ? "true" : "false"]: "fab"
+      [brand ? "true" : "false"]: "fab",
     }["true"] || "far";
 
   return <span className={`${prefix} fa-${name}`} {...rest}></span>;
@@ -20,7 +20,7 @@ const MembershipType = {
   Playstation: 2,
   Steam: 3,
   BattleNet: 4,
-  Stadia: 5
+  Stadia: 5,
 };
 
 export const PlatformIcon = ({ membershipType, ...rest }) => {
@@ -29,7 +29,7 @@ export const PlatformIcon = ({ membershipType, ...rest }) => {
     [MembershipType.Playstation]: "playstation",
     [MembershipType.Steam]: "steam",
     [MembershipType.BattleNet]: "battle-net",
-    [MembershipType.Stadia]: "google"
+    [MembershipType.Stadia]: "google",
   };
 
   const type = membershipType.toString

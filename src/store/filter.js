@@ -8,7 +8,7 @@ export const SET_FILTER_VALUE = "Set filter value";
 export const SET_SEARCH_RESULTS = "Set search results";
 
 const INITIAL_STATE = {
-  filters: {}
+  filters: {},
 };
 
 export default function filterReducer(
@@ -19,14 +19,14 @@ export default function filterReducer(
     case SET_FILTER_STRING: {
       return {
         ...state,
-        searchString: payload
+        searchString: payload,
       };
     }
 
     case SET_SEARCH_RESULTS: {
       return {
         ...state,
-        results: payload
+        results: payload,
       };
     }
 
@@ -35,11 +35,11 @@ export default function filterReducer(
         ...state,
         filters: {
           ...state.filters,
-          ...payload
-        }
+          ...payload,
+        },
       };
 
-      draft.filters = pickBy(draft.filters, value => {
+      draft.filters = pickBy(draft.filters, (value) => {
         return value !== null && value !== "null";
       });
 
@@ -52,7 +52,7 @@ export default function filterReducer(
 }
 
 const raf = () =>
-  new Promise(resolve => window.requestAnimationFrame(() => resolve()));
+  new Promise((resolve) => window.requestAnimationFrame(() => resolve()));
 
 async function doSearch(dispatch, getState) {
   const state = getState();
@@ -61,26 +61,26 @@ async function doSearch(dispatch, getState) {
 
   const searchPayload = {
     searchString: state.filter.searchString,
-    filters: state.filter.filters
+    filters: state.filter.filters,
   };
 
   const results = await search(searchPayload, state.definitions.definitions);
 
   dispatch({
     type: SET_SEARCH_RESULTS,
-    payload: results
+    payload: results,
   });
 }
 
 // export const setFilterString = makePayloadAction(SET_FILTER_STRING);
-export const setFilterValue = filterValue => {
+export const setFilterValue = (filterValue) => {
   return (dispatch, getState) => {
     dispatch(makePayloadAction(SET_FILTER_VALUE)(filterValue));
     doSearch(dispatch, getState);
   };
 };
 
-export const setFilterString = searchString => {
+export const setFilterString = (searchString) => {
   return (dispatch, getState) => {
     dispatch(makePayloadAction(SET_FILTER_STRING)(searchString));
     doSearch(dispatch, getState);

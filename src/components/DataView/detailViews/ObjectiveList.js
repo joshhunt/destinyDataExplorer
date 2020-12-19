@@ -6,21 +6,21 @@ import BungieImage from "components/BungieImage";
 
 import s from "./styles.module.scss";
 
-const _withDef = memoize(defs => (itemHash, cb) => cb(defs[itemHash]));
+const _withDef = memoize((defs) => (itemHash, cb) => cb(defs[itemHash]));
 
 export default function ObjectiveList({
   objectiveHashes,
   definitions,
-  pathForItem
+  pathForItem,
 }) {
   const withObjectiveDef = _withDef(definitions.DestinyObjectiveDefinition);
 
   return (
     <ul className={s.boringList}>
-      {objectiveHashes.map(objectiveHash =>
+      {objectiveHashes.map((objectiveHash) =>
         withObjectiveDef(
           objectiveHash,
-          objective =>
+          (objective) =>
             objective && (
               <li key={objectiveHash}>
                 <Link

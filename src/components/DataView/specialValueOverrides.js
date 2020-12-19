@@ -20,7 +20,7 @@ export default {
       definitions.DestinyDestinationDefinition[locationRelease.destinationHash];
 
     const bubble =
-      destination && destination.bubbles.find(bub => (bub.hash = rawValue));
+      destination && destination.bubbles.find((bub) => (bub.hash = rawValue));
 
     return bubble && `<"${bubble.displayProperties.name}" ${prettyValue}>`;
   },
@@ -41,7 +41,7 @@ export default {
     const bubble =
       destination &&
       destination.bubbles.find(
-        bub => bub.hash === locationRelease.activityBubbleName
+        (bub) => bub.hash === locationRelease.activityBubbleName
       );
 
     const activity =
@@ -70,10 +70,10 @@ export default {
       vendorString,
       showActivityString && activityString,
       bubbleString,
-      destinationString
+      destinationString,
     ].filter(Boolean);
 
     strings.push(`${prettyValue}`);
     return "<Location " + strings.join(", ") + ">";
-  }
+  },
 };

@@ -5,26 +5,26 @@ import { EMBLEM, HUNTER, TITAN, WARLOCK, NO_CLASS } from "lib/destinyEnums";
 import { getLower } from "lib/utils";
 
 // TODO: we can just use itemCategoryHashes for this now?
-export const isOrnament = item =>
+export const isOrnament = (item) =>
   item.inventory &&
   item.inventory.stackUniqueLabel &&
   item.plug &&
   item.plug.plugCategoryIdentifier &&
   item.plug.plugCategoryIdentifier.includes("skins");
 
-export const makeTypeShort = memoize(type => {
+export const makeTypeShort = memoize((type) => {
   const match = type.match(/Destiny(\w+)Definition/);
   return match ? match[1] : type;
 });
 
-export const getName = item => {
+export const getName = (item) => {
   return (
     (item.displayProperties && item.displayProperties.name) ||
     item.statName || <em>No name</em>
   );
 };
 
-export const bungieUrl = path => {
+export const bungieUrl = (path) => {
   return path && path.includes && path.includes("//bungie.net/")
     ? path
     : `https://bungie.net${path}`;
@@ -48,7 +48,7 @@ function classFromString(str) {
   }
 }
 
-export const getItemClass = item => {
+export const getItemClass = (item) => {
   // if (CLASS_OVERRIDES.hasOwnProperty(item.hash)) {
   //   return CLASS_OVERRIDES[item.hash];
   // }
@@ -90,7 +90,7 @@ export function getNameForItem(item, noQuotes) {
   return foundName ? `"${foundName}"` : "";
 }
 
-export const makeAllDefsArray = memoize(allDefs => {
+export const makeAllDefsArray = memoize((allDefs) => {
   return toPairs(allDefs).reduce((acc, [type, defs]) => {
     return [
       ...acc,
@@ -98,16 +98,16 @@ export const makeAllDefsArray = memoize(allDefs => {
         dxId: `${type}:${key}`, // Data Explorer-specific ID, (hopefully) globally unique across all entries
         type, // definition type
         key, // definition key, like hash
-        def // the definition item itself
-      }))
+        def, // the definition item itself
+      })),
     ];
   }, []);
 });
 
 const MAX_RANDOM_ITEMS = 100;
-export const getRandomItems = memoize(allDefs => {
+export const getRandomItems = memoize((allDefs) => {
   let n = MAX_RANDOM_ITEMS;
-  const arr = makeAllDefsArray(allDefs).filter(obj => {
+  const arr = makeAllDefsArray(allDefs).filter((obj) => {
     return (
       obj.def && obj.def.displayProperties && obj.def.displayProperties.hasIcon
     );

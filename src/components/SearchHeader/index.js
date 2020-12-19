@@ -36,14 +36,14 @@ function SearchHeader({
   searchString,
   activeLanguage,
   defs,
-  searchIsReady
+  searchIsReady,
 }) {
   const filterArr = Object.entries(filters)
     .map(([key, value]) => ({
       key,
-      value
+      value,
     }))
-    .filter(v => v.value);
+    .filter((v) => v.value);
 
   return (
     <div className={s.root}>
@@ -64,7 +64,7 @@ function SearchHeader({
             disabled={!defs}
           />
 
-          {filterArr.map(filterOpt => {
+          {filterArr.map((filterOpt) => {
             const filterDef = FILTERS_BY_ID[filterOpt.key];
 
             if (!filterDef) {
@@ -77,10 +77,10 @@ function SearchHeader({
 
             console.log({ values, filterOpt });
 
-            const texts = values.map(value => {
+            const texts = values.map((value) => {
               const valueLabel = filterDef
                 .data(defs)
-                .find(fdef => value.value === fdef.value);
+                .find((fdef) => value.value === fdef.value);
 
               return valueLabel.label;
             });
@@ -110,10 +110,10 @@ function SearchHeader({
 
           <select
             className={s.languageDropdown}
-            onChange={ev => setActiveLanguage(ev.target.value)}
+            onChange={(ev) => setActiveLanguage(ev.target.value)}
             value={activeLanguage}
           >
-            {languages.map(lang => (
+            {languages.map((lang) => (
               <option key={lang.identifier} value={lang.identifier}>
                 {lang.displayName}
               </option>
@@ -148,12 +148,12 @@ function SearchHeader({
         className={{
           base: s.filterModalBase,
           afterOpen: s.filterModalAfterOpen,
-          beforeClose: s.filterModalBeforeClose
+          beforeClose: s.filterModalBeforeClose,
         }}
         overlayClassName={{
           base: s.filterModalOverlayBase,
           afterOpen: s.filterModalOverlayAfterOpen,
-          beforeClose: s.filterModalOverlayBeforeClose
+          beforeClose: s.filterModalOverlayBeforeClose,
         }}
       >
         <Filters
@@ -165,17 +165,16 @@ function SearchHeader({
   );
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   defs: state.definitions.definitions,
   filters: state.filter.filters,
   searchString: state.filter.searchString,
   languages:
     (state.app.bungieSettings && state.app.bungieSettings.userContentLocales) ||
     [],
-  activeLanguage: state.app.activeLanguage
+  activeLanguage: state.app.activeLanguage,
 });
 
-export default connect(
-  mapStateToProps,
-  { setActiveLanguage: _setActiveLanguage }
-)(SearchHeader);
+export default connect(mapStateToProps, {
+  setActiveLanguage: _setActiveLanguage,
+})(SearchHeader);

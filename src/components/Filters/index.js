@@ -7,7 +7,7 @@ import Icon from "components/Icon";
 import { setFilterValue } from "store/filter";
 import {
   FILTER_OPTION_RENDERERS as FILTER_OPTION_RENDERER_TYPES,
-  FILTERS
+  FILTERS,
 } from "lib/search/guiSearchFilters";
 
 import s from "./styles.module.scss";
@@ -35,7 +35,7 @@ const FILTER_OPTION_RENDERERS = {
         isClearable
       />
     );
-  }
+  },
 };
 
 function Filters({
@@ -43,7 +43,7 @@ function Filters({
   toggleFilterDrawer,
   definitions,
   setFilterValue,
-  filters
+  filters,
 }) {
   if (!definitions) {
     return null;
@@ -67,7 +67,7 @@ function Filters({
             <Renderer
               data={data}
               value={filters[filter.id]}
-              onChange={value => setFilterValue({ [filter.id]: value })}
+              onChange={(value) => setFilterValue({ [filter.id]: value })}
             />
           </div>
         );
@@ -76,15 +76,12 @@ function Filters({
   );
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   definitions: state.definitions.definitions,
-  filters: state.filter
+  filters: state.filter,
 });
 const mapDispatchToActions = {
-  setFilterValue
+  setFilterValue,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToActions
-)(Filters);
+export default connect(mapStateToProps, mapDispatchToActions)(Filters);

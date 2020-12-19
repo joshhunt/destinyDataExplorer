@@ -17,15 +17,11 @@
   },
   "host": "www.bungie.net",
   "basePath": "/Platform",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "paths": {
     "/App/ApiUsage/{applicationId}/": {
       "get": {
-        "tags": [
-          "App"
-        ],
+        "tags": ["App"],
         "description": "Get API usage by application for time frame specified. You can go as far back as 30 days ago, and can ask for up to a 48 hour window of time in a single request. You must be authenticated with at least the ReadUserData permission to access this endpoint.",
         "operationId": "App.GetApplicationApiUsage",
         "parameters": [
@@ -55,9 +51,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadUserData"
-            ]
+            "oauth2": ["ReadUserData"]
           }
         ],
         "responses": {
@@ -103,9 +97,7 @@
     },
     "/App/FirstParty/": {
       "get": {
-        "tags": [
-          "App"
-        ],
+        "tags": ["App"],
         "description": "Get list of applications created by Bungie.",
         "operationId": "App.GetBungieApplications",
         "parameters": [],
@@ -156,9 +148,7 @@
     },
     "/User/GetBungieNetUserById/{id}/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Loads a bungienet user by membership id.",
         "operationId": "User.GetBungieNetUserById",
         "parameters": [
@@ -215,9 +205,7 @@
     },
     "/User/SearchUsers/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Returns a list of possible users based on the search string",
         "operationId": "User.SearchUsers",
         "parameters": [
@@ -275,9 +263,7 @@
     },
     "/User/GetAvailableThemes/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Returns a list of all available user themes.",
         "operationId": "User.GetAvailableThemes",
         "parameters": [],
@@ -328,9 +314,7 @@
     },
     "/User/GetMembershipsById/{membershipId}/{membershipType}/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Returns a list of accounts associated with the supplied membership ID and membership type. This will include all linked accounts (even when hidden) if supplied credentials permit it.",
         "operationId": "User.GetMembershipDataById",
         "parameters": [
@@ -395,18 +379,14 @@
     },
     "/User/GetMembershipsForCurrentUser/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Returns a list of accounts associated with signed in user. This is useful for OAuth implementations that do not give you access to the token response.",
         "operationId": "User.GetMembershipDataForCurrentUser",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadBasicUserProfile"
-            ]
+            "oauth2": ["ReadBasicUserProfile"]
           }
         ],
         "responses": {
@@ -452,9 +432,7 @@
     },
     "/User/GetMembershipFromHardLinkedCredential/{crType}/{credential}/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Gets any hard linked membership given a credential. Only works for credentials that are public (just SteamID64 right now). Cross Save aware.",
         "operationId": "User.GetMembershipFromHardLinkedCredential",
         "parameters": [
@@ -518,9 +496,7 @@
     },
     "/Content/GetContentType/{type}/": {
       "get": {
-        "tags": [
-          "Content"
-        ],
+        "tags": ["Content"],
         "description": "Gets an object describing a particular variant of content.",
         "operationId": "Content.GetContentType",
         "parameters": [
@@ -576,9 +552,7 @@
     },
     "/Content/GetContentById/{id}/{locale}/": {
       "get": {
-        "tags": [
-          "Content"
-        ],
+        "tags": ["Content"],
         "description": "Returns a content item referenced by id",
         "operationId": "Content.GetContentById",
         "parameters": [
@@ -648,9 +622,7 @@
     },
     "/Content/GetContentByTagAndType/{tag}/{type}/{locale}/": {
       "get": {
-        "tags": [
-          "Content"
-        ],
+        "tags": ["Content"],
         "description": "Returns the newest item that matches a given tag and Content Type.",
         "operationId": "Content.GetContentByTagAndType",
         "parameters": [
@@ -726,9 +698,7 @@
     },
     "/Content/Search/{locale}/": {
       "get": {
-        "tags": [
-          "Content"
-        ],
+        "tags": ["Content"],
         "description": "Gets content based on querystring information passed in. Provides basic search and text search capabilities.",
         "operationId": "Content.SearchContentWithText",
         "parameters": [
@@ -821,9 +791,7 @@
     },
     "/Content/SearchContentByTagAndType/{tag}/{type}/{locale}/": {
       "get": {
-        "tags": [
-          "Content"
-        ],
+        "tags": ["Content"],
         "description": "Searches for Content Items that match the given Tag and Content Type.",
         "operationId": "Content.SearchContentByTagAndType",
         "parameters": [
@@ -913,9 +881,7 @@
     },
     "/Content/SearchHelpArticles/{searchtext}/{size}/": {
       "get": {
-        "tags": [
-          "Content"
-        ],
+        "tags": ["Content"],
         "description": "Search for Help Articles.",
         "operationId": "Content.SearchHelpArticles",
         "parameters": [
@@ -978,9 +944,7 @@
     },
     "/Forum/GetTopicsPaged/{page}/{pageSize}/{group}/{sort}/{quickDate}/{categoryFilter}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Get topics from any forum.",
         "operationId": "Forum.GetTopicsPaged",
         "parameters": [
@@ -1089,9 +1053,7 @@
     },
     "/Forum/GetCoreTopicsPaged/{page}/{sort}/{quickDate}/{categoryFilter}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Gets a listing of all topics marked as part of the core group.",
         "operationId": "Forum.GetCoreTopicsPaged",
         "parameters": [
@@ -1178,9 +1140,7 @@
     },
     "/Forum/GetPostsThreadedPaged/{parentPostId}/{page}/{pageSize}/{replySize}/{getParentPost}/{rootThreadMode}/{sortMode}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Returns a thread of posts at the given parent, optionally returning replies to those posts as well as the original parent.",
         "operationId": "Forum.GetPostsThreadedPaged",
         "parameters": [
@@ -1289,9 +1249,7 @@
     },
     "/Forum/GetPostsThreadedPagedFromChild/{childPostId}/{page}/{pageSize}/{replySize}/{rootThreadMode}/{sortMode}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Returns a thread of posts starting at the topicId of the input childPostId, optionally returning replies to those posts as well as the original parent.",
         "operationId": "Forum.GetPostsThreadedPagedFromChild",
         "parameters": [
@@ -1393,9 +1351,7 @@
     },
     "/Forum/GetPostAndParent/{childPostId}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Returns the post specified and its immediate parent.",
         "operationId": "Forum.GetPostAndParent",
         "parameters": [
@@ -1458,9 +1414,7 @@
     },
     "/Forum/GetPostAndParentAwaitingApproval/{childPostId}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Returns the post specified and its immediate parent of posts that are awaiting approval.",
         "operationId": "Forum.GetPostAndParentAwaitingApproval",
         "parameters": [
@@ -1523,9 +1477,7 @@
     },
     "/Forum/GetTopicForContent/{contentId}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Gets the post Id for the given content item's comments, if it exists.",
         "operationId": "Forum.GetTopicForContent",
         "parameters": [
@@ -1583,9 +1535,7 @@
     },
     "/Forum/GetForumTagSuggestions/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Gets tag suggestions based on partial text entry, matching them with other tags previously used in the forums.",
         "operationId": "Forum.GetForumTagSuggestions",
         "parameters": [
@@ -1643,9 +1593,7 @@
     },
     "/Forum/Poll/{topicId}/": {
       "get": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Gets the specified forum poll.",
         "operationId": "Forum.GetPoll",
         "parameters": [
@@ -1702,9 +1650,7 @@
     },
     "/Forum/Recruit/Summaries/": {
       "post": {
-        "tags": [
-          "Forum"
-        ],
+        "tags": ["Forum"],
         "description": "Allows the caller to get a list of to 25 recruitment thread summary information objects.",
         "operationId": "Forum.GetRecruitmentThreadSummaries",
         "parameters": [],
@@ -1755,9 +1701,7 @@
     },
     "/GroupV2/GetAvailableAvatars/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Returns a list of all available group avatars for the signed-in user.",
         "operationId": "GroupV2.GetAvailableAvatars",
         "parameters": [],
@@ -1808,9 +1752,7 @@
     },
     "/GroupV2/GetAvailableThemes/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Returns a list of all available group themes.",
         "operationId": "GroupV2.GetAvailableThemes",
         "parameters": [],
@@ -1861,9 +1803,7 @@
     },
     "/GroupV2/GetUserClanInviteSetting/{mType}/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Gets the state of the user's clan invite preferences for a particular membership type - true if they wish to be invited to clans, false otherwise.",
         "operationId": "GroupV2.GetUserClanInviteSetting",
         "parameters": [
@@ -1879,9 +1819,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadUserData"
-            ]
+            "oauth2": ["ReadUserData"]
           }
         ],
         "responses": {
@@ -1927,9 +1865,7 @@
     },
     "/GroupV2/Recommended/{groupType}/{createDateRange}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Gets groups recommended for you based on the groups to whom those you follow belong.",
         "operationId": "GroupV2.GetRecommendedGroups",
         "parameters": [
@@ -1953,9 +1889,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadGroups"
-            ]
+            "oauth2": ["ReadGroups"]
           }
         ],
         "responses": {
@@ -2004,9 +1938,7 @@
     },
     "/GroupV2/Search/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Search for Groups.",
         "operationId": "GroupV2.GroupSearch",
         "parameters": [],
@@ -2054,9 +1986,7 @@
     },
     "/GroupV2/{groupId}/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get information about a specific group of the given ID.",
         "operationId": "GroupV2.GetGroup",
         "parameters": [
@@ -2113,9 +2043,7 @@
     },
     "/GroupV2/Name/{groupName}/{groupType}/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get information about a specific group with the given name and type.",
         "operationId": "GroupV2.GetGroupByName",
         "parameters": [
@@ -2179,9 +2107,7 @@
     },
     "/GroupV2/NameV2/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get information about a specific group with the given name and type. The POST version.",
         "operationId": "GroupV2.GetGroupByNameV2",
         "parameters": [],
@@ -2229,9 +2155,7 @@
     },
     "/GroupV2/{groupId}/OptionalConversations/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Gets a list of available optional conversation channels and their settings.",
         "operationId": "GroupV2.GetGroupOptionalConversations",
         "parameters": [
@@ -2291,9 +2215,7 @@
     },
     "/GroupV2/{groupId}/Edit/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Edit an existing group. You must have suitable permissions in the group to perform this operation. This latest revision will only edit the fields you pass in - pass null for properties you want to leave unaltered.",
         "operationId": "GroupV2.EditGroup",
         "parameters": [
@@ -2309,9 +2231,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2358,9 +2278,7 @@
     },
     "/GroupV2/{groupId}/EditClanBanner/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Edit an existing group's clan banner. You must have suitable permissions in the group to perform this operation. All fields are required.",
         "operationId": "GroupV2.EditClanBanner",
         "parameters": [
@@ -2376,9 +2294,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2425,9 +2341,7 @@
     },
     "/GroupV2/{groupId}/EditFounderOptions/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Edit group options only available to a founder. You must have suitable permissions in the group to perform this operation.",
         "operationId": "GroupV2.EditFounderOptions",
         "parameters": [
@@ -2443,9 +2357,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2492,9 +2404,7 @@
     },
     "/GroupV2/{groupId}/OptionalConversations/Add/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Add a new optional conversation/chat channel. Requires admin permissions to the group.",
         "operationId": "GroupV2.AddOptionalConversation",
         "parameters": [
@@ -2510,9 +2420,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2559,9 +2467,7 @@
     },
     "/GroupV2/{groupId}/OptionalConversations/Edit/{conversationId}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Edit the settings of an optional conversation/chat channel. Requires admin permissions to the group.",
         "operationId": "GroupV2.EditOptionalConversation",
         "parameters": [
@@ -2585,9 +2491,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2634,9 +2538,7 @@
     },
     "/GroupV2/{groupId}/Members/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get the list of members in a given group.",
         "operationId": "GroupV2.GetMembersOfGroup",
         "parameters": [
@@ -2714,9 +2616,7 @@
     },
     "/GroupV2/{groupId}/AdminsAndFounder/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get the list of members in a given group who are of admin level or higher.",
         "operationId": "GroupV2.GetAdminsAndFounderOfGroup",
         "parameters": [
@@ -2781,9 +2681,7 @@
     },
     "/GroupV2/{groupId}/Members/{membershipType}/{membershipId}/SetMembershipType/{memberType}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Edit the membership type of a given member. You must have suitable permissions in the group to perform this operation.",
         "operationId": "GroupV2.EditGroupMembership",
         "parameters": [
@@ -2823,9 +2721,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2872,9 +2768,7 @@
     },
     "/GroupV2/{groupId}/Members/{membershipType}/{membershipId}/Kick/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Kick a member from the given group, forcing them to reapply if they wish to re-join the group. You must have suitable permissions in the group to perform this operation.",
         "operationId": "GroupV2.KickMember",
         "parameters": [
@@ -2906,9 +2800,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -2954,9 +2846,7 @@
     },
     "/GroupV2/{groupId}/Members/{membershipType}/{membershipId}/Ban/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Bans the requested member from the requested group for the specified period of time.",
         "operationId": "GroupV2.BanMember",
         "parameters": [
@@ -2988,9 +2878,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3037,9 +2925,7 @@
     },
     "/GroupV2/{groupId}/Members/{membershipType}/{membershipId}/Unban/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Unbans the requested member, allowing them to re-apply for membership.",
         "operationId": "GroupV2.UnbanMember",
         "parameters": [
@@ -3071,9 +2957,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3120,9 +3004,7 @@
     },
     "/GroupV2/{groupId}/Banned/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get the list of banned members in a given group. Only accessible to group Admins and above. Not applicable to all groups. Check group features.",
         "operationId": "GroupV2.GetBannedMembersOfGroup",
         "parameters": [
@@ -3146,9 +3028,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3194,9 +3074,7 @@
     },
     "/GroupV2/{groupId}/Admin/AbdicateFoundership/{membershipType}/{founderIdNew}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "An administrative method to allow the founder of a group or clan to give up their position to another admin permanently.",
         "operationId": "GroupV2.AbdicateFoundership",
         "parameters": [
@@ -3269,9 +3147,7 @@
     },
     "/GroupV2/{groupId}/Members/Pending/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get the list of users who are awaiting a decision on their application to join a given group. Modified to include application info.",
         "operationId": "GroupV2.GetPendingMemberships",
         "parameters": [
@@ -3295,9 +3171,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3343,9 +3217,7 @@
     },
     "/GroupV2/{groupId}/Members/InvitedIndividuals/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get the list of users who have been invited into the group.",
         "operationId": "GroupV2.GetInvitedIndividuals",
         "parameters": [
@@ -3369,9 +3241,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3417,9 +3287,7 @@
     },
     "/GroupV2/{groupId}/Members/ApproveAll/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Approve all of the pending users for the given group.",
         "operationId": "GroupV2.ApproveAllPending",
         "parameters": [
@@ -3435,9 +3303,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3486,9 +3352,7 @@
     },
     "/GroupV2/{groupId}/Members/DenyAll/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Deny all of the pending users for the given group.",
         "operationId": "GroupV2.DenyAllPending",
         "parameters": [
@@ -3504,9 +3368,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3555,9 +3417,7 @@
     },
     "/GroupV2/{groupId}/Members/ApproveList/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Approve all of the pending users for the given group.",
         "operationId": "GroupV2.ApprovePendingForList",
         "parameters": [
@@ -3573,9 +3433,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3624,9 +3482,7 @@
     },
     "/GroupV2/{groupId}/Members/Approve/{membershipType}/{membershipId}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Approve the given membershipId to join the group/clan as long as they have applied.",
         "operationId": "GroupV2.ApprovePending",
         "parameters": [
@@ -3658,9 +3514,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3706,9 +3560,7 @@
     },
     "/GroupV2/{groupId}/Members/DenyList/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Deny all of the pending users for the given group that match the passed-in .",
         "operationId": "GroupV2.DenyPendingForList",
         "parameters": [
@@ -3724,9 +3576,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -3775,9 +3625,7 @@
     },
     "/GroupV2/User/{membershipType}/{membershipId}/{filter}/{groupType}/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get information about the groups that a given member has joined.",
         "operationId": "GroupV2.GetGroupsForMember",
         "parameters": [
@@ -3858,9 +3706,7 @@
     },
     "/GroupV2/Recover/{membershipType}/{membershipId}/{groupType}/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Allows a founder to manually recover a group they can see in game but not on bungie.net",
         "operationId": "GroupV2.RecoverGroupForFounder",
         "parameters": [
@@ -3933,9 +3779,7 @@
     },
     "/GroupV2/User/Potential/{membershipType}/{membershipId}/{filter}/{groupType}/": {
       "get": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Get information about the groups that a given member has applied to or been invited to.",
         "operationId": "GroupV2.GetPotentialGroupsForMember",
         "parameters": [
@@ -4016,9 +3860,7 @@
     },
     "/GroupV2/{groupId}/Members/IndividualInvite/{membershipType}/{membershipId}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Invite a user to join this group.",
         "operationId": "GroupV2.IndividualGroupInvite",
         "parameters": [
@@ -4050,9 +3892,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -4098,9 +3938,7 @@
     },
     "/GroupV2/{groupId}/Members/IndividualInviteCancel/{membershipType}/{membershipId}/": {
       "post": {
-        "tags": [
-          "GroupV2"
-        ],
+        "tags": ["GroupV2"],
         "description": "Cancels a pending invitation to join a group.",
         "operationId": "GroupV2.IndividualGroupInviteCancel",
         "parameters": [
@@ -4132,9 +3970,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdminGroups"
-            ]
+            "oauth2": ["AdminGroups"]
           }
         ],
         "responses": {
@@ -4180,18 +4016,14 @@
     },
     "/Tokens/Partner/ClaimOffer/": {
       "post": {
-        "tags": [
-          "Tokens"
-        ],
+        "tags": ["Tokens"],
         "description": "Claim a partner offer as the authenticated user.",
         "operationId": "Tokens.ClaimPartnerOffer",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "PartnerOfferGrant"
-            ]
+            "oauth2": ["PartnerOfferGrant"]
           }
         ],
         "responses": {
@@ -4237,9 +4069,7 @@
     },
     "/Tokens/Partner/ApplyMissingOffers/{partnerApplicationId}/{targetBnetMembershipId}/": {
       "post": {
-        "tags": [
-          "Tokens"
-        ],
+        "tags": ["Tokens"],
         "description": "Apply a partner offer to the targeted user. This endpoint does not claim a new offer, but any already claimed offers will be applied to the game if not already.",
         "operationId": "Tokens.ApplyMissingPartnerOffersWithoutClaim",
         "parameters": [
@@ -4263,9 +4093,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "PartnerOfferGrant"
-            ]
+            "oauth2": ["PartnerOfferGrant"]
           }
         ],
         "responses": {
@@ -4311,9 +4139,7 @@
     },
     "/Tokens/Partner/History/{partnerApplicationId}/{targetBnetMembershipId}/": {
       "get": {
-        "tags": [
-          "Tokens"
-        ],
+        "tags": ["Tokens"],
         "description": "Returns the partner sku and offer history of the targeted user. Elevated permissions are required to see users that are not yourself.",
         "operationId": "Tokens.GetPartnerOfferSkuHistory",
         "parameters": [
@@ -4337,9 +4163,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "PartnerOfferGrant"
-            ]
+            "oauth2": ["PartnerOfferGrant"]
           }
         ],
         "responses": {
@@ -4388,9 +4212,7 @@
     },
     "/Destiny2/Manifest/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns the current version of the manifest as a json object.",
         "operationId": "Destiny2.GetDestinyManifest",
         "parameters": [],
@@ -4438,9 +4260,7 @@
     },
     "/Destiny2/Manifest/{entityType}/{hashIdentifier}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns the static definition of an entity of the given Type and hash identifier. Examine the API Documentation for the Type Names of entities that have their own definitions. Note that the return type will always *inherit from* DestinyDefinition, but the specific type returned will be the requested entity type if it can be found. Please don't use this as a chatty alternative to the Manifest database if you require large sets of data, but for simple and one-off accesses this should be handy.",
         "operationId": "Destiny2.GetDestinyEntityDefinition",
         "parameters": [
@@ -4504,9 +4324,7 @@
     },
     "/Destiny2/SearchDestinyPlayer/{membershipType}/{displayName}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns a list of Destiny memberships given a full Gamertag or PSN ID. Unless you pass returnOriginalProfile=true, this will return membership information for the users' Primary Cross Save Profile if they are engaged in cross save rather than any original Destiny profile that is now being overridden.",
         "operationId": "Destiny2.SearchDestinyPlayer",
         "parameters": [
@@ -4579,9 +4397,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{membershipId}/LinkedProfiles/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns a summary information about all profiles linked to the requesting membership type/membership ID that have valid Destiny information. The passed-in Membership Type/Membership ID may be a Bungie.Net membership or a Destiny membership. It only returns the minimal amount of data to begin making more substantive requests, but will hopefully serve as a useful alternative to UserServices for people who just care about Destiny data. Note that it will only return linked accounts whose linkages you are allowed to view.",
         "operationId": "Destiny2.GetLinkedProfiles",
         "parameters": [
@@ -4652,9 +4468,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{destinyMembershipId}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns Destiny Profile information for the supplied membership.",
         "operationId": "Destiny2.GetProfile",
         "parameters": [
@@ -4733,9 +4547,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns character information for the supplied character.",
         "operationId": "Destiny2.GetCharacter",
         "parameters": [
@@ -4822,9 +4634,7 @@
     },
     "/Destiny2/Clan/{groupId}/WeeklyRewardState/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns information on the weekly clan rewards and if the clan has earned them or not. Note that this will always report rewards as not redeemed.",
         "operationId": "Destiny2.GetClanWeeklyRewardState",
         "parameters": [
@@ -4881,9 +4691,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{destinyMembershipId}/Item/{itemInstanceId}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Retrieve the details of an instanced Destiny Item. An instanced Destiny item is one with an ItemInstanceId. Non-instanced items, such as materials, have no useful instance-specific details and thus are not queryable here.",
         "operationId": "Destiny2.GetItem",
         "parameters": [
@@ -4970,9 +4778,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/Vendors/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Get currently available vendors from the list of vendors that can possibly have rotating inventory. Note that this does not include things like preview vendors and vendors-as-kiosks, neither of whom have rotating/dynamic inventories. Use their definitions as-is for those.",
         "operationId": "Destiny2.GetVendors",
         "parameters": [
@@ -5066,9 +4872,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/Vendors/{vendorHash}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Get the details of a specific Vendor.",
         "operationId": "Destiny2.GetVendor",
         "parameters": [
@@ -5163,10 +4967,7 @@
     },
     "/Destiny2//Vendors/": {
       "get": {
-        "tags": [
-          "Destiny2",
-          "Preview"
-        ],
+        "tags": ["Destiny2", "Preview"],
         "description": "Get items available from vendors where the vendors have items for sale that are common for everyone. If any portion of the Vendor's available inventory is character or account specific, we will be unable to return their data from this endpoint due to the way that available inventory is computed. As I am often guilty of saying: 'It's a long story...'",
         "operationId": "Destiny2.GetPublicVendors",
         "parameters": [
@@ -5230,9 +5031,7 @@
     },
     "/Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/Collectibles/{collectiblePresentationNodeHash}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Given a Presentation Node that has Collectibles as direct descendants, this will return item details about those descendants in the context of the requesting character.",
         "operationId": "Destiny2.GetCollectibleNodeDetails",
         "parameters": [
@@ -5327,18 +5126,14 @@
     },
     "/Destiny2/Actions/Items/TransferItem/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Transfer an item to/from your vault. You must have a valid Destiny account. You must also pass BOTH a reference AND an instance ID if it's an instanced item. itshappening.gif",
         "operationId": "Destiny2.TransferItem",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "MoveEquipDestinyItems"
-            ]
+            "oauth2": ["MoveEquipDestinyItems"]
           }
         ],
         "responses": {
@@ -5388,18 +5183,14 @@
     },
     "/Destiny2/Actions/Items/PullFromPostmaster/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Extract an item from the Postmaster, with whatever implications that may entail. You must have a valid Destiny account. You must also pass BOTH a reference AND an instance ID if it's an instanced item.",
         "operationId": "Destiny2.PullFromPostmaster",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "MoveEquipDestinyItems"
-            ]
+            "oauth2": ["MoveEquipDestinyItems"]
           }
         ],
         "responses": {
@@ -5449,18 +5240,14 @@
     },
     "/Destiny2/Actions/Items/EquipItem/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Equip an item. You must have a valid Destiny Account, and either be in a social space, in orbit, or offline.",
         "operationId": "Destiny2.EquipItem",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "MoveEquipDestinyItems"
-            ]
+            "oauth2": ["MoveEquipDestinyItems"]
           }
         ],
         "responses": {
@@ -5510,18 +5297,14 @@
     },
     "/Destiny2/Actions/Items/EquipItems/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Equip a list of items by itemInstanceIds. You must have a valid Destiny Account, and either be in a social space, in orbit, or offline. Any items not found on your character will be ignored.",
         "operationId": "Destiny2.EquipItems",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "MoveEquipDestinyItems"
-            ]
+            "oauth2": ["MoveEquipDestinyItems"]
           }
         ],
         "responses": {
@@ -5570,18 +5353,14 @@
     },
     "/Destiny2/Actions/Items/SetLockState/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Set the Lock State for an instanced item. You must have a valid Destiny Account.",
         "operationId": "Destiny2.SetItemLockState",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "MoveEquipDestinyItems"
-            ]
+            "oauth2": ["MoveEquipDestinyItems"]
           }
         ],
         "responses": {
@@ -5631,19 +5410,14 @@
     },
     "/Destiny2/Actions/Items/InsertSocketPlug/": {
       "post": {
-        "tags": [
-          "Destiny2",
-          "Preview"
-        ],
+        "tags": ["Destiny2", "Preview"],
         "description": "Insert a plug into a socketed item. I know how it sounds, but I assure you it's much more G-rated than you might be guessing. We haven't decided yet whether this will be able to insert plugs that have side effects, but if we do it will require special scope permission for an application attempting to do so. You must have a valid Destiny Account, and either be in a social space, in orbit, or offline. Request must include proof of permission for 'InsertPlugs' from the account owner.",
         "operationId": "Destiny2.InsertSocketPlug",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdvancedWriteActions"
-            ]
+            "oauth2": ["AdvancedWriteActions"]
           }
         ],
         "responses": {
@@ -5693,9 +5467,7 @@
     },
     "/Destiny2/Stats/PostGameCarnageReport/{activityId}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets the available post game carnage report for the activity ID.",
         "operationId": "Destiny2.GetPostGameCarnageReport",
         "parameters": [
@@ -5752,9 +5524,7 @@
     },
     "/Destiny2/Stats/PostGameCarnageReport/{activityId}/Report/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Report a player that you met in an activity that was engaging in ToS-violating activities. Both you and the offending player must have played in the activityId passed in. Please use this judiciously and only when you have strong suspicions of violation, pretty please.",
         "operationId": "Destiny2.ReportOffensivePostGameCarnageReportPlayer",
         "parameters": [
@@ -5770,9 +5540,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "BnetWrite"
-            ]
+            "oauth2": ["BnetWrite"]
           }
         ],
         "responses": {
@@ -5819,9 +5587,7 @@
     },
     "/Destiny2/Stats/Definition/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets historical stats definitions.",
         "operationId": "Destiny2.GetHistoricalStatsDefinition",
         "parameters": [],
@@ -5872,10 +5638,7 @@
     },
     "/Destiny2/Stats/Leaderboards/Clans/{groupId}/": {
       "get": {
-        "tags": [
-          "Destiny2",
-          "Preview"
-        ],
+        "tags": ["Destiny2", "Preview"],
         "description": "Gets leaderboards with the signed in user's friends and the supplied destinyMembershipId as the focus. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.",
         "operationId": "Destiny2.GetClanLeaderboards",
         "parameters": [
@@ -5958,10 +5721,7 @@
     },
     "/Destiny2/Stats/AggregateClanStats/{groupId}/": {
       "get": {
-        "tags": [
-          "Destiny2",
-          "Preview"
-        ],
+        "tags": ["Destiny2", "Preview"],
         "description": "Gets aggregated stats for a clan using the same categories as the clan leaderboards. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.",
         "operationId": "Destiny2.GetClanAggregateStats",
         "parameters": [
@@ -6028,10 +5788,7 @@
     },
     "/Destiny2/{membershipType}/Account/{destinyMembershipId}/Stats/Leaderboards/": {
       "get": {
-        "tags": [
-          "Destiny2",
-          "Preview"
-        ],
+        "tags": ["Destiny2", "Preview"],
         "description": "Gets leaderboards with the signed in user's friends and the supplied destinyMembershipId as the focus. PREVIEW: This endpoint has not yet been implemented. It is being returned for a preview of future functionality, and for public comment/suggestion/preparation.",
         "operationId": "Destiny2.GetLeaderboards",
         "parameters": [
@@ -6122,10 +5879,7 @@
     },
     "/Destiny2/Stats/Leaderboards/{membershipType}/{destinyMembershipId}/{characterId}/": {
       "get": {
-        "tags": [
-          "Destiny2",
-          "Preview"
-        ],
+        "tags": ["Destiny2", "Preview"],
         "description": "Gets leaderboards with the signed in user's friends and the supplied destinyMembershipId as the focus. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.",
         "operationId": "Destiny2.GetLeaderboardsForCharacter",
         "parameters": [
@@ -6224,9 +5978,7 @@
     },
     "/Destiny2/Armory/Search/{type}/{searchTerm}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets a page list of Destiny items.",
         "operationId": "Destiny2.SearchDestinyEntities",
         "parameters": [
@@ -6296,9 +6048,7 @@
     },
     "/Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets historical stats for indicated character.",
         "operationId": "Destiny2.GetHistoricalStats",
         "parameters": [
@@ -6423,9 +6173,7 @@
     },
     "/Destiny2/{membershipType}/Account/{destinyMembershipId}/Stats/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets aggregate historical stats organized around each character for a given account.",
         "operationId": "Destiny2.GetHistoricalStatsForAccount",
         "parameters": [
@@ -6504,9 +6252,7 @@
     },
     "/Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/Activities/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets activity history stats for indicated character.",
         "operationId": "Destiny2.GetActivityHistory",
         "parameters": [
@@ -6600,9 +6346,7 @@
     },
     "/Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/UniqueWeapons/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets details about unique weapon usage, including all exotic weapons.",
         "operationId": "Destiny2.GetUniqueWeaponHistory",
         "parameters": [
@@ -6675,9 +6419,7 @@
     },
     "/Destiny2/{membershipType}/Account/{destinyMembershipId}/Character/{characterId}/Stats/AggregateActivityStats/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets all activities the character has participated in together with aggregate statistics for those activities.",
         "operationId": "Destiny2.GetDestinyAggregateActivityStats",
         "parameters": [
@@ -6750,9 +6492,7 @@
     },
     "/Destiny2/Milestones/{milestoneHash}/Content/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets custom localized content for the milestone of the given hash, if it exists.",
         "operationId": "Destiny2.GetPublicMilestoneContent",
         "parameters": [
@@ -6809,9 +6549,7 @@
     },
     "/Destiny2/Milestones/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Gets public information about currently available Milestones.",
         "operationId": "Destiny2.GetPublicMilestones",
         "parameters": [],
@@ -6862,18 +6600,14 @@
     },
     "/Destiny2/Awa/Initialize/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Initialize a request to perform an advanced write action.",
         "operationId": "Destiny2.AwaInitializeRequest",
         "parameters": [],
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdvancedWriteActions"
-            ]
+            "oauth2": ["AdvancedWriteActions"]
           }
         ],
         "responses": {
@@ -6919,9 +6653,7 @@
     },
     "/Destiny2/Awa/AwaProvideAuthorizationResult/": {
       "post": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Provide the result of the user interaction. Called by the Bungie Destiny App to approve or reject a request.",
         "operationId": "Destiny2.AwaProvideAuthorizationResult",
         "parameters": [],
@@ -6970,9 +6702,7 @@
     },
     "/Destiny2/Awa/GetActionToken/{correlationId}/": {
       "get": {
-        "tags": [
-          "Destiny2"
-        ],
+        "tags": ["Destiny2"],
         "description": "Returns the action token if user approves the request.",
         "operationId": "Destiny2.AwaGetActionToken",
         "parameters": [
@@ -6987,9 +6717,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "AdvancedWriteActions"
-            ]
+            "oauth2": ["AdvancedWriteActions"]
           }
         ],
         "responses": {
@@ -7035,9 +6763,7 @@
     },
     "/CommunityContent/Get/{sort}/{mediaFilter}/{page}/": {
       "get": {
-        "tags": [
-          "CommunityContent"
-        ],
+        "tags": ["CommunityContent"],
         "description": "Returns community content.",
         "operationId": "CommunityContent.GetCommunityContent",
         "parameters": [
@@ -7110,9 +6836,7 @@
     },
     "/Trending/Categories/": {
       "get": {
-        "tags": [
-          "Trending"
-        ],
+        "tags": ["Trending"],
         "description": "Returns trending items for Bungie.net, collapsed into the first page of items per category. For pagination within a category, call GetTrendingCategory.",
         "operationId": "Trending.GetTrendingCategories",
         "parameters": [],
@@ -7160,9 +6884,7 @@
     },
     "/Trending/Categories/{categoryId}/{pageNumber}/": {
       "get": {
-        "tags": [
-          "Trending"
-        ],
+        "tags": ["Trending"],
         "description": "Returns paginated lists of trending items for a category.",
         "operationId": "Trending.GetTrendingCategory",
         "parameters": [
@@ -7226,9 +6948,7 @@
     },
     "/Trending/Details/{trendingEntryType}/{identifier}/": {
       "get": {
-        "tags": [
-          "Trending"
-        ],
+        "tags": ["Trending"],
         "description": "Returns the detailed results for a specific trending entry. Note that trending entries are uniquely identified by a combination of *both* the TrendingEntryType *and* the identifier: the identifier alone is not guaranteed to be globally unique.",
         "operationId": "Trending.GetTrendingEntryDetail",
         "parameters": [
@@ -7292,9 +7012,7 @@
     },
     "/Fireteam/Clan/{groupId}/ActiveCount/": {
       "get": {
-        "tags": [
-          "Fireteam"
-        ],
+        "tags": ["Fireteam"],
         "description": "Gets a count of all active non-public fireteams for the specified clan. Maximum value returned is 25.",
         "operationId": "Fireteam.GetActivePrivateClanFireteamCount",
         "parameters": [
@@ -7310,9 +7028,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadGroups"
-            ]
+            "oauth2": ["ReadGroups"]
           }
         ],
         "responses": {
@@ -7359,9 +7075,7 @@
     },
     "/Fireteam/Clan/{groupId}/Available/{platform}/{activityType}/{dateRange}/{slotFilter}/{publicOnly}/{page}/": {
       "get": {
-        "tags": [
-          "Fireteam"
-        ],
+        "tags": ["Fireteam"],
         "description": "Gets a listing of all of this clan's fireteams that are have available slots. Caller is not checked for join criteria so caching is maximized.",
         "operationId": "Fireteam.GetAvailableClanFireteams",
         "parameters": [
@@ -7431,9 +7145,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadGroups"
-            ]
+            "oauth2": ["ReadGroups"]
           }
         ],
         "responses": {
@@ -7479,9 +7191,7 @@
     },
     "/Fireteam/Search/Available/{platform}/{activityType}/{dateRange}/{slotFilter}/{page}/": {
       "get": {
-        "tags": [
-          "Fireteam"
-        ],
+        "tags": ["Fireteam"],
         "description": "Gets a listing of all public fireteams starting now with open slots. Caller is not checked for join criteria so caching is maximized.",
         "operationId": "Fireteam.SearchPublicAvailableClanFireteams",
         "parameters": [
@@ -7535,9 +7245,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadGroups"
-            ]
+            "oauth2": ["ReadGroups"]
           }
         ],
         "responses": {
@@ -7583,9 +7291,7 @@
     },
     "/Fireteam/Clan/{groupId}/My/{platform}/{includeClosed}/{page}/": {
       "get": {
-        "tags": [
-          "Fireteam"
-        ],
+        "tags": ["Fireteam"],
         "description": "Gets a listing of all clan fireteams that caller is an applicant, a member, or an alternate of.",
         "operationId": "Fireteam.GetMyClanFireteams",
         "parameters": [
@@ -7637,9 +7343,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadGroups"
-            ]
+            "oauth2": ["ReadGroups"]
           }
         ],
         "responses": {
@@ -7685,9 +7389,7 @@
     },
     "/Fireteam/Clan/{groupId}/Summary/{fireteamId}/": {
       "get": {
-        "tags": [
-          "Fireteam"
-        ],
+        "tags": ["Fireteam"],
         "description": "Gets a specific clan fireteam.",
         "operationId": "Fireteam.GetClanFireteam",
         "parameters": [
@@ -7711,9 +7413,7 @@
         "deprecated": false,
         "security": [
           {
-            "oauth2": [
-              "ReadGroups"
-            ]
+            "oauth2": ["ReadGroups"]
           }
         ],
         "responses": {
@@ -7759,9 +7459,7 @@
     },
     "/GetAvailableLocales/": {
       "get": {
-        "tags": [
-          ""
-        ],
+        "tags": [""],
         "description": "List of available localization cultures",
         "operationId": ".GetAvailableLocales",
         "parameters": [],
@@ -7812,9 +7510,7 @@
     },
     "/Settings/": {
       "get": {
-        "tags": [
-          ""
-        ],
+        "tags": [""],
         "description": "Get the common settings used by the Bungie.Net environment.",
         "operationId": ".GetCommonSettings",
         "parameters": [],
@@ -7862,9 +7558,7 @@
     },
     "/GlobalAlerts/": {
       "get": {
-        "tags": [
-          ""
-        ],
+        "tags": [""],
         "description": "Gets any active global alert for display in the forum banners, help pages, etc. Usually used for DOC alerts.",
         "operationId": ".GetGlobalAlerts",
         "parameters": [
@@ -8150,11 +7844,7 @@
     },
     "Applications.OAuthApplicationType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -8175,13 +7865,7 @@
     },
     "Applications.ApplicationStatus": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -8232,11 +7916,7 @@
     },
     "Applications.DeveloperRole": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -8279,17 +7959,7 @@
     "BungieMembershipType": {
       "format": "int32",
       "description": "The types of membership the Accounts system supports. This is the external facing enum used in place of the internal-only Bungie.SharedDefinitions.MembershipType.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "10",
-        "254",
-        "-1"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "10", "254", "-1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -8580,15 +8250,7 @@
     },
     "Ignores.IgnoreStatus": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -9415,17 +9077,7 @@
     },
     "Forum.ForumTopicsCategoryFiltersEnum": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64",
-        "128"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64", "128"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -9468,13 +9120,7 @@
     },
     "Forum.ForumTopicsQuickDateEnum": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -9501,16 +9147,7 @@
     },
     "Forum.ForumTopicsSortEnum": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -9608,12 +9245,7 @@
     },
     "Forum.ForumMediaType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -9636,14 +9268,7 @@
     },
     "Forum.ForumPostPopularity": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -9742,17 +9367,7 @@
     },
     "Forums.ForumFlagsEnum": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64",
-        "128"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64", "128"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10061,10 +9676,7 @@
     },
     "GroupsV2.GroupType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10079,10 +9691,7 @@
     },
     "GroupsV2.ChatSecuritySetting": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10097,11 +9706,7 @@
     },
     "GroupsV2.GroupHomepage": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10120,11 +9725,7 @@
     },
     "GroupsV2.MembershipOption": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10143,11 +9744,7 @@
     },
     "GroupsV2.GroupPostPublicity": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10226,16 +9823,7 @@
     },
     "GroupsV2.Capabilities": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10286,11 +9874,7 @@
     "GroupsV2.HostGuidedGamesPermissionLevel": {
       "format": "int32",
       "description": "Used for setting the guided game permission level override (admins and founders can always host guided games).",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10310,14 +9894,7 @@
     "GroupsV2.RuntimeGroupMemberType": {
       "format": "int32",
       "description": "The member levels used by all V2 Groups API. Individual group types use their own mappings in their native storage (general uses BnetDbGroupMemberType and D2 clans use ClanMemberLevel), but they are all translated to this in the runtime api. These runtime values should NEVER be stored anywhere, so the values can be changed as necessary.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10514,13 +10091,7 @@
     "Destiny.DestinyProgressionRewardItemState": {
       "format": "int32",
       "description": "Represents the different states a progression reward item can be in.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8"
-      ],
+      "enum": ["0", "1", "2", "4", "8"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10722,17 +10293,7 @@
     "Destiny.DestinyProgressionScope": {
       "format": "int32",
       "description": "There are many Progressions in Destiny (think Character Level, or Reputation). These are the various \"Scopes\" of Progressions, which affect many things: * Where/if they are stored * How they are calculated * Where they can be used in other game logic",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -10810,11 +10371,7 @@
     "Destiny.DestinyProgressionStepDisplayEffect": {
       "format": "int32",
       "description": "If progression is earned, this determines whether the progression shows visual effects on the character or its item - or neither.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -11536,15 +11093,7 @@
     },
     "Destiny.TierType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -11649,10 +11198,7 @@
     },
     "Destiny.BucketScope": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -11667,13 +11213,7 @@
     },
     "Destiny.BucketCategory": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -11700,13 +11240,7 @@
     },
     "Destiny.ItemLocation": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -11948,11 +11482,7 @@
     "Destiny.DestinyStatAggregationType": {
       "format": "int32",
       "description": "When a Stat (DestinyStatDefinition) is aggregated, this is the rules used for determining the level and formula used for aggregation.\r\n* CharacterAverage = apply a weighted average using the related DestinyStatGroupDefinition on the DestinyInventoryItemDefinition across the character's equipped items. See both of those definitions for details. * Character = don't aggregate: the stat should be located and used directly on the character. * Item = don't aggregate: the stat should be located and used directly on the item.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -11972,12 +11502,7 @@
     "Destiny.DestinyStatCategory": {
       "format": "int32",
       "description": "At last, stats have categories. Use this for whatever purpose you might wish.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -12165,10 +11690,7 @@
     },
     "Destiny.EquippingItemBlockAttributes": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -12183,13 +11705,7 @@
     },
     "Destiny.DestinyAmmunitionType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -12890,10 +12406,7 @@
     "Destiny.VendorDisplayCategorySortOrder": {
       "format": "int32",
       "description": "Display categories can have custom sort orders. These are the possible options.",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13016,11 +12529,7 @@
     "Destiny.DestinyVendorInteractionRewardSelection": {
       "format": "int32",
       "description": "When a Vendor Interaction provides rewards, they'll either let you choose one or let you have all of them. This determines which it will be.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13040,11 +12549,7 @@
     "Destiny.DestinyVendorReplyType": {
       "format": "int32",
       "description": "This determines the type of reply that a Vendor will have during an Interaction.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13074,19 +12579,7 @@
     "Destiny.VendorInteractionType": {
       "format": "int32",
       "description": "An enumeration of the known UI interactions for Vendors.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13214,11 +12707,7 @@
     "Destiny.DestinyItemSortType": {
       "format": "int32",
       "description": "Determines how items are sorted in an inventory bucket.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13423,11 +12912,7 @@
     "Destiny.DestinyVendorItemRefundPolicy": {
       "format": "int32",
       "description": "The action that happens when the user attempts to refund an item.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13470,15 +12955,7 @@
     "Destiny.DestinyGatingScope": {
       "format": "int32",
       "description": "This enumeration represents the most restrictive type of gating that is being performed by an entity. This is useful as a shortcut to avoid a lot of lookups when determining whether the gating on an Entity applies to everyone equally, or to their specific Profile or Character states.\r\nNone = There is no gating on this item.\r\nGlobal = The gating on this item is based entirely on global game state. It will be gated the same for everyone.\r\nClan = The gating on this item is at the Clan level. For instance, if you're gated by Clan level this will be the case.\r\nProfile = The gating includes Profile-specific checks, but not on the Profile's characters. An example of this might be when you acquire an Emblem: the Emblem will be available in your Kiosk for all characters in your Profile from that point onward.\r\nCharacter = The gating includes Character-specific checks, including character level restrictions. An example of this might be an item that you can't purchase from a Vendor until you reach a specific Character Level.\r\nItem = The gating includes item-specific checks. For BNet, this generally implies that we'll show this data only on a character level or deeper.\r\nAssumedWorstCase = The unlocks and checks being used for this calculation are of an unknown type and are used for unknown purposes. For instance, if some great person decided that an unlock value should be globally scoped, but then the game changes it using character-specific data in a way that BNet doesn't know about. Because of the open-ended potential for this to occur, many unlock checks for \"globally\" scoped unlock data may be assumed as the worst case unless it has been specifically whitelisted as otherwise. That sucks, but them's the breaks.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13643,11 +13120,7 @@
     "Destiny.SocketTypeActionType": {
       "format": "int32",
       "description": "Indicates the type of actions that can be performed",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13689,12 +13162,7 @@
     },
     "Destiny.DestinySocketVisibility": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -13768,15 +13236,7 @@
     "Destiny.DestinySocketCategoryStyle": {
       "format": "int32",
       "description": "Represents the possible and known UI styles used by the game for rendering Socket Categories.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -14081,13 +13541,7 @@
     "Destiny.ActivityGraphNodeHighlightType": {
       "format": "int32",
       "description": "The various known UI styles in which an item can be highlighted. It'll be up to you to determine what you want to show based on this highlighting, BNet doesn't have any assets that correspond to these states. And yeah, RiseOfIron and Comet have their own special highlight states. Don't ask me, I can't imagine they're still used.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -15062,11 +14516,7 @@
     "Destiny.DestinyObjectiveGrantStyle": {
       "format": "int32",
       "description": "Some Objectives provide perks, generally as part of providing some kind of interesting modifier for a Challenge or Quest. This indicates when the Perk is granted.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -15145,14 +14595,7 @@
     },
     "Destiny.DamageType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -15307,16 +14750,7 @@
     },
     "Destiny.Definitions.DestinyTalentNodeStepImpactEffects": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "63"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "63"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -15355,18 +14789,7 @@
     },
     "Destiny.Definitions.DestinyTalentNodeStepGuardianAttributes": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64",
-        "128",
-        "255"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64", "128", "255"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -15413,16 +14836,7 @@
     },
     "Destiny.Definitions.DestinyTalentNodeStepLightAbilities": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "63"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "63"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -15461,14 +14875,7 @@
     },
     "Destiny.Definitions.DestinyTalentNodeStepDamageTypes": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "15"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "15"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -16691,12 +16098,7 @@
     "Destiny.DestinyActivityModeCategory": {
       "format": "int32",
       "description": "Activity Modes are grouped into a few possible broad categories.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -17090,13 +16492,7 @@
     "Destiny.DestinyGraphNodeState": {
       "format": "int32",
       "description": "Represents a potential state of an Activity Graph node.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -17773,12 +17169,7 @@
     "Destiny.Definitions.DestinyRewardSourceCategory": {
       "format": "int32",
       "description": "BNet's custom categorization of reward sources. We took a look at the existing ways that items could be spawned, and tried to make high-level categorizations of them. This needs to be re-evaluated for Destiny 2.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -17982,13 +17373,7 @@
     },
     "Destiny.DestinyPresentationNodeType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -18223,10 +17608,7 @@
     "Destiny.DestinyScope": {
       "format": "int32",
       "description": "There's a lot of places where we need to know scope on more than just a profile or character level. For everything else, there's this more generic sense of scope.",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -18535,13 +17917,7 @@
     "Destiny.DestinyPresentationDisplayStyle": {
       "format": "int32",
       "description": "A hint for how the presentation node should be displayed when shown in a list. How you use this is your UI is up to you.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -18704,13 +18080,7 @@
     },
     "Destiny.DestinyRecordValueStyle": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -18761,11 +18131,7 @@
     },
     "Destiny.DestinyGender": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -18840,14 +18206,7 @@
     },
     "Destiny.DestinyRecordToastStyle": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -19040,11 +18399,7 @@
     "Destiny.DestinyPresentationScreenStyle": {
       "format": "int32",
       "description": "A hint for what screen should be shown when this presentation node is clicked into. How you use this is your UI is up to you.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -19196,10 +18551,7 @@
     "Destiny.PlugUiStyles": {
       "format": "int32",
       "description": "If the plug has a specific custom style, this enumeration will represent that style/those styles.",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -19215,11 +18567,7 @@
     "Destiny.PlugAvailabilityMode": {
       "format": "int32",
       "description": "This enum determines whether the plug is available to be inserted.\r\n- Normal means that all existing rules for plug insertion apply.\r\n- UnavailableIfSocketContainsMatchingPlugCategory means that the plug is only available if the socket does NOT match the plug category.\r\n- AvailableIfSocketContainsMatchingPlugCategory means that the plug is only available if the socket DOES match the plug category.\r\nFor category matching, use the plug's \"plugCategoryIdentifier\" property, comparing it to",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -19280,12 +18628,7 @@
     "Destiny.DestinyEnergyType": {
       "format": "int32",
       "description": "Represents an Energy Type for systems that require payment of energy of certain types, such as with Armor 2.0.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -19548,13 +18891,7 @@
     "Destiny.SocketPlugSources": {
       "format": "int32",
       "description": "Indicates how a socket is populated, and where you should look for valid plug data.\r\n This is a flags enumeration/bitmask field, as you may have to look in multiple sources across multiple components for valid plugs.\r\n For instance, a socket could have plugs that are sourced from its own definition, as well as plugs that are sourced from Character-scoped AND profile-scoped Plug Sets. Only by combining plug data for every indicated source will you be able to know all of the plugs available for a socket.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8"
-      ],
+      "enum": ["0", "1", "2", "4", "8"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20240,11 +19577,7 @@
     "Destiny.ItemPerkVisibility": {
       "format": "int32",
       "description": "Indicates how a perk should be shown, or if it should be, in the game UI. Maybe useful for those of you trying to filter out internal-use-only perks (or for those of you trying to figure out what they do!)",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20289,17 +19622,7 @@
     "Destiny.SpecialItemType": {
       "format": "int32",
       "description": "As you run into items that need to be classified for Milestone purposes in ways that we cannot infer via direct data, add a new classification here and use a string constant to represent it in the local item config file.\r\nNOTE: This is not all of the item types available, and some of these are holdovers from Destiny 1 that may or may not still exist.",
-      "enum": [
-        "0",
-        "1",
-        "8",
-        "9",
-        "23",
-        "24",
-        "25",
-        "27",
-        "29"
-      ],
+      "enum": ["0", "1", "8", "9", "23", "24", "25", "27", "29"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20486,12 +19809,7 @@
     },
     "Destiny.DestinyClass": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20515,12 +19833,7 @@
     "Destiny.DestinyBreakerType": {
       "format": "int32",
       "description": "A plug can optionally have a \"Breaker Type\": a special ability that can affect units in unique ways. Activating this plug can grant one of these types.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20835,10 +20148,7 @@
     "Destiny.DestinyProgressionRewardItemAcquisitionBehavior": {
       "format": "int32",
       "description": "Represents the different kinds of acquisition behavior for progression reward items.",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20905,11 +20215,7 @@
     },
     "GroupsV2.GroupAllianceStatus": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -20954,11 +20260,7 @@
     },
     "GroupsV2.GroupPotentialMemberStatus": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21084,11 +20386,7 @@
     },
     "Forum.ForumRecruitmentIntensityLabel": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21107,11 +20405,7 @@
     },
     "Forum.ForumRecruitmentToneLabel": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21130,10 +20424,7 @@
     },
     "Forum.ForumPostSortEnum": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21162,13 +20453,7 @@
     },
     "GroupsV2.GroupDateRange": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21339,12 +20624,7 @@
         },
         "groupMemberCountFilter": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1",
-            "2",
-            "3"
-          ],
+          "enum": ["0", "1", "2", "3"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21386,12 +20666,7 @@
     },
     "GroupsV2.GroupSortBy": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21414,12 +20689,7 @@
     },
     "GroupsV2.GroupMemberCountFilter": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21508,11 +20778,7 @@
         },
         "membershipOption": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "enum": ["0", "1", "2"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21537,10 +20803,7 @@
         },
         "chatSecurity": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1"
-          ],
+          "enum": ["0", "1"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21561,11 +20824,7 @@
         },
         "homepage": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "enum": ["0", "1", "2"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21587,11 +20846,7 @@
         },
         "defaultPublicity": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "enum": ["0", "1", "2"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21624,11 +20879,7 @@
         "HostGuidedGamePermissionOverride": {
           "format": "int32",
           "description": "Minimum Member Level allowed to host guided games\r\nAlways Allowed: Founder, Acting Founder, Admin\r\nAllowed Overrides: None, Member, Beginner\r\nDefault is Member for clans, None for groups, although this means nothing for groups.",
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "enum": ["0", "1", "2"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21652,14 +20903,7 @@
         "JoinLevel": {
           "format": "int32",
           "description": "Level to join a member at when accepting an invite, application, or joining an open clan\r\nDefault is Beginner.",
-          "enum": [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"
-          ],
+          "enum": ["0", "1", "2", "3", "4", "5"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21716,10 +20960,7 @@
         },
         "chatSecurity": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1"
-          ],
+          "enum": ["0", "1"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -21790,20 +21031,7 @@
     },
     "Ignores.IgnoreLength": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -21958,12 +21186,7 @@
     },
     "GroupsV2.GroupApplicationResolveState": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -25892,11 +25115,7 @@
     },
     "GroupsV2.GroupsForMemberFilter": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -26159,17 +25378,7 @@
         },
         "MembershipType": {
           "format": "int32",
-          "enum": [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "10",
-            "254",
-            "-1"
-          ],
+          "enum": ["0", "1", "2", "3", "4", "5", "10", "254", "-1"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -26369,15 +25578,7 @@
         "unpairedGameVersions": {
           "format": "int32",
           "description": "If this profile is not in a cross save pairing, this will return the game versions that we believe this profile has access to.\r\n For the time being, we will not return this information for any membership that is in a cross save pairing. The gist is that, once the pairing occurs, we do not currently have a consistent way to get that information for the profile's original Platform, and thus gameVersions would be too inconsistent (based on the last platform they happened to play on) for the info to be useful.\r\n If we ever can get this data, this field will be deprecated and replaced with data on the DestinyLinkedProfileResponse itself, with game versions per linked Platform. But since we can't get that, we have this as a stop-gap measure for getting the data in the only situation that we currently need it.",
-          "enum": [
-            "0",
-            "1",
-            "2",
-            "4",
-            "8",
-            "16",
-            "32"
-          ],
+          "enum": ["0", "1", "2", "4", "8", "16", "32"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -26588,12 +25789,7 @@
     },
     "Destiny.ItemBindStatus": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -26617,12 +25813,7 @@
     "Destiny.TransferStatuses": {
       "format": "int32",
       "description": "Whether you can transfer an item, and why not if you can't.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -26650,12 +25841,7 @@
     "Destiny.ItemState": {
       "format": "int32",
       "description": "A flags enumeration/bitmask where each bit represents a different possible state that the item can be in that may effect how the item is displayed to the user and what actions can be performed against it.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -26730,15 +25916,7 @@
     "Destiny.DestinyGameVersions": {
       "format": "int32",
       "description": "A flags enumeration/bitmask indicating the versions of the game that a given user has purchased.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -27367,11 +26545,7 @@
     "Components.ComponentPrivacySetting": {
       "format": "int32",
       "description": "A set of flags for reason(s) why the component populated in the way that it did. Inspect the individual flags for the reasons.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -27959,11 +27133,7 @@
     "Destiny.DestinyPresentationNodeState": {
       "format": "int32",
       "description": "I know this doesn't look like a Flags Enumeration/bitmask right now, but I assure you it is. This is the possible states that a Presentation Node can be in, and it is almost certain that its potential states will increase in the future. So don't treat it like a straight up enumeration.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -28060,16 +27230,7 @@
     "Destiny.DestinyRecordState": {
       "format": "int32",
       "description": "A Flags enumeration/bitmask where each bit represents a possible state that a Record/Triumph can be in.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -28220,16 +27381,7 @@
     "Destiny.DestinyCollectibleState": {
       "format": "int32",
       "description": "A Flags Enumeration/bitmask where each bit represents a different state that the Collectible can be in. A collectible can be in any number of these states, and you can choose to use or ignore any or all of them when making your own UI that shows Collectible info. Our displays are going to honor them, but we're also the kind of people who only pretend to inhale before quickly passing it to the left. So, you know, do what you got to do.\r\n(All joking aside, please note the caveat I mention around the Invisible flag: there are cases where it is in the best interest of your users to honor these flags even if you're a \"show all the data\" person. Collector-oriented compulsion is a very unfortunate and real thing, and I would hate to instill that compulsion in others through showing them items that they cannot earn. Please consider this when you are making your own apps/sites.)",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -28426,13 +27578,7 @@
     "Destiny.DestinyPartyMemberStates": {
       "format": "int32",
       "description": "A flags enumeration that represents a Fireteam Member's status.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8"
-      ],
+      "enum": ["0", "1", "2", "4", "8"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -28527,13 +27673,7 @@
     "Destiny.DestinyGamePrivacySetting": {
       "format": "int32",
       "description": "A player can choose to restrict requests to join their Fireteam to specific states. These are the possible states a user can choose.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -28561,15 +27701,7 @@
     "Destiny.DestinyJoinClosedReasons": {
       "format": "int32",
       "description": "A Flags enumeration representing the reasons why a person can't join this user's fireteam.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32768"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32768"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -28882,12 +28014,7 @@
     },
     "Destiny.DestinyRace": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -30540,11 +29667,7 @@
     "Destiny.Definitions.Milestones.DestinyMilestoneDisplayPreference": {
       "format": "int32",
       "description": "A hint for the UI as to what display information ought to be shown. Defaults to showing the static MilestoneDefinition's display properties.\r\n If for some reason the indicated property is not populated, fall back to the MilestoneDefinition.displayProperties.",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -30567,14 +29690,7 @@
     "Destiny.Definitions.Milestones.DestinyMilestoneType": {
       "format": "int32",
       "description": "The type of milestone. Milestones can be Tutorials, one-time/triggered/non-repeating but not necessarily tutorials, or Repeating Milestones.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -31710,16 +30826,7 @@
     "Destiny.DestinyActivityDifficultyTier": {
       "format": "int32",
       "description": "An enumeration representing the potential difficulty levels of an activity. Their names are... more qualitative than quantitative.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -32143,12 +31250,7 @@
         "breakerType": {
           "format": "int32",
           "description": "If populated, this item has a breaker type corresponding to the given value. See DestinyBreakerTypeDefinition for more details.",
-          "enum": [
-            "0",
-            "1",
-            "2",
-            "3"
-          ],
+          "enum": ["0", "1", "2", "3"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -32211,14 +31313,7 @@
     "Destiny.EquipFailureReason": {
       "format": "int32",
       "description": "The reasons why an item cannot be equipped, if any. Many flags can be set, or \"None\" if",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -33545,9 +32640,7 @@
     "Destiny.DestinyVendorFilter": {
       "format": "int32",
       "description": "Indicates the type of filter to apply to Vendor results.",
-      "enum": [
-        "0"
-      ],
+      "enum": ["0"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -35312,10 +34405,7 @@
     "Destiny.Requests.Actions.DestinySocketArrayType": {
       "format": "int32",
       "description": "If you look in the DestinyInventoryItemDefinition's \"sockets\" property, you'll see that there are two types of sockets: intrinsic, and \"socketEntry.\"\r\nUnfortunately, because Intrinsic sockets are a whole separate array, it is no longer sufficient to know the index into that array to know which socket we're talking about. You have to know whether it's in the default \"socketEntries\" or if it's in the \"intrinsic\" list.",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -35810,11 +34900,7 @@
         "mergeMethod": {
           "format": "int32",
           "description": "Optional icon for the statistic",
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "enum": ["0", "1", "2"],
           "type": "integer",
           "x-enum-values": [
             {
@@ -35854,17 +34940,7 @@
     "Destiny.HistoricalStats.Definitions.DestinyStatsGroupType": {
       "format": "int32",
       "description": "If the enum value is > 100, it is a \"special\" group that cannot be queried for directly (special cases apply to when they are returned, and are not relevant in general cases)",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "100",
-        "101",
-        "102",
-        "103",
-        "104"
-      ],
+      "enum": ["0", "1", "2", "3", "100", "101", "102", "103", "104"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -36111,11 +35187,7 @@
     },
     "Destiny.HistoricalStats.Definitions.DestinyStatsMergeMethod": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -36310,12 +35382,7 @@
     },
     "Destiny.HistoricalStats.Definitions.PeriodType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -37638,10 +36705,7 @@
     },
     "Destiny.Advanced.AwaType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -37682,11 +36746,7 @@
     },
     "Destiny.Advanced.AwaUserSelection": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -37759,12 +36819,7 @@
     },
     "Destiny.Advanced.AwaResponseReason": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -37790,11 +36845,7 @@
     },
     "Forum.CommunityContentSortMode": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -37911,20 +36962,7 @@
     "Trending.TrendingEntryType": {
       "format": "int32",
       "description": "The known entity types that you can have returned from Trending.",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -38184,13 +37222,7 @@
     },
     "Fireteam.FireteamDateRange": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -38217,14 +37249,7 @@
     },
     "Fireteam.FireteamPlatform": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "enum": ["0", "1", "2", "3", "4", "5"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -38255,11 +37280,7 @@
     },
     "Fireteam.FireteamPublicSearchOption": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -38278,11 +37299,7 @@
     },
     "Fireteam.FireteamSlotSearch": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2"
-      ],
+      "enum": ["0", "1", "2"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -38530,13 +37547,7 @@
     },
     "Fireteam.FireteamPlatformInviteResult": {
       "format": "byte",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "enum": ["0", "1", "2", "3", "4"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -38875,18 +37886,7 @@
     },
     "User.OptInFlags": {
       "format": "int64",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "16",
-        "32",
-        "64",
-        "128",
-        "256"
-      ],
+      "enum": ["0", "1", "2", "4", "8", "16", "32", "64", "128", "256"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -39081,12 +38081,7 @@
     },
     "GlobalAlertLevel": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "enum": ["0", "1", "2", "3"],
       "type": "integer",
       "x-enum-values": [
         {
@@ -39109,10 +38104,7 @@
     },
     "GlobalAlertType": {
       "format": "int32",
-      "enum": [
-        "0",
-        "1"
-      ],
+      "enum": ["0", "1"],
       "type": "integer",
       "x-enum-values": [
         {

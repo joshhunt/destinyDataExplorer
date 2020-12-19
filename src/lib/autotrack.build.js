@@ -1,10 +1,10 @@
 /* eslint-disable */
 
-(function() {
+(function () {
   var f =
       "function" == typeof Object.defineProperties
         ? Object.defineProperty
-        : function(a, b, c) {
+        : function (a, b, c) {
             if (c.get || c.set)
               throw new TypeError("ES3 does not support getters and setters.");
             a != Array.prototype && a != Object.prototype && (a[b] = c.value);
@@ -16,7 +16,7 @@
         ? global
         : this;
   function h() {
-    h = function() {};
+    h = function () {};
     g.Symbol || (g.Symbol = k);
   }
   var l = 0;
@@ -31,22 +31,22 @@
       f(Array.prototype, a, {
         configurable: !0,
         writable: !0,
-        value: function() {
+        value: function () {
           return n(this);
-        }
+        },
       });
-    m = function() {};
+    m = function () {};
   }
   function n(a) {
     var b = 0;
-    return p(function() {
+    return p(function () {
       return b < a.length ? { done: !1, value: a[b++] } : { done: !0 };
     });
   }
   function p(a) {
     m();
     a = { next: a };
-    a[g.Symbol.iterator] = function() {
+    a[g.Symbol.iterator] = function () {
       return this;
     };
     return a;
@@ -86,7 +86,7 @@
       pathname: "/" == v.pathname.charAt(0) ? v.pathname : "/" + v.pathname,
       port: b,
       protocol: v.protocol,
-      search: v.search
+      search: v.search,
     });
   }
   var z = [];
@@ -97,7 +97,7 @@
     this.f = (this.c = /Task$/.test(b)) ? a.get(b) : a[b];
     this.b = [];
     this.a = [];
-    this.g = function(a) {
+    this.g = function (a) {
       for (var b = [], d = 0; d < arguments.length; ++d)
         b[d - 0] = arguments[d];
       return c.a[c.a.length - 1].apply(null, [].concat(t(b)));
@@ -127,7 +127,7 @@
     }
   }
   function E(a, b) {
-    var c = z.filter(function(c) {
+    var c = z.filter(function (c) {
       return c.context == a && c.h == b;
     })[0];
     c || ((c = new A(a, b)), z.push(c));
@@ -138,19 +138,19 @@
     if ("function" == typeof c) {
       var e = b.get("buildHitTask");
       return {
-        buildHitTask: function(b) {
+        buildHitTask: function (b) {
           b.set(d, null, !0);
           b.set(a, null, !0);
           c(b, void 0, void 0);
           e(b);
-        }
+        },
       };
     }
     return G({}, d, a);
   }
   var G =
     Object.assign ||
-    function(a, b) {
+    function (a, b) {
       for (var c = [], d = 1; d < arguments.length; ++d)
         c[d - 1] = arguments[d];
       for (var d = 0, e = c.length; d < e; d++) {
@@ -165,7 +165,7 @@
     var c = window.GoogleAnalyticsObject || "ga";
     window[c] =
       window[c] ||
-      function(a) {
+      function (a) {
         for (var b = [], d = 0; d < arguments.length; ++d)
           b[d - 0] = arguments[d];
         (window[c].q = window[c].q || []).push(b);
@@ -203,9 +203,9 @@
     b = this.c;
     B(E(a, "buildHitTask"), b);
   }
-  L.prototype.f = function(a) {
+  L.prototype.f = function (a) {
     var b = this;
-    return function(c) {
+    return function (c) {
       if ("page" == c || c == b.b) {
         var d = { location: a("location"), page: a("page") };
         return M(b, d)[c];
@@ -213,9 +213,9 @@
       return a(c);
     };
   };
-  L.prototype.c = function(a) {
+  L.prototype.c = function (a) {
     var b = this;
-    return function(c) {
+    return function (c) {
       var d = M(b, { location: c.get("location"), page: c.get("page") });
       c.set(d, null, !0);
       a(c);
@@ -240,7 +240,7 @@
       ? ((b = a.a.urlFieldsFilter(d, y)),
         (c = {
           page: b.page,
-          location: b.location
+          location: b.location,
         }),
         a.b && (c[a.b] = b[a.b]),
         c)
@@ -251,7 +251,7 @@
       var c = [];
       b.slice(1)
         .split("\x26")
-        .forEach(function(b) {
+        .forEach(function (b) {
           var d = r(b.split("\x3d"));
           b = d.next().value;
           d = d.next().value;
@@ -260,7 +260,7 @@
       return c.length
         ? "?" +
             c
-              .map(function(a) {
+              .map(function (a) {
                 return a.join("\x3d");
               })
               .join("\x26")
@@ -268,7 +268,7 @@
     }
     return "";
   }
-  L.prototype.remove = function() {
+  L.prototype.remove = function () {
     var a = this.f;
     D(E(this.g, "get"), a);
     a = this.c;
@@ -286,7 +286,7 @@
           shouldTrackUrlChange: this.shouldTrackUrlChange,
           trackReplaceState: !1,
           fieldsObj: {},
-          hitFilter: null
+          hitFilter: null,
         },
         b
       )),
@@ -301,29 +301,29 @@
       B(E(history, "replaceState"), a),
       window.addEventListener("popstate", this.b));
   }
-  O.prototype.c = function(a) {
+  O.prototype.c = function (a) {
     var b = this;
-    return function(c) {
+    return function (c) {
       for (var d = [], e = 0; e < arguments.length; ++e)
         d[e - 0] = arguments[e];
       a.apply(null, [].concat(t(d)));
       P(b, !0);
     };
   };
-  O.prototype.f = function(a) {
+  O.prototype.f = function (a) {
     var b = this;
-    return function(c) {
+    return function (c) {
       for (var d = [], e = 0; e < arguments.length; ++e)
         d[e - 0] = arguments[e];
       a.apply(null, [].concat(t(d)));
       P(b, !1);
     };
   };
-  O.prototype.b = function() {
+  O.prototype.b = function () {
     P(this, !0);
   };
   function P(a, b) {
-    setTimeout(function() {
+    setTimeout(function () {
       var c = a.i,
         d = location.pathname + location.search;
       c != d &&
@@ -334,10 +334,10 @@
           a.g.send("pageview", F(a.a.fieldsObj, a.g, a.a.hitFilter)));
     }, 0);
   }
-  O.prototype.shouldTrackUrlChange = function(a, b) {
+  O.prototype.shouldTrackUrlChange = function (a, b) {
     return !(!a || !b);
   };
-  O.prototype.remove = function() {
+  O.prototype.remove = function () {
     var a = this.c;
     D(E(history, "pushState"), a);
     a = this.f;

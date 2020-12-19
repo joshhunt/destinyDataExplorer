@@ -7,7 +7,7 @@ import Icon from "components/Icon";
 
 import s from "./styles.module.scss";
 
-const hasDefs = defs => defs && Object.keys(defs).length > 0;
+const hasDefs = (defs) => defs && Object.keys(defs).length > 0;
 
 export default class CollectDrawer extends Component {
   componentDidUpdate() {
@@ -20,7 +20,7 @@ export default class CollectDrawer extends Component {
 
     let jason = JSON.stringify(objToCopy, null, 2);
 
-    (jason.match(/(\d{5,})(,?)/g) || []).forEach(match => {
+    (jason.match(/(\d{5,})(,?)/g) || []).forEach((match) => {
       const hash = +match.match(/\d+/)[0];
       const collectionEntry =
         items[`DestinyInventoryItemDefinition:${hash}`] || {};
@@ -54,12 +54,12 @@ export default class CollectDrawer extends Component {
           </p>
         )}
 
-        {sections.map(section => {
+        {sections.map((section) => {
           return (
             <div key={section.name} className={s.section}>
               <h4 className={s.sectionTitle}>{section.name}</h4>
               <div>
-                {section.items.map(entry => {
+                {section.items.map((entry) => {
                   const def = definitions[entry.type][entry.key];
 
                   return (

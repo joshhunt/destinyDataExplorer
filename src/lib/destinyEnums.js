@@ -53,7 +53,7 @@ export const NUMERICAL_STATS = [4284893193, 3871231066, 2961396640];
 export const STAT_BLACKLIST = [
   1480404414, // Attack
   1935470627, // Power
-  3897883278 // Defense
+  3897883278, // Defense
 ];
 
 export const PLATFORMS = {
@@ -61,11 +61,11 @@ export const PLATFORMS = {
   [PLAYSTATION]: "PlayStation",
   [PC_BLIZZARD]: "PC (Battle.net)",
   [TIGERDEMON]: "TigerDemon",
-  [BUNGIENEXT]: "BungieNext"
+  [BUNGIENEXT]: "BungieNext",
 };
 
 export const CLASSES = {
   [WARLOCK]: "Warlock",
   [TITAN]: "Titan",
-  [HUNTER]: "Hunter"
+  [HUNTER]: "Hunter",
 };

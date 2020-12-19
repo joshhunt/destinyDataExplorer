@@ -61,7 +61,7 @@ test("can parse most complex string", () => {
     "is:cat",
     "something else",
     "is:another",
-    "wow"
+    "wow",
   ];
   expect(tokenize(input)).toEqual(expected);
 });

@@ -8,15 +8,15 @@ const MODAL_STYLES = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 10
+    zIndex: 10,
   },
   content: {
     position: "static",
     background: "none",
     border: "none",
     maxHeight: "100vh",
-    maxWidth: "1200px"
-  }
+    maxWidth: "1200px",
+  },
 };
 
 export default function Modal({ children, ...props }) {

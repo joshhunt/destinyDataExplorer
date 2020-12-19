@@ -9,7 +9,7 @@ import {
   toggleFilterDrawer,
   addCollectedItem,
   removeCollectedItem,
-  fetchBungieSettings
+  fetchBungieSettings,
 } from "store/app";
 import { setBulkDefinitions } from "store/definitions";
 import { setFilterString, setFilterValue } from "store/filter";
@@ -43,7 +43,7 @@ class HomeView extends Component {
     updating: false,
     views: [],
     searchTerm: "",
-    results: null
+    results: null,
   };
 
   componentDidMount() {
@@ -65,7 +65,7 @@ class HomeView extends Component {
     this.setState({ views: segments });
   }
 
-  onSearchChange = ev => {
+  onSearchChange = (ev) => {
     const searchTerm = isString(ev) ? ev : ev.target.value;
     this.props.setFilterString(searchTerm);
   };
@@ -98,7 +98,7 @@ class HomeView extends Component {
       newViews.length === 0
         ? "/"
         : "/i/" +
-          newViews.map(view => `${view.shortType}:${view.hash}`).join("/");
+          newViews.map((view) => `${view.shortType}:${view.hash}`).join("/");
 
     this.props.router.push(newPath);
   };
@@ -132,7 +132,7 @@ class HomeView extends Component {
       definitionsError,
       definitionsStatus,
       filterResults,
-      searchIsReady
+      searchIsReady,
     } = this.props;
 
     const { views } = this.state;
@@ -172,7 +172,7 @@ class HomeView extends Component {
             {filterResults.noResults && <h2>No results</h2>}
 
             <div className={s.items}>
-              {items.map(obj => {
+              {items.map((obj) => {
                 return (
                   <Item
                     key={obj.dxId}
@@ -258,7 +258,7 @@ function mapStateToProps(state) {
     collectModeEnabled: state.app.collectModeEnabled,
     filterDrawerVisible: state.app.filterDrawerVisible,
     collectedItems: state.app.collectedItems,
-    searchIsReady: state.app.searchIsReady
+    searchIsReady: state.app.searchIsReady,
   };
 }
 
@@ -270,10 +270,7 @@ const mapDispatchToActions = {
   toggleFilterDrawer,
   addCollectedItem,
   removeCollectedItem,
-  fetchBungieSettings
+  fetchBungieSettings,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToActions
-)(HomeView);
+export default connect(mapStateToProps, mapDispatchToActions)(HomeView);

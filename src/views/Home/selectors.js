@@ -3,10 +3,10 @@ import { createSelector } from "reselect";
 const MAX_RESULTS = 150;
 
 export const filteredItemsSelector = createSelector(
-  state => state.filter.searchString,
-  state => state.filter,
-  state => state.definitions.definitions,
-  state => state.filter.results,
+  (state) => state.filter.searchString,
+  (state) => state.filter,
+  (state) => state.definitions.definitions,
+  (state) => state.filter.results,
   (searchString, filterOptions, definitions, results) => {
     const hasSearchQuery =
       (searchString && searchString.length > 2) ||
@@ -22,11 +22,11 @@ export const filteredItemsSelector = createSelector(
     }
 
     const mappedResults = results
-      .map(obj => ({
+      .map((obj) => ({
         ...obj,
-        def: definitions[obj.type] && definitions[obj.type][obj.key]
+        def: definitions[obj.type] && definitions[obj.type][obj.key],
       }))
-      .filter(obj => obj.def);
+      .filter((obj) => obj.def);
 
     const payload = {};
     payload.results = mappedResults;

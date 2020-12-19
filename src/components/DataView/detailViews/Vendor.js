@@ -9,12 +9,12 @@ import s from "./styles.module.scss";
 function CategoryListing({ item, definitions, pathForItem, categories }) {
   return (
     <div>
-      {categories.map(category => {
+      {categories.map((category) => {
         return (
           <div key={category.categoryId} className={s.section}>
             <div className={s.sectionTitle}>{category.categoryId}</div>
             <div className={s.sectionItemList}>
-              {category.vendorItemIndexes.map(itemIndex => {
+              {category.vendorItemIndexes.map((itemIndex) => {
                 const vendorItemEntry = item.itemList[itemIndex];
                 const vendorItem =
                   definitions.DestinyInventoryItemDefinition[
@@ -27,7 +27,7 @@ function CategoryListing({ item, definitions, pathForItem, categories }) {
                     key={`${vendorItem.hash}${itemIndex}${category.categoryId}`}
                     entry={{
                       type: "DestinyInventoryItemDefinition",
-                      def: vendorItem
+                      def: vendorItem,
                     }}
                   />
                 );
@@ -71,9 +71,12 @@ export default function Vendor({ item, definitions, pathForItem }) {
         </TabPanel>
 
         <TabPanel>
-          {item.displayCategories.map(displayCategory => {
+          {item.displayCategories.map((displayCategory) => {
             return (
-              <div key= {displayCategory.displayProperties.name} className={s.section}>
+              <div
+                key={displayCategory.displayProperties.name}
+                className={s.section}
+              >
                 <div className={s.sectionTitle}>
                   {displayCategory.displayProperties.name}
                 </div>

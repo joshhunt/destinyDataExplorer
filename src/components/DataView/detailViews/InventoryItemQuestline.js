@@ -7,11 +7,11 @@ import ObjectiveList from "./ObjectiveList";
 
 import s from "./styles.module.scss";
 
-const _withDef = memoize(defs => (itemHash, cb) => cb(defs[itemHash]));
+const _withDef = memoize((defs) => (itemHash, cb) => cb(defs[itemHash]));
 
 class Toggleable extends Component {
   state = {
-    visible: false
+    visible: false,
   };
 
   toggle = () => {
@@ -53,7 +53,7 @@ function QuestlineBody({ item, definitions, pathForItem }) {
     <div className={s.section}>
       <br />
       {item.setData.itemList.map((listItem, index) =>
-        withItemDef(listItem.itemHash, def => (
+        withItemDef(listItem.itemHash, (def) => (
           <div key={`${listItem.itemHash}${index}`} className={s.section}>
             <div className={s.sectionTitle}>
               <strong>
@@ -108,7 +108,7 @@ export function ViewParentQuestline({ item, definitions, pathForItem }) {
         className={s.item}
         entry={{
           type: "DestinyInventoryItemDefinition",
-          def: parentQuestItem
+          def: parentQuestItem,
         }}
       />
     </Fragment>

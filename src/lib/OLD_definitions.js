@@ -11,7 +11,7 @@ import { getDestiny } from "./destiny";
 const db = new Dexie("destinyManifest");
 db.version(1).stores({
   manifestBlob: "&key, data",
-  allData: "&key, data"
+  allData: "&key, data",
 });
 
 const REVISION = "rev2";
@@ -29,11 +29,11 @@ const LANGUAGE =
     "ru",
     "pl",
     "ko",
-    "zh-cht"
-  ].find(lang => window.location.search.includes(lang)) || "en";
+    "zh-cht",
+  ].find((lang) => window.location.search.includes(lang)) || "en";
 
 function fetchManifestDBPath() {
-  return getDestiny("/platform/Destiny2/Manifest/").then(data => {
+  return getDestiny("/platform/Destiny2/Manifest/").then((data) => {
     return data.mobileWorldContentPaths[LANGUAGE];
   });
 }
@@ -41,7 +41,7 @@ function fetchManifestDBPath() {
 function fetchManifest(dbPath) {
   console.log("Requesting manifest from", dbPath);
 
-  return db.manifestBlob.get(dbPath).then(cachedValue => {
+  return db.manifestBlob.get(dbPath).then((cachedValue) => {
     if (cachedValue) {
       return cachedValue.data;
     }
@@ -52,8 +52,8 @@ function fetchManifest(dbPath) {
         console.log(
           `Progress ${Math.round((progress.loaded / progress.total) * 100)}%`
         );
-      }
-    }).then(resp => {
+      },
+    }).then((resp) => {
       console.log("Finished loading manifest");
       console.log("Storing in db", { key: dbPath, data: resp.data });
       db.manifestBlob.put({ key: dbPath, data: resp.data });
@@ -69,27 +69,27 @@ function unzipManifest(blob) {
 
     // eslint-disable-next-line no-undef
     zip.workerScripts = {
-      inflater: [zipWorker, inflate]
+      inflater: [zipWorker, inflate],
     };
 
     // eslint-disable-next-line no-undef
     zip.createReader(
       new zip.BlobReader(blob), // eslint-disable-line
-      zipReader => {
+      (zipReader) => {
         // get all entries from the zip
-        zipReader.getEntries(entries => {
+        zipReader.getEntries((entries) => {
           if (entries.length) {
             console.log("Found", entries.length, "entries within zip file");
             console.log("Loading first file...", entries[0].filename);
 
             // eslint-disable-next-line no-undef
-            entries[0].getData(new zip.BlobWriter(), blob => {
+            entries[0].getData(new zip.BlobWriter(), (blob) => {
               resolve(blob);
             });
           }
         });
       },
-      error => {
+      (error) => {
         reject(error);
       }
     );
@@ -98,11 +98,11 @@ function unzipManifest(blob) {
 
 function loadManifest(dbPath) {
   return fetchManifest(dbPath)
-    .then(data => {
+    .then((data) => {
       console.log("Got a blob db", data);
       return unzipManifest(data);
     })
-    .then(manifestBlob => {
+    .then((manifestBlob) => {
       console.log("Got unziped db", manifestBlob);
       return manifestBlob;
     });
@@ -114,7 +114,7 @@ function openDBFromBlob(SQLLib, blob) {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.responseType = "arraybuffer";
-    xhr.onload = function(e) {
+    xhr.onload = function (e) {
       const uInt8Array = new Uint8Array(this.response);
       resolve(new SQLLib.Database(uInt8Array));
     };
@@ -128,12 +128,12 @@ function allDataFromRemote(dbPath) {
       console.log("Loaded both SQL library and manifest blob");
       return openDBFromBlob(SQLLib, manifestBlob);
     })
-    .then(db => {
+    .then((db) => {
       console.log("Got proper SQLite DB", db);
 
       const allTables = db
         .exec(`SELECT name FROM sqlite_master WHERE type='table';`)[0]
-        .values.map(a => a[0]);
+        .values.map((a) => a[0]);
 
       console.log("All tables", allTables);
 
@@ -154,7 +154,7 @@ function allDataFromRemote(dbPath) {
 
 export function getAllDefinitions(progressCb) {
   return fetchManifestDBPath()
-    .then(dbPath => {
+    .then((dbPath) => {
       const key = `${REVISION}:${dbPath}`;
       return Promise.all([db.allData.get(key), Promise.resolve(dbPath)]);
     })
@@ -166,7 +166,7 @@ export function getAllDefinitions(progressCb) {
       progressCb({ updating: true });
 
       const key = `${REVISION}:${dbPath}`;
-      return allDataFromRemote(dbPath).then(allData => {
+      return allDataFromRemote(dbPath).then((allData) => {
         db.allData.put({ key, data: allData });
 
         return allData;

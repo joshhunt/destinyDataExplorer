@@ -3,7 +3,7 @@ import { has } from "lodash";
 const log = require("lib/log")("http");
 
 export function get(url, opts) {
-  return fetch(url, opts).then(res => res.json());
+  return fetch(url, opts).then((res) => res.json());
 }
 
 export function getDestiny(_pathname, opts = {}, postBody) {
@@ -26,7 +26,7 @@ export function getDestiny(_pathname, opts = {}, postBody) {
 
   log(`REQUEST: ${pathname}`, opts);
 
-  return get(url, opts).then(resp => {
+  return get(url, opts).then((resp) => {
     log(`RESPONSE: ${pathname}`, resp);
 
     if (resp.ErrorStatus === "DestinyAccountNotFound") {

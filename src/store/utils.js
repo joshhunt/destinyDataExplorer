@@ -3,12 +3,12 @@ export function makeSimpleAction(type) {
 }
 
 export function makePayloadAction(type) {
-  return payload => ({ type, payload });
+  return (payload) => ({ type, payload });
 }
 
 export function toggle(state, field) {
   return {
     ...state,
-    [field]: !state[field]
+    [field]: !state[field],
   };
 }

@@ -13,7 +13,7 @@ function deepCollectiblesFromPresentationNodes(node, definitions) {
     return [];
   }
 
-  return flatMapDeep(node.children.presentationNodes, childNode => {
+  return flatMapDeep(node.children.presentationNodes, (childNode) => {
     const childPresentationNode =
       definitions.DestinyPresentationNodeDefinition[
         childNode.presentationNodeHash
@@ -27,7 +27,7 @@ function deepCollectiblesFromPresentationNodes(node, definitions) {
     ) {
       return childPresentationNode.children.collectibles
         .map(
-          c =>
+          (c) =>
             definitions.DestinyCollectibleDefinition &&
             definitions.DestinyCollectibleDefinition[c.collectibleHash]
         )
@@ -45,7 +45,7 @@ function RecursiveItemsBySource({
   item,
   definitions,
   pathForItem,
-  addCollectiblesListToCollection
+  addCollectiblesListToCollection,
 }) {
   const [newSourceStrings, setNewSourceStrings] = useState([]);
   const [showOnlyNew, setShowOnlyNew] = useState(true);
@@ -54,8 +54,8 @@ function RecursiveItemsBySource({
     fetch(
       "https://s3.amazonaws.com/destiny.plumbing/en/diff/collectibleSourceStrings.json"
     )
-      .then(r => r.json())
-      .then(data => {
+      .then((r) => r.json())
+      .then((data) => {
         setNewSourceStrings(data.new);
       });
   }, []);
@@ -67,7 +67,7 @@ function RecursiveItemsBySource({
     )
   )
     .map(([sourceString, items]) => {
-      return { sourceString, items: uniqBy(items, c => c.itemHash) };
+      return { sourceString, items: uniqBy(items, (c) => c.itemHash) };
     })
     // .filter(({ sourceString }) => sourceString.includes('Nightfall'))
     .sort((a, b) => (a.sourceString > b.sourceString ? 1 : -1));
@@ -80,7 +80,7 @@ function RecursiveItemsBySource({
       <br />
 
       {itemsBySource
-        .filter(itemSet => {
+        .filter((itemSet) => {
           if (showOnlyNew) {
             return (
               itemSet.sourceString &&
@@ -108,7 +108,7 @@ function RecursiveItemsBySource({
             </div>
 
             <div className={s.itemList}>
-              {itemSet.items.map(collectible => {
+              {itemSet.items.map((collectible) => {
                 return (
                   <Item
                     pathForItem={pathForItem}
@@ -116,7 +116,7 @@ function RecursiveItemsBySource({
                     entry={{
                       type: "DestinyCollectibleDefinition",
                       def: collectible,
-                      key: collectible.hash
+                      key: collectible.hash,
                     }}
                   />
                 );
@@ -149,7 +149,7 @@ function Children({ items, definitions, childDefinitionType, pathForItem }) {
               key={hash}
               entry={{
                 type: childDefinitionType,
-                def: child
+                def: child,
               }}
             />
           );
@@ -161,19 +161,19 @@ function Children({ items, definitions, childDefinitionType, pathForItem }) {
 
 class PresentationNode extends Component {
   state = {
-    showRecursiveItemSources: false
+    showRecursiveItemSources: false,
   };
 
   toggle = () => {
     this.setState({
-      showRecursiveItemSources: !this.state.showRecursiveItemSources
+      showRecursiveItemSources: !this.state.showRecursiveItemSources,
     });
   };
 
-  addCollectiblesListToCollection = collectiblesList => {
+  addCollectiblesListToCollection = (collectiblesList) => {
     console.log("want to add", `collectiblesList`);
 
-    collectiblesList.forEach(col => {
+    collectiblesList.forEach((col) => {
       console.log(" - ", col);
       if (col.itemHash) {
         console.log("   - yes");
@@ -181,7 +181,7 @@ class PresentationNode extends Component {
           dxId: `DestinyInventoryItemDefinition:${col.itemHash}`,
           type: `DestinyInventoryItemDefinition`,
           key: col.itemHash,
-          forceName: col.displayProperties && col.displayProperties.name
+          forceName: col.displayProperties && col.displayProperties.name,
         });
       }
     });
@@ -239,7 +239,4 @@ class PresentationNode extends Component {
   }
 }
 
-export default connect(
-  null,
-  { addCollectedItem }
-)(PresentationNode);
+export default connect(null, { addCollectedItem })(PresentationNode);

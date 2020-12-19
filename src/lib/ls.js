@@ -2,7 +2,7 @@
 const keys = {
   DESTINY_PROFILE: "d2Profile",
   LANGUAGE: "language",
-  DEBUG: "debug"
+  DEBUG: "debug",
 };
 
 let LOCAL_STORAGE;
@@ -24,7 +24,7 @@ const localStoragePolyfill = {
 
   clear() {
     this._data = {};
-  }
+  },
 };
 
 function init() {

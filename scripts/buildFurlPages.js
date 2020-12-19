@@ -16,11 +16,8 @@ const mkdirp = promisify(_mkdirp);
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-const hashString = string =>
-  crypto
-    .createHash("md5")
-    .update(string)
-    .digest("hex");
+const hashString = (string) =>
+  crypto.createHash("md5").update(string).digest("hex");
 
 async function getDefinitions() {
   const manifestResponse = await axios.get(
@@ -50,7 +47,7 @@ async function getDefinitions() {
   console.log("requesting definitions from remote");
 
   const defsResponse = await axios.get(definitionsUrl, {
-    headers: { "x-api-key": API_KEY }
+    headers: { "x-api-key": API_KEY },
   });
 
   const defs = defsResponse.data;
@@ -70,7 +67,7 @@ async function getDefinitions() {
   const itemsToBuild = Object.values(
     definitions.DestinyInventoryItemDefinition
   ).filter(
-    item =>
+    (item) =>
       item && item.itemCategoryHashes && item.itemCategoryHashes.includes(20)
   );
 
@@ -81,7 +78,7 @@ async function getDefinitions() {
   async.eachLimit(
     itemsToBuild,
     MAP_LIMIT,
-    async item => {
+    async (item) => {
       const $ = cheerio.load(htmlFile);
       const shortTableName = "InventoryItem";
 
@@ -90,26 +87,26 @@ async function getDefinitions() {
         { name: "twitter:title", value: item.displayProperties.name },
         {
           name: "twitter:description",
-          value: item.displayProperties.description
+          value: item.displayProperties.description,
         },
 
         {
           name: "twitter:image",
-          content: `https://bungie.net${item.displayProperties.icon}`
+          content: `https://bungie.net${item.displayProperties.icon}`,
         },
         {
           name: "twitter:url",
-          value: `https://data.destinysets.com/i/${shortTableName}:${item.hash}`
+          value: `https://data.destinysets.com/i/${shortTableName}:${item.hash}`,
         },
 
         { name: "twitter:label1", value: "Table" },
         { name: "twitter:data1", value: `Destiny${shortTableName}Definition` },
 
         { name: "twitter:label2", value: "Hash" },
-        { name: "twitter:data2", value: item.hash }
+        { name: "twitter:data2", value: item.hash },
       ];
 
-      fields.forEach(field => {
+      fields.forEach((field) => {
         const $metaHost = cheerio.load("<html><meta /> </html>");
         Object.entries(field).forEach(([attrName, attrValue]) => {
           $metaHost("meta").attr(attrName, attrValue);
@@ -147,7 +144,7 @@ async function getDefinitions() {
       console.log(`Writing ${writePath}`);
       await writeFile(writePath, $.html());
     },
-    err => {
+    (err) => {
       if (err) throw err;
       console.log("done all");
     }

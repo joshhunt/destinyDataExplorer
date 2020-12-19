@@ -16,18 +16,18 @@ class DefinitionDiff extends Component {
   state = { version: LATEST, versions: [], diffs: {} };
 
   componentDidMount() {
-    get("https://destiny.plumbing/history.json").then(data => {
+    get("https://destiny.plumbing/history.json").then((data) => {
       this.setState({
         versions: data.sort(
           (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-        )
+        ),
       });
     });
 
     this.getAllDiffs(this.state.version);
   }
 
-  onVersionChange = ev => {
+  onVersionChange = (ev) => {
     this.setState({ version: ev.target.value, currentTable: null }, () => {
       this.getAllDiffs(this.state.version);
     });
@@ -38,8 +38,8 @@ class DefinitionDiff extends Component {
     const url = `https://destiny.plumbing/${versionKey}en/diff/${table}/friendly.json`;
 
     get(url)
-      .then(data => {
-        this.setState(state => {
+      .then((data) => {
+        this.setState((state) => {
           const newDiffs = { ...state.diffs };
           if (!newDiffs[version]) {
             newDiffs[version] = {};
@@ -50,20 +50,20 @@ class DefinitionDiff extends Component {
           return { diffs: newDiffs };
         });
       })
-      .catch(err =>
+      .catch((err) =>
         this.setState({
-          error: err.message || (err.toString && err.toString())
+          error: err.message || (err.toString && err.toString()),
         })
       );
   }
 
   getAllDiffs(version = LATEST) {
-    DEFINITION_TABLES.forEach(table => {
+    DEFINITION_TABLES.forEach((table) => {
       this.getDiffForTable(table, version);
     });
   }
 
-  setCurrentTable = table => {
+  setCurrentTable = (table) => {
     this.setState({ currentTable: table });
   };
 
@@ -91,7 +91,7 @@ class DefinitionDiff extends Component {
           <h1 className={s.title}>Diffs</h1>
           <select className={s.versionSelect} onChange={this.onVersionChange}>
             <option value={LATEST}>Current</option>
-            {versions.map(v => (
+            {versions.map((v) => (
               <option key={v.id} value={v.id}>
                 {format(v.lastUpdated, DATE_FORMAT)}
               </option>
@@ -126,7 +126,7 @@ class DefinitionDiff extends Component {
                         opacity:
                           diff.new.length + diff.unclassified.length === 0
                             ? 0.5
-                            : 1
+                            : 1,
                       }}
                     >
                       <td>
@@ -136,7 +136,7 @@ class DefinitionDiff extends Component {
                           style={{
                             textDecoration:
                               tableName === currentTable && "underline",
-                            color: tableName === currentTable && "#f1c40f"
+                            color: tableName === currentTable && "#f1c40f",
                           }}
                         >
                           {tableName}
@@ -160,7 +160,7 @@ class DefinitionDiff extends Component {
             <div className={s.currentTable}>
               <h3>New</h3>
               <div className={s.items}>
-                {diffsForVersion[currentTable].new.map(hash => (
+                {diffsForVersion[currentTable].new.map((hash) => (
                   <Item
                     className={s.item}
                     pathForItem={this.pathForItem}
@@ -169,7 +169,7 @@ class DefinitionDiff extends Component {
                       def: currentTableDefs[hash],
                       type: currentTable,
                       key: hash,
-                      dxId: `${currentTable}:${hash}`
+                      dxId: `${currentTable}:${hash}`,
                     }}
                   />
                 ))}
@@ -177,7 +177,7 @@ class DefinitionDiff extends Component {
 
               <h3>Unclassified</h3>
               <div className={s.items}>
-                {diffsForVersion[currentTable].unclassified.map(hash => (
+                {diffsForVersion[currentTable].unclassified.map((hash) => (
                   <Item
                     className={s.item}
                     pathForItem={this.pathForItem}
@@ -186,7 +186,7 @@ class DefinitionDiff extends Component {
                       def: currentTableDefs[hash],
                       type: currentTable,
                       key: hash,
-                      dxId: `${currentTable}:${hash}`
+                      dxId: `${currentTable}:${hash}`,
                     }}
                   />
                 ))}
@@ -201,7 +201,7 @@ class DefinitionDiff extends Component {
 
 function mapStateToProps(state) {
   return {
-    definitions: state.definitions.definitions
+    definitions: state.definitions.definitions,
   };
 }
 
@@ -253,5 +253,5 @@ const DEFINITION_TABLES = [
   "DestinyReportReasonCategoryDefinition",
   "DestinyPlugSetDefinition",
   "DestinyChecklistDefinition",
-  "DestinyHistoricalStatsDefinition"
+  "DestinyHistoricalStatsDefinition",
 ];

@@ -15,7 +15,7 @@ const hasPerk = (obj, hash) => {
     return false;
   }
 
-  const it = item.sockets.socketEntries.find(socket => {
+  const it = item.sockets.socketEntries.find((socket) => {
     return socket.singleInitialItemHash === hash;
   });
 
@@ -29,9 +29,9 @@ const hasRandomPerk = (obj, hash) => {
     return false;
   }
 
-  const it = item.sockets.socketEntries.find(socket => {
+  const it = item.sockets.socketEntries.find((socket) => {
     return socket.randomizedPlugItems.find(
-      randomPlugItem => (randomPlugItem.plugItemHash = hash)
+      (randomPlugItem) => (randomPlugItem.plugItemHash = hash)
     );
   });
 
@@ -42,7 +42,7 @@ const isDefinition = (obj, definitionName) => {
   return matches(obj.type, definitionName);
 };
 
-const classType = value => obj => obj.def.classType === value;
+const classType = (value) => (obj) => obj.def.classType === value;
 
 const $ = (term, secondArg, filterFn) => {
   const regex = isString(term)
@@ -53,14 +53,14 @@ const $ = (term, secondArg, filterFn) => {
     ? {
         regex,
         parseInt: secondArg,
-        filterFn
+        filterFn,
       }
     : { regex, filterFn: secondArg };
 };
 
-const itemCategory = hash => obj => isItemCategoryHash(obj, hash);
+const itemCategory = (hash) => (obj) => isItemCategoryHash(obj, hash);
 
-const allItemCategories = (...hashes) => obj => {
+const allItemCategories = (...hashes) => (obj) => {
   return (
     obj.def &&
     obj.def.itemCategoryHashes &&
@@ -68,7 +68,7 @@ const allItemCategories = (...hashes) => obj => {
   );
 };
 
-const anyItemCategory = (...hashes) => obj => {
+const anyItemCategory = (...hashes) => (obj) => {
   return (
     obj.def &&
     obj.def.itemCategoryHashes &&
@@ -76,10 +76,10 @@ const anyItemCategory = (...hashes) => obj => {
   );
 };
 
-const tierType = hash => obj =>
+const tierType = (hash) => (obj) =>
   obj.def && obj.def.inventory && obj.def.inventory.tierTypeHash === hash;
 
-const sourceString = matching => obj =>
+const sourceString = (matching) => (obj) =>
   obj.def &&
   obj.def.sourceString &&
   obj.def.sourceString.toLowerCase().includes(matching);
@@ -125,11 +125,12 @@ export default [
   $("emblem", itemCategory(enums.EMBLEM)),
   $("classitem", itemCategory(enums.CLASS_ITEMS)),
 
-  $("medal", obj => obj.def && obj.def.medalTierIdentifier),
+  $("medal", (obj) => obj.def && obj.def.medalTierIdentifier),
 
   $(
     "perk",
-    obj => obj.def && obj.def.perks && obj.def.plug && obj.def.perks.length > 0
+    (obj) =>
+      obj.def && obj.def.perks && obj.def.plug && obj.def.perks.length > 0
   ),
 
   $(/stackUniqueLabel:(.+)/i, false, (obj, term) =>
@@ -163,7 +164,7 @@ export default [
   $(/from:lastwish/, sourceString("last wish")),
   $(
     /temp:hastitle/,
-    obj => obj.def && obj.def.titleInfo && obj.def.titleInfo.hasTitle
+    (obj) => obj.def && obj.def.titleInfo && obj.def.titleInfo.hasTitle
   ),
 
   $(/deep:(.+)/, false, (obj, term) => {
@@ -171,6 +172,6 @@ export default [
     return str.includes(term);
   }),
 
-  $(/not:classified/, obj => obj.def && !obj.def.redacted),
-  $("classified", obj => obj.def && obj.def.redacted)
+  $(/not:classified/, (obj) => obj.def && !obj.def.redacted),
+  $("classified", (obj) => obj.def && obj.def.redacted),
 ];

@@ -12,7 +12,7 @@ function GearsetItemList({ item, definitions, pathForItem }) {
       <div className={s.sectionTitle}>gearset itemList</div>
 
       <div className={s.sectionItemList}>
-        {item.gearset.itemList.map(itemIndex => {
+        {item.gearset.itemList.map((itemIndex) => {
           const gearSetItem =
             definitions.DestinyInventoryItemDefinition[itemIndex];
 
@@ -23,7 +23,7 @@ function GearsetItemList({ item, definitions, pathForItem }) {
               key={gearSetItem.hash}
               entry={{
                 type: "DestinyInventoryItemDefinition",
-                def: gearSetItem
+                def: gearSetItem,
               }}
             />
           );
@@ -38,7 +38,7 @@ function Sockets({ item, definitions, pathForItem }) {
     <div>
       <h3 className={s.title}>Sockets</h3>
 
-      {item.sockets.socketCategories.map(socketCategory => {
+      {item.sockets.socketCategories.map((socketCategory) => {
         const socketCategoryDef =
           definitions.DestinySocketCategoryDefinition[
             socketCategory.socketCategoryHash
@@ -54,7 +54,7 @@ function Sockets({ item, definitions, pathForItem }) {
             </div>
 
             <div className={s.sectionItemList}>
-              {socketCategory.socketIndexes.map(index => {
+              {socketCategory.socketIndexes.map((index) => {
                 const socketEntry = item.sockets.socketEntries[index];
                 const socketItem =
                   definitions.DestinyInventoryItemDefinition[
@@ -70,7 +70,7 @@ function Sockets({ item, definitions, pathForItem }) {
                           className={s.item}
                           entry={{
                             type: "DestinyInventoryItemDefinition",
-                            def: socketItem
+                            def: socketItem,
                           }}
                         />
                       )}
@@ -79,13 +79,13 @@ function Sockets({ item, definitions, pathForItem }) {
                     <div className={s.socketAlts}>
                       {[
                         ...socketEntry.reusablePlugItems,
-                        ...(socketEntry.randomizedPlugItems || [])
+                        ...(socketEntry.randomizedPlugItems || []),
                       ]
                         .filter(
-                          h =>
+                          (h) =>
                             h.plugItemHash !== socketEntry.singleInitialItemHash
                         )
-                        .map(hash => {
+                        .map((hash) => {
                           const reusablePlugItem =
                             definitions.DestinyInventoryItemDefinition[
                               hash.plugItemHash
@@ -103,7 +103,7 @@ function Sockets({ item, definitions, pathForItem }) {
                                 key={hash.plugItemHash}
                                 entry={{
                                   type: "DestinyInventoryItemDefinition",
-                                  def: reusablePlugItem
+                                  def: reusablePlugItem,
                                 }}
                               />
                             )
@@ -131,7 +131,7 @@ export default function InventoryItem({ item, definitions, pathForItem }) {
     hasGearset && GearsetItemList,
     hasSockets && Sockets,
     isQuestline && Questline,
-    item.objectives && item.objectives.questlineItemHash && ViewParentQuestline
+    item.objectives && item.objectives.questlineItemHash && ViewParentQuestline,
   ].filter(Boolean);
 
   if (!views.length) {

@@ -48,7 +48,7 @@ export function requireDatabase() {
     window.Module = {
       locateFile() {
         return sqlWasmBinaryPath;
-      }
+      },
     };
 
     window.SQL = {
@@ -72,7 +72,7 @@ export function requireDatabase() {
           resolve(window.SQL);
           delete window.SQL;
         }
-      }
+      },
     };
 
     // Give it 10 seconds to load

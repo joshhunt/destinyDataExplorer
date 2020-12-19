@@ -9,7 +9,7 @@ function WrappedObjectiveList({
   title,
   definitions,
   pathForItem,
-  objectiveHashes
+  objectiveHashes,
 }) {
   console.log("WrappedObjectiveList objectiveHashes", objectiveHashes);
 
@@ -32,7 +32,7 @@ function WrappedObjectiveList({
 export default function AnyObjectives({ item, definitions, pathForItem }) {
   const objectiveHashes = [
     ...get(item, "objectives.objectiveHashes", []),
-    ...get(item, "objectiveHashes", [])
+    ...get(item, "objectiveHashes", []),
   ];
 
   const emblemObjective = item.emblemObjectiveHash;

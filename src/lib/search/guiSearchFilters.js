@@ -1,15 +1,15 @@
 import { intersection } from "lodash";
 
 function selectDataFromDefs(defs) {
-  return Object.values(defs || {}).map(d => ({
+  return Object.values(defs || {}).map((d) => ({
     value: d.hash,
-    label: d.displayProperties.name || `Hash: ${d.hash}`
+    label: d.displayProperties.name || `Hash: ${d.hash}`,
   }));
 }
 
 export const FILTER_OPTION_RENDERERS = {
   SELECT: "SELECT",
-  MULTI_SELECT: "MULTI_SELECT"
+  MULTI_SELECT: "MULTI_SELECT",
 };
 
 export const FILTERS = [
@@ -20,8 +20,8 @@ export const FILTERS = [
     searchFn: (obj, filterValue) => {
       return obj.type === filterValue.value;
     },
-    data: definitions =>
-      Object.keys(definitions).map(n => ({ value: n, label: n }))
+    data: (definitions) =>
+      Object.keys(definitions).map((n) => ({ value: n, label: n })),
   },
 
   {
@@ -29,7 +29,7 @@ export const FILTERS = [
     id: "itemCategoryHash",
     renderer: FILTER_OPTION_RENDERERS.MULTI_SELECT,
     searchFn: (obj, filterValue) => {
-      const filterValues = filterValue.map(f => f.value);
+      const filterValues = filterValue.map((f) => f.value);
       const itemCategoryHashes = obj.def.itemCategoryHashes || [];
 
       return (
@@ -37,8 +37,8 @@ export const FILTERS = [
         filterValues.length
       );
     },
-    data: definitions =>
-      selectDataFromDefs(definitions.DestinyItemCategoryDefinition)
+    data: (definitions) =>
+      selectDataFromDefs(definitions.DestinyItemCategoryDefinition),
   },
   {
     label: "Item tier",
@@ -46,8 +46,8 @@ export const FILTERS = [
     renderer: FILTER_OPTION_RENDERERS.SELECT,
     searchFn: (obj, filterValue) =>
       obj.def.inventory && obj.def.inventory.tierTypeHash === filterValue.value,
-    data: definitions =>
-      selectDataFromDefs(definitions.DestinyItemTierTypeDefinition)
+    data: (definitions) =>
+      selectDataFromDefs(definitions.DestinyItemTierTypeDefinition),
   },
 
   {
@@ -59,8 +59,8 @@ export const FILTERS = [
     data: () => [
       { value: 0, label: "Titan" },
       { value: 1, label: "Hunter" },
-      { value: 2, label: "Warlock" }
-    ]
+      { value: 2, label: "Warlock" },
+    ],
   },
 
   {
@@ -70,7 +70,7 @@ export const FILTERS = [
     searchFn: (obj, filterValue) =>
       obj.def.damageTypeHashes &&
       obj.def.damageTypeHashes.includes(filterValue.value),
-    data: definitions =>
-      selectDataFromDefs(definitions.DestinyDamageTypeDefinition)
-  }
+    data: (definitions) =>
+      selectDataFromDefs(definitions.DestinyDamageTypeDefinition),
+  },
 ];

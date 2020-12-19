@@ -26,7 +26,7 @@ import {
   LEGENDARY,
   UNCOMMON,
   RARE,
-  COMMON
+  COMMON,
 } from "lib/destinyEnums";
 
 const tierTypeNameValue = {
@@ -34,10 +34,10 @@ const tierTypeNameValue = {
   Uncommon: 3,
   Rare: 2,
   Legendary: 1,
-  Exotic: 0
+  Exotic: 0,
 };
 
-export const isArmorOrnament = item =>
+export const isArmorOrnament = (item) =>
   item.itemCategoryHashes &&
   item.itemCategoryHashes.includes(ARMOR_MODS_ORNAMENTS);
 
@@ -46,7 +46,7 @@ const RARITY_SCORE = {
   [LEGENDARY]: 1000,
   [UNCOMMON]: 10000,
   [RARE]: 100000,
-  [COMMON]: 1000000
+  [COMMON]: 1000000,
 };
 
 function scoreItem(item) {
@@ -80,7 +80,7 @@ function scoreItem(item) {
 
 function sortArmor(objs, definitions) {
   console.log("sorting objs!", objs);
-  return sortBy(objs, obj => {
+  return sortBy(objs, (obj) => {
     const item = definitions.DestinyInventoryItemDefinition[obj.key];
     const rarity =
       (item.inventory && RARITY_SCORE[item.inventory.tierTypeHash]) || 0;
@@ -128,12 +128,12 @@ function getItemCategory(entry, definitions) {
 export default function sortItems(_entries, definitions, justHashes = false) {
   const entries = Object.values(_entries); //uniqBy(_entries, entry => entry.dxId);
 
-  const _sectionItems = groupBy(entries, entry =>
+  const _sectionItems = groupBy(entries, (entry) =>
     getItemCategory(entry, definitions)
   );
 
-  const sectionItems = mapValues(_sectionItems, items => {
-    return sortBy(items, item => {
+  const sectionItems = mapValues(_sectionItems, (items) => {
+    return sortBy(items, (item) => {
       return item.inventory
         ? tierTypeNameValue[item.inventory.tierTypeName]
         : 9999;
@@ -144,12 +144,12 @@ export default function sortItems(_entries, definitions, justHashes = false) {
     { name: "Weapons", items: sectionItems.weapon },
     {
       name: "Hunter armor",
-      items: sortArmor(sectionItems[HUNTER], definitions)
+      items: sortArmor(sectionItems[HUNTER], definitions),
     },
     { name: "Titan armor", items: sortArmor(sectionItems[TITAN], definitions) },
     {
       name: "Warlock armor",
-      items: sortArmor(sectionItems[WARLOCK], definitions)
+      items: sortArmor(sectionItems[WARLOCK], definitions),
     },
     { name: "Emotes", items: sectionItems.emotes },
     { name: "Ghosts", items: sectionItems.ghosts },
@@ -158,16 +158,16 @@ export default function sortItems(_entries, definitions, justHashes = false) {
     { name: "Emblems", items: sectionItems.emblems },
     { name: "Shaders", items: sectionItems.shaders },
     { name: "Weapon Ornaments", items: sectionItems.weaponOrnaments },
-    { name: "Other", items: sectionItems.other }
+    { name: "Other", items: sectionItems.other },
   ]
     .filter(({ items }) => {
       return items && items.length > 0;
     })
-    .map(section => {
+    .map((section) => {
       return justHashes
         ? {
             ...section,
-            items: section.items.map(entry => entry.key)
+            items: section.items.map((entry) => entry.key),
           }
         : section;
     });
