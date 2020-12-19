@@ -53,8 +53,6 @@ class HomeView extends Component {
   };
 
   componentDidMount() {
-    console.log("HomeView props", this.props);
-
     if (getSplat(this.props.match.params)) {
       this.updateViews();
     }
