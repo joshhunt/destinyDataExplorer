@@ -97,12 +97,6 @@ function SearchHeader({
               </div>
             );
           })}
-
-          {!searchIsReady && (
-            <span className={s.loadingSpinner}>
-              <Icon name="spinner-third" className={s.spinnerIcon} spin />
-            </span>
-          )}
         </div>
 
         <div className={s.languageButton}>
