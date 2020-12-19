@@ -79,7 +79,6 @@ function scoreItem(item) {
 }
 
 function sortArmor(objs, definitions) {
-  console.log("sorting objs!", objs);
   return sortBy(objs, (obj) => {
     const item = definitions.DestinyInventoryItemDefinition[obj.key];
     const rarity =

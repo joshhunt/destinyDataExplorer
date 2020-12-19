@@ -44,7 +44,6 @@ export function sendDefinitions(definitions) {
 
 export default async function search(filterPayload, definitions) {
   if (!sentDefinitions.has(definitions)) {
-    console.log("Definitions not send, sending them now");
     sendDefinitions(definitions);
   }
 

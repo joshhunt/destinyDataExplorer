@@ -11,8 +11,6 @@ function WrappedObjectiveList({
   pathForItem,
   objectiveHashes,
 }) {
-  console.log("WrappedObjectiveList objectiveHashes", objectiveHashes);
-
   return (
     objectiveHashes &&
     objectiveHashes.length > 0 && (

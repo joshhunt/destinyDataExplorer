@@ -75,8 +75,6 @@ function SearchHeader({
               ? filterOpt.value
               : [filterOpt.value];
 
-            console.log({ values, filterOpt });
-
             const texts = values.map((value) => {
               const valueLabel = filterDef
                 .data(defs)

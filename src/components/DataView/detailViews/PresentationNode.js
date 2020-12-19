@@ -171,12 +171,8 @@ class PresentationNode extends Component {
   };
 
   addCollectiblesListToCollection = (collectiblesList) => {
-    console.log("want to add", `collectiblesList`);
-
     collectiblesList.forEach((col) => {
-      console.log(" - ", col);
       if (col.itemHash) {
-        console.log("   - yes");
         this.props.addCollectedItem({
           dxId: `DestinyInventoryItemDefinition:${col.itemHash}`,
           type: `DestinyInventoryItemDefinition`,
