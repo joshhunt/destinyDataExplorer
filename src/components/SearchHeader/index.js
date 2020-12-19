@@ -90,7 +90,7 @@ function SearchHeader({
                   className={s.closeButton}
                   onClick={() => setFilterValue({ [filterOpt.key]: null })}
                 >
-                  <Icon className={s.closeIcon} name="times" />
+                  <Icon name="times" />
                 </button>
               </div>
             );
