@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { isString, memoize } from "lodash";
 import cx from "classnames";
 import JSONTree from "react-json-tree";
@@ -18,8 +18,6 @@ import specialValueOverrides from "./specialValueOverrides";
 import s from "./styles.module.scss";
 
 import apispec from "./apispec.json";
-
-window.__apispec = apispec;
 
 const RE = /Destiny(\w+)Definition/;
 

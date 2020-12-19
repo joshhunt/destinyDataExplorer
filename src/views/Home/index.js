@@ -24,12 +24,18 @@ import Item from "components/Item";
 import { filteredItemsSelector } from "./selectors";
 import s from "./styles.module.scss";
 
+function getSplat(params) {
+  return params[0];
+}
+
 function parsePathSegment(segment) {
   const [type, hash] = segment.split(":");
   return { type: `Destiny${type}Definition`, shortType: type, hash };
 }
 
-function parsePath(splat) {
+function parseSplatParam(params) {
+  const splat = getSplat(params);
+
   if (!splat) {
     return [];
   }
@@ -47,7 +53,9 @@ class HomeView extends Component {
   };
 
   componentDidMount() {
-    if (this.props.routeParams.splat) {
+    console.log("HomeView props", this.props);
+
+    if (getSplat(this.props.match.params)) {
       this.updateViews();
     }
 
@@ -55,13 +63,15 @@ class HomeView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.routeParams.splat !== prevProps.routeParams.splat) {
+    if (
+      getSplat(this.props.match.params) !== getSplat(prevProps.match.params)
+    ) {
       this.updateViews();
     }
   }
 
   updateViews() {
-    const segments = parsePath(this.props.routeParams.splat);
+    const segments = parseSplatParam(this.props.match.params);
     this.setState({ views: segments });
   }
 
@@ -81,7 +91,7 @@ class HomeView extends Component {
     const shortType = makeTypeShort(type);
     const key = obj.def ? obj.key || obj.def.hash : obj.hash;
 
-    if (this.props.routeParams.splat) {
+    if (getSplat(this.props.match.params)) {
       url = `${this.props.location.pathname}/${shortType}:${key}`;
     } else {
       url = `/i/${shortType}:${key}`;
@@ -100,7 +110,7 @@ class HomeView extends Component {
         : "/i/" +
           newViews.map((view) => `${view.shortType}:${view.hash}`).join("/");
 
-    this.props.router.push(newPath);
+    this.props.history.push(newPath);
   };
 
   onItemClick = (ev, entry) => {

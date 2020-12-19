@@ -1,6 +1,6 @@
 import React from "react";
 import cx from "classnames";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 import { CLASSES } from "lib/destinyEnums";
 import { makeTypeShort, getNameForItem } from "lib/destinyUtils";

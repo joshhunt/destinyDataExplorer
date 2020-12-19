@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { memoize } from "lodash";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 import Item from "components/Item";
 import ObjectiveList from "./ObjectiveList";
