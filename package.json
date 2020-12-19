@@ -41,8 +41,8 @@
   },
   "scripts": {
     "update-api-spec": "curl https://raw.githubusercontent.com/Bungie-net/api/master/openapi-2.json > ./src/components/DataView/apispec.json",
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "yarn run update-api-spec; react-app-rewired start",
+    "build": "yarn run update-api-spec; react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "serve": "serve -s build"
