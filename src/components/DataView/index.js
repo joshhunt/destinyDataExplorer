@@ -17,7 +17,7 @@ import AnyObjectives from "./detailViews/AnyObjectives";
 import specialValueOverrides from "./specialValueOverrides";
 import s from "./styles.module.scss";
 
-import apispec from "./apispec.json";
+import apispec from "lib/apispec.json";
 
 const RE = /Destiny(\w+)Definition/;
 

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import store from "./store";
 import ApiView from "./views/Api";
+import ApiRequestView from "./views/ApiRequest";
 import Home from "./views/Home";
 
 export default class AppRouter extends Component {
@@ -16,6 +17,11 @@ export default class AppRouter extends Component {
             <Route exact path="/" component={Home} />
 
             <Route exact path="/api" component={ApiView} />
+            <Route
+              exact
+              path="/api/:operationName"
+              component={ApiRequestView}
+            />
 
             <Route path="/i/*" component={Home} />
           </Switch>
