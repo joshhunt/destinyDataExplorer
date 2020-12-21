@@ -1,3 +1,5 @@
+@use "../../variables";
+
 $iconSize: 3.125em;
 $substituteColour: #494a4c;
 
@@ -27,7 +29,7 @@ $substituteColour: #494a4c;
 
 .collected {
   composes: root;
-  color: #090b0e;
+  color: variables.$background;
 
   &:before {
     background: #fafafa;
@@ -35,7 +37,7 @@ $substituteColour: #494a4c;
 }
 
 .icon {
-  background: #090b0e;
+  background: lighten(variables.$background, 5%);
   border-radius: 2px;
 }
 

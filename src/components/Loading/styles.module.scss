@@ -1,3 +1,5 @@
+@use "../../variables";
+
 .root {
   position: fixed;
   z-index: 9999999;
@@ -11,7 +13,7 @@
   padding: 10px;
   text-align: center;
   background: #bdc3c7;
-  color: #090b0e;
+  color: variables.$background;
   box-shadow: 0 0 20px -5px rgba(black, 0.75);
 }
 

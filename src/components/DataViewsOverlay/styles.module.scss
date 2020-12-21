@@ -1,3 +1,8 @@
+@use "../../variables";
+
+$duration: 200ms;
+$bg: lighten(variables.$background, 3%);
+
 .layer {
   height: 100%;
   position: fixed;
@@ -15,13 +20,11 @@
   top: 0;
   bottom: 0;
   right: 0;
-  background: lighten(#090b0e, 3%);
+  background: $bg;
   padding: 10px;
   box-shadow: 0 0px 20px rgba(black, 0.3);
   will-change: transform;
 }
-
-$duration: 200ms;
 
 :global(.global-dataview-animation-enter) {
   .root {
