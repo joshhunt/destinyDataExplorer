@@ -87,18 +87,33 @@
 .urlBar {
   width: 100%;
   display: flex;
-  line-height: 1;
+  // line-height: 1;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
 }
 
 .url {
-  font-family: "Roboto Mono", monospace;
   flex: 1 1 auto;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   margin-right: 8px;
+  transform: translateX(-211px);
+  transition: transform 300ms ease-in-out;
+
+  // &:hover {
+  //   transform: translateX(0);
+  // }
+
+  &,
+  .urlPrefix {
+    font-family: "Roboto Mono", monospace;
+  }
+}
+
+.urlPrefix {
+  opacity: 0.5;
 }
 
 .urlActions {

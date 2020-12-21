@@ -1,11 +1,18 @@
 import React from "react";
 import { OpenAPIV2 } from "openapi-types";
 import JSONTree from "react-json-tree";
-import { Link } from "react-router-dom";
 import { getPropertySchemaForPath } from "lib/apiSchemaUtils";
 
 import s from "./styles.module.scss";
-import { makeTypeShort } from "lib/destinyUtils";
+import LinkedJSONValue from "./LinkedJSONValue";
+
+declare module "openapi-types/dist/index" {
+  namespace OpenAPIV2 {
+    interface SchemaObject {
+      "x-mapped-definition"?: OpenAPIV2.ReferenceObject;
+    }
+  }
+}
 
 interface NewDataViewProps {
   data: Object;
@@ -24,24 +31,30 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
       return prettyValue;
     }
 
-    const mappedDefinitionRef = propertySchema["x-mapped-definition"] as
-      | OpenAPIV2.ReferenceObject
-      | undefined;
+    const mappedDefinitionRef = propertySchema["x-mapped-definition"];
+
+    if (mappedDefinitionRef) {
+      const linkedDefinitionName = definitionNameFromRef(
+        mappedDefinitionRef.$ref
+      );
+
+      return (
+        <LinkedJSONValue
+          value={rawValue}
+          linkedDefinitionName={linkedDefinitionName}
+        >
+          {prettyValue}
+        </LinkedJSONValue>
+      );
+    }
 
     return (
       <>
         {prettyValue}{" "}
-        {mappedDefinitionRef && (
-          <Link
-            to={`/i/${makeTypeShort(
-              definitionNameFromRef(mappedDefinitionRef.$ref)
-            )}:${rawValue}`}
-            className={s.comment}
-          >
-            {" >> "} {definitionNameFromRef(mappedDefinitionRef.$ref)}
-          </Link>
-        )}
-        <span className={s.comment}> // {propertySchema.description}</span>
+        <span className={s.comment}>
+          {" // "}
+          {propertySchema.description}
+        </span>
       </>
     );
   }

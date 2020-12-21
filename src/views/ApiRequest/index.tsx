@@ -159,7 +159,10 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
 
         <div className={s.requestEditor}>
           <div className={s.urlBar}>
-            <div className={s.url}>{displayUrl}</div>
+            <div className={s.url}>
+              <span className={s.urlPrefix}>https://www.bungie.net</span>
+              {displayUrl}
+            </div>
 
             <div className={s.urlActions}>
               <button
