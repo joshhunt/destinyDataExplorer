@@ -1,6 +1,11 @@
 .root {
   margin: 0 !important;
   background: none !important;
+
+  &,
+  * {
+    font-family: "Roboto Mono", monospace !important;
+  }
 }
 
 .comment {

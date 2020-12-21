@@ -51,7 +51,7 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
       theme={{
         tree: s.root,
       }}
-      shouldExpandNode={() => true}
+      shouldExpandNode={(keyPath) => keyPath.length < 3}
       data={data}
       valueRenderer={valueRenderer}
       hideRoot={true}
@@ -64,4 +64,5 @@ function definitionNameFromRef(ref: string) {
   return bits[bits.length - 1];
 }
 
-export default NewDataView;
+// export default NewDataView;
+export default React.memo(NewDataView);
