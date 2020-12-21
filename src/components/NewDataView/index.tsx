@@ -5,11 +5,19 @@ import { getPropertySchemaForPath } from "lib/apiSchemaUtils";
 
 import s from "./styles.module.scss";
 import LinkedJSONValue from "./LinkedJSONValue";
+import EnumJsonValue from "./EnumJsonValue";
+import { isImage } from "lib/utils";
+import ImageJsonValue from "./ImageJsonValue";
 
 declare module "openapi-types/dist/index" {
   namespace OpenAPIV2 {
     interface SchemaObject {
       "x-mapped-definition"?: OpenAPIV2.ReferenceObject;
+      "x-enum-reference"?: OpenAPIV2.ReferenceObject;
+      "x-enum-values"?: {
+        numericValue: string;
+        identifier: string;
+      }[];
     }
   }
 }
@@ -26,37 +34,36 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
     ...itemPath: (string | number)[]
   ) {
     const propertySchema = getPropertySchemaForPath(schema, itemPath);
+    if (!propertySchema) return prettyValue;
 
-    if (!propertySchema) {
-      return prettyValue;
-    }
+    const children = (
+      <span onClick={() => console.log(propertySchema)}>{prettyValue}</span>
+    );
 
-    const mappedDefinitionRef = propertySchema["x-mapped-definition"];
+    const definitionRef = propertySchema["x-mapped-definition"];
+    const enumRef = propertySchema["x-enum-reference"];
 
-    if (mappedDefinitionRef) {
-      const linkedDefinitionName = definitionNameFromRef(
-        mappedDefinitionRef.$ref
-      );
-
+    if (definitionRef) {
       return (
-        <LinkedJSONValue
-          value={rawValue}
-          linkedDefinitionName={linkedDefinitionName}
-        >
-          {prettyValue}
+        <LinkedJSONValue value={rawValue} schemaRef={definitionRef.$ref}>
+          {children}
         </LinkedJSONValue>
       );
     }
 
-    return (
-      <>
-        {prettyValue}{" "}
-        <span className={s.comment}>
-          {" // "}
-          {propertySchema.description}
-        </span>
-      </>
-    );
+    if (enumRef) {
+      return (
+        <EnumJsonValue value={rawValue} schemaRef={enumRef.$ref}>
+          {children}
+        </EnumJsonValue>
+      );
+    }
+
+    if (isImage(rawValue)) {
+      return <ImageJsonValue value={rawValue} />;
+    }
+
+    return children;
   }
 
   return (
@@ -71,11 +78,6 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
     />
   );
 };
-
-function definitionNameFromRef(ref: string) {
-  const bits = ref.split(".");
-  return bits[bits.length - 1];
-}
 
 // export default NewDataView;
 export default React.memo(NewDataView);

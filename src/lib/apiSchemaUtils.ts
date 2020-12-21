@@ -95,9 +95,19 @@ export function getOperation(operationId: string) {
   }
 }
 
-export function getReferencedSchema(ref: string) {
+export function getSchemaNameFromRef(ref: string) {
   const bits = ref.split("/");
-  return apiSpec.definitions?.[bits[bits.length - 1]];
+  return bits[bits.length - 1];
+}
+
+export function getShortSchemaNameFromRef(ref: string) {
+  const name = getSchemaNameFromRef(ref);
+  const bits = name.split(".");
+  return bits[bits.length - 1];
+}
+
+export function getReferencedSchema(ref: string) {
+  return apiSpec.definitions?.[getSchemaNameFromRef(ref)];
 }
 
 // TODO: type this better, remove all the any casts
@@ -134,4 +144,19 @@ export function getPropertySchemaForPath(
   });
 
   return currentSpec;
+}
+
+export function getEnumValuesForRef(ref: string) {
+  const enumSpec = getReferencedSchema(ref);
+
+  if (!enumSpec) {
+    return;
+  }
+
+  return enumSpec["x-enum-values"];
+}
+
+export function definitionNameFromRef(ref: string) {
+  const bits = ref.split(".");
+  return bits[bits.length - 1];
 }

@@ -2,6 +2,17 @@
   text-decoration: underline;
   cursor: pointer;
   color: inherit;
+  color: #657b83;
+}
+
+.unlinkedJsonValue {
+  color: #657b83;
+}
+
+.imageJsonValue {
+  max-height: 50px;
+  display: inline-block;
+  margin-right: 1ch;
 }
 
 .noSelect {

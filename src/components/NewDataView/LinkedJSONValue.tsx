@@ -6,17 +6,20 @@ import { Link } from "react-router-dom";
 import s from "./jsonStyles.module.scss";
 import { getDisplayName, isTableName } from "lib/destinyTsUtils";
 import { ReduxStore } from "types";
+import { definitionNameFromRef } from "lib/apiSchemaUtils";
+import SelectBreak from "./SelectBreak";
 
 interface LinkedJSONValueProps {
   value: any;
-  linkedDefinitionName: string;
+  schemaRef: string;
 }
 
 const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
   value,
-  linkedDefinitionName,
+  schemaRef: ref,
   children,
 }) => {
+  const linkedDefinitionName = definitionNameFromRef(ref);
   const shortDefinitionName = makeTypeShort(linkedDefinitionName);
   const definition = useSelector((store: ReduxStore) => {
     const { definitions: allDefinitions } = store.definitions;
@@ -37,8 +40,8 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
 
   return (
     <>
-      <span>{children}</span>
-      <span className={s.noSelect}> </span>
+      {children}
+      <SelectBreak />
       <Link
         to={`/i/${shortDefinitionName}:${value}`}
         className={s.linkedJsonValue}
