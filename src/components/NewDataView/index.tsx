@@ -8,6 +8,8 @@ import LinkedJSONValue from "./LinkedJSONValue";
 import EnumJsonValue from "./EnumJsonValue";
 import { isImage } from "lib/utils";
 import ImageJsonValue from "./ImageJsonValue";
+import theme from "./theme";
+import CSSThemeVariables from "components/CSSThemeVariables";
 
 declare module "openapi-types/dist/index" {
   namespace OpenAPIV2 {
@@ -18,6 +20,10 @@ declare module "openapi-types/dist/index" {
         numericValue: string;
         identifier: string;
       }[];
+    }
+
+    interface ItemsObject {
+      "x-enum-reference"?: OpenAPIV2.ReferenceObject;
     }
   }
 }
@@ -41,7 +47,9 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
     );
 
     const definitionRef = propertySchema["x-mapped-definition"];
-    const enumRef = propertySchema["x-enum-reference"];
+    const enumRef =
+      propertySchema["x-enum-reference"] ||
+      propertySchema.items?.["x-enum-reference"];
 
     if (definitionRef) {
       return (
@@ -67,15 +75,18 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
   }
 
   return (
-    <JSONTree
-      theme={{
-        tree: s.root,
-      }}
-      shouldExpandNode={(keyPath) => keyPath.length < 3}
-      data={data}
-      valueRenderer={valueRenderer}
-      hideRoot={true}
-    />
+    <CSSThemeVariables theme={theme}>
+      <JSONTree
+        theme={{
+          tree: s.root,
+          ...theme,
+        }}
+        shouldExpandNode={(keyPath) => keyPath.length < 3}
+        data={data}
+        valueRenderer={valueRenderer}
+        hideRoot={true}
+      />
+    </CSSThemeVariables>
   );
 };
 

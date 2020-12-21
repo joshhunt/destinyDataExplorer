@@ -1,4 +1,4 @@
-$bg: darken(#16171a, 2%);
+@use "../../views/ApiRequest/variables";
 
 .table {
   width: 100%;
@@ -6,7 +6,7 @@ $bg: darken(#16171a, 2%);
 }
 
 td {
-  border: 1px solid lighten($bg, 10%);
+  border: 1px solid lighten(variables.$apiRequestEditorBg, 15%);
   padding: 8px;
 }
 

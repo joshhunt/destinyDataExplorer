@@ -6,6 +6,7 @@ import React from "react";
 
 import s from "./jsonStyles.module.scss";
 import SelectBreak from "./SelectBreak";
+import Separator from "./Separator";
 
 interface EnumJsonValueProps {
   value: any;
@@ -27,13 +28,14 @@ const EnumJsonValue: React.FC<EnumJsonValueProps> = ({
     <>
       {children}
       <SelectBreak />
+      <Separator />
       <span
         className={s.unlinkedJsonValue}
         onClick={() => console.log(enumValues)}
       >
         {enumValueName
-          ? `// enum ${enumName} "${enumValueName.identifier}"`
-          : `// enum ${enumName}`}
+          ? `enum ${enumName} "${enumValueName.identifier}"`
+          : `enum ${enumName}`}
       </span>
     </>
   );

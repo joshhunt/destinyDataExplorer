@@ -8,6 +8,7 @@ import { getDisplayName, isTableName } from "lib/destinyTsUtils";
 import { ReduxStore } from "types";
 import { definitionNameFromRef } from "lib/apiSchemaUtils";
 import SelectBreak from "./SelectBreak";
+import Separator from "./Separator";
 
 interface LinkedJSONValueProps {
   value: any;
@@ -42,7 +43,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
     <>
       {children}
       <SelectBreak />
-      <span className={s.unlinkedJsonValue}>{" // "}</span>
+      <Separator />
       <Link
         to={`/i/${shortDefinitionName}:${value}`}
         className={s.linkedJsonValue}

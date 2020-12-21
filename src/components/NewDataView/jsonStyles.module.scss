@@ -2,11 +2,15 @@
   text-decoration: underline;
   cursor: pointer;
   color: inherit;
-  color: #657b83;
+  color: var(--base08);
+}
+
+.comment {
+  color: var(--base03);
 }
 
 .unlinkedJsonValue {
-  color: #657b83;
+  color: var(--base08);
 }
 
 .imageJsonValue {

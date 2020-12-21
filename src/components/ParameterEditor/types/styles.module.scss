@@ -1,4 +1,4 @@
-$parentBg: darken(#16171a, 2%);
+@use "../../../views/ApiRequest/variables";
 
 .textInput {
   width: calc(100% + 10px);
@@ -11,14 +11,26 @@ $parentBg: darken(#16171a, 2%);
   padding: 5px;
   margin: -5px;
   outline: none !important;
+  border-bottom: 1px solid
+    desaturate(lighten(variables.$apiRequestEditorBg, 25%), 5%);
+  transition: background 50ms ease-in-out;
+
+  tr:hover & {
+    background: desaturate(lighten(variables.$apiRequestEditorBg, 3%), 5%);
+  }
 
   &:hover,
   &:active {
-    background: desaturate(lighten($parentBg, 6%), 10%);
+    background: desaturate(
+      lighten(variables.$apiRequestEditorBg, 6%),
+      5%
+    ) !important;
   }
 
   &:focus {
-    outline: 2px solid desaturate(lighten($parentBg, 50%), 10%) !important;
+    outline: 2px solid
+      desaturate(lighten(variables.$apiRequestEditorBg, 50%), 5%) !important;
+    border-bottom-color: transparent;
   }
 }
 
