@@ -42,6 +42,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
     <>
       {children}
       <SelectBreak />
+      <span className={s.unlinkedJsonValue}>{" // "}</span>
       <Link
         to={`/i/${shortDefinitionName}:${value}`}
         className={s.linkedJsonValue}
