@@ -13,7 +13,6 @@ interface NewDataViewProps {
 }
 
 const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
-  console.log("---------");
   function valueRenderer(
     prettyValue: string,
     rawValue: any,
@@ -28,12 +27,6 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
     const mappedDefinitionRef = propertySchema["x-mapped-definition"] as
       | OpenAPIV2.ReferenceObject
       | undefined;
-
-    console.log(rawValue, {
-      itemPath,
-      propertySchema,
-      mappedDefinitionRef,
-    });
 
     return (
       <>

@@ -21,7 +21,7 @@ const ParameterTextField: React.FC<ParameterTextFieldProps> = ({
 
   return (
     <input
-      className={s.input}
+      className={s.textInput}
       type={type}
       placeholder={parameter.type}
       name={parameter.name}

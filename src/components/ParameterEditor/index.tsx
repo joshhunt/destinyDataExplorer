@@ -47,9 +47,7 @@ const ParameterEditor: React.FC<ParameterEditorProps> = ({
         <tbody>
           {parameters.map((param) => (
             <tr key={param.name}>
-              <td>
-                <code>{param.name}</code>
-              </td>
+              <td>{param.name}</td>
               <td>
                 <ParameterField
                   parameter={param}

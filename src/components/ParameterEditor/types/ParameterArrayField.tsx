@@ -47,7 +47,7 @@ const ParameterArrayField: React.FC<ParameterArrayFieldProps> = ({
 
   return (
     <Select
-      className={s.input}
+      className={s.reselectInput}
       options={options}
       isMulti={true}
       defaultValue={defaultValue}

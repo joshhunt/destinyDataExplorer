@@ -70,7 +70,7 @@ export function getApiPaths() {
             param.items?.["x-enum-reference"]
           ) {
           } else {
-            console.log("look at param type", param.type, param);
+            console.warn("look at param type", param.type, param);
           }
         }
       });

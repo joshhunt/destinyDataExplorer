@@ -1,4 +1,28 @@
-.input {
+$parentBg: darken(#16171a, 2%);
+
+.textInput {
+  width: calc(100% + 10px);
+  color: inherit;
+  background: none;
+  border: none;
+  font-size: inherit;
+  padding: 0;
+  font-family: "Roboto Mono", monospace !important;
+  padding: 5px;
+  margin: -5px;
+  outline: none !important;
+
+  &:hover,
+  &:active {
+    background: desaturate(lighten($parentBg, 6%), 10%);
+  }
+
+  &:focus {
+    outline: 2px solid desaturate(lighten($parentBg, 50%), 10%) !important;
+  }
+}
+
+.reselectInput {
   width: 100%;
   color: black;
 }
