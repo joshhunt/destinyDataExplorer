@@ -1,6 +1,23 @@
 import React from "react";
 
-const Icon = ({ name, solid, regular, light, duotone, brand, ...rest }) => {
+interface IconProps {
+  name: string;
+  solid?: boolean;
+  regular?: boolean;
+  light?: boolean;
+  duotone?: boolean;
+  brand?: boolean;
+}
+
+const Icon: React.FC<IconProps> = ({
+  name,
+  solid,
+  regular,
+  light,
+  duotone,
+  brand,
+  ...rest
+}) => {
   const prefix =
     {
       [solid ? "true" : "false"]: "fas",
@@ -23,7 +40,14 @@ const MembershipType = {
   Stadia: 5,
 };
 
-export const PlatformIcon = ({ membershipType, ...rest }) => {
+interface PlatformIconProps {
+  membershipType: number;
+}
+
+export const PlatformIcon: React.FC<PlatformIconProps> = ({
+  membershipType,
+  ...rest
+}) => {
   const iconMap = {
     [MembershipType.Xbox]: "xbox",
     [MembershipType.Playstation]: "playstation",
@@ -36,5 +60,5 @@ export const PlatformIcon = ({ membershipType, ...rest }) => {
     ? membershipType.toString()
     : membershipType;
 
-  return <Icon brand name={iconMap[type]} {...rest} />;
+  return <Icon brand name={iconMap[type as any]} {...rest} />;
 };

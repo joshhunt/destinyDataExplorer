@@ -1,0 +1,29 @@
+$bg: #16171a;
+$textColor: #ffffff;
+
+.root {
+  display: flex;
+  background: $bg;
+  font-size: 20px;
+  padding: 15px;
+  color: $textColor;
+}
+
+.logoish {
+  display: flex;
+  align-items: center;
+
+  span {
+    font-family: "Titillium Web", sans-serif !important;
+  }
+}
+
+.logo {
+  height: 1.3em;
+  margin-right: 0.5em;
+}
+
+.main {
+  margin-left: 16px;
+  flex: 1 1 auto;
+}

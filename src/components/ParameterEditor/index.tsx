@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
+import cx from "classnames";
 import { OpenAPIV2 } from "openapi-types";
 import ParameterTextField from "./types/ParameterTextField";
 import { ParameterFieldProps } from "./types";
 import ParameterBooleanField from "./types/ParameterBooleanField";
 import ParameterArrayField from "./types/ParameterArrayField";
 
+import s from "./styles.module.scss";
+
 interface ParameterEditorProps {
+  title: React.ReactNode;
+  className?: string;
   parameters: OpenAPIV2.Parameter[];
   values: Record<string, string>;
   onChange: (params: Record<string, string>) => void;
 }
 
 const ParameterEditor: React.FC<ParameterEditorProps> = ({
+  title,
+  className,
   parameters,
   values,
   onChange,
@@ -25,33 +32,37 @@ const ParameterEditor: React.FC<ParameterEditorProps> = ({
   );
 
   return (
-    <table style={{ width: "100%" }}>
-      <thead>
-        <tr>
-          <td style={{ width: "25%" }}>Name</td>
-          <td style={{ width: "25%" }}>Value</td>
-          <td style={{ width: "50%" }}>Description</td>
-        </tr>
-      </thead>
+    <div className={cx(s.root, className)}>
+      <h3 className={s.title}>{title}</h3>
 
-      <tbody>
-        {parameters.map((param) => (
-          <tr key={param.name}>
-            <td>
-              <code>{param.name}</code>
-            </td>
-            <td>
-              <ParameterField
-                parameter={param}
-                value={values[param.name]}
-                onChange={onFieldChange}
-              />
-            </td>
-            <td>{param.description}</td>
+      <table className={s.table}>
+        <thead>
+          <tr>
+            <td style={{ width: "25%" }}>Name</td>
+            <td style={{ width: "25%" }}>Value</td>
+            <td style={{ width: "50%" }}>Description</td>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {parameters.map((param) => (
+            <tr key={param.name}>
+              <td>
+                <code>{param.name}</code>
+              </td>
+              <td>
+                <ParameterField
+                  parameter={param}
+                  value={values[param.name]}
+                  onChange={onFieldChange}
+                />
+              </td>
+              <td>{param.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

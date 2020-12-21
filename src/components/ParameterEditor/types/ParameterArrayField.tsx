@@ -1,6 +1,6 @@
 import { getReferencedSchema } from "lib/apiSchemaUtils";
 import React from "react";
-import Select, { ValueType } from "react-select";
+import Select from "react-select";
 import { ParameterFieldProps } from "../types";
 
 import s from "./styles.module.scss";
@@ -35,9 +35,9 @@ const ParameterArrayField: React.FC<ParameterArrayFieldProps> = ({
     label: item.identifier,
   }));
 
-  const handleChange = (value: iOption[]) => {
+  const handleChange = (value: iOption[] | null) => {
     console.log(value);
-    onChange(parameter.name, value.map((v) => v.value).join(","));
+    onChange(parameter.name, (value ?? []).map((v) => v.value).join(","));
   };
 
   const defaultValue = (value ?? "")
@@ -51,7 +51,7 @@ const ParameterArrayField: React.FC<ParameterArrayFieldProps> = ({
       options={options}
       isMulti={true}
       defaultValue={defaultValue}
-      onChange={(v) => handleChange((v as unknown) as iOption[])}
+      onChange={(v) => handleChange((v as unknown) as iOption[] | null)}
     />
   );
 };

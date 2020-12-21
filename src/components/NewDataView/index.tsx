@@ -53,7 +53,17 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
     );
   }
 
-  return <JSONTree data={data} valueRenderer={valueRenderer} hideRoot={true} />;
+  return (
+    <JSONTree
+      theme={{
+        tree: s.root,
+      }}
+      shouldExpandNode={() => true}
+      data={data}
+      valueRenderer={valueRenderer}
+      hideRoot={true}
+    />
+  );
 };
 
 function definitionNameFromRef(ref: string) {

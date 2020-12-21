@@ -1,10 +1,16 @@
+import Header from "components/Header";
 import NewDataView from "components/NewDataView";
 import { OpenAPIV2 } from "openapi-types";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
+
 import ParameterEditor from "../../components/ParameterEditor";
 import { getOperation } from "../../lib/apiSchemaUtils";
+
+import AnimateHeight from "react-animate-height";
+
 import s from "./styles.module.scss";
+import Icon from "components/Icon";
 
 interface ApiRequestViewProps {}
 
@@ -40,9 +46,52 @@ const useApiParams = (apiOperation: ReturnType<typeof getOperation>) => {
   return [pathState, queryState];
 };
 
+function makeUrl(
+  apiOperation: ReturnType<typeof getOperation>,
+  pathParams: Record<string, string>,
+  queryParams: Record<string, string>,
+  encodeUrl?: boolean
+) {
+  if (!apiOperation) return;
+
+  let path = apiOperation.path;
+
+  const qs = Object.entries(queryParams)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+
+  for (const [key, value] of Object.entries(pathParams)) {
+    if (value) {
+      const v = encodeUrl ? encodeURIComponent(value) : value;
+      path = path.replace(`{${key}}`, v);
+    }
+  }
+
+  if (qs.length > 1) {
+    path = path + "?" + qs;
+  }
+
+  return `/Platform${path}`;
+}
+
+enum Collapsed {
+  Unselected = "Unselected",
+  Collapsed = "Collapsed",
+  Visible = "Visible",
+}
+
+function invertCollapsed(v: Collapsed, isCollapsed: boolean) {
+  if (v === Collapsed.Visible) {
+    return Collapsed.Collapsed;
+  }
+
+  return isCollapsed ? Collapsed.Visible : Collapsed.Collapsed;
+}
+
 const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const history = useHistory();
   const [apiResponse, setApiResponse] = useState<any>();
+  const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
   const params = useParams<{ operationName: string }>();
   const apiOperation = useMemo(() => getOperation(params.operationName), [
@@ -67,30 +116,15 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
     history.replace(`?${qs}`);
   }, [history, pathParams, queryParams]);
 
-  const filledInUrl = useMemo(() => {
-    if (!apiOperation) return undefined;
-
-    let path = apiOperation.path;
-
-    const qs = Object.entries(queryParams)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join("&");
-
-    for (const [key, value] of Object.entries(pathParams)) {
-      if (value) {
-        path = path.replace(`{${key}}`, value);
-      }
-    }
-
-    if (qs.length > 1) {
-      path = path + "?" + qs;
-    }
-
-    return path;
-  }, [apiOperation, pathParams, queryParams]);
+  const displayUrl = useMemo(
+    () => makeUrl(apiOperation, pathParams, queryParams),
+    [apiOperation, pathParams, queryParams]
+  );
 
   const handleSubmit = useCallback(() => {
-    fetch(`https://www.bungie.net/Platform${filledInUrl}`, {
+    const url = makeUrl(apiOperation, pathParams, queryParams, true);
+
+    fetch(`https://www.bungie.net${url}`, {
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY ?? "",
       },
@@ -99,7 +133,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         return response.json();
       })
       .then((data) => setApiResponse(data));
-  }, [filledInUrl]);
+  }, [apiOperation, pathParams, queryParams]);
 
   if (!apiOperation) {
     return <h1>could not find</h1>;
@@ -109,39 +143,81 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
     | OpenAPIV2.SchemaObject
     | undefined;
 
+  const isCollapsed =
+    collapsed === Collapsed.Unselected
+      ? !!apiResponse
+      : collapsed === Collapsed.Collapsed;
+
   return (
     <div className={s.root}>
-      <h1>{apiOperation.operationId}</h1>
-      <p>{apiOperation.description}</p>
-      URL: <code>{apiOperation.path}</code>
-      <br />
-      URL: <code>{filledInUrl}</code>
-      {apiOperation.pathParameters.length > 0 && (
-        <>
-          <h4>Path params</h4>
-          <ParameterEditor
-            parameters={apiOperation.pathParameters}
-            values={pathParams}
-            onChange={(v) => setPathParams(v)}
-          />
-        </>
-      )}
-      {apiOperation.queryParameters.length > 0 && (
-        <>
-          <h4>Query params</h4>
-          <ParameterEditor
-            parameters={apiOperation.queryParameters}
-            values={queryParams}
-            onChange={(v) => setQueryParams(v)}
-          />
-        </>
-      )}
-      <button onClick={handleSubmit} type="button">
-        Submit
-      </button>
-      {apiResponse && response && (
-        <NewDataView data={apiResponse} schema={response} />
-      )}
+      <div className={s.request}>
+        <Header className={s.header}>
+          <div className={s.headerBody}>
+            <div className={s.headerMain}>{apiOperation.operationId}</div>
+          </div>
+        </Header>
+
+        <div className={s.requestEditor}>
+          <div className={s.urlBar}>
+            <div className={s.url}>{displayUrl}</div>
+
+            <div className={s.urlActions}>
+              <button
+                className={s.submitButton}
+                onClick={handleSubmit}
+                type="button"
+              >
+                Submit
+              </button>
+
+              <button
+                className={s.actionButton}
+                onClick={() =>
+                  setCollapsed((v) => invertCollapsed(v, isCollapsed))
+                }
+              >
+                {isCollapsed ? (
+                  <span key="up">
+                    <Icon name="chevron-up" />
+                  </span>
+                ) : (
+                  <span key="down">
+                    <Icon name="chevron-down" />
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <AnimateHeight height={isCollapsed ? 0 : "auto"}>
+            {apiOperation.pathParameters.length > 0 && (
+              <ParameterEditor
+                className={s.params}
+                title="Path params"
+                parameters={apiOperation.pathParameters}
+                values={pathParams}
+                onChange={(v) => setPathParams(v)}
+              />
+            )}
+
+            {apiOperation.queryParameters.length > 0 && (
+              <ParameterEditor
+                className={s.params}
+                title="Query params"
+                parameters={apiOperation.queryParameters}
+                values={queryParams}
+                onChange={(v) => setQueryParams(v)}
+              />
+            )}
+          </AnimateHeight>
+        </div>
+      </div>
+
+      <div className={s.response}>
+        {apiResponse && response && (
+          <NewDataView data={apiResponse} schema={response} />
+        )}
+      </div>
     </div>
   );
 };
