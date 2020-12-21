@@ -5,7 +5,7 @@ import { getOperation } from "lib/apiSchemaUtils";
 import React, { useMemo } from "react";
 
 import AnimateHeight from "react-animate-height";
-import { makeUrl, Params } from "views/ApiRequest/utils";
+import { makeApiRequestUrl, Params } from "views/ApiRequest/utils";
 
 import s from "./styles.module.scss";
 
@@ -33,7 +33,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   onQueryParamsChange,
 }) => {
   const displayUrl = useMemo(
-    () => makeUrl(apiOperation, pathParams, queryParams),
+    () => makeApiRequestUrl(apiOperation, pathParams, queryParams),
     [apiOperation, pathParams, queryParams]
   );
 

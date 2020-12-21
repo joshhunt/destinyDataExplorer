@@ -2,28 +2,41 @@ import Header from "components/Header";
 import NewDataView from "components/NewDataView";
 import { OpenAPIV2 } from "openapi-types";
 import React, { useCallback, useMemo, useState } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 
-import ParameterEditor from "../../components/ParameterEditor";
 import { getOperation } from "../../lib/apiSchemaUtils";
 
-import AnimateHeight from "react-animate-height";
-
 import s from "./styles.module.scss";
-import Icon from "components/Icon";
-import { Collapsed, useApiParams, makeUrl, invertCollapsed } from "./utils";
+import {
+  Collapsed,
+  useApiParams,
+  makeApiRequestUrl,
+  invertCollapsed,
+  makeUrl,
+} from "./utils";
 import APIRequestEditor from "components/APIRequestEditor";
+import DataViewsOverlay, {
+  DefinitionEntry,
+  parsePathParam,
+} from "components/DataViewsOverlay";
+import { makeTypeShort } from "lib/destinyUtils";
 
 interface ApiRequestViewProps {}
 
 const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
+  const history = useHistory();
   const [apiResponse, setApiResponse] = useState<any>();
   const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
-  const params = useParams<{ operationName: string }>();
+  const params = useParams<{ operationName: string; "0"?: string }>();
   const apiOperation = useMemo(() => getOperation(params.operationName), [
     params.operationName,
   ]);
+
+  const definitionEntries = useMemo(
+    () => (params["0"] ? parsePathParam(params["0"]) : []),
+    [params]
+  );
 
   const [
     [pathParams, setPathParams],
@@ -31,7 +44,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   ] = useApiParams(apiOperation);
 
   const handleSubmit = useCallback(() => {
-    const url = makeUrl(apiOperation, pathParams, queryParams, true);
+    const url = makeApiRequestUrl(apiOperation, pathParams, queryParams, true);
 
     fetch(`https://www.bungie.net${url}`, {
       headers: {
@@ -43,6 +56,28 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
       })
       .then((data) => setApiResponse(data));
   }, [apiOperation, pathParams, queryParams]);
+
+  const linkedDefinitionUrl = useCallback(
+    ({ type, hash }: DefinitionEntry) => {
+      const newItems = [...definitionEntries, { type, hash }];
+      return makeUrl(newItems, params.operationName, pathParams, queryParams);
+    },
+    [definitionEntries, params.operationName, pathParams, queryParams]
+  );
+
+  const requestPopOverlay = useCallback(() => {
+    const newItems = [...definitionEntries];
+    newItems.pop();
+    history.push(
+      makeUrl(newItems, params.operationName, pathParams, queryParams)
+    );
+  }, [
+    definitionEntries,
+    history,
+    params.operationName,
+    pathParams,
+    queryParams,
+  ]);
 
   if (!apiOperation) {
     return <h1>could not find</h1>;
@@ -58,35 +93,47 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
       : collapsed === Collapsed.Collapsed;
 
   return (
-    <div className={s.root}>
-      <div className={s.request}>
-        <Header className={s.header}>
-          <div className={s.headerBody}>
-            <div className={s.headerMain}>{apiOperation.operationId}</div>
-          </div>
-        </Header>
+    <>
+      <div className={s.root}>
+        <div className={s.request}>
+          <Header className={s.header}>
+            <div className={s.headerBody}>
+              <div className={s.headerMain}>{apiOperation.operationId}</div>
+            </div>
+          </Header>
 
-        <APIRequestEditor
-          className={s.requestEditor}
-          apiOperation={apiOperation}
-          isCollapsed={isCollapsed}
-          pathParams={pathParams}
-          queryParams={queryParams}
-          onPathParamsChange={setPathParams}
-          onQueryParamsChange={setQueryParams}
-          onSubmit={handleSubmit}
-          onToggleCollapsed={() =>
-            setCollapsed((v) => invertCollapsed(v, isCollapsed))
-          }
-        />
+          <APIRequestEditor
+            className={s.requestEditor}
+            apiOperation={apiOperation}
+            isCollapsed={isCollapsed}
+            pathParams={pathParams}
+            queryParams={queryParams}
+            onPathParamsChange={setPathParams}
+            onQueryParamsChange={setQueryParams}
+            onSubmit={handleSubmit}
+            onToggleCollapsed={() =>
+              setCollapsed((v) => invertCollapsed(v, isCollapsed))
+            }
+          />
+        </div>
+
+        <div className={s.response}>
+          {apiResponse && response && (
+            <NewDataView
+              data={apiResponse}
+              schema={response}
+              linkedDefinitionUrl={linkedDefinitionUrl}
+            />
+          )}
+        </div>
       </div>
 
-      <div className={s.response}>
-        {apiResponse && response && (
-          <NewDataView data={apiResponse} schema={response} />
-        )}
-      </div>
-    </div>
+      <DataViewsOverlay
+        items={definitionEntries}
+        linkedDefinitionUrl={linkedDefinitionUrl}
+        requestPopOverlay={requestPopOverlay}
+      />
+    </>
   );
 };
 

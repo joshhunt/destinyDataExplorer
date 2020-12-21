@@ -10,6 +10,7 @@ import { isImage } from "lib/utils";
 import ImageJsonValue from "./ImageJsonValue";
 import theme from "./theme";
 import CSSThemeVariables from "components/CSSThemeVariables";
+import { DefinitionEntry } from "components/DataViewsOverlay/utils";
 
 declare module "openapi-types/dist/index" {
   namespace OpenAPIV2 {
@@ -30,16 +31,21 @@ declare module "openapi-types/dist/index" {
 
 interface NewDataViewProps {
   data: Object;
-  schema: OpenAPIV2.SchemaObject;
+  schema?: OpenAPIV2.SchemaObject;
+  linkedDefinitionUrl: (item: DefinitionEntry) => string;
 }
 
-const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
+const NewDataView: React.FC<NewDataViewProps> = ({
+  data,
+  schema,
+  linkedDefinitionUrl,
+}) => {
   function valueRenderer(
     prettyValue: string,
     rawValue: any,
     ...itemPath: (string | number)[]
   ) {
-    const propertySchema = getPropertySchemaForPath(schema, itemPath);
+    const propertySchema = schema && getPropertySchemaForPath(schema, itemPath);
     if (!propertySchema) return prettyValue;
 
     const children = (
@@ -53,7 +59,11 @@ const NewDataView: React.FC<NewDataViewProps> = ({ data, schema }) => {
 
     if (definitionRef) {
       return (
-        <LinkedJSONValue value={rawValue} schemaRef={definitionRef.$ref}>
+        <LinkedJSONValue
+          value={rawValue}
+          schemaRef={definitionRef.$ref}
+          linkedDefinitionUrl={linkedDefinitionUrl}
+        >
           {children}
         </LinkedJSONValue>
       );

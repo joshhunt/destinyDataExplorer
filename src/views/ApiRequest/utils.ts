@@ -1,4 +1,6 @@
+import { DefinitionEntry } from "components/DataViewsOverlay";
 import { getOperation } from "lib/apiSchemaUtils";
+import { makeTypeShort } from "lib/destinyUtils";
 import { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router";
 
@@ -38,7 +40,7 @@ export const useApiParams = (apiOperation: ReturnType<typeof getOperation>) => {
   return [pathState, queryState];
 };
 
-export function makeUrl(
+export function makeApiRequestUrl(
   apiOperation: ReturnType<typeof getOperation>,
   pathParams: Params,
   queryParams: Params,
@@ -95,4 +97,21 @@ export function useURLUpdater(pathParams: Params, queryParams: Params) {
 
     history.replace(`?${qs}`);
   }, [history, pathParams, queryParams]);
+}
+
+export function makeUrl(
+  items: DefinitionEntry[],
+  operationName: string,
+  pathParams: Params,
+  queryParams: Params
+) {
+  const defsPath = items
+    .map((v) => `${makeTypeShort(v.type)}:${v.hash}`)
+    .join("/");
+
+  const qs = Object.entries({ ...pathParams, ...queryParams })
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+    .join("&");
+
+  return `/api/${operationName}/${defsPath}?${qs}`;
 }

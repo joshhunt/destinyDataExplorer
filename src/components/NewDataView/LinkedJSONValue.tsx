@@ -1,37 +1,29 @@
 import { makeTypeShort } from "lib/destinyUtils";
 import React from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import s from "./jsonStyles.module.scss";
-import { getDisplayName, isTableName } from "lib/destinyTsUtils";
-import { ReduxStore } from "types";
+import { getDisplayName, useDefinition } from "lib/destinyTsUtils";
 import { definitionNameFromRef } from "lib/apiSchemaUtils";
 import SelectBreak from "./SelectBreak";
 import Separator from "./Separator";
+import { DefinitionEntry } from "components/DataViewsOverlay";
 
 interface LinkedJSONValueProps {
   value: any;
   schemaRef: string;
+  linkedDefinitionUrl: (item: DefinitionEntry) => string;
 }
 
 const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
   value,
+  linkedDefinitionUrl,
   schemaRef: ref,
   children,
 }) => {
   const linkedDefinitionName = definitionNameFromRef(ref);
   const shortDefinitionName = makeTypeShort(linkedDefinitionName);
-  const definition = useSelector((store: ReduxStore) => {
-    const { definitions: allDefinitions } = store.definitions;
-    if (!allDefinitions) {
-      return undefined;
-    }
-
-    if (isTableName(linkedDefinitionName, allDefinitions)) {
-      return allDefinitions[linkedDefinitionName]?.[value];
-    }
-  });
+  const definition = useDefinition(linkedDefinitionName, value);
 
   if (!definition) {
     return <>{children}</>;
@@ -45,7 +37,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
       <SelectBreak />
       <Separator />
       <Link
-        to={`/i/${shortDefinitionName}:${value}`}
+        to={linkedDefinitionUrl({ type: linkedDefinitionName, hash: value })}
         className={s.linkedJsonValue}
       >
         {displayName

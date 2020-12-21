@@ -1,12 +1,9 @@
-import { OpenAPI, OpenAPIV2 } from "openapi-types";
+import { OpenAPIV2 } from "openapi-types";
 
 import _apispec from "./apispec.json";
+import { notEmpty } from "./utils";
 
 const apiSpec = (_apispec as unknown) as OpenAPIV2.Document;
-
-function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
-  return value !== null && value !== undefined;
-}
 
 function getParameters(operation: OpenAPIV2.OperationObject) {
   const pathParameters: OpenAPIV2.Parameter[] = [];
@@ -159,4 +156,15 @@ export function getEnumValuesForRef(ref: string) {
 export function definitionNameFromRef(ref: string) {
   const bits = ref.split(".");
   return bits[bits.length - 1];
+}
+
+export function getSchemaFromDefinitionName(tableName: string) {
+  const found = Object.entries(apiSpec.definitions ?? {}).find(
+    ([schemaKey, schema]) => {
+      const shortName = getShortSchemaNameFromRef(schemaKey);
+      return shortName === tableName;
+    }
+  );
+
+  return found?.[1];
 }

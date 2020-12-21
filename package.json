@@ -49,6 +49,7 @@
   },
   "scripts": {
     "update-api-spec": "curl https://raw.githubusercontent.com/Bungie-net/api/master/openapi-2.json > ./src/lib/apispec.json",
+    "update-api-spec-v3": "curl https://raw.githubusercontent.com/Bungie-net/api/master/openapi.json > ./src/lib/apispecv3.json",
     "start": "yarn run update-api-spec; react-app-rewired start",
     "build": "yarn run update-api-spec; react-app-rewired build",
     "test": "react-app-rewired test",

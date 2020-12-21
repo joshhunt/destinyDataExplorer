@@ -7,3 +7,9 @@ export function getLower(obj: any, path: string, fallback = "") {
 
 export const isImage = (value: string | number): value is string =>
   isString(value) && !!value.match(/\.(png|jpg|jpeg)$/);
+
+export function notEmpty<TValue>(
+  value: TValue | null | undefined
+): value is TValue {
+  return value !== null && value !== undefined;
+}
