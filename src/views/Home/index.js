@@ -15,6 +15,7 @@ import { setBulkDefinitions } from "store/definitions";
 import { setFilterString, setFilterValue } from "store/filter";
 import { makeTypeShort, getRandomItems } from "lib/destinyUtils";
 
+import DataViewsOverlay from "components/DataViewsOverlay";
 import Loading from "components/Loading";
 import CollectDrawer from "components/Collect";
 import SearchHeader from "components/SearchHeader";
@@ -95,7 +96,7 @@ class HomeView extends Component {
       url = `/i/${shortType}:${key}`;
     }
 
-    return url;
+    return url + (this.props.location.search ?? "");
   };
 
   popView = () => {
@@ -108,7 +109,9 @@ class HomeView extends Component {
         : "/i/" +
           newViews.map((view) => `${view.shortType}:${view.hash}`).join("/");
 
-    this.props.history.push(newPath);
+    const newUrl = newPath + (this.props.location.search ?? "");
+
+    this.props.history.push(newUrl);
   };
 
   onItemClick = (ev, entry) => {
@@ -144,6 +147,7 @@ class HomeView extends Component {
     } = this.props;
 
     const { views } = this.state;
+    const useNewDataView = this.props.location.search.includes("new");
 
     let items = filterResults.results || [];
 
@@ -228,29 +232,39 @@ class HomeView extends Component {
           )}
         </div>
 
-        <TransitionGroup>
-          {views.map(
-            ({ type, hash }, index) =>
-              this.props.definitions &&
-              this.props.definitions[type] && (
-                <CSSTransition
-                  key={index}
-                  classNames="global-dataview-animation"
-                  timeout={{ enter: 200, exit: 200 }}
-                >
-                  <DataView
-                    definitions={definitions}
-                    depth={index + 1}
-                    className={s.dataView}
-                    item={this.props.definitions[type][hash]}
-                    type={type}
-                    onRequestClose={this.popView}
-                    pathForItem={this.pathForItem}
-                  />
-                </CSSTransition>
-              )
-          )}
-        </TransitionGroup>
+        {useNewDataView ? (
+          <DataViewsOverlay
+            items={views}
+            linkedDefinitionUrl={(item) =>
+              this.pathForItem(item.type, { hash: item.hash })
+            }
+            requestPopOverlay={this.popView}
+          />
+        ) : (
+          <TransitionGroup>
+            {views.map(
+              ({ type, hash }, index) =>
+                this.props.definitions &&
+                this.props.definitions[type] && (
+                  <CSSTransition
+                    key={index}
+                    classNames="global-dataview-animation"
+                    timeout={{ enter: 200, exit: 200 }}
+                  >
+                    <DataView
+                      definitions={definitions}
+                      depth={index + 1}
+                      className={s.dataView}
+                      item={this.props.definitions[type][hash]}
+                      type={type}
+                      onRequestClose={this.popView}
+                      pathForItem={this.pathForItem}
+                    />
+                  </CSSTransition>
+                )
+            )}
+          </TransitionGroup>
+        )}
       </div>
     );
   }

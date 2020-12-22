@@ -1,4 +1,4 @@
-import DefinitionsDataView from "components/DefinitionsDataView";
+import DefinitionDataView from "components/DefinitionDataView";
 import { getSchemaFromDefinitionName } from "lib/apiSchemaUtils";
 import { definitionFromStore } from "lib/destinyTsUtils";
 import { notEmpty } from "lib/utils";
@@ -34,7 +34,7 @@ const DataViewsOverlay: React.FC<DataViewsOverlayProps> = ({
         };
 
         // @ts-ignore
-        delete definition.$type;
+        delete cleanedDef.$type;
 
         return {
           ...item,
@@ -67,7 +67,7 @@ const DataViewsOverlay: React.FC<DataViewsOverlayProps> = ({
           >
             <div className={s.layer} data-root="true" onClick={onLayerClick}>
               <div className={s.data} style={{ left: 100 * (index + 1) }}>
-                <DefinitionsDataView
+                <DefinitionDataView
                   definition={definition}
                   tableName={type}
                   linkedDefinitionUrl={linkedDefinitionUrl}

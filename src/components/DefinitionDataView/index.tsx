@@ -8,13 +8,13 @@ import BungieImage from "components/BungieImage";
 import { BaseDestinyDefinition } from "types";
 import { getDisplayName } from "lib/destinyTsUtils";
 
-interface DefinitionsDataViewProps {
+interface DefinitionDataViewProps {
   definition: any;
   tableName: string;
   linkedDefinitionUrl: (item: DefinitionEntry) => string;
 }
 
-const DefinitionsDataView: React.FC<DefinitionsDataViewProps> = ({
+const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
   definition,
   tableName,
   linkedDefinitionUrl,
@@ -53,4 +53,4 @@ const DefinitionsDataView: React.FC<DefinitionsDataViewProps> = ({
   );
 };
 
-export default DefinitionsDataView;
+export default DefinitionDataView;
