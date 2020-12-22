@@ -25,6 +25,8 @@
     "lodash": "^4.17.4",
     "normalize-text": "^2.3.1",
     "openapi-types": "^7.0.1",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "promise-worker": "^2.0.1",
     "react": "^17.0.1",
     "react-animate-height": "^2.0.23",
@@ -44,6 +46,7 @@
     "reselect": "^4.0.0",
     "sass": "^1.30.0",
     "sql.js": "github:DestinyItemManager/sql.js",
+    "ts-node": "^9.1.1",
     "typescript": "^4.0.3",
     "worker-loader": "^3.0.6"
   },
@@ -54,6 +57,7 @@
     "build": "yarn run update-api-spec; yarn run update-api-spec-v3; react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
+    "postinstall": "patch-package",
     "serve": "serve -s build"
   },
   "eslintConfig": {

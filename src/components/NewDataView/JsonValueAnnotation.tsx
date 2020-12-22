@@ -1,6 +1,6 @@
 import React from "react";
-import SelectBreak from "./SelectBreak";
-import Separator from "./Separator";
+
+import s from "./jsonStyles.module.scss";
 
 interface JsonValueAnnotationProps {
   value: React.ReactNode;
@@ -15,9 +15,17 @@ const JsonValueAnnotation: React.FC<JsonValueAnnotationProps> = ({
       {value}
       <SelectBreak />
       <Separator />
-      {children}
+      <span className={s.annotation}>{children}</span>
     </>
   );
+};
+
+export const SelectBreak: React.FC = () => {
+  return <span className={s.noSelect}> </span>;
+};
+
+export const Separator: React.FC = () => {
+  return <span className={s.comment}>{" // "}</span>;
 };
 
 export default JsonValueAnnotation;

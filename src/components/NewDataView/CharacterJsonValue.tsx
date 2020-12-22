@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 import { ReduxStore } from "types";
 import { definitionFromStore, getDisplayName } from "lib/destinyTsUtils";
 
-import s from "./jsonStyles.module.scss";
-
 interface CharacterJsonValueProps {
   value: any;
   data: any;
@@ -37,9 +35,7 @@ const CharacterJsonValue: React.FC<CharacterJsonValueProps> = ({
 
   return (
     <JsonValueAnnotation value={children}>
-      <span className={s.unlinkedJsonValue}>
-        character {classDefinition && getDisplayName(classDefinition)}
-      </span>
+      character "{classDefinition && getDisplayName(classDefinition)}""
     </JsonValueAnnotation>
   );
 };
@@ -51,9 +47,7 @@ export function getCharacterData(rawValue: any, data: any) {
     return undefined;
   }
 
-  const characterData = data.Response.characters?.data?.[rawValue];
-
-  return characterData ? characterData : undefined;
+  return data.Response.characters?.data?.[rawValue];
 }
 
 export function isCharacterId(rawValue: any, data: any) {
@@ -63,7 +57,7 @@ export function isCharacterId(rawValue: any, data: any) {
 function isProfileResponse(
   data: any
 ): data is ServerResponse<DestinyProfileResponse> {
-  if (data.Response?.profile?.data) {
+  if (data.Response?.profile?.data || data.Response?.characters?.data) {
     return true;
   }
 

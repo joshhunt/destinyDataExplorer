@@ -4,7 +4,6 @@ import {
 } from "lib/apiSchemaUtils";
 import React from "react";
 
-import s from "./jsonStyles.module.scss";
 import JsonValueAnnotation from "./JsonValueAnnotation";
 
 interface EnumJsonValueProps {
@@ -43,16 +42,11 @@ const EnumJsonValue: React.FC<EnumJsonValueProps> = ({
 
   return (
     <JsonValueAnnotation value={children}>
-      <span
-        className={s.unlinkedJsonValue}
-        onClick={() => console.log(enumSchema)}
-      >
-        {isBitmask
-          ? `bitmask ${enumName} [${prettyName}]`
-          : prettyName
-          ? `enum ${enumName} "${prettyName}"`
-          : `enum ${enumName}`}
-      </span>
+      {isBitmask
+        ? `bitmask ${enumName} [${prettyName}]`
+        : prettyName
+        ? `enum ${enumName} "${prettyName}"`
+        : `enum ${enumName}`}
     </JsonValueAnnotation>
   );
 };

@@ -12,6 +12,7 @@
   &,
   * {
     font-family: "Roboto Mono", monospace !important;
+    user-select: initial !important;
   }
 
   & > li > ul > li:first-child {

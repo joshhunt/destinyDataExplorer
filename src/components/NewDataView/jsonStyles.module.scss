@@ -1,16 +1,15 @@
-.linkedJsonValue {
+.annotation {
+  color: var(--base08);
+}
+
+.linkedAnnotation {
+  composes: annotation;
   text-decoration: underline;
   cursor: pointer;
-  color: inherit;
-  color: var(--base08);
 }
 
 .comment {
   color: var(--base03);
-}
-
-.unlinkedJsonValue {
-  color: var(--base08);
 }
 
 .imageJsonValue {

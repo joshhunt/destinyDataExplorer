@@ -1,0 +1,39 @@
+diff --git a/node_modules/react-json-tree/lib/JSONNestedNode.js b/node_modules/react-json-tree/lib/JSONNestedNode.js
+index f975ff5..0bfcccf 100644
+--- a/node_modules/react-json-tree/lib/JSONNestedNode.js
++++ b/node_modules/react-json-tree/lib/JSONNestedNode.js
+@@ -174,7 +174,7 @@ var JSONNestedNode = /*#__PURE__*/function (_React$Component) {
+ 
+       var itemType = /*#__PURE__*/_react["default"].createElement("span", styling('nestedNodeItemType', expanded), nodeTypeIndicator);
+ 
+-      var renderedItemString = getItemString(nodeType, data, itemType, createItemString(data, collectionLimit));
++      var renderedItemString = getItemString(nodeType, data, itemType, createItemString(data, collectionLimit), keyPath);
+       var stylingArgs = [keyPath, nodeType, expanded, expandable];
+       return hideRoot ? /*#__PURE__*/_react["default"].createElement("li", styling.apply(void 0, ['rootNode'].concat(stylingArgs)), /*#__PURE__*/_react["default"].createElement("ul", styling.apply(void 0, ['rootNodeChildren'].concat(stylingArgs)), renderedChildren)) : /*#__PURE__*/_react["default"].createElement("li", styling.apply(void 0, ['nestedNode'].concat(stylingArgs)), expandable && /*#__PURE__*/_react["default"].createElement(_JSONArrow["default"], {
+         styling: styling,
+diff --git a/node_modules/react-json-tree/lib/index.d.ts b/node_modules/react-json-tree/lib/index.d.ts
+index 5e69266..afa8ac2 100644
+--- a/node_modules/react-json-tree/lib/index.d.ts
++++ b/node_modules/react-json-tree/lib/index.d.ts
+@@ -24,7 +24,7 @@ export default class JSONTree extends React.Component<Props, State> {
+         shouldExpandNode: (keyPath: (string | number)[], data: any, level: number) => boolean;
+         hideRoot: boolean;
+         keyPath: string[];
+-        getItemString: (type: string, data: any, itemType: React.ReactNode, itemString: string) => JSX.Element;
++        getItemString: (type: string, data: any, itemType: React.ReactNode, itemString: string, keyPath: (string | number)[]) => JSX.Element;
+         labelRenderer: ([label]: (string | number)[]) => JSX.Element;
+         valueRenderer: (value: any) => any;
+         postprocessValue: (value: any) => any;
+diff --git a/node_modules/react-json-tree/lib/types.d.ts b/node_modules/react-json-tree/lib/types.d.ts
+index 99ea08e..08bdcc7 100644
+--- a/node_modules/react-json-tree/lib/types.d.ts
++++ b/node_modules/react-json-tree/lib/types.d.ts
+@@ -14,7 +14,7 @@ export declare type JSONValueNodeCircularPropsProvidedByJSONNode = SharedCircula
+ interface JSONNestedNodeCircularPropsPassedThroughJSONTree {
+     shouldExpandNode: (keyPath: (string | number)[], data: any, level: number) => boolean;
+     hideRoot: boolean;
+-    getItemString: (nodeType: string, data: any, itemType: React.ReactNode, itemString: string) => React.ReactNode;
++    getItemString: (nodeType: string, data: any, itemType: React.ReactNode, itemString: string, keyPath: (string | number)[]) => React.ReactNode;
+     postprocessValue: (value: any) => any;
+     isCustomNode: (value: any) => boolean;
+     collectionLimit: number;

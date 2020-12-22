@@ -64,6 +64,7 @@
   line-height: 1;
   border: 2px solid var(--bg-color);
   outline: none !important;
+  transition: 100ms ease-in-out background;
 
   &:hover {
     --bg-color: #{lighten(#e67e22, 15%)};
@@ -86,6 +87,17 @@
   margin-left: 8px;
   outline: none;
   border-radius: 5px;
+  cursor: pointer;
+  transition: 100ms ease-in-out background;
+  outline: none !important;
+
+  &:hover {
+    background: rgba(white, 0.15);
+  }
+
+  &:active {
+    background: rgba(white, 0.05);
+  }
 
   &:focus {
     box-shadow: inset 0 0 0 2px

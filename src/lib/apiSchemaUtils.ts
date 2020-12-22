@@ -118,7 +118,25 @@ export function getReferencedSchema(ref: string) {
   return found;
 }
 
+// export function getObjectSchemaForPath(
+//   parentSchema: OpenAPIV3.SchemaObject,
+//   _itemPath: (number | string)[]
+// ) {
+//   const keyPath = [..._itemPath];
+//   keyPath.reverse();
+
+//   let currentSchema:
+//     | OpenAPIV3.ReferenceObject
+//     | OpenAPIV3.ArraySchemaObject
+//     | OpenAPIV3.NonArraySchemaObject = parentSchema;
+
+//   for (const propertyName of keyPath) {
+
+//   }
+// }
+
 // TODO: type this better, remove all the any casts
+
 export function getPropertySchemaForPath(
   parentSchema: OpenAPIV3.SchemaObject,
   itemPath: (number | string)[]
@@ -127,23 +145,27 @@ export function getPropertySchemaForPath(
   orderedPath.reverse();
 
   let currentSpec:
-    | OpenAPIV3.ReferenceObject
     | OpenAPIV3.ArraySchemaObject
-    | OpenAPIV3.NonArraySchemaObject = parentSchema;
+    | OpenAPIV3.NonArraySchemaObject = ensureSchema(parentSchema);
 
-  orderedPath.forEach((pathElement) => {
+  orderedPath.forEach((pathElement, index) => {
+    const isLast = index === orderedPath.length - 1;
+
     const potentialNewSpec =
       "properties" in currentSpec &&
       currentSpec.properties &&
       currentSpec.properties[pathElement];
 
-    currentSpec = potentialNewSpec || currentSpec;
+    currentSpec =
+      (potentialNewSpec && ensureSchema(potentialNewSpec)) || currentSpec;
 
     if (!currentSpec) {
       return;
     }
 
-    const ref = getRefFromWhateverTheFuckThisIs(currentSpec);
+    const dontLookAtChildren = isLast && currentSpec.type === "object";
+
+    const ref = dontLookAtChildren ? undefined : getRefForChildren(currentSpec);
 
     if (ref) {
       const foundSchema = getReferencedSchema(ref);
@@ -154,7 +176,7 @@ export function getPropertySchemaForPath(
   return currentSpec;
 }
 
-function getRefFromWhateverTheFuckThisIs(
+function getRefForChildren(
   spec:
     | OpenAPIV3.ReferenceObject
     | OpenAPIV3.ArraySchemaObject

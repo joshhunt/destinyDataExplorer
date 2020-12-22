@@ -34,7 +34,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
     <JsonValueAnnotation value={children}>
       <Link
         to={linkedDefinitionUrl({ type: linkedDefinitionName, hash: value })}
-        className={s.linkedJsonValue}
+        className={s.linkedAnnotation}
       >
         {displayName
           ? `<${shortDefinitionName} "${displayName}">`
