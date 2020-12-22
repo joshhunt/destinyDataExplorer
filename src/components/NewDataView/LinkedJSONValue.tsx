@@ -5,9 +5,8 @@ import { Link } from "react-router-dom";
 import s from "./jsonStyles.module.scss";
 import { getDisplayName, useDefinition } from "lib/destinyTsUtils";
 import { definitionNameFromRef } from "lib/apiSchemaUtils";
-import SelectBreak from "./SelectBreak";
-import Separator from "./Separator";
 import { DefinitionEntry } from "components/DataViewsOverlay";
+import JsonValueAnnotation from "./JsonValueAnnotation";
 
 interface LinkedJSONValueProps {
   value: any;
@@ -32,10 +31,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
   const displayName = getDisplayName(definition);
 
   return (
-    <>
-      {children}
-      <SelectBreak />
-      <Separator />
+    <JsonValueAnnotation value={children}>
       <Link
         to={linkedDefinitionUrl({ type: linkedDefinitionName, hash: value })}
         className={s.linkedJsonValue}
@@ -44,7 +40,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
           ? `<${shortDefinitionName} "${displayName}">`
           : `<${shortDefinitionName}>`}
       </Link>
-    </>
+    </JsonValueAnnotation>
   );
 };
 

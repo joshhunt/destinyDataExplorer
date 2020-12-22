@@ -11,30 +11,7 @@ import ImageJsonValue from "./ImageJsonValue";
 import theme from "./theme";
 import CSSThemeVariables from "components/CSSThemeVariables";
 import { DefinitionEntry } from "components/DataViewsOverlay/utils";
-
-declare module "openapi-types/dist/index" {
-  namespace OpenAPIV3 {
-    interface ArraySchemaObject {
-      "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
-      "x-enum-reference"?: OpenAPIV3.ReferenceObject;
-      "x-enum-is-bitmask"?: boolean;
-      "x-enum-values"?: {
-        numericValue: string;
-        identifier: string;
-      }[];
-    }
-
-    interface NonArraySchemaObject {
-      "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
-      "x-enum-reference"?: OpenAPIV3.ReferenceObject;
-      "x-enum-is-bitmask"?: boolean;
-      "x-enum-values"?: {
-        numericValue: string;
-        identifier: string;
-      }[];
-    }
-  }
-}
+import CharacterJsonValue, { isCharacterId } from "./CharacterJsonValue";
 
 interface NewDataViewProps {
   data: any;
@@ -89,6 +66,14 @@ const NewDataView: React.FC<NewDataViewProps> = ({
 
     if (isImage(rawValue)) {
       return <ImageJsonValue value={rawValue} />;
+    }
+
+    if (isCharacterId(rawValue, data)) {
+      return (
+        <CharacterJsonValue value={rawValue} data={data}>
+          {children}
+        </CharacterJsonValue>
+      );
     }
 
     return children;
