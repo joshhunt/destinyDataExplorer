@@ -17,6 +17,7 @@ declare module "openapi-types/dist/index" {
     interface ArraySchemaObject {
       "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
       "x-enum-reference"?: OpenAPIV3.ReferenceObject;
+      "x-enum-is-bitmask"?: boolean;
       "x-enum-values"?: {
         numericValue: string;
         identifier: string;
@@ -26,6 +27,7 @@ declare module "openapi-types/dist/index" {
     interface NonArraySchemaObject {
       "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
       "x-enum-reference"?: OpenAPIV3.ReferenceObject;
+      "x-enum-is-bitmask"?: boolean;
       "x-enum-values"?: {
         numericValue: string;
         identifier: string;

@@ -18,11 +18,29 @@ const EnumJsonValue: React.FC<EnumJsonValueProps> = ({
   schemaRef,
   children,
 }) => {
-  const enumValues = getReferencedSchema(schemaRef);
   const enumName = getShortSchemaNameFromRef(schemaRef);
-  const enumValueName = enumValues?.["x-enum-values"]?.find(
-    (v) => v.numericValue === value.toString()
-  );
+  const enumSchema = getReferencedSchema(schemaRef);
+  const enumValues = enumSchema?.["x-enum-values"] || [];
+  const isBitmask = enumSchema?.["x-enum-is-bitmask"];
+  const enumValue = enumValues.find((v) => v.numericValue === value.toString());
+
+  let prettyName = enumValue?.identifier;
+
+  if (isBitmask && enumValues) {
+    let matchingValues = enumValues.filter(
+      (v) => !!(value & parseInt(v.numericValue, 10))
+    );
+
+    const noneValue =
+      matchingValues.length === 0 &&
+      enumValues.find((v) => v.numericValue === "0");
+
+    if (noneValue) {
+      matchingValues = [noneValue];
+    }
+
+    prettyName = matchingValues.map((v) => `"${v.identifier}"`).join(", ");
+  }
 
   return (
     <>
@@ -31,10 +49,12 @@ const EnumJsonValue: React.FC<EnumJsonValueProps> = ({
       <Separator />
       <span
         className={s.unlinkedJsonValue}
-        onClick={() => console.log(enumValues)}
+        onClick={() => console.log(enumSchema)}
       >
-        {enumValueName
-          ? `enum ${enumName} "${enumValueName.identifier}"`
+        {isBitmask
+          ? `bitmask ${enumName} [${prettyName}]`
+          : prettyName
+          ? `enum ${enumName} "${prettyName}"`
           : `enum ${enumName}`}
       </span>
     </>
