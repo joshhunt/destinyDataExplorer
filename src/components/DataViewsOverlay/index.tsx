@@ -1,4 +1,4 @@
-import NewDataView from "components/NewDataView";
+import DefinitionsDataView from "components/DefinitionsDataView";
 import { getSchemaFromDefinitionName } from "lib/apiSchemaUtils";
 import { definitionFromStore } from "lib/destinyTsUtils";
 import { notEmpty } from "lib/utils";
@@ -67,9 +67,9 @@ const DataViewsOverlay: React.FC<DataViewsOverlayProps> = ({
           >
             <div className={s.layer} data-root="true" onClick={onLayerClick}>
               <div className={s.data} style={{ left: 100 * (index + 1) }}>
-                <NewDataView
-                  data={definition}
-                  schema={getSchemaFromDefinitionName(type)}
+                <DefinitionsDataView
+                  definition={definition}
+                  tableName={type}
                   linkedDefinitionUrl={linkedDefinitionUrl}
                 />
               </div>

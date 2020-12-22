@@ -37,7 +37,7 @@ declare module "openapi-types/dist/index" {
 }
 
 interface NewDataViewProps {
-  data: Object;
+  data: any;
   schema?: OpenAPIV3.SchemaObject;
   linkedDefinitionUrl: (item: DefinitionEntry) => string;
 }
