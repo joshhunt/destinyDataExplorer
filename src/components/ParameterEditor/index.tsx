@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import cx from "classnames";
-import { OpenAPIV2 } from "openapi-types";
+import { OpenAPIV3 } from "openapi-types";
 import ParameterTextField from "./types/ParameterTextField";
 import { ParameterFieldProps } from "./types";
 import ParameterBooleanField from "./types/ParameterBooleanField";
@@ -11,7 +11,7 @@ import s from "./styles.module.scss";
 interface ParameterEditorProps {
   title: React.ReactNode;
   className?: string;
-  parameters: OpenAPIV2.Parameter[];
+  parameters: OpenAPIV3.ParameterObject[];
   values: Record<string, string>;
   onChange: (params: Record<string, string>) => void;
 }
@@ -69,7 +69,11 @@ const ParameterField: React.FC<ParameterFieldProps> = ({
   value,
   onChange,
 }) => {
-  switch (parameter.type) {
+  if (!parameter.schema || "$ref" in parameter.schema) {
+    throw new Error("Parameter schema is invalid");
+  }
+
+  switch (parameter.schema.type) {
     // boolean
 
     case "integer":
@@ -101,8 +105,8 @@ const ParameterField: React.FC<ParameterFieldProps> = ({
       );
 
     default:
-      console.warn("unknown param type", parameter.type, parameter);
-      return <span>unknown param type {parameter.type}</span>;
+      console.warn("unknown param type", parameter);
+      return <span>unknown param type. See console.</span>;
   }
 };
 

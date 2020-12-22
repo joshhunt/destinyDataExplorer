@@ -1,10 +1,9 @@
 import Header from "components/Header";
 import NewDataView from "components/NewDataView";
-import { OpenAPIV2 } from "openapi-types";
 import React, { useCallback, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 
-import { getOperation } from "../../lib/apiSchemaUtils";
+import { ensureSchema, getOperation } from "../../lib/apiSchemaUtils";
 
 import s from "./styles.module.scss";
 import {
@@ -19,7 +18,6 @@ import DataViewsOverlay, {
   DefinitionEntry,
   parsePathParam,
 } from "components/DataViewsOverlay";
-import { makeTypeShort } from "lib/destinyUtils";
 
 interface ApiRequestViewProps {}
 
@@ -83,9 +81,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
     return <h1>could not find</h1>;
   }
 
-  const response = apiOperation.responses["200"]?.schema as
-    | OpenAPIV2.SchemaObject
-    | undefined;
+  const responseSchema = ensureSchema(apiOperation.responses?.["200"]);
 
   const isCollapsed =
     collapsed === Collapsed.Unselected
@@ -118,10 +114,10 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         </div>
 
         <div className={s.response}>
-          {apiResponse && response && (
+          {apiResponse && responseSchema && (
             <NewDataView
               data={apiResponse}
-              schema={response}
+              schema={responseSchema}
               linkedDefinitionUrl={linkedDefinitionUrl}
             />
           )}

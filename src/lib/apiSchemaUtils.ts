@@ -1,13 +1,35 @@
-import { OpenAPIV2 } from "openapi-types";
+import { OpenAPIV3 } from "openapi-types";
 
-import _apispec from "./apispec.json";
+import _apispec from "./apispecv3.json";
 import { notEmpty } from "./utils";
 
-const apiSpec = (_apispec as unknown) as OpenAPIV2.Document;
+const apiSpec = (_apispec as unknown) as OpenAPIV3.Document;
 
-function getParameters(operation: OpenAPIV2.OperationObject) {
-  const pathParameters: OpenAPIV2.Parameter[] = [];
-  const queryParameters: OpenAPIV2.Parameter[] = [];
+declare module "openapi-types/dist/index" {
+  namespace OpenAPIV3 {
+    interface ArraySchemaObject {
+      "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
+      "x-enum-reference"?: OpenAPIV3.ReferenceObject;
+      "x-enum-values"?: {
+        numericValue: string;
+        identifier: string;
+      }[];
+    }
+
+    interface NonArraySchemaObject {
+      "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
+      "x-enum-reference"?: OpenAPIV3.ReferenceObject;
+      "x-enum-values"?: {
+        numericValue: string;
+        identifier: string;
+      }[];
+    }
+  }
+}
+
+function getParameters(operation: OpenAPIV3.OperationObject) {
+  const pathParameters: OpenAPIV3.ParameterObject[] = [];
+  const queryParameters: OpenAPIV3.ParameterObject[] = [];
 
   for (const param of operation.parameters ?? []) {
     if ("name" in param) {
@@ -31,7 +53,7 @@ function getParameters(operation: OpenAPIV2.OperationObject) {
 }
 
 const METHODS = ["get" as const, "post" as const];
-export function formatApiPath(path: string, spec: OpenAPIV2.PathItemObject) {
+export function formatApiPath(path: string, spec: OpenAPIV3.PathItemObject) {
   return METHODS.map((method) => {
     const operation = spec[method];
     if (!operation) return null;
@@ -50,36 +72,17 @@ export function formatApiPath(path: string, spec: OpenAPIV2.PathItemObject) {
 }
 
 export function getApiPaths() {
-  return Object.entries(apiSpec.paths)
-    .flatMap(([path, spec]: [string, OpenAPIV2.PathItemObject]) =>
-      formatApiPath(path, spec)
-    )
-    .map((spec) => {
-      spec.parameters?.forEach((param) => {
-        if ("type" in param) {
-          if (
-            param.type === "integer" ||
-            param.type === "string" ||
-            param.type === "boolean"
-          ) {
-          } else if (
-            param.type === "array" &&
-            param.items?.["x-enum-reference"]
-          ) {
-          } else {
-            console.warn("look at param type", param.type, param);
-          }
-        }
-      });
-
-      return spec;
-    });
+  return Object.entries(
+    apiSpec.paths
+  ).flatMap(([path, spec]: [string, OpenAPIV3.PathItemObject]) =>
+    formatApiPath(path, spec)
+  );
 }
 
 export function getOperation(operationId: string) {
   for (const [path, spec] of Object.entries(apiSpec.paths) as [
     string,
-    OpenAPIV2.PathItemObject
+    OpenAPIV3.PathItemObject
   ][]) {
     for (const method of METHODS) {
       const operation = spec[method];
@@ -104,22 +107,33 @@ export function getShortSchemaNameFromRef(ref: string) {
 }
 
 export function getReferencedSchema(ref: string) {
-  return apiSpec.definitions?.[getSchemaNameFromRef(ref)];
+  const found = apiSpec.components?.schemas?.[getSchemaNameFromRef(ref)];
+
+  if (found && "$ref" in found) {
+    throw new Error("Referenced schema can not be a reference schema itself");
+  }
+
+  return found;
 }
 
 // TODO: type this better, remove all the any casts
 export function getPropertySchemaForPath(
-  parentSchema: OpenAPIV2.SchemaObject,
+  parentSchema: OpenAPIV3.SchemaObject,
   itemPath: (number | string)[]
 ) {
   const orderedPath = [...itemPath];
   orderedPath.reverse();
 
-  let currentSpec = parentSchema;
+  let currentSpec:
+    | OpenAPIV3.ReferenceObject
+    | OpenAPIV3.ArraySchemaObject
+    | OpenAPIV3.NonArraySchemaObject = parentSchema;
 
   orderedPath.forEach((pathElement) => {
     const potentialNewSpec =
-      currentSpec.properties && currentSpec.properties[pathElement];
+      "properties" in currentSpec &&
+      currentSpec.properties &&
+      currentSpec.properties[pathElement];
 
     currentSpec = potentialNewSpec || currentSpec;
 
@@ -127,12 +141,7 @@ export function getPropertySchemaForPath(
       return;
     }
 
-    const ref: string | undefined =
-      currentSpec.$ref ||
-      (currentSpec.allOf && (currentSpec.allOf[0] as any).$ref) ||
-      (currentSpec.additionalProperties &&
-        (currentSpec.additionalProperties as any).$ref) ||
-      (currentSpec.items && currentSpec.items.$ref);
+    const ref = getRefFromWhateverTheFuckThisIs(currentSpec);
 
     if (ref) {
       const foundSchema = getReferencedSchema(ref);
@@ -143,6 +152,46 @@ export function getPropertySchemaForPath(
   return currentSpec;
 }
 
+function getRefFromWhateverTheFuckThisIs(
+  spec:
+    | OpenAPIV3.ReferenceObject
+    | OpenAPIV3.ArraySchemaObject
+    | OpenAPIV3.NonArraySchemaObject
+) {
+  if ("$ref" in spec && spec.$ref) {
+    return spec.$ref;
+  }
+
+  if ("allOf" in spec && spec.allOf?.[0]) {
+    const zerothChildSpec = spec.allOf[0];
+
+    if ("$ref" in zerothChildSpec && zerothChildSpec.$ref) {
+      return zerothChildSpec.$ref;
+    }
+  }
+
+  if ("additionalProperties" in spec) {
+    const additionalProperties = spec.additionalProperties;
+
+    if (
+      additionalProperties &&
+      typeof additionalProperties === "object" &&
+      "$ref" in additionalProperties
+    ) {
+      return additionalProperties.$ref;
+    }
+  }
+
+  if (
+    "items" in spec &&
+    spec.items &&
+    "$ref" in spec.items &&
+    spec.items.$ref
+  ) {
+    return spec.items.$ref;
+  }
+}
+
 export function getEnumValuesForRef(ref: string) {
   const enumSpec = getReferencedSchema(ref);
 
@@ -150,7 +199,7 @@ export function getEnumValuesForRef(ref: string) {
     return;
   }
 
-  return enumSpec["x-enum-values"];
+  return "x-enum-values" in enumSpec && enumSpec["x-enum-values"];
 }
 
 export function definitionNameFromRef(ref: string) {
@@ -159,12 +208,42 @@ export function definitionNameFromRef(ref: string) {
 }
 
 export function getSchemaFromDefinitionName(tableName: string) {
-  const found = Object.entries(apiSpec.definitions ?? {}).find(
+  const found = Object.entries(apiSpec.components?.schemas ?? {}).find(
     ([schemaKey, schema]) => {
       const shortName = getShortSchemaNameFromRef(schemaKey);
       return shortName === tableName;
     }
   );
 
-  return found?.[1];
+  const schema = found?.[1];
+
+  if (schema && "$ref" in schema) {
+    return getReferencedSchema(schema.$ref);
+  }
+
+  return schema;
+}
+
+export function ensureSchema(
+  schema:
+    | undefined
+    | OpenAPIV3.ReferenceObject
+    | OpenAPIV3.ArraySchemaObject
+    | OpenAPIV3.NonArraySchemaObject
+) {
+  if (!schema) {
+    throw new Error("Schema is unexpectedly undefined");
+  }
+
+  if ("$ref" in schema) {
+    const referenced = getReferencedSchema(schema.$ref);
+
+    if (!referenced) {
+      throw new Error("Referenced schema is unexpectedly undefined");
+    }
+
+    return referenced;
+  }
+
+  return schema;
 }

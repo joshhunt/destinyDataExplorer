@@ -1,3 +1,4 @@
+import { ensureSchema } from "lib/apiSchemaUtils";
 import React, { useCallback } from "react";
 import { ParameterFieldProps } from "../types";
 
@@ -10,7 +11,8 @@ const ParameterTextField: React.FC<ParameterTextFieldProps> = ({
   value,
   onChange,
 }) => {
-  const type = parameter.type === "integer" ? "number" : "text";
+  const type =
+    ensureSchema(parameter.schema).type === "integer" ? "number" : "text";
 
   const handleChange = useCallback(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +25,7 @@ const ParameterTextField: React.FC<ParameterTextFieldProps> = ({
     <input
       className={s.textInput}
       type={type}
-      placeholder={parameter.type}
+      placeholder={ensureSchema(parameter.schema).type}
       name={parameter.name}
       value={value}
       onChange={handleChange}

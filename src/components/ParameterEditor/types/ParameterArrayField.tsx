@@ -1,4 +1,5 @@
 import { getReferencedSchema } from "lib/apiSchemaUtils";
+import { OpenAPIV3 } from "openapi-types/dist/index";
 import React from "react";
 import Select from "react-select";
 import { ParameterFieldProps } from "../types";
@@ -18,8 +19,12 @@ const ParameterArrayField: React.FC<ParameterArrayFieldProps> = ({
   onChange,
   value,
 }) => {
-  const enumRef: string | undefined =
-    parameter.items?.["x-enum-reference"]?.$ref;
+  const enumRef =
+    parameter.schema &&
+    "items" in parameter.schema &&
+    parameter.schema.items &&
+    "x-enum-reference" in parameter.schema.items &&
+    parameter.schema.items["x-enum-reference"]?.$ref;
 
   const enumItems = enumRef ? getReferencedSchema(enumRef) : undefined;
   const enumItemValues =
