@@ -18,11 +18,14 @@ import DataViewsOverlay, {
   DefinitionEntry,
   parsePathParam,
 } from "components/DataViewsOverlay";
+import APIListOverlay from "components/APIListOverlay";
+import { Link } from "react-router-dom";
 
 interface ApiRequestViewProps {}
 
 const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const history = useHistory();
+  const [menuOverlayVisible, setMenuOverlayVisible] = useState(false);
   const [apiResponse, setApiResponse] = useState<any>();
   const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
@@ -94,7 +97,26 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         <div className={s.request}>
           <Header className={s.header}>
             <div className={s.headerBody}>
-              <div className={s.headerMain}>{apiOperation.operationId}</div>
+              <div className={s.headerMain}>
+                <span
+                  className={s.headerApiName}
+                  onClick={() => setMenuOverlayVisible(true)}
+                >
+                  Request: <strong>{apiOperation.operationId}</strong>
+                </span>
+                <div>
+                  <button
+                    className={s.headerbutton}
+                    onClick={() => setMenuOverlayVisible(true)}
+                  >
+                    API Library
+                  </button>
+
+                  <Link className={s.headerbutton} to="/">
+                    Back to Definitions
+                  </Link>
+                </div>
+              </div>
             </div>
           </Header>
 
@@ -123,6 +145,11 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
           )}
         </div>
       </div>
+
+      <APIListOverlay
+        visible={menuOverlayVisible}
+        onRequestClose={() => setMenuOverlayVisible(false)}
+      />
 
       <DataViewsOverlay
         items={definitionEntries}

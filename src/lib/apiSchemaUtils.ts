@@ -109,7 +109,21 @@ export function getShortSchemaNameFromRef(ref: string) {
 }
 
 export function getReferencedSchema(ref: string) {
-  const found = apiSpec.components?.schemas?.[getSchemaNameFromRef(ref)];
+  const [foo, bar, section, name] = ref.split("/");
+
+  let found:
+    | OpenAPIV3.ReferenceObject
+    | OpenAPIV3.ArraySchemaObject
+    | OpenAPIV3.NonArraySchemaObject
+    | undefined;
+
+  console.log({ ref, section, name });
+
+  if (section === "responses") {
+    found = apiSpec.components?.responses?.[name];
+  } else if (section === "schemas") {
+    found = apiSpec.components?.schemas?.[name];
+  }
 
   if (found && "$ref" in found) {
     throw new Error("Referenced schema can not be a reference schema itself");
@@ -263,6 +277,10 @@ export function ensureSchema(
     const referenced = getReferencedSchema(schema.$ref);
 
     if (!referenced) {
+      console.error("Referenced schema is unexpectedly undefined", {
+        schema,
+        referenced,
+      });
       throw new Error("Referenced schema is unexpectedly undefined");
     }
 

@@ -1,3 +1,5 @@
+@use "../../views/ApiRequest/variables";
+
 .root {
   font-size: 16px;
   height: 100vh;
@@ -59,8 +61,50 @@
 .headerMain {
   overflow: hidden;
   width: 100%;
-  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
 }
 
 .headerActions {
+}
+
+.headerApiName {
+  margin-top: 2px;
+  cursor: pointer;
+
+  strong {
+    font-weight: 500;
+  }
+}
+
+.headerbutton {
+  background: #2e2f31;
+  padding: 9px 16px;
+  color: inherit;
+  border: none;
+  border-radius: 2px;
+  font-size: 16px;
+  font-family: "Titillium Web", sans-serif;
+  line-height: 1;
+  margin-top: -1px;
+  transition: 100ms ease-in-out background;
+  outline: none !important;
+  text-decoration: none;
+
+  &:hover {
+    background: lighten(#2e2f31, 15%);
+  }
+
+  &:active {
+    background: light(#2e2f31, 5%);
+  }
+
+  &:focus {
+    box-shadow: inset 0 0 0 2px
+      desaturate(lighten(variables.$apiRequestEditorBg, 90%), 5%);
+  }
+
+  & + & {
+    margin-left: 1em;
+  }
 }

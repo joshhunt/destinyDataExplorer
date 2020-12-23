@@ -1,5 +1,4 @@
 import DefinitionDataView from "components/DefinitionDataView";
-import { getSchemaFromDefinitionName } from "lib/apiSchemaUtils";
 import { definitionFromStore } from "lib/destinyTsUtils";
 import { notEmpty } from "lib/utils";
 import React, { useCallback } from "react";
