@@ -131,6 +131,13 @@ const APIListOverlay: React.FC<APIListOverlayProps> = ({
           ))}
         </div>
       </div>
+
+      {/* <div className={s.explainer}>
+        <h2>
+          <span className={s.newLabel}>NEW</span> Destiny API Explorer
+        </h2>
+        <p>The Destiny Data Explorer now</p>
+      </div> */}
     </div>
   );
 };

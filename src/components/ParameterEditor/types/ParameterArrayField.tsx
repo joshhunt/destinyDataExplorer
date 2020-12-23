@@ -1,5 +1,4 @@
 import { getReferencedSchema } from "lib/apiSchemaUtils";
-import { OpenAPIV3 } from "openapi-types/dist/index";
 import React from "react";
 import Select from "react-select";
 import { ParameterFieldProps } from "../types";

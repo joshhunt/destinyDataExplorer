@@ -160,7 +160,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
               linkedDefinitionUrl={linkedDefinitionUrl}
             />
           ) : (
-            <ResponseEmptyState loading={loading} />
+            operationName && <ResponseEmptyState loading={loading} />
           )}
         </div>
       </div>
