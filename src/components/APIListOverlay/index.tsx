@@ -1,4 +1,3 @@
-import Header from "components/Header";
 import cx from "classnames";
 import Icon from "components/Icon";
 import { getApiPaths } from "lib/apiSchemaUtils";

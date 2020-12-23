@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import cx from "classnames";
 
 import NewDataView from "components/NewDataView";
 import { getSchemaFromDefinitionName } from "lib/apiSchemaUtils";
@@ -12,7 +11,7 @@ import RawJSON from "./RawJSON";
 import DefinitionDetails, {
   displayDefinitionDetails,
 } from "components/DefinitionDetails";
-import { type } from "os";
+import TabButtonList from "components/TabButtonList";
 
 interface DefinitionDataViewProps {
   definition: any;
@@ -58,28 +57,15 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
         </p>
       )}
 
-      <div className={s.tabList}>
-        <button
-          className={cx(s.tab, activeTab === Tabs.Pretty && s.active)}
-          onClick={() => setActiveTab(Tabs.Pretty)}
-        >
-          Pretty
-        </button>
-        <button
-          className={cx(s.tab, activeTab === Tabs.RawJson && s.active)}
-          onClick={() => setActiveTab(Tabs.RawJson)}
-        >
-          Raw JSON
-        </button>
-        {hasDetails && (
-          <button
-            className={cx(s.tab, activeTab === Tabs.Preview && s.active)}
-            onClick={() => setActiveTab(Tabs.Preview)}
-          >
-            Details
-          </button>
-        )}
-      </div>
+      <TabButtonList
+        onButtonClick={(tabId: Tabs) => setActiveTab(tabId)}
+        activeTab={activeTab}
+        options={[
+          [Tabs.Pretty, "Pretty"],
+          [Tabs.RawJson, "Raw JSON"],
+          hasDetails && [Tabs.Preview, "Details"],
+        ].filter(Boolean)}
+      />
 
       {activeTab === Tabs.Pretty && (
         <NewDataView
