@@ -20,12 +20,14 @@ import DataViewsOverlay, {
 } from "components/DataViewsOverlay";
 import APIListOverlay from "components/APIListOverlay";
 import { Link } from "react-router-dom";
+import ResponseEmptyState from "components/ResponseEmptyState";
 
 interface ApiRequestViewProps {}
 
 const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const history = useHistory();
   const [menuOverlayVisible, setMenuOverlayVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState<any>();
   const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
@@ -51,14 +53,14 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
 
   // Clear state when the URL/operation changes
   useEffect(() => {
-    setPathParams({});
-    setQueryParams({});
     setApiResponse(null);
-  }, [setPathParams, setQueryParams, operationName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [operationName]);
 
   const handleSubmit = useCallback(() => {
     const url = makeApiRequestUrl(apiOperation, pathParams, queryParams, true);
 
+    setLoading(true);
     fetch(`https://www.bungie.net${url}`, {
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY ?? "",
@@ -67,7 +69,10 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
       .then((response) => {
         return response.json();
       })
-      .then((data) => setApiResponse(data));
+      .then((data) => {
+        setLoading(false);
+        setApiResponse(data);
+      });
   }, [apiOperation, pathParams, queryParams]);
 
   const linkedDefinitionUrl = useCallback(
@@ -83,6 +88,13 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
     newItems.pop();
     history.push(makeUrl(newItems, operationName, pathParams, queryParams));
   }, [definitionEntries, history, operationName, pathParams, queryParams]);
+
+  const handleListOverlayClose = useCallback(() => {
+    setPathParams({});
+    setQueryParams({});
+    setMenuOverlayVisible(false);
+    setCollapsed(Collapsed.Visible);
+  }, [setPathParams, setQueryParams]);
 
   const responseSchema =
     apiOperation && ensureSchema(apiOperation.responses?.["200"]);
@@ -125,6 +137,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
           </Header>
 
           <APIRequestEditor
+            isLoading={loading}
             className={s.requestEditor}
             apiOperation={apiOperation}
             isCollapsed={isCollapsed}
@@ -140,19 +153,21 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         </div>
 
         <div className={s.response}>
-          {apiResponse && responseSchema && (
+          {apiResponse && responseSchema ? (
             <NewDataView
               data={apiResponse}
               schema={responseSchema}
               linkedDefinitionUrl={linkedDefinitionUrl}
             />
+          ) : (
+            <ResponseEmptyState loading={loading} />
           )}
         </div>
       </div>
 
       <APIListOverlay
         visible={!operationName || menuOverlayVisible}
-        onRequestClose={() => setMenuOverlayVisible(false)}
+        onRequestClose={handleListOverlayClose}
       />
 
       <DataViewsOverlay

@@ -116,13 +116,13 @@ export function getReferencedSchema(ref: string) {
     | OpenAPIV3.ReferenceObject
     | OpenAPIV3.ArraySchemaObject
     | OpenAPIV3.NonArraySchemaObject
-    | undefined;
+    | undefined = apiSpec.components?.schemas?.[getSchemaNameFromRef(ref)];
 
-  console.log({ ref, section, name });
+  // console.log({ ref, section, name });
 
-  if (section === "responses") {
+  if (!found && section === "responses") {
     found = apiSpec.components?.responses?.[name];
-  } else if (section === "schemas") {
+  } else if (!found && section === "schemas") {
     found = apiSpec.components?.schemas?.[name];
   }
 

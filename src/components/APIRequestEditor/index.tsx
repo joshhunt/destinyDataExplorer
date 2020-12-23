@@ -11,6 +11,7 @@ import s from "./styles.module.scss";
 
 interface APIRequestEditorProps {
   className?: string;
+  isLoading: boolean;
   apiOperation: ReturnType<typeof getOperation>;
   pathParams: Params;
   queryParams: Params;
@@ -23,6 +24,7 @@ interface APIRequestEditorProps {
 
 const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   className,
+  isLoading,
   apiOperation,
   pathParams,
   queryParams,
@@ -46,15 +48,16 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
         </div>
 
         <div className={s.urlActions}>
-          <button className={s.submitButton} onClick={onSubmit} type="button">
-            Submit
+          <button
+            className={s.submitButton}
+            onClick={onSubmit}
+            type="button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Send"}
           </button>
 
-          <button
-            className={s.actionButton}
-            // onClick={() => setCollapsed((v) => invertCollapsed(v, isCollapsed))}
-            onClick={onToggleCollapsed}
-          >
+          <button className={s.actionButton} onClick={onToggleCollapsed}>
             {isCollapsed ? (
               <span key="up">
                 <Icon name="chevron-up" />

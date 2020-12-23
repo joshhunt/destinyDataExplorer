@@ -1,0 +1,49 @@
+.root {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.rocketIcon {
+  font-size: 100px;
+  // opacity: 0.75;
+}
+
+.loadingRocketIcon {
+  composes: rocketIcon;
+  padding: 10px 0 0 10px;
+  margin: -10px 0 0 -10px;
+  animation: rotation 2s infinite linear;
+  display: inline-block;
+  opacity: 1;
+}
+
+.loadingRocketIconInner {
+  animation: rotation 2s infinite linear reverse;
+  display: inline-block;
+
+  svg {
+    animation: flying 2s infinite ease-in-out;
+    animation-direction: alternate;
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes flying {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2deg);
+  }
+}

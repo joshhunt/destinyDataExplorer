@@ -1,6 +1,7 @@
 import React from "react";
 import { keyBy, isArray } from "lodash";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { FILTERS } from "lib/search/guiSearchFilters";
 
@@ -120,7 +121,11 @@ function SearchHeader({
           </div>
         </button>
 
-        <button
+        <Link to="/api" className={s.filterButton}>
+          <div className={s.buttonInner}>API Explorer</div>
+        </Link>
+
+        {/* <button
           className={collectModeEnabled ? s.bigButtonActive : s.bigButton}
           onClick={toggleCollectMode}
           title={
@@ -130,7 +135,7 @@ function SearchHeader({
           <div className={s.buttonInner}>
             <Icon name="plus" />
           </div>
-        </button>
+        </button> */}
       </div>
 
       <Modal

@@ -77,7 +77,11 @@ $textColor: #ffffff;
   padding: 1px 7px 2px 7px;
   width: auto;
   font-size: 15px;
-  margin-right: 1em;
+  text-decoration: none;
+
+  & + & {
+    margin-left: 1em;
+  }
 }
 .languageButton {
   composes: filterButton;

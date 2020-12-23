@@ -81,6 +81,11 @@
   &:focus {
     border-color: desaturate(lighten(variables.$apiRequestEditorBg, 90%), 5%);
   }
+
+  &[disabled] {
+    opacity: 0.5;
+    --bg-color: #e67e22;
+  }
 }
 
 .actionButton {

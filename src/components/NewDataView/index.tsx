@@ -71,7 +71,11 @@ const NewDataView: React.FC<NewDataViewProps> = ({
           ...theme,
         }}
         shouldExpandNode={(keyPath) =>
-          keyPath.includes("Response") ? keyPath.length < 3 : keyPath.length < 1
+          keyPath.includes("Response")
+            ? keyPath[0] === "data"
+              ? keyPath.length < 4
+              : keyPath.length < 3
+            : keyPath.length < 1
         }
         data={data}
         valueRenderer={valueRenderer}
