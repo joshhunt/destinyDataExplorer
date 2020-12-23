@@ -72,7 +72,6 @@
 }
 
 .headerbutton {
-  background: #2e2f31;
   padding: 5px 16px;
   color: inherit;
   border: none;
@@ -84,12 +83,14 @@
   outline: none !important;
   text-decoration: none;
 
+  background: #2e2f31;
+
   &:hover {
     background: lighten(#2e2f31, 15%);
   }
 
   &:active {
-    background: light(#2e2f31, 5%);
+    background: lighten(#2e2f31, 5%);
   }
 
   &:focus {

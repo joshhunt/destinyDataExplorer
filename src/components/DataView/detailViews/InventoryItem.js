@@ -91,10 +91,6 @@ function Sockets({ item, definitions, pathForItem }) {
                               hash.plugItemHash
                             ];
 
-                          if (!reusablePlugItem) {
-                            debugger;
-                          }
-
                           return (
                             reusablePlugItem && (
                               <Item

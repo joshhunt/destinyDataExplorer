@@ -1,0 +1,57 @@
+.root {
+}
+
+.title {
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 1.3em;
+}
+
+// items
+
+.cateogryTitle {
+  margin: 0 0 8px 0;
+}
+
+.category {
+  & + & {
+    margin-top: 32px;
+  }
+}
+
+.socketList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.socket {
+  padding: 8px;
+  overflow: auto;
+  background: rgba(black, 0.2);
+  border-radius: 3px;
+  max-height: 240px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    margin-top: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lighten(#16171a, 20%);
+    border-radius: 5px;
+  }
+}
+
+.plug {
+  & + & {
+    margin-top: 8px;
+  }
+}
+
+.altPlug {
+  composes: plug;
+  opacity: 0.5;
+}

@@ -36,6 +36,22 @@ const APIListOverlay: React.FC<APIListOverlayProps> = ({
       );
     });
 
+    // Sort Destiny endpoints to the top
+    allPaths.sort((a, b) => {
+      const aIsDestiny = a.operationId?.includes("Destiny");
+      const bIsDestiny = b.operationId?.includes("Destiny");
+
+      if (aIsDestiny && bIsDestiny) {
+        return 0;
+      } else if (aIsDestiny && !bIsDestiny) {
+        return -1;
+      } else if (!aIsDestiny && bIsDestiny) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
     const groups: {
       id: string;
       apiPaths: ReturnType<typeof getApiPaths>;

@@ -10,6 +10,7 @@ import { setActiveLanguage as _setActiveLanguage } from "store/app";
 import Modal from "components/Modal";
 import Icon from "components/Icon";
 import Filters from "components/Filters";
+import sparkleEmoji from "./sparkleEmoji.png";
 
 import s from "./styles.module.scss";
 import logo from "./logo.svg";
@@ -122,7 +123,10 @@ function SearchHeader({
         </button>
 
         <Link to="/api" className={s.filterButton}>
-          <div className={s.buttonInner}>API Explorer</div>
+          <div className={s.buttonInner}>
+            <img src={sparkleEmoji} alt="" className={s.emojiImage} /> API
+            Explorer
+          </div>
         </Link>
 
         {/* <button
