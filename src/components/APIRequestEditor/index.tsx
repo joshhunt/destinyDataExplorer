@@ -70,6 +70,8 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
 
       {apiOperation && (
         <AnimateHeight height={isCollapsed ? 0 : "auto"}>
+          <p className={s.description}>{apiOperation.description}</p>
+
           {apiOperation.pathParameters.length > 0 && (
             <ParameterEditor
               className={s.params}

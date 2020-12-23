@@ -16,7 +16,10 @@ export default class AppRouter extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
 
-            <Route exact path="/api" component={ApiView} />
+            <Route exact path="/list-api" component={ApiView} />
+
+            <Route exact path="/api" component={ApiRequestView} />
+
             <Route
               exact
               path="/api/:operationName"

@@ -1,6 +1,6 @@
 import Header from "components/Header";
 import NewDataView from "components/NewDataView";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 
 import { ensureSchema, getOperation } from "../../lib/apiSchemaUtils";
@@ -29,20 +29,32 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const [apiResponse, setApiResponse] = useState<any>();
   const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
-  const params = useParams<{ operationName: string; "0"?: string }>();
-  const apiOperation = useMemo(() => getOperation(params.operationName), [
-    params.operationName,
-  ]);
+  const { operationName, 0: splat } = useParams<{
+    operationName?: string;
+    "0"?: string;
+  }>();
+
+  const apiOperation = useMemo(
+    () => (operationName ? getOperation(operationName) : undefined),
+    [operationName]
+  );
 
   const definitionEntries = useMemo(
-    () => (params["0"] ? parsePathParam(params["0"]) : []),
-    [params]
+    () => (splat ? parsePathParam(splat) : []),
+    [splat]
   );
 
   const [
     [pathParams, setPathParams],
     [queryParams, setQueryParams],
   ] = useApiParams(apiOperation);
+
+  // Clear state when the URL/operation changes
+  useEffect(() => {
+    setPathParams({});
+    setQueryParams({});
+    setApiResponse(null);
+  }, [setPathParams, setQueryParams, operationName]);
 
   const handleSubmit = useCallback(() => {
     const url = makeApiRequestUrl(apiOperation, pathParams, queryParams, true);
@@ -61,30 +73,19 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const linkedDefinitionUrl = useCallback(
     ({ type, hash }: DefinitionEntry) => {
       const newItems = [...definitionEntries, { type, hash }];
-      return makeUrl(newItems, params.operationName, pathParams, queryParams);
+      return makeUrl(newItems, operationName, pathParams, queryParams);
     },
-    [definitionEntries, params.operationName, pathParams, queryParams]
+    [definitionEntries, operationName, pathParams, queryParams]
   );
 
   const requestPopOverlay = useCallback(() => {
     const newItems = [...definitionEntries];
     newItems.pop();
-    history.push(
-      makeUrl(newItems, params.operationName, pathParams, queryParams)
-    );
-  }, [
-    definitionEntries,
-    history,
-    params.operationName,
-    pathParams,
-    queryParams,
-  ]);
+    history.push(makeUrl(newItems, operationName, pathParams, queryParams));
+  }, [definitionEntries, history, operationName, pathParams, queryParams]);
 
-  if (!apiOperation) {
-    return <h1>could not find</h1>;
-  }
-
-  const responseSchema = ensureSchema(apiOperation.responses?.["200"]);
+  const responseSchema =
+    apiOperation && ensureSchema(apiOperation.responses?.["200"]);
 
   const isCollapsed =
     collapsed === Collapsed.Unselected
@@ -97,25 +98,28 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         <div className={s.request}>
           <Header className={s.header}>
             <div className={s.headerBody}>
-              <div className={s.headerMain}>
-                <span
-                  className={s.headerApiName}
+              <span
+                className={s.headerApiName}
+                onClick={() => setMenuOverlayVisible(true)}
+              >
+                {apiOperation && (
+                  <>
+                    Request: <strong>{apiOperation.operationId}</strong>
+                  </>
+                )}
+              </span>
+
+              <div>
+                <button
+                  className={s.headerbutton}
                   onClick={() => setMenuOverlayVisible(true)}
                 >
-                  Request: <strong>{apiOperation.operationId}</strong>
-                </span>
-                <div>
-                  <button
-                    className={s.headerbutton}
-                    onClick={() => setMenuOverlayVisible(true)}
-                  >
-                    API Library
-                  </button>
+                  API Library
+                </button>
 
-                  <Link className={s.headerbutton} to="/">
-                    Back to Definitions
-                  </Link>
-                </div>
+                <Link className={s.headerbutton} to="/">
+                  Back to Definitions
+                </Link>
               </div>
             </div>
           </Header>
@@ -147,7 +151,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
       </div>
 
       <APIListOverlay
-        visible={menuOverlayVisible}
+        visible={!operationName || menuOverlayVisible}
         onRequestClose={() => setMenuOverlayVisible(false)}
       />
 

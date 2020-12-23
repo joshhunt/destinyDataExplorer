@@ -58,18 +58,8 @@
   align-items: center;
 }
 
-.headerMain {
-  overflow: hidden;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.headerActions {
-}
-
 .headerApiName {
-  margin-top: 2px;
+  margin-top: -2px;
   cursor: pointer;
 
   strong {

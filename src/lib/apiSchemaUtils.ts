@@ -54,7 +54,8 @@ function getParameters(operation: OpenAPIV3.OperationObject) {
   };
 }
 
-const METHODS = ["get" as const, "post" as const];
+// const METHODS = ["get" as const, "post" as const];
+const METHODS = ["get" as const];
 export function formatApiPath(path: string, spec: OpenAPIV3.PathItemObject) {
   return METHODS.map((method) => {
     const operation = spec[method];
@@ -109,7 +110,7 @@ export function getShortSchemaNameFromRef(ref: string) {
 }
 
 export function getReferencedSchema(ref: string) {
-  const [foo, bar, section, name] = ref.split("/");
+  const [, , section, name] = ref.split("/");
 
   let found:
     | OpenAPIV3.ReferenceObject
@@ -132,25 +133,7 @@ export function getReferencedSchema(ref: string) {
   return found;
 }
 
-// export function getObjectSchemaForPath(
-//   parentSchema: OpenAPIV3.SchemaObject,
-//   _itemPath: (number | string)[]
-// ) {
-//   const keyPath = [..._itemPath];
-//   keyPath.reverse();
-
-//   let currentSchema:
-//     | OpenAPIV3.ReferenceObject
-//     | OpenAPIV3.ArraySchemaObject
-//     | OpenAPIV3.NonArraySchemaObject = parentSchema;
-
-//   for (const propertyName of keyPath) {
-
-//   }
-// }
-
 // TODO: type this better, remove all the any casts
-
 export function getPropertySchemaForPath(
   parentSchema: OpenAPIV3.SchemaObject,
   itemPath: (number | string)[]

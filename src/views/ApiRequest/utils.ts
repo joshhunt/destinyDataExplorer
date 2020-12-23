@@ -101,7 +101,7 @@ export function useURLUpdater(pathParams: Params, queryParams: Params) {
 
 export function makeUrl(
   items: DefinitionEntry[],
-  operationName: string,
+  operationName: string | undefined,
   pathParams: Params,
   queryParams: Params
 ) {
@@ -113,5 +113,7 @@ export function makeUrl(
     .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
     .join("&");
 
-  return `/api/${operationName}/${defsPath}?${qs}`;
+  const urlEnd = `${defsPath}?${qs}`;
+
+  return operationName ? `/api/${operationName}/${urlEnd}` : `/api/${urlEnd}`;
 }
