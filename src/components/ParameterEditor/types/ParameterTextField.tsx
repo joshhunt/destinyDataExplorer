@@ -27,7 +27,7 @@ const ParameterTextField: React.FC<ParameterTextFieldProps> = ({
       type={type}
       placeholder={ensureSchema(parameter.schema).type}
       name={parameter.name}
-      value={value}
+      value={value || ""}
       onChange={handleChange}
     />
   );

@@ -17,7 +17,9 @@ const ParameterBooleanField: React.FC<ParameterBooleanFieldProps> = ({
     [onChange, parameter.name]
   );
 
-  return <input type="checkbox" checked={checked} onChange={handleChange} />;
+  return (
+    <input type="checkbox" checked={checked ?? false} onChange={handleChange} />
+  );
 };
 
 export default ParameterBooleanField;
