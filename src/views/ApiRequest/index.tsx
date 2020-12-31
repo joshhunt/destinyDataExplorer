@@ -12,6 +12,7 @@ import {
   makeApiRequestUrl,
   invertCollapsed,
   makeUrl,
+  Params,
 } from "./utils";
 import APIRequestEditor from "components/APIRequestEditor";
 import DataViewsOverlay, {
@@ -46,10 +47,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
     [splat]
   );
 
-  const [
-    [pathParams, setPathParams],
-    [queryParams, setQueryParams],
-  ] = useApiParams(apiOperation);
+  const [apiParams, setApiParams] = useApiParams(apiOperation);
 
   // Clear state when the URL/operation changes
   useEffect(() => {
@@ -58,7 +56,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   }, [operationName]);
 
   const handleSubmit = useCallback(() => {
-    const url = makeApiRequestUrl(apiOperation, pathParams, queryParams, true);
+    const url = makeApiRequestUrl(apiOperation, apiParams, true);
 
     setLoading(true);
     fetch(`https://www.bungie.net${url}`, {
@@ -73,28 +71,35 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         setLoading(false);
         setApiResponse(data);
       });
-  }, [apiOperation, pathParams, queryParams]);
+  }, [apiOperation, apiParams]);
 
   const linkedDefinitionUrl = useCallback(
     ({ type, hash }: DefinitionEntry) => {
       const newItems = [...definitionEntries, { type, hash }];
-      return makeUrl(newItems, operationName, pathParams, queryParams);
+      return makeUrl(newItems, operationName, apiParams);
     },
-    [definitionEntries, operationName, pathParams, queryParams]
+    [definitionEntries, operationName, apiParams]
   );
 
   const requestPopOverlay = useCallback(() => {
     const newItems = [...definitionEntries];
     newItems.pop();
-    history.push(makeUrl(newItems, operationName, pathParams, queryParams));
-  }, [definitionEntries, history, operationName, pathParams, queryParams]);
+    history.push(makeUrl(newItems, operationName, apiParams));
+  }, [definitionEntries, history, operationName, apiParams]);
+
+  const handleParamsEdited = useCallback(
+    (newParamsPartial: Params) => {
+      setApiParams({ ...apiParams, ...newParamsPartial });
+    },
+    [apiParams, setApiParams]
+  );
 
   const handleListOverlayClose = useCallback(() => {
-    setPathParams({});
-    setQueryParams({});
+    // setPathParams({});
+    // setQueryParams({});
     setMenuOverlayVisible(false);
     setCollapsed(Collapsed.Visible);
-  }, [setPathParams, setQueryParams]);
+  }, []);
 
   const responseSchema =
     apiOperation && ensureSchema(apiOperation.responses?.["200"]);
@@ -141,10 +146,9 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
             className={s.requestEditor}
             apiOperation={apiOperation}
             isCollapsed={isCollapsed}
-            pathParams={pathParams}
-            queryParams={queryParams}
-            onPathParamsChange={setPathParams}
-            onQueryParamsChange={setQueryParams}
+            apiParams={apiParams}
+            onPathParamsChange={handleParamsEdited}
+            onQueryParamsChange={handleParamsEdited}
             onSubmit={handleSubmit}
             onToggleCollapsed={() =>
               setCollapsed((v) => invertCollapsed(v, isCollapsed))

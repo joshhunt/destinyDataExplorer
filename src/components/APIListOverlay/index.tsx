@@ -109,11 +109,12 @@ const APIListOverlay: React.FC<APIListOverlayProps> = ({
           )}
 
           {apiGroups.map((group) => (
-            <div className={s.group}>
+            <div className={s.group} key={group.id}>
               <h3 className={s.groupTitle}>{group.id}</h3>
 
               {group.apiPaths.map((apiPath) => (
                 <Link
+                  key={apiPath.operationId}
                   className={s.apiRequest}
                   to={`/api/${apiPath.operationId}`}
                   onClick={() => onRequestClose()}
@@ -131,13 +132,6 @@ const APIListOverlay: React.FC<APIListOverlayProps> = ({
           ))}
         </div>
       </div>
-
-      {/* <div className={s.explainer}>
-        <h2>
-          <span className={s.newLabel}>NEW</span> Destiny API Explorer
-        </h2>
-        <p>The Destiny Data Explorer now</p>
-      </div> */}
     </div>
   );
 };

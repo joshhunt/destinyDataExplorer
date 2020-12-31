@@ -13,8 +13,7 @@ interface APIRequestEditorProps {
   className?: string;
   isLoading: boolean;
   apiOperation: ReturnType<typeof getOperation>;
-  pathParams: Params;
-  queryParams: Params;
+  apiParams: Params;
   isCollapsed: boolean;
   onSubmit: () => void;
   onToggleCollapsed: () => void;
@@ -26,18 +25,17 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   className,
   isLoading,
   apiOperation,
-  pathParams,
-  queryParams,
+  apiParams,
   isCollapsed,
   onSubmit,
   onToggleCollapsed,
   onPathParamsChange,
   onQueryParamsChange,
 }) => {
-  const displayUrl = useMemo(
-    () => makeApiRequestUrl(apiOperation, pathParams, queryParams),
-    [apiOperation, pathParams, queryParams]
-  );
+  const displayUrl = useMemo(() => makeApiRequestUrl(apiOperation, apiParams), [
+    apiOperation,
+    apiParams,
+  ]);
 
   return (
     <div className={cx(s.requestEditor, className)}>
@@ -80,7 +78,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
               className={s.params}
               title="Path params"
               parameters={apiOperation.pathParameters}
-              values={pathParams}
+              values={apiParams}
               onChange={onPathParamsChange}
             />
           )}
@@ -90,7 +88,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
               className={s.params}
               title="Query params"
               parameters={apiOperation.queryParameters}
-              values={queryParams}
+              values={apiParams}
               onChange={onQueryParamsChange}
             />
           )}
