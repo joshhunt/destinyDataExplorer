@@ -6,6 +6,9 @@ import {
 import React, { useMemo, useState } from "react";
 import VendorSaleItem from "./VendorSaleItem";
 import s from "../styles.module.scss";
+import TabButtonList, { TabKind } from "components/TabButtonList";
+import { notEmpty } from "lib/utils";
+import { SelectBreak } from "components/NewDataView/JsonValueAnnotation";
 
 interface VendorDetailsProps {
   definition: DestinyVendorDefinition;
@@ -17,10 +20,16 @@ interface Category {
   items: DestinyVendorItemDefinition[];
 }
 
-const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
-  const [toggle, setToggle] = useState(false);
+interface NormalizedCategory {
+  title: string | undefined;
+  items: DestinyVendorItemDefinition[];
+  tags: string[];
+}
 
-  const displayCategories = useMemo(() => {
+const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
+  const [activeTab, setActiveTab] = useState(TabKind.VendorCategories);
+
+  const displayCategoriesData = useMemo(() => {
     const categories: Category[] = definition.displayCategories.map(
       (displayCategory) => ({
         displayCategory,
@@ -56,77 +65,73 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
     return categories;
   }, [definition]);
 
+  const displayCategories: NormalizedCategory[] = displayCategoriesData.map(
+    (category) => ({
+      title: category.displayCategory
+        ? category.displayCategory.displayProperties.name
+        : category.manualName,
+      items: category.items,
+      tags: [
+        category.displayCategory?.index
+          ? `index: ${category.displayCategory?.index}`
+          : null,
+        category.displayCategory?.identifier &&
+          `identifier: ${category.displayCategory?.identifier}`,
+      ].filter(notEmpty),
+    })
+  );
+
+  const categories: NormalizedCategory[] = definition.categories.map(
+    (category) => ({
+      title: category.displayTitle,
+      items: category.vendorItemIndexes.map((v) => definition.itemList[v]),
+      tags: [`categoryIndex: ${category.categoryIndex}`],
+    })
+  );
+
+  const categoriesToDisplay =
+    activeTab === TabKind.VendorCategories ? categories : displayCategories;
+
   return (
     <div>
-      <button onClick={() => setToggle((v) => !v)}>
-        {toggle ? "show display categories" : "show categories"}
-      </button>
+      <TabButtonList
+        onTabChange={(tabId) => setActiveTab(tabId)}
+        activeTab={activeTab}
+        options={[
+          [TabKind.VendorCategories, "Categories"] as const,
+          [TabKind.VendorDisplayCategories, "Display categories"] as const,
+        ]}
+      />
 
-      {toggle ? (
-        <div>
-          <h3>Categories</h3>
+      {categoriesToDisplay.map(
+        (category, index) =>
+          category.items.length > 0 && (
+            <div className={s.category} key={index}>
+              <h4 className={s.categoryTitle}>
+                {category.title || <em>No name</em>}
 
-          {definition.categories.map((category) => {
-            if (category.vendorItemIndexes.length === 0) {
-              return null;
-            }
+                {category.tags.map((tag, ii) => (
+                  <>
+                    <span className={s.tag} key={ii}>
+                      {tag}
+                    </span>
+                    <SelectBreak />
+                  </>
+                ))}
+              </h4>
 
-            return (
-              <div className={s.category} key={category.categoryIndex}>
-                <h4 className={s.cateogryTitle}>
-                  #{category.categoryIndex}:{" "}
-                  {category.displayTitle || <em>No name</em>}
-                </h4>
-
-                <div className={s.categoryItems}>
-                  {category.vendorItemIndexes.map((itemIndex) => {
-                    const itemSale = definition.itemList[itemIndex];
-
-                    return (
-                      <VendorSaleItem vendorItem={itemSale} key={itemIndex} />
-                    );
-                  })}
-                </div>
+              <div className={s.categoryItems}>
+                {category.items.map((itemSale) => {
+                  return (
+                    <VendorSaleItem
+                      vendorItem={itemSale}
+                      key={itemSale.vendorItemIndex}
+                    />
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div>
-          <h3>Display categories</h3>
-
-          {displayCategories.map(
-            (category, index) =>
-              category.items.length > 0 && (
-                <div key={index} className={s.category}>
-                  <h4 className={s.cateogryTitle}>
-                    {category.displayCategory?.displayProperties.name ? (
-                      category.displayCategory.displayProperties.name
-                    ) : (
-                      <em>{category.manualName ?? "No name"}</em>
-                    )}
-
-                    {category.displayCategory?.identifier && (
-                      <>
-                        {" - "} {category.displayCategory.identifier}
-                      </>
-                    )}
-                  </h4>
-
-                  <div className={s.categoryItems}>
-                    {category.items.map((itemSale) => {
-                      return (
-                        <VendorSaleItem
-                          vendorItem={itemSale}
-                          key={itemSale.vendorItemIndex}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )
-          )}
-        </div>
+            </div>
+          )
       )}
 
       <p>

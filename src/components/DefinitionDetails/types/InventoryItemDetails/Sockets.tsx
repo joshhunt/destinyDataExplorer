@@ -32,7 +32,7 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
 
         return (
           <div key={socketCategory.socketCategoryHash} className={s.category}>
-            <h4 className={s.cateogryTitle}>
+            <h4 className={s.categoryTitle}>
               {categoryDef?.displayProperties.name}
             </h4>
 

@@ -53,7 +53,7 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
       )}
 
       <TabButtonList
-        onButtonClick={(tabId) => setActiveTab(tabId)}
+        onTabChange={(tabId) => setActiveTab(tabId)}
         activeTab={activeTab}
         options={[
           [TabKind.Pretty, "Pretty"] as const,

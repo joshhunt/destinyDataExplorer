@@ -7,18 +7,20 @@ export enum TabKind {
   Pretty,
   RawJson,
   Preview,
+  VendorCategories,
+  VendorDisplayCategories,
 }
 
 interface TabButtonListProps {
   options: (readonly [TabKind, React.ReactNode])[];
   activeTab: TabKind;
-  onButtonClick: (arg: TabKind) => void;
+  onTabChange: (arg: TabKind) => void;
 }
 
 const TabButtonList: React.FC<TabButtonListProps> = ({
   options,
   activeTab,
-  onButtonClick,
+  onTabChange: onButtonClick,
 }) => {
   return (
     <div className={s.root}>

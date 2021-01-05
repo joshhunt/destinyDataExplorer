@@ -17,6 +17,10 @@
     background: lighten(#2e2f31, 15%);
   }
 
+  &.active {
+    cursor: initial;
+  }
+
   &.active,
   &:active {
     background: lighten(#2e2f31, 10%);
