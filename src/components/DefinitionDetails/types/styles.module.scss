@@ -7,6 +7,26 @@
   font-size: 1.3em;
 }
 
+.heightLimitedWell {
+  padding: 8px;
+  overflow: auto;
+  background: rgba(black, 0.2);
+  border-radius: 3px;
+  max-height: 240px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    margin-top: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lighten(#16171a, 35%);
+    border-radius: 5px;
+  }
+}
+
 // items
 
 .cateogryTitle {
@@ -26,23 +46,7 @@
 }
 
 .socket {
-  padding: 8px;
-  overflow: auto;
-  background: rgba(black, 0.2);
-  border-radius: 3px;
-  max-height: 240px;
-
-  &::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    background-color: transparent;
-    margin-top: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: lighten(#16171a, 20%);
-    border-radius: 5px;
-  }
+  composes: heightLimitedWell;
 }
 
 .plug {
@@ -54,4 +58,15 @@
 .altPlug {
   composes: plug;
   opacity: 0.5;
+}
+
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.categoryItems {
+  composes: itemGrid heightLimitedWell;
+  margin: 0 16px;
 }

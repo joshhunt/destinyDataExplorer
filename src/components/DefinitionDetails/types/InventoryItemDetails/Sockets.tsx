@@ -72,6 +72,7 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
                         ];
 
                       return (
+                        // TODO: pathForItem
                         plugItemDef && (
                           <Item
                             pathForItem={() => ""}
