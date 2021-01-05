@@ -5,7 +5,14 @@ export const SET_BULK_DEFINITIONS = "Set bulk definitions";
 export const DEFINITIONS_ERROR = "Definitions error";
 export const DEFINITIONS_STATUS = "Definitions status";
 
-export default function definitionsReducer(state = {}, { type, payload }) {
+const initialState = {
+  definitions: {},
+};
+
+export default function definitionsReducer(
+  state = initialState,
+  { type, payload }
+) {
   switch (type) {
     case DEFINITIONS_ERROR: {
       return {

@@ -39,3 +39,11 @@ export function useDefinition(tableName: string, hash: any) {
     return definitionFromStore(store, tableName, hash);
   });
 }
+
+export function useDefinitionTable(
+  tableName: keyof ReduxStore["definitions"]["definitions"]
+) {
+  return useSelector(
+    (store: ReduxStore) => store.definitions.definitions?.[tableName]
+  );
+}

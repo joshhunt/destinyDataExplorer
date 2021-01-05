@@ -19,6 +19,6 @@ export interface BaseDestinyDefinition
 
 export interface ReduxStore {
   definitions: {
-    definitions?: Partial<AllDestinyManifestComponents>;
+    definitions: Partial<AllDestinyManifestComponents>;
   };
 }
