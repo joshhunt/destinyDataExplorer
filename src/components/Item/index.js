@@ -10,11 +10,21 @@ import Icon from "components/Icon";
 
 import s from "./styles.module.scss";
 
+const DUMMIES_HASH = 3109687656;
+
 function makeItemTypeName(item, type) {
   const shortType = makeTypeShort(type);
   const _klass = CLASSES[item.classType];
   const klass = _klass ? `${_klass} ` : "";
   const official = item.itemTypeName || item.itemTypeDisplayName;
+
+  if (
+    !official &&
+    item.itemCategoryHashes &&
+    item.itemCategoryHashes.includes(DUMMIES_HASH)
+  ) {
+    return `${shortType}: Dummy item`;
+  }
 
   return official ? `${shortType}: ${klass}${official}` : shortType;
 }

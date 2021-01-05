@@ -8,7 +8,7 @@ import VendorSaleItem from "./VendorSaleItem";
 import s from "../styles.module.scss";
 import TabButtonList, { TabKind } from "components/TabButtonList";
 import { notEmpty } from "lib/utils";
-import { SelectBreak } from "components/NewDataView/JsonValueAnnotation";
+import { SelectBreak } from "components/DataView/JsonValueAnnotation";
 
 interface VendorDetailsProps {
   definition: DestinyVendorDefinition;

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import { connect } from "react-redux";
 import { isString } from "lodash";
 import cx from "classnames";
@@ -19,11 +19,14 @@ import DataViewsOverlay from "components/DataViewsOverlay";
 import Loading from "components/Loading";
 import CollectDrawer from "components/Collect";
 import SearchHeader from "components/SearchHeader";
-import DataView from "components/DataView";
 import Item from "components/Item";
 
 import { filteredItemsSelector } from "./selectors";
 import s from "./styles.module.scss";
+import { Provider as PathForDefinitionProvider } from "lib/pathForDefinitionContext";
+import ComponentLoading from "components/ComponentLoading";
+
+const OldDataView = React.lazy(() => import("components/OldDataView"));
 
 function getSplat(params) {
   return params[0];
@@ -147,7 +150,7 @@ class HomeView extends Component {
     } = this.props;
 
     const { views } = this.state;
-    const useNewDataView = this.props.location.search.includes("new");
+    const useOldDataView = this.props.location.search.includes("old");
 
     let items = filterResults.results || [];
 
@@ -158,114 +161,118 @@ class HomeView extends Component {
     }
 
     return (
-      <div className={s.root}>
-        <SearchHeader
-          searchIsReady={searchIsReady}
-          setFilterValue={this.props.setFilterValue}
-          onSearchChange={this.onSearchChange}
-          toggleCollectMode={toggleCollectMode}
-          collectModeEnabled={collectModeEnabled}
-          filterDrawerVisible={filterDrawerVisible}
-          toggleFilterDrawer={toggleFilterDrawer}
-        />
+      <PathForDefinitionProvider value={this.pathForItem}>
+        <div className={s.root}>
+          <SearchHeader
+            searchIsReady={searchIsReady}
+            setFilterValue={this.props.setFilterValue}
+            onSearchChange={this.onSearchChange}
+            toggleCollectMode={toggleCollectMode}
+            collectModeEnabled={collectModeEnabled}
+            filterDrawerVisible={filterDrawerVisible}
+            toggleFilterDrawer={toggleFilterDrawer}
+          />
 
-        <div className={s.body}>
-          <div
-            className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
-          >
-            {definitionsStatus && (
-              <Loading children={"Downloading new data from Bungie..."} />
-            )}
+          <div className={s.body}>
+            <div
+              className={cx(s.main, collectModeEnabled && s.collectDrawerOpen)}
+            >
+              {definitionsStatus && (
+                <Loading children={"Downloading new data from Bungie..."} />
+              )}
 
-            {definitionsError && false && (
-              <Loading noSpin children="Error loading manifest" />
-            )}
+              {definitionsError && false && (
+                <Loading noSpin children="Error loading manifest" />
+              )}
 
-            {filterResults.noResults && <h2>No results</h2>}
+              {filterResults.noResults && <h2>No results</h2>}
 
-            <div className={s.items}>
-              {items.map((obj) => {
-                return (
-                  <Item
-                    key={obj.dxId}
-                    entry={obj}
-                    className={s.item}
-                    pathForItem={this.pathForItem}
-                    onClick={this.onItemClick}
-                    isCollected={collectedItems[obj.dxId]}
-                  />
-                );
-              })}
+              <div className={s.items}>
+                {items.map((obj) => {
+                  return (
+                    <Item
+                      key={obj.dxId}
+                      entry={obj}
+                      className={s.item}
+                      pathForItem={this.pathForItem}
+                      onClick={this.onItemClick}
+                      isCollected={collectedItems[obj.dxId]}
+                    />
+                  );
+                })}
+              </div>
+
+              {filterResults.results &&
+                filterResults.allResults &&
+                items !== filterResults.allResults && (
+                  <div className={s.moreResultsWrap}>
+                    <div className={s.moreResults}>
+                      {filterResults.allResults.length -
+                        filterResults.results.length}{" "}
+                      more results hidden for performance.{" "}
+                      <button
+                        onClick={this.displayAllResults}
+                        className={s.moreResultsButton}
+                      >
+                        Display all anyway
+                      </button>
+                    </div>
+                  </div>
+                )}
             </div>
 
-            {filterResults.results &&
-              filterResults.allResults &&
-              items !== filterResults.allResults && (
-                <div className={s.moreResultsWrap}>
-                  <div className={s.moreResults}>
-                    {filterResults.allResults.length -
-                      filterResults.results.length}{" "}
-                    more results hidden for performance.{" "}
-                    <button
-                      onClick={this.displayAllResults}
-                      className={s.moreResultsButton}
-                    >
-                      Display all anyway
-                    </button>
+            {collectModeEnabled && (
+              <div className={s.side}>
+                <div className={s.collectDrawer}>
+                  <div className={s.collectDrawerInner}>
+                    <CollectDrawer
+                      items={collectedItems}
+                      definitions={definitions}
+                      removeItem={this.props.removeCollectedItem}
+                    />
                   </div>
                 </div>
-              )}
+              </div>
+            )}
           </div>
 
-          {collectModeEnabled && (
-            <div className={s.side}>
-              <div className={s.collectDrawer}>
-                <div className={s.collectDrawerInner}>
-                  <CollectDrawer
-                    items={collectedItems}
-                    definitions={definitions}
-                    removeItem={this.props.removeCollectedItem}
-                  />
-                </div>
-              </div>
-            </div>
+          {!useOldDataView ? (
+            <DataViewsOverlay
+              items={views}
+              linkedDefinitionUrl={(item) =>
+                this.pathForItem(item.type, { hash: item.hash })
+              }
+              requestPopOverlay={this.popView}
+            />
+          ) : (
+            <TransitionGroup>
+              {views.map(
+                ({ type, hash }, index) =>
+                  this.props.definitions &&
+                  this.props.definitions[type] && (
+                    <CSSTransition
+                      key={index}
+                      classNames="global-dataview-animation"
+                      timeout={{ enter: 200, exit: 200 }}
+                    >
+                      <Suspense fallback={<ComponentLoading />}>
+                        <OldDataView
+                          definitions={definitions}
+                          depth={index + 1}
+                          className={s.dataView}
+                          item={this.props.definitions[type][hash]}
+                          type={type}
+                          onRequestClose={this.popView}
+                          pathForItem={this.pathForItem}
+                        />
+                      </Suspense>
+                    </CSSTransition>
+                  )
+              )}
+            </TransitionGroup>
           )}
         </div>
-
-        {useNewDataView ? (
-          <DataViewsOverlay
-            items={views}
-            linkedDefinitionUrl={(item) =>
-              this.pathForItem(item.type, { hash: item.hash })
-            }
-            requestPopOverlay={this.popView}
-          />
-        ) : (
-          <TransitionGroup>
-            {views.map(
-              ({ type, hash }, index) =>
-                this.props.definitions &&
-                this.props.definitions[type] && (
-                  <CSSTransition
-                    key={index}
-                    classNames="global-dataview-animation"
-                    timeout={{ enter: 200, exit: 200 }}
-                  >
-                    <DataView
-                      definitions={definitions}
-                      depth={index + 1}
-                      className={s.dataView}
-                      item={this.props.definitions[type][hash]}
-                      type={type}
-                      onRequestClose={this.popView}
-                      pathForItem={this.pathForItem}
-                    />
-                  </CSSTransition>
-                )
-            )}
-          </TransitionGroup>
-        )}
-      </div>
+      </PathForDefinitionProvider>
     );
   }
 }

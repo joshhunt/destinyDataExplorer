@@ -13,13 +13,13 @@ import CSSThemeVariables from "components/CSSThemeVariables";
 import { DefinitionEntry } from "components/DataViewsOverlay/utils";
 import CharacterJsonValue, { isCharacterId } from "./CharacterJsonValue";
 
-interface NewDataViewProps {
+interface DataViewProps {
   data: any;
   schema?: OpenAPIV3.SchemaObject;
   linkedDefinitionUrl: (item: DefinitionEntry) => string;
 }
 
-const NewDataView: React.FC<NewDataViewProps> = ({
+const DataView: React.FC<DataViewProps> = ({
   data,
   schema,
   linkedDefinitionUrl,
@@ -86,13 +86,13 @@ const NewDataView: React.FC<NewDataViewProps> = ({
   );
 };
 
-// export default NewDataView;
-export default React.memo(NewDataView);
+// export default DataView;
+export default React.memo(DataView);
 
 function renderWithAccessory(
-  data: NewDataViewProps["data"],
-  schema: NewDataViewProps["schema"],
-  linkedDefinitionUrl: NewDataViewProps["linkedDefinitionUrl"],
+  data: DataViewProps["data"],
+  schema: DataViewProps["schema"],
+  linkedDefinitionUrl: DataViewProps["linkedDefinitionUrl"],
   displayValue: React.ReactNode,
   rawValue: any,
   keyPath: (string | number)[]

@@ -1,12 +1,14 @@
+import ComponentLoading from "components/ComponentLoading";
 import { DefinitionEntry } from "components/DataViewsOverlay/utils";
 import RawJSON from "components/DefinitionDataView/RawJSON";
-import NewDataView from "components/NewDataView";
 import TabButtonList, { TabKind } from "components/TabButtonList";
 import { notEmpty } from "lib/utils";
 import { OpenAPIV3 } from "openapi-types/dist/index";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import GetPostGameCarnageReport from "./responseViews/GetPostGameCarnageReportView";
 import GetPGCR from "./responseViews/GetPostGameCarnageReportView";
+
+const NewDataView = React.lazy(() => import("components/DataView"));
 
 interface APIResponseDataViewProps {
   data: any;
@@ -37,11 +39,13 @@ const APIResponseDataView: React.FC<APIResponseDataViewProps> = ({
       />
 
       {activeTab === TabKind.Pretty && (
-        <NewDataView
-          data={data}
-          schema={schema}
-          linkedDefinitionUrl={linkedDefinitionUrl}
-        />
+        <Suspense fallback={<ComponentLoading />}>
+          <NewDataView
+            data={data}
+            schema={schema}
+            linkedDefinitionUrl={linkedDefinitionUrl}
+          />
+        </Suspense>
       )}
 
       {activeTab === TabKind.RawJson && (

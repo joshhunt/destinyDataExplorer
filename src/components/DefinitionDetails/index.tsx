@@ -3,6 +3,7 @@ import InventoryItemDetails, {
   displayInventoryItemDetails,
 } from "./types/InventoryItemDetails";
 import VendorDetails, { displayVendorDetails } from "./types/VendorDetails";
+import RecordDetails, { displayRecordDetails } from "./types/RecordDetails";
 
 interface DefinitionDetailsProps {
   definition: any;
@@ -21,13 +22,18 @@ const DefinitionDetails: React.FC<DefinitionDetailsProps> = ({
     return <VendorDetails definition={definition} />;
   }
 
+  if (tableName === "DestinyRecordDefinition") {
+    return <RecordDetails definition={definition} />;
+  }
+
   return null;
 };
 
 export function displayDefinitionDetails(tableName: string, definition: any) {
   return (
     displayInventoryItemDetails(tableName, definition) ||
-    displayVendorDetails(tableName)
+    displayVendorDetails(tableName) ||
+    displayRecordDetails(tableName, definition)
   );
 }
 

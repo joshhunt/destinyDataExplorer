@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 
-import NewDataView from "components/NewDataView";
 import { getSchemaFromDefinitionName } from "lib/apiSchemaUtils";
 import { DefinitionEntry } from "components/DataViewsOverlay";
 import BungieImage from "components/BungieImage";
@@ -13,6 +12,9 @@ import DefinitionDetails, {
 } from "components/DefinitionDetails";
 import TabButtonList, { TabKind } from "components/TabButtonList";
 import { notEmpty } from "lib/utils";
+import ComponentLoading from "components/ComponentLoading";
+
+const NewDataView = React.lazy(() => import("components/DataView"));
 
 interface DefinitionDataViewProps {
   definition: any;
@@ -63,11 +65,13 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
       />
 
       {activeTab === TabKind.Pretty && (
-        <NewDataView
-          data={definition}
-          schema={getSchemaFromDefinitionName(tableName)}
-          linkedDefinitionUrl={linkedDefinitionUrl}
-        />
+        <Suspense fallback={<ComponentLoading />}>
+          <NewDataView
+            data={definition}
+            schema={getSchemaFromDefinitionName(tableName)}
+            linkedDefinitionUrl={linkedDefinitionUrl}
+          />
+        </Suspense>
       )}
 
       {activeTab === TabKind.RawJson && (

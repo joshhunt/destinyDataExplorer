@@ -1,3 +1,4 @@
+import { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
 import { get, isString } from "lodash";
 
 export function getLower(obj: any, path: string, fallback = "") {

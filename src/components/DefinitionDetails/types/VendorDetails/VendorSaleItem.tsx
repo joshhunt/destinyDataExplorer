@@ -1,6 +1,7 @@
 import { DestinyVendorItemDefinition } from "bungie-api-ts/destiny2";
 import Item from "components/Item";
 import { useDefinition } from "lib/destinyTsUtils";
+import { usePathForDefinition } from "lib/pathForDefinitionContext";
 import React from "react";
 import s from "../styles.module.scss";
 
@@ -9,6 +10,7 @@ interface VendorSaleItemProps {
 }
 
 const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
+  const pathForItem = usePathForDefinition();
   const itemDef = useDefinition(
     "DestinyInventoryItemDefinition",
     vendorItem.itemHash
@@ -21,7 +23,7 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
   return (
     // TODO: pathForItem
     <Item
-      pathForItem={() => ""}
+      pathForItem={pathForItem}
       className={s.item}
       key={vendorItem.vendorItemIndex}
       entry={{

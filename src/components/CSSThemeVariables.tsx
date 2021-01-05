@@ -1,5 +1,5 @@
 import React from "react";
-import Theme from "./NewDataView/theme";
+import Theme from "./DataView/theme";
 
 interface CSSThemeVariablesProps {
   theme: typeof Theme;

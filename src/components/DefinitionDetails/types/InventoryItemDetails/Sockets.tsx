@@ -5,12 +5,15 @@ import s from "../styles.module.scss";
 import { ReduxStore } from "types";
 import { useSelector } from "react-redux";
 import Item from "components/Item";
+import { usePathForDefinition } from "lib/pathForDefinitionContext";
 
 interface SocketsProps {
   definition: DestinyInventoryItemDefinition;
 }
 
 const Sockets: React.FC<SocketsProps> = ({ definition }) => {
+  const pathForItem = usePathForDefinition();
+
   const definitions = useSelector(
     (store: ReduxStore) => store.definitions.definitions
   );
@@ -72,10 +75,9 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
                         ];
 
                       return (
-                        // TODO: pathForItem
                         plugItemDef && (
                           <Item
-                            pathForItem={() => ""}
+                            pathForItem={pathForItem}
                             className={isMainPlug ? s.plug : s.altPlug}
                             key={plugItemHash}
                             isCollected={false}

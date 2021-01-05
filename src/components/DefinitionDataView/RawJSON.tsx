@@ -1,6 +1,6 @@
 import CSSThemeVariables from "components/CSSThemeVariables";
 import cx from "classnames";
-import theme from "components/NewDataView/theme";
+import theme from "components/DataView/theme";
 import React, { useMemo } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
