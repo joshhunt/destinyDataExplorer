@@ -17,7 +17,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/react-select": "^3.0.28",
     "@types/react-syntax-highlighter": "^13.5.0",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bungie-api-ts": "^4.7.0",
     "classnames": "^2.2.5",
     "dequal": "^2.0.2",
