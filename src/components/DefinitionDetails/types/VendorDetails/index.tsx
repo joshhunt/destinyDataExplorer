@@ -72,7 +72,7 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
         : category.manualName,
       items: category.items,
       tags: [
-        category.displayCategory?.index
+        category.displayCategory?.index !== undefined
           ? `index: ${category.displayCategory?.index}`
           : null,
         category.displayCategory?.identifier &&
