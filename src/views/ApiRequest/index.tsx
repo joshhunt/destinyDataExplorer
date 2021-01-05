@@ -1,5 +1,4 @@
 import Header from "components/Header";
-import NewDataView from "components/NewDataView";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 
@@ -22,6 +21,7 @@ import DataViewsOverlay, {
 import APIListOverlay from "components/APIListOverlay";
 import { Link } from "react-router-dom";
 import ResponseEmptyState from "components/ResponseEmptyState";
+import APIResponseDataView from "components/APIResponseDataView";
 
 interface ApiRequestViewProps {}
 
@@ -95,8 +95,6 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   );
 
   const handleListOverlayClose = useCallback(() => {
-    // setPathParams({});
-    // setQueryParams({});
     setMenuOverlayVisible(false);
     setCollapsed(Collapsed.Visible);
   }, []);
@@ -157,10 +155,11 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         </div>
 
         <div className={s.response}>
-          {apiResponse && responseSchema ? (
-            <NewDataView
+          {apiResponse && responseSchema && operationName ? (
+            <APIResponseDataView
               data={apiResponse}
               schema={responseSchema}
+              operationName={operationName}
               linkedDefinitionUrl={linkedDefinitionUrl}
             />
           ) : (

@@ -11,7 +11,8 @@ import RawJSON from "./RawJSON";
 import DefinitionDetails, {
   displayDefinitionDetails,
 } from "components/DefinitionDetails";
-import TabButtonList from "components/TabButtonList";
+import TabButtonList, { TabKind } from "components/TabButtonList";
+import { notEmpty } from "lib/utils";
 
 interface DefinitionDataViewProps {
   definition: any;
@@ -19,18 +20,12 @@ interface DefinitionDataViewProps {
   linkedDefinitionUrl: (item: DefinitionEntry) => string;
 }
 
-enum Tabs {
-  Pretty,
-  RawJson,
-  Preview,
-}
-
 const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
   definition,
   tableName,
   linkedDefinitionUrl,
 }) => {
-  const [activeTab, setActiveTab] = useState(Tabs.Pretty);
+  const [activeTab, setActiveTab] = useState(TabKind.Pretty);
   const typedDef = definition as BaseDestinyDefinition;
   const hasDetails = displayDefinitionDetails(tableName, definition);
 
@@ -58,16 +53,16 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
       )}
 
       <TabButtonList
-        onButtonClick={(tabId: Tabs) => setActiveTab(tabId)}
+        onButtonClick={(tabId) => setActiveTab(tabId)}
         activeTab={activeTab}
         options={[
-          [Tabs.Pretty, "Pretty"],
-          [Tabs.RawJson, "Raw JSON"],
-          hasDetails && [Tabs.Preview, "Details"],
-        ].filter(Boolean)}
+          [TabKind.Pretty, "Pretty"] as const,
+          [TabKind.RawJson, "Raw JSON"] as const,
+          hasDetails && ([TabKind.Preview, "Details"] as const),
+        ].filter(notEmpty)}
       />
 
-      {activeTab === Tabs.Pretty && (
+      {activeTab === TabKind.Pretty && (
         <NewDataView
           data={definition}
           schema={getSchemaFromDefinitionName(tableName)}
@@ -75,9 +70,11 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
         />
       )}
 
-      {activeTab === Tabs.RawJson && <RawJSON data={definition} />}
+      {activeTab === TabKind.RawJson && (
+        <RawJSON data={definition} limitHeight={true} />
+      )}
 
-      {activeTab === Tabs.Preview && (
+      {activeTab === TabKind.Preview && (
         <DefinitionDetails tableName={tableName} definition={definition} />
       )}
     </div>

@@ -3,10 +3,16 @@ import cx from "classnames";
 
 import s from "./styles.module.scss";
 
-interface TabButtonListProps<T = any> {
-  options: [T, React.ReactNode][];
-  activeTab: T;
-  onButtonClick: T;
+export enum TabKind {
+  Pretty,
+  RawJson,
+  Preview,
+}
+
+interface TabButtonListProps {
+  options: (readonly [TabKind, React.ReactNode])[];
+  activeTab: TabKind;
+  onButtonClick: (arg: TabKind) => void;
 }
 
 const TabButtonList: React.FC<TabButtonListProps> = ({

@@ -27,8 +27,6 @@ $bg: lighten(variables.$background, 3%);
 
 .rawJson {
   font-size: 14px;
-  max-height: 80vh;
-  overflow: auto;
   background: rgba(black, 0.2);
   border-radius: 3px;
 
@@ -36,4 +34,9 @@ $bg: lighten(variables.$background, 3%);
   * {
     font-family: "Fira Mono";
   }
+}
+
+.limitHeight {
+  max-height: 80vh;
+  overflow: auto;
 }

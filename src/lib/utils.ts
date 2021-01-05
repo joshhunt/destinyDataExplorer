@@ -9,7 +9,7 @@ export const isImage = (value: string | number): value is string =>
   isString(value) && !!value.match(/\.(png|jpg|jpeg)$/);
 
 export function notEmpty<TValue>(
-  value: TValue | null | undefined
+  value: TValue | null | undefined | boolean
 ): value is TValue {
-  return value !== null && value !== undefined;
+  return value !== false && value !== null && value !== undefined;
 }
