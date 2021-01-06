@@ -7,7 +7,8 @@ export function getDisplayName(def: BaseDestinyDefinition) {
     def.displayProperties?.name ||
     def.progressDescription ||
     def.tierName ||
-    def.statName
+    def.statName ||
+    def.powerCap
   );
 }
 

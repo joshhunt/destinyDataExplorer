@@ -6,7 +6,7 @@ import JSONTree from "react-json-tree";
 
 import { makeTypeShort } from "lib/destinyUtils";
 import BungieImage from "components/BungieImage";
-import { getNameForItem, bungieUrl } from "lib/destinyUtils";
+import { bungieUrl } from "lib/destinyUtils";
 import copyToClipboard from "lib/copyToClipboard";
 
 import Vendor from "./detailViews/Vendor";
@@ -18,6 +18,7 @@ import specialValueOverrides from "./specialValueOverrides";
 import s from "./styles.module.scss";
 
 import apispec from "lib/apispec.json";
+import { getDisplayName } from "lib/destinyTsUtils";
 
 const RE = /Destiny(\w+)Definition/;
 
@@ -144,7 +145,7 @@ export default class DataView extends Component {
       );
     }
 
-    const displayName = getNameForItem(item);
+    const displayName = getDisplayName(item);
 
     return (
       <Decorate spec={currentSpec}>
@@ -152,7 +153,7 @@ export default class DataView extends Component {
           to={this.props.pathForItem(definitionType, item)}
           className={s.jsonLinkedValue}
         >
-          {`<${toTitleCase(definitionType)} ${displayName} ${prettyValue}>`}
+          {`<${toTitleCase(definitionType)} "${displayName}" ${prettyValue}>`}
         </Link>
       </Decorate>
     );
@@ -216,7 +217,7 @@ export default class DataView extends Component {
 
     const { rawJSON, textAreaHeight } = this.state;
 
-    const displayname = getNameForItem(item, true) || <em>No name</em>;
+    const displayname = getDisplayName(item) || <em>No name</em>;
     const isPerk = !!item.plug;
 
     const DetailView = DETAIL_VIEWS[type];

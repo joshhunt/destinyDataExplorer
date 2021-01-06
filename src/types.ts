@@ -3,6 +3,7 @@ import {
   DestinyObjectiveDefinition,
   DestinyInventoryItemDefinition,
   DestinyHistoricalStatsDefinition,
+  DestinyPowerCapDefinition,
 } from "bungie-api-ts/destiny2";
 
 export type AnyDefinitionTable = AllDestinyManifestComponents[keyof AllDestinyManifestComponents];
@@ -12,7 +13,8 @@ export interface BaseDestinyDefinition
   extends Partial<
     DestinyInventoryItemDefinition &
       DestinyObjectiveDefinition &
-      DestinyHistoricalStatsDefinition
+      DestinyHistoricalStatsDefinition &
+      DestinyPowerCapDefinition
   > {
   tierName?: string;
 }

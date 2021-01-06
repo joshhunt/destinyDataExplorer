@@ -3,12 +3,13 @@ import cx from "classnames";
 import { Link } from "react-router-dom";
 
 import { CLASSES } from "lib/destinyEnums";
-import { makeTypeShort, getNameForItem } from "lib/destinyUtils";
+import { makeTypeShort } from "lib/destinyUtils";
 
 import BungieImage from "components/BungieImage";
 import Icon from "components/Icon";
 
 import s from "./styles.module.scss";
+import { getDisplayName } from "lib/destinyTsUtils";
 
 const DUMMIES_HASH = 3109687656;
 
@@ -64,7 +65,7 @@ export default function Item({
     return null;
   }
 
-  const name = getNameForItem(item, true) || <em>No name</em>;
+  const name = getDisplayName(item) || <em>No name</em>;
   const icon =
     (item.displayProperties && item.displayProperties.icon) ||
     item.iconImage ||

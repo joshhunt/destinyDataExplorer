@@ -49,10 +49,6 @@ function classFromString(str) {
 }
 
 export const getItemClass = (item) => {
-  // if (CLASS_OVERRIDES.hasOwnProperty(item.hash)) {
-  //   return CLASS_OVERRIDES[item.hash];
-  // }
-
   const stackUniqueLabel = getLower(item, "inventory.stackUniqueLabel");
   const plugCategoryIdentifier = getLower(item, "plug.plugCategoryIdentifier");
 
@@ -67,28 +63,6 @@ export const getItemClass = (item) => {
 
   return item.classType;
 };
-
-export function getNameForItem(item, noQuotes) {
-  let foundName;
-
-  if (item) {
-    if (item.displayProperties && item.displayProperties.name) {
-      foundName = item.displayProperties.name;
-    } else if (item.progressDescription) {
-      foundName = item.progressDescription;
-    } else if (item.statName) {
-      foundName = item.statName;
-    } else if (item.tierName) {
-      foundName = item.tierName;
-    }
-  }
-
-  if (noQuotes) {
-    return foundName;
-  }
-
-  return foundName ? `"${foundName}"` : "";
-}
 
 export const makeAllDefsArray = memoize((allDefs) => {
   return toPairs(allDefs).reduce((acc, [type, defs]) => {
