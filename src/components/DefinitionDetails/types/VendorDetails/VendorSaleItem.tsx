@@ -1,4 +1,7 @@
-import { DestinyVendorItemDefinition } from "bungie-api-ts/destiny2";
+import {
+  DestinyInventoryItemDefinition,
+  DestinyVendorItemDefinition,
+} from "bungie-api-ts/destiny2";
 import Item from "components/Item";
 import { useDefinition } from "lib/destinyTsUtils";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
@@ -14,6 +17,11 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
   const itemDef = useDefinition(
     "DestinyInventoryItemDefinition",
     vendorItem.itemHash
+  ) as DestinyInventoryItemDefinition | undefined;
+
+  const vendorDef = useDefinition(
+    "DestinyVendorDefinition",
+    itemDef?.preview?.previewVendorHash
   );
 
   if (!itemDef) {
@@ -26,10 +34,17 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
       pathForItem={pathForItem}
       className={s.item}
       key={vendorItem.vendorItemIndex}
-      entry={{
-        type: "DestinyInventoryItemDefinition",
-        def: itemDef,
-      }}
+      entry={
+        vendorDef
+          ? {
+              type: "DestinyVendorDefinition",
+              def: vendorDef,
+            }
+          : {
+              type: "DestinyInventoryItemDefinition",
+              def: itemDef,
+            }
+      }
       isCollected={false}
       onClick={() => {}}
     />

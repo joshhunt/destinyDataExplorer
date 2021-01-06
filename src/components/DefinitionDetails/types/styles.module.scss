@@ -12,7 +12,7 @@
   overflow: auto;
   background: rgba(black, 0.2);
   border-radius: 3px;
-  max-height: 240px;
+  max-height: 210px;
 
   &::-webkit-scrollbar {
     width: 10px;
@@ -62,7 +62,7 @@
 
 .itemGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 8px;
 }
 

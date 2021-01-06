@@ -135,7 +135,12 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
       )}
 
       <p>
-        <em>Empty categories are hidden</em>
+        <em>
+          Empty categories are hidden.
+          <br />
+          Vendor preview items (such as Vendor subscreens, or Eververse bundles)
+          are resolved to their Vendor.
+        </em>
       </p>
     </div>
   );
