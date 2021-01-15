@@ -38,3 +38,14 @@
   width: 100%;
   color: black;
 }
+
+.specialValue {
+  font-size: 0.9em;
+  padding: 4px 10px;
+  background: desaturate(lighten(variables.$apiRequestEditorBg, 6%), 5%);
+  border-radius: 3px;
+}
+
+.inlineButton {
+  composes: headerbutton from "../../../views/ApiRequest/styles.module.scss";
+}

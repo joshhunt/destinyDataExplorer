@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import OAuthReturn from "views/OAuthReturn";
 
 import store from "./store";
 import ApiView from "./views/Api";
@@ -30,6 +31,8 @@ export default class AppRouter extends Component {
               path="/api/:operationName/**"
               component={ApiRequestView}
             />
+
+            <Route exact path="/oauth-return" component={OAuthReturn} />
 
             <Route path="/i/*" component={Home} />
           </Switch>

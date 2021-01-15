@@ -7,7 +7,10 @@ interface ResponseEmptyStateProps {
   loading?: boolean;
 }
 
-const ResponseEmptyState: React.FC<ResponseEmptyStateProps> = ({ loading }) => {
+const ResponseEmptyState: React.FC<ResponseEmptyStateProps> = ({
+  loading,
+  children,
+}) => {
   return (
     <div className={s.root}>
       <div>
@@ -22,7 +25,14 @@ const ResponseEmptyState: React.FC<ResponseEmptyStateProps> = ({ loading }) => {
             <Icon name="rocket" duotone />
           </span>
         )}
-        {loading ? <p>Sending...</p> : <p>Hit Send to get a response</p>}
+
+        {children ? (
+          children
+        ) : loading ? (
+          <p>Sending...</p>
+        ) : (
+          <p>Hit Send to get a response</p>
+        )}
       </div>
     </div>
   );

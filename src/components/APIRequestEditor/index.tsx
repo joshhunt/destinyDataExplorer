@@ -8,6 +8,8 @@ import AnimateHeight from "react-animate-height";
 import { makeApiRequestUrl, Params } from "views/ApiRequest/utils";
 
 import s from "./styles.module.scss";
+import { notEmpty } from "lib/utils";
+import { useBungieAuth } from "lib/bungieAuth";
 
 interface APIRequestEditorProps {
   className?: string;
@@ -32,10 +34,24 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   onPathParamsChange,
   onQueryParamsChange,
 }) => {
+  const bungieAuth = useBungieAuth();
   const displayUrl = useMemo(() => makeApiRequestUrl(apiOperation, apiParams), [
     apiOperation,
     apiParams,
   ]);
+
+  const fakeHeaderParams = [
+    {
+      name: "$auth",
+      "x-display-name": "Authorization",
+      in: "headers",
+      description:
+        "OAuth 2.0 header for access to protected endpoints and data.",
+      schema: {
+        "x-custom-type": "x-dx-authorization",
+      },
+    },
+  ].filter(notEmpty);
 
   return (
     <div className={cx(s.requestEditor, className)}>
@@ -88,6 +104,16 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
               className={s.params}
               title="Query params"
               parameters={apiOperation.queryParameters}
+              values={apiParams}
+              onChange={onQueryParamsChange}
+            />
+          )}
+
+          {fakeHeaderParams && (
+            <ParameterEditor
+              className={s.params}
+              title="Headers"
+              parameters={fakeHeaderParams}
               values={apiParams}
               onChange={onQueryParamsChange}
             />

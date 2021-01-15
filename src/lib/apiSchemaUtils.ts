@@ -7,6 +7,10 @@ const apiSpec = (_apispec as unknown) as OpenAPIV3.Document;
 
 declare module "openapi-types/dist/index" {
   namespace OpenAPIV3 {
+    interface ParameterObject {
+      "x-display-name"?: string;
+    }
+
     interface ArraySchemaObject {
       "x-mapped-definition"?: OpenAPIV3.ReferenceObject;
       "x-enum-reference"?: OpenAPIV3.ReferenceObject;
@@ -25,6 +29,8 @@ declare module "openapi-types/dist/index" {
         numericValue: string;
         identifier: string;
       }[];
+      "x-custom-type"?: string;
+      "x-display-name"?: string;
     }
   }
 }
@@ -75,11 +81,9 @@ export function formatApiPath(path: string, spec: OpenAPIV3.PathItemObject) {
 }
 
 export function getApiPaths() {
-  return Object.entries(
-    apiSpec.paths
-  ).flatMap(([path, spec]: [string, OpenAPIV3.PathItemObject]) =>
-    formatApiPath(path, spec)
-  );
+  return Object.entries(apiSpec.paths)
+    .flatMap(([path, spec]) => spec && formatApiPath(path, spec))
+    .filter(notEmpty);
 }
 
 export function getOperation(operationId: string) {

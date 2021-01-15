@@ -7,6 +7,7 @@ import ParameterBooleanField from "./types/ParameterBooleanField";
 import ParameterArrayField from "./types/ParameterArrayField";
 
 import s from "./styles.module.scss";
+import ParameterAuthField from "./types/ParameterAuthField";
 
 interface ParameterEditorProps {
   title: React.ReactNode;
@@ -47,7 +48,7 @@ const ParameterEditor: React.FC<ParameterEditorProps> = ({
         <tbody>
           {parameters.map((param) => (
             <tr key={param.name}>
-              <td>{param.name}</td>
+              <td>{param["x-display-name"] || param.name}</td>
               <td>
                 <ParameterField
                   parameter={param}
@@ -70,10 +71,12 @@ const ParameterField: React.FC<ParameterFieldProps> = ({
   onChange,
 }) => {
   if (!parameter.schema || "$ref" in parameter.schema) {
-    throw new Error("Parameter schema is invalid");
+    return <span>Parameter is unsupported</span>;
   }
 
-  switch (parameter.schema.type) {
+  const type = parameter.schema.type || parameter.schema["x-custom-type"];
+
+  switch (type) {
     // boolean
 
     case "integer":
@@ -104,9 +107,22 @@ const ParameterField: React.FC<ParameterFieldProps> = ({
         />
       );
 
+    case "x-dx-authorization":
+      return (
+        <ParameterAuthField
+          parameter={parameter}
+          value={value}
+          onChange={onChange}
+        />
+      );
+
     default:
       console.warn("unknown param type", parameter);
-      return <span>unknown param type. See console.</span>;
+      return (
+        <span>
+          Parameter type <code>{type}</code> is unsupported.
+        </span>
+      );
   }
 };
 

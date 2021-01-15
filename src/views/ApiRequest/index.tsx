@@ -1,6 +1,6 @@
 import Header from "components/Header";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 
 import { ensureSchema, getOperation } from "../../lib/apiSchemaUtils";
 
@@ -22,10 +22,13 @@ import APIListOverlay from "components/APIListOverlay";
 import { Link } from "react-router-dom";
 import ResponseEmptyState from "components/ResponseEmptyState";
 import APIResponseDataView from "components/APIResponseDataView";
+import { getValidAuthData, useBungieAuth } from "lib/bungieAuth";
+import OAuthLoginButton from "components/OAuthLoginButton";
 
 interface ApiRequestViewProps {}
 
 const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
+  const authData = useBungieAuth();
   const history = useHistory();
   const [menuOverlayVisible, setMenuOverlayVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,11 +62,19 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
     const url = makeApiRequestUrl(apiOperation, apiParams, true);
 
     setLoading(true);
-    fetch(`https://www.bungie.net${url}`, {
-      headers: {
-        "x-api-key": process.env.REACT_APP_API_KEY ?? "",
-      },
-    })
+
+    getValidAuthData()
+      .then((authData) =>
+        fetch(`https://www.bungie.net${url}`, {
+          headers: {
+            "x-api-key": process.env.REACT_APP_API_KEY ?? "",
+            authorization:
+              authData && apiParams.$auth
+                ? `Bearer ${authData.accessToken}`
+                : "",
+          },
+        })
+      )
       .then((response) => {
         return response.json();
       })
@@ -125,6 +136,12 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
               </span>
 
               <div>
+                {!authData && (
+                  <OAuthLoginButton className={s.headerbutton}>
+                    Login
+                  </OAuthLoginButton>
+                )}
+
                 <button
                   className={s.headerbutton}
                   onClick={() => setMenuOverlayVisible(true)}
