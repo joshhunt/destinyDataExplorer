@@ -22,20 +22,25 @@ db.version(1).stores({
   allData: "&key, data",
 });
 
+db.version(2).stores({
+  manifestBlob: "&key, data",
+  allData: "&key, data",
+  jsonTables: "&key, data",
+});
+
 export const STATUS_DOWNLOADING = "downloading";
 export const STATUS_EXTRACTING_TABLES = "extracting tables";
 export const STATUS_UNZIPPING = "unzipping";
 export const STATUS_DONE = "done";
 
-function fetchManifestDBPath(language) {
+async function fetchManifestDBPath(language) {
   log("Requesting manifest for language", language);
 
-  return getDestiny("/Platform/Destiny2/Manifest/", { _noAuth: true }).then(
-    (data) => {
-      log("Manifest returned from Bungie", data);
-      return data.mobileWorldContentPaths[language];
-    }
-  );
+  const data = await getDestiny("/Platform/Destiny2/Manifest/", {
+    _noAuth: true,
+  });
+  log("Manifest returned from Bungie", data);
+  return data.mobileWorldContentPaths[language];
 }
 
 function onDownloadProgress(progress) {
@@ -125,48 +130,65 @@ function openDBFromBlob(SQLLib, blob) {
 
 let requireDatabasePromise;
 
-function allDataFromRemote(dbPath, tablesNames, progressCb) {
+async function allDataFromRemote(dbPath, tablesNames, progressCb, _language) {
   if (!requireDatabasePromise) {
     requireDatabasePromise = requireDatabase();
   }
 
-  return Promise.all([
-    requireDatabasePromise,
-    loadDefinitions(dbPath, progressCb),
-  ])
-    .then(([SQLLib, databaseBlob]) => {
-      progressCb({ status: STATUS_EXTRACTING_TABLES });
-      log("Loaded both SQL library and definitions database");
-      return openDBFromBlob(SQLLib, databaseBlob);
-    })
-    .then((db) => {
-      log("Opened database as SQLite DB object");
+  try {
+    const [SQLLib, databaseBlob] = await Promise.all([
+      requireDatabasePromise,
+      loadDefinitions(dbPath, progressCb),
+    ]);
 
-      const tablesToRequest =
-        tablesNames ||
-        db
-          .exec(`SELECT name FROM sqlite_master WHERE type='table';`)[0]
-          .values.map((a) => a[0]);
+    progressCb({ status: STATUS_EXTRACTING_TABLES });
 
-      log("Extracting tables from definitions database", tablesToRequest);
+    log("Loaded both SQL library and definitions database");
+    const db = await openDBFromBlob(SQLLib, databaseBlob);
+    log("Opened database as SQLite DB object");
 
-      const allData = tablesToRequest.reduce((acc, tableName) => {
-        log("Getting all records for", tableName);
+    const tablesToRequest =
+      tablesNames ||
+      db
+        .exec(`SELECT name FROM sqlite_master WHERE type='table';`)[0]
+        .values.map((a) => a[0]);
 
-        return {
-          ...acc,
-          [tableName]: getAllRecords(db, tableName),
-        };
-      }, {});
+    log("Extracting tables from definitions database", tablesToRequest);
 
-      return allData;
-    })
-    .catch((err) => {
-      //TODO: Fix memory issue with SQLLib or more gracefully handle failure
-      window.location.reload();
-      //without throwing an error the data becomes corrupted
-      throw err;
+    const allData = tablesToRequest.reduce((acc, tableName) => {
+      log("Getting all records for", tableName);
+
+      return {
+        ...acc,
+        [tableName]: getAllRecords(db, tableName),
+      };
+    }, {});
+
+    const language = _language || "en";
+    const manifest = await getDestiny("/Platform/Destiny2/Manifest/", {
+      _noAuth: true,
     });
+
+    const jsonComponents = Object.entries(
+      manifest.jsonWorldComponentContentPaths[language]
+    ).filter(([tableName]) => !allData[tableName]);
+
+    console.log("extra components", jsonComponents);
+
+    for (const [tableName, tablePath] of jsonComponents) {
+      const resp = await fetch(`https://www.bungie.net${tablePath}`);
+      const table = await resp.json();
+      allData[tableName] = table;
+    }
+
+    return allData;
+  } catch (err) {
+    // TODO: Fix memory issue with SQLLib or more gracefully handle failure
+    // window.location.reload();
+
+    // without throwing an error the data becomes corrupted
+    throw err;
+  }
 }
 
 function cleanUpPreviousVersions(dbPath, keyToKeep) {
@@ -233,18 +255,21 @@ export function fasterGetDefinitions(
 
         progressCb({ status: STATUS_DOWNLOADING });
 
-        allDataFromRemote(dbPath, requestedTableNames, progressCb).then(
-          (definitions) => {
-            log("Successfully got requested definitions");
+        allDataFromRemote(
+          dbPath,
+          requestedTableNames,
+          progressCb,
+          language
+        ).then((definitions) => {
+          log("Successfully got requested definitions");
 
-            const key = [VERSION, dbPath].join(":");
-            db.allData.put({ key, data: definitions });
+          const key = [VERSION, dbPath].join(":");
+          db.allData.put({ key, data: definitions });
 
-            cleanUpPreviousVersions(dbPath, key);
+          cleanUpPreviousVersions(dbPath, key);
 
-            dataCb(null, { done: true, definitions });
-          }
-        );
+          dataCb(null, { done: true, definitions });
+        });
       });
     })
     .catch((err) => {
