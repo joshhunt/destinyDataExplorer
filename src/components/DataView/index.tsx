@@ -98,17 +98,18 @@ function renderWithAccessory(
   keyPath: (string | number)[]
 ) {
   const propertySchema = schema && getPropertySchemaForPath(schema, keyPath);
-  if (!propertySchema) return displayValue;
+  // if (!propertySchema) return displayValue;
 
   const displayNode = (
     <span onClick={() => console.log(propertySchema)}>{displayValue}</span>
   );
 
-  const definitionRef = propertySchema["x-mapped-definition"];
+  const definitionRef = propertySchema?.["x-mapped-definition"];
 
   const enumRef =
-    propertySchema["x-enum-reference"] ||
-    ("items" in propertySchema &&
+    propertySchema?.["x-enum-reference"] ||
+    (propertySchema &&
+      "items" in propertySchema &&
       "x-enum-reference" in propertySchema.items &&
       propertySchema.items["x-enum-reference"]);
 
