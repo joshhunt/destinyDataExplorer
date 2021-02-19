@@ -1,4 +1,3 @@
-import { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
 import { get, isString } from "lodash";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";

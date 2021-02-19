@@ -171,9 +171,11 @@ async function allDataFromRemote(dbPath, tablesNames, progressCb, _language) {
 
     const jsonComponents = Object.entries(
       manifest.jsonWorldComponentContentPaths[language]
-    ).filter(([tableName]) => !allData[tableName]);
-
-    console.log("extra components", jsonComponents);
+    ).filter(
+      ([tableName]) =>
+        !allData[tableName] &&
+        tableName !== "DestinyInventoryItemLiteDefinition"
+    );
 
     for (const [tableName, tablePath] of jsonComponents) {
       const resp = await fetch(`https://www.bungie.net${tablePath}`);

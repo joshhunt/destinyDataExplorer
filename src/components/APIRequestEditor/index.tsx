@@ -9,7 +9,6 @@ import { makeApiRequestUrl, Params } from "views/ApiRequest/utils";
 
 import s from "./styles.module.scss";
 import { notEmpty } from "lib/utils";
-import { useBungieAuth } from "lib/bungieAuth";
 
 interface APIRequestEditorProps {
   className?: string;
@@ -34,7 +33,6 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   onPathParamsChange,
   onQueryParamsChange,
 }) => {
-  const bungieAuth = useBungieAuth();
   const displayUrl = useMemo(() => makeApiRequestUrl(apiOperation, apiParams), [
     apiOperation,
     apiParams,

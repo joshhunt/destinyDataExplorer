@@ -39,6 +39,9 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
       typedDef.displayProperties.icon) ||
     typedDef.iconImage;
 
+  const description =
+    typedDef.displayProperties?.description || typedDef.flavorText;
+
   return (
     <div>
       <h2>
@@ -48,11 +51,7 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
         <code className={s.code}>{tableName}</code>
       </h2>
 
-      {typedDef.displayProperties && typedDef.displayProperties.description && (
-        <p className={s.itemDescription}>
-          {typedDef.displayProperties.description}
-        </p>
-      )}
+      {description && <p className={s.itemDescription}>{description}</p>}
 
       <TabButtonList
         onTabChange={(tabId) => setActiveTab(tabId)}

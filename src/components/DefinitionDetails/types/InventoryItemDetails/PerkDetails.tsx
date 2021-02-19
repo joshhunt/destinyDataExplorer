@@ -58,7 +58,7 @@ const PerkDetails: React.FC<PerkDetailsProps> = ({ definition }) => {
   return (
     <div>
       <h3>Items with this perk</h3>
-      <div className={s.categoryItems}>
+      <div className={s.itemGrid}>
         {itemsWithThisPerk?.map((item) => (
           <Item
             pathForItem={pathForItem}
