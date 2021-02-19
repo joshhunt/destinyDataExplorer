@@ -1,0 +1,19 @@
+.root {
+  display: inline-block;
+}
+
+.objective {
+  display: flex;
+  padding: 2px 8px;
+  // border: 1px solid rgba(white, 0.1);
+  background: rgba(white, 0.08);
+  justify-content: space-between;
+
+  & + & {
+    margin-top: 4px;
+  }
+}
+
+.label {
+  margin-right: 24px;
+}
