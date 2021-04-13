@@ -109,7 +109,7 @@ function SearchHeader({
           >
             {languages.map((lang) => (
               <option key={lang.identifier} value={lang.identifier}>
-                {lang.displayName}
+                {lang.displayName} ({lang.identifier})
               </option>
             ))}
           </select>
