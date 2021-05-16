@@ -29,7 +29,6 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
   }
 
   return (
-    // TODO: pathForItem
     <Item
       pathForItem={pathForItem}
       className={s.item}

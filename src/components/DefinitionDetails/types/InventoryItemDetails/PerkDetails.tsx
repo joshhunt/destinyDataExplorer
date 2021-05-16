@@ -49,8 +49,6 @@ const PerkDetails: React.FC<PerkDetailsProps> = ({ definition }) => {
     });
   }, [itemDefs, perkItemHash, plugSetDefs]);
 
-  console.log({ itemsWithThisPerk });
-
   if (!itemsWithThisPerk || itemsWithThisPerk.length < 1) {
     return null;
   }

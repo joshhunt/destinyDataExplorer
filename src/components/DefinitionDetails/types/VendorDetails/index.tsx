@@ -1,48 +1,32 @@
-import {
-  DestinyDisplayCategoryDefinition,
-  DestinyVendorDefinition,
-  DestinyVendorItemDefinition,
-} from "bungie-api-ts/destiny2";
+import { DestinyVendorDefinition } from "bungie-api-ts/destiny2";
 import React, { useMemo, useState } from "react";
-import VendorSaleItem from "./VendorSaleItem";
-import s from "../styles.module.scss";
 import TabButtonList, { TabKind } from "components/TabButtonList";
 import { notEmpty } from "lib/utils";
-import { SelectBreak } from "components/DataView/JsonValueAnnotation";
+import { VendorCategory, VendorNormalizedCategory } from "./types";
+import VendorCategories from "./VendorCategories";
+import VendorInteractions from "./VendorInteractions";
 
 interface VendorDetailsProps {
   definition: DestinyVendorDefinition;
-}
-
-interface Category {
-  displayCategory?: DestinyDisplayCategoryDefinition;
-  manualName?: string;
-  items: DestinyVendorItemDefinition[];
-}
-
-interface NormalizedCategory {
-  title: string | undefined;
-  items: DestinyVendorItemDefinition[];
-  tags: string[];
 }
 
 const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
   const [activeTab, setActiveTab] = useState(TabKind.VendorCategories);
 
   const displayCategoriesData = useMemo(() => {
-    const categories: Category[] = definition.displayCategories.map(
+    const categories: VendorCategory[] = definition.displayCategories.map(
       (displayCategory) => ({
         displayCategory,
         items: [],
       })
     );
 
-    const negativeOneCategory: Category = {
+    const negativeOneCategory: VendorCategory = {
       manualName: "-1 uncategorised items",
       items: [],
     };
 
-    const fallbackCategory: Category = {
+    const fallbackCategory: VendorCategory = {
       manualName: "Missing category",
       items: [],
     };
@@ -65,8 +49,8 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
     return categories;
   }, [definition]);
 
-  const displayCategories: NormalizedCategory[] = displayCategoriesData.map(
-    (category) => ({
+  const displayCategories: VendorNormalizedCategory[] =
+    displayCategoriesData.map((category) => ({
       title: category.displayCategory
         ? category.displayCategory.displayProperties.name
         : category.manualName,
@@ -78,19 +62,15 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
         category.displayCategory?.identifier &&
           `identifier: ${category.displayCategory?.identifier}`,
       ].filter(notEmpty),
-    })
-  );
+    }));
 
-  const categories: NormalizedCategory[] = definition.categories.map(
+  const categories: VendorNormalizedCategory[] = definition.categories.map(
     (category) => ({
       title: category.displayTitle,
       items: category.vendorItemIndexes.map((v) => definition.itemList[v]),
       tags: [`categoryIndex: ${category.categoryIndex}`],
     })
   );
-
-  const categoriesToDisplay =
-    activeTab === TabKind.VendorCategories ? categories : displayCategories;
 
   return (
     <div>
@@ -100,48 +80,21 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
         options={[
           [TabKind.VendorCategories, "Categories"] as const,
           [TabKind.VendorDisplayCategories, "Display categories"] as const,
+          [TabKind.VendorInteractions, "Interactions"] as const,
         ]}
       />
 
-      {categoriesToDisplay.map(
-        (category, index) =>
-          category.items.length > 0 && (
-            <div className={s.category} key={index}>
-              <h4 className={s.categoryTitle}>
-                {category.title || <em>No name</em>}
-
-                {category.tags.map((tag, ii) => (
-                  <>
-                    <span className={s.tag} key={ii}>
-                      {tag}
-                    </span>
-                    <SelectBreak />
-                  </>
-                ))}
-              </h4>
-
-              <div className={s.categoryItems}>
-                {category.items.map((itemSale) => {
-                  return (
-                    <VendorSaleItem
-                      vendorItem={itemSale}
-                      key={itemSale.vendorItemIndex}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          )
+      {activeTab === TabKind.VendorCategories && (
+        <VendorCategories categories={categories} />
       )}
 
-      <p>
-        <em>
-          Empty categories are hidden.
-          <br />
-          Vendor preview items (such as Vendor subscreens, or Eververse bundles)
-          are resolved to their Vendor.
-        </em>
-      </p>
+      {activeTab === TabKind.VendorDisplayCategories && (
+        <VendorCategories categories={displayCategories} />
+      )}
+
+      {activeTab === TabKind.VendorInteractions && (
+        <VendorInteractions definition={definition} categories={categories} />
+      )}
     </div>
   );
 };

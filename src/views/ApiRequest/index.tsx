@@ -35,10 +35,11 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const [apiResponse, setApiResponse] = useState<any>();
   const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
-  const { operationName, 0: splat } = useParams<{
-    operationName?: string;
-    "0"?: string;
-  }>();
+  const { operationName, 0: splat } =
+    useParams<{
+      operationName?: string;
+      "0"?: string;
+    }>();
 
   const apiOperation = useMemo(
     () => (operationName ? getOperation(operationName) : undefined),
@@ -63,9 +64,14 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
 
     setLoading(true);
 
+    const fullUrl =
+      apiOperation?.operationId === "Destiny2.GetPostGameCarnageReport"
+        ? `https://stats.bungie.net${url}`
+        : `https://www.bungie.net${url}`;
+
     getValidAuthData()
       .then((authData) =>
-        fetch(`https://www.bungie.net${url}`, {
+        fetch(fullUrl, {
           headers: {
             "x-api-key": process.env.REACT_APP_API_KEY ?? "",
             authorization:

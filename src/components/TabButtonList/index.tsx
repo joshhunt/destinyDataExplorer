@@ -9,6 +9,7 @@ export enum TabKind {
   Preview,
   VendorCategories,
   VendorDisplayCategories,
+  VendorInteractions,
 }
 
 interface TabButtonListProps {
