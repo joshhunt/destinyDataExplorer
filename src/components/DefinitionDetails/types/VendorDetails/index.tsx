@@ -69,6 +69,7 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
       title: category.displayTitle,
       items: category.vendorItemIndexes.map((v) => definition.itemList[v]),
       tags: [`categoryIndex: ${category.categoryIndex}`],
+      categoryIndex: category.categoryIndex,
     })
   );
 
@@ -85,11 +86,14 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
       />
 
       {activeTab === TabKind.VendorCategories && (
-        <VendorCategories categories={categories} />
+        <VendorCategories categories={categories} definition={definition} />
       )}
 
       {activeTab === TabKind.VendorDisplayCategories && (
-        <VendorCategories categories={displayCategories} />
+        <VendorCategories
+          categories={displayCategories}
+          definition={definition}
+        />
       )}
 
       {activeTab === TabKind.VendorInteractions && (

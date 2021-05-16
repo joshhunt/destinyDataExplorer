@@ -13,4 +13,5 @@ export interface VendorNormalizedCategory {
   title: string | undefined;
   items: DestinyVendorItemDefinition[];
   tags: string[];
+  categoryIndex?: number;
 }

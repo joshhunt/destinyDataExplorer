@@ -5,6 +5,7 @@ import cx from "classnames";
 import s from "../styles.module.scss";
 import { VendorNormalizedCategory } from "./types";
 import VendorSaleItem from "./VendorSaleItem";
+import { SelectBreak } from "components/DataView/JsonValueAnnotation";
 
 interface VendorInteractionsProps {
   definition: DestinyVendorDefinition;
@@ -26,6 +27,11 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
           <div className={cx(s.category, s.extraGap)}>
             <h4 className={s.categoryTitle}>
               {interaction.headerDisplayProperties.name}
+
+              <span className={s.tag}>
+                interactionIndex: {interaction.interactionIndex}
+              </span>
+              <SelectBreak />
             </h4>
             <p className={s.prose}>
               <em>{interaction.flavorLineOne}</em>
