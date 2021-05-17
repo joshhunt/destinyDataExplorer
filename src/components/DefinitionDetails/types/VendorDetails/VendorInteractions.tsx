@@ -44,6 +44,7 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
                   {vendorCategory.items.map((itemSale) => {
                     return (
                       <VendorSaleItem
+                        vendorDefinition={definition}
                         vendorItem={itemSale}
                         key={itemSale.vendorItemIndex}
                       />
@@ -60,6 +61,7 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
                   {rewardsCategory.items.map((itemSale) => {
                     return (
                       <VendorSaleItem
+                        vendorDefinition={definition}
                         vendorItem={itemSale}
                         key={itemSale.vendorItemIndex}
                       />

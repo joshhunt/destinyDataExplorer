@@ -57,6 +57,7 @@ export default function Item({
   pathForItem,
   onClick,
   isCollected,
+  children = <></>,
 }) {
   const { def: item, type } = entry;
 
@@ -88,6 +89,7 @@ export default function Item({
       <div className={s.main}>
         <div className={s.name}>{name}</div>
         <div className={s.itemType}>{makeItemTypeName(item, type)}</div>
+        <div className={s.children}>{children}</div>
       </div>
     </Link>
   );

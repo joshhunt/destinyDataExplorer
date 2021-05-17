@@ -63,12 +63,14 @@ $substituteColour: #494a4c;
 
 .main,
 .name,
+.children,
 .itemType {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.children,
 .itemType {
   opacity: 0.75;
   font-size: 0.85em;

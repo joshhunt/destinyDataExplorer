@@ -51,6 +51,7 @@ const VendorCategories: React.FC<VendorCategoriesProps> = ({
               {category.items.map((itemSale) => {
                 return (
                   <VendorSaleItem
+                    vendorDefinition={definition}
                     vendorItem={itemSale}
                     key={itemSale.vendorItemIndex}
                   />

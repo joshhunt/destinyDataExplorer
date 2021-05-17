@@ -1,19 +1,29 @@
 import {
+  AllDestinyManifestComponents,
   DestinyInventoryItemDefinition,
+  DestinyVendorDefinition,
   DestinyVendorItemDefinition,
 } from "bungie-api-ts/destiny2";
+import BungieImage from "components/BungieImage";
 import Item from "components/Item";
-import { useDefinition } from "lib/destinyTsUtils";
+import { useDefinition, useDefinitionTable } from "lib/destinyTsUtils";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
 import React from "react";
 import s from "../styles.module.scss";
 
 interface VendorSaleItemProps {
+  vendorDefinition: DestinyVendorDefinition;
   vendorItem: DestinyVendorItemDefinition;
 }
 
 const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
   const pathForItem = usePathForDefinition();
+  const itemDefinitions =
+    (useDefinitionTable(
+      "DestinyInventoryItemDefinition"
+    ) as AllDestinyManifestComponents["DestinyInventoryItemDefinition"]) ||
+    undefined;
+
   const itemDef = useDefinition(
     "DestinyInventoryItemDefinition",
     vendorItem.itemHash
@@ -27,6 +37,28 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
   if (!itemDef) {
     return null;
   }
+
+  const costs = vendorItem.currencies.map((currency) => {
+    const currencyItemDef = itemDefinitions?.[currency.itemHash];
+
+    if (!currencyItemDef) {
+      return (
+        <>
+          {currency.quantity} × <em>unknown currency</em>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <BungieImage
+          className={s.inlineIcon}
+          src={currencyItemDef.displayProperties.icon}
+        />{" "}
+        {currencyItemDef.displayProperties.name} × {currency.quantity}
+      </>
+    );
+  });
 
   return (
     <Item
@@ -46,7 +78,9 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
       }
       isCollected={false}
       onClick={() => {}}
-    />
+    >
+      <>{costs}</>
+    </Item>
   );
 };
 
