@@ -38,7 +38,7 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
     return null;
   }
 
-  const costs = vendorItem.currencies.map((currency) => {
+  const costs = vendorItem.currencies.map((currency, index) => {
     const currencyItemDef = itemDefinitions?.[currency.itemHash];
 
     if (!currencyItemDef) {
@@ -51,6 +51,7 @@ const VendorSaleItem: React.FC<VendorSaleItemProps> = ({ vendorItem }) => {
 
     return (
       <>
+        {index !== 0 && <br />}
         <BungieImage
           className={s.inlineIcon}
           src={currencyItemDef.displayProperties.icon}
