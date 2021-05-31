@@ -13,6 +13,7 @@ import DefinitionDetails, {
 import TabButtonList, { TabKind } from "components/TabButtonList";
 import { notEmpty } from "lib/utils";
 import ComponentLoading from "components/ComponentLoading";
+import { H2 } from "components/Typography";
 
 const NewDataView = React.lazy(() => import("components/DataView"));
 
@@ -44,12 +45,12 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
 
   return (
     <div>
-      <h2>
+      <H2>
         {icon && <BungieImage className={s.titleIcon} alt="" src={icon} />}
         {displayName}{" "}
         {typedDef.hash && <code className={s.code}>{typedDef.hash}</code>}{" "}
         <code className={s.code}>{tableName}</code>
-      </h2>
+      </H2>
 
       {description && <p className={s.itemDescription}>{description}</p>}
 

@@ -1,9 +1,8 @@
 @use "../../views/ApiRequest/variables";
 
 .root {
-  font-size: 16px;
+  // font-size: 16px;
   height: 100vh;
-  // background: #7f8c8d;
 
   code {
     font-family: monospace;
@@ -77,7 +76,7 @@
   color: inherit;
   border: none;
   border-radius: 2px;
-  font-size: 16px;
+  // font-size: 16px;
   font-family: "Titillium Web", sans-serif;
   margin-top: -1px;
   transition: 100ms ease-in-out background;

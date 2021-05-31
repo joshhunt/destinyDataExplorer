@@ -58,7 +58,7 @@ $substituteColour: #494a4c;
   justify-content: center;
   border: 2px solid $substituteColour;
   color: lighten($substituteColour, 50%);
-  font-size: 20px;
+  // font-size: 20px;
 }
 
 .main,
@@ -73,5 +73,5 @@ $substituteColour: #494a4c;
 .children,
 .itemType {
   opacity: 0.75;
-  font-size: 0.85em;
+  // font-size: 0.85em;
 }

@@ -22,7 +22,7 @@ $bg: lighten(variables.$background, 3%);
 }
 
 .code {
-  font-size: 13px;
+  // font-size: 13px;
   border-radius: 3px;
   font-family: "Roboto Mono", monospace;
   font-weight: 400;
@@ -111,7 +111,7 @@ $bg: lighten(variables.$background, 3%);
   height: 1px;
   font-family: "Roboto Mono", monospace;
   background: transparent;
-  font-size: 13px;
+  // font-size: 13px;
   color: #268ad1;
 
   &::selection {

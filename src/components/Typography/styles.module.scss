@@ -1,0 +1,41 @@
+@use "../../variables";
+
+.article {
+  font-size: variables.$font-size-body;
+  line-height: 22px;
+}
+
+.h1 {
+  font-size: 40px;
+  line-height: 44px;
+  margin-top: 22px;
+  margin-bottom: 44px;
+}
+
+.h2 {
+  font-size: 33px;
+  line-height: 44px;
+  margin-top: 22px;
+  margin-bottom: 22px;
+}
+
+.h3 {
+  font-size: 28px;
+  line-height: 44px;
+  margin-top: 22px;
+  margin-bottom: 0px;
+}
+
+.h4 {
+  font-size: 23px;
+  line-height: 44px;
+  margin-top: 22px;
+  margin-bottom: 0px;
+}
+
+.h5 {
+  font-size: 19px;
+  line-height: 22px;
+  margin-top: 22px;
+  margin-bottom: 0px;
+}

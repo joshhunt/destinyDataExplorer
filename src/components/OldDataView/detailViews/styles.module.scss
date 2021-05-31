@@ -17,7 +17,7 @@
 }
 
 .small {
-  font-size: 0.9em;
+  // font-size: 0.9em;
   line-height: 1.2;
   margin-top: 5px;
 }
@@ -71,7 +71,7 @@
 
 .sectionTitle {
   border-bottom: 1px solid rgba(white, 0.3);
-  font-size: 16px;
+  // font-size: 16px;
 }
 
 .sectionItemList {
@@ -85,7 +85,7 @@
 }
 
 .item {
-  font-size: 14px;
+  // font-size: 14px;
   min-width: 200px;
   flex: 0 0 auto;
   padding: 5px;
@@ -135,7 +135,7 @@
   background: rgba(white, 0.07);
   color: white;
   border: none;
-  font-size: inherit;
+  // font-size: inherit;
   color: white;
   border-radius: 2px;
 
@@ -146,7 +146,7 @@
 
 .smallButton {
   composes: button;
-  font-size: 0.8em;
+  // font-size: 0.8em;
   vertical-align: top;
   margin-left: 10px;
 }
@@ -165,7 +165,7 @@
 }
 
 .objectivesList {
-  font-size: 0.9em;
+  // font-size: 0.9em;
 }
 
 .inlineIcon {

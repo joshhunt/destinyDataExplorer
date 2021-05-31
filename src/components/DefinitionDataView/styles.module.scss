@@ -10,7 +10,6 @@ $bg: lighten(variables.$background, 3%);
 }
 
 .code {
-  font-size: 13px;
   border-radius: 3px;
   font-family: "Roboto Mono", monospace;
   font-weight: 400;
@@ -26,7 +25,6 @@ $bg: lighten(variables.$background, 3%);
 }
 
 .rawJson {
-  font-size: 14px;
   background: rgba(black, 0.2);
   border-radius: 3px;
 

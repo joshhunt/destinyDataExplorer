@@ -16,3 +16,39 @@ body {
 code {
   font-family: "Roboto Mono", monospace;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-size: 16px;
+}
+
+html {
+  font-size: variables.$font-size-body;
+  line-height: 22px;
+}
+
+body {
+  font-size: variables.$font-size-body;
+  line-height: 22px;
+}
+
+p,
+ul,
+ol,
+pre,
+table,
+blockquote {
+  margin-top: 0px;
+  margin-bottom: 22px;
+}
+
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

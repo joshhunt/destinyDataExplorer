@@ -5,7 +5,7 @@
   color: inherit;
   background: none;
   border: none;
-  font-size: inherit;
+  // font-size: inherit;
   padding: 0;
   font-family: "Roboto Mono", monospace !important;
   padding: 5px;
@@ -40,7 +40,7 @@
 }
 
 .specialValue {
-  font-size: 0.9em;
+  // font-size: 0.9em;
   padding: 4px 10px;
   background: desaturate(lighten(variables.$apiRequestEditorBg, 6%), 5%);
   border-radius: 3px;
