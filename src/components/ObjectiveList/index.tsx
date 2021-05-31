@@ -29,7 +29,7 @@ enum DestinyUnlockValueUIStyle {
 
 function isBooleanObjective(objectiveDef: DestinyObjectiveDefinition) {
   return (
-    ((objectiveDef.valueStyle as unknown) as DestinyUnlockValueUIStyle) ===
+    (objectiveDef.valueStyle as unknown as DestinyUnlockValueUIStyle) ===
       DestinyUnlockValueUIStyle.Checkbox ||
     (objectiveDef.completionValue === 1 &&
       (!objectiveDef.allowOvercompletion || !objectiveDef.showValueOnComplete))
@@ -60,7 +60,7 @@ const ObjectiveList: React.FC<ObjectiveListProps> = ({ objectiveHashes }) => {
               {isBooleanObjective(objectiveDef) ? (
                 <input type="checkbox" disabled />
               ) : (
-                objectiveDef.completionValue
+                <>/ {objectiveDef.completionValue}</>
               )}
             </div>
           </div>

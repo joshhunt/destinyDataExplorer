@@ -12,7 +12,7 @@ const Objectives: React.FC<ObjectivesProps> = ({ definition }) => {
   if (!objectives) return null;
 
   return (
-    <div>
+    <div className={s.containWidth}>
       <h3 className={s.title}>Objectives</h3>
 
       <ObjectiveList objectiveHashes={objectives.objectiveHashes} />

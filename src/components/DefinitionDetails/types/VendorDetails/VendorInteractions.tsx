@@ -33,9 +33,10 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
               </span>
               <SelectBreak />
             </h4>
-            <p className={s.prose}>
-              <em>{interaction.flavorLineOne}</em>
-            </p>
+
+            <blockquote className={s.quoteProse}>
+              {interaction.flavorLineOne}
+            </blockquote>
 
             {vendorCategory && (
               <>
