@@ -5,6 +5,7 @@ import VendorSaleItem from "./VendorSaleItem";
 import s from "../styles.module.scss";
 import { VendorNormalizedCategory } from "./types";
 import { DestinyVendorDefinition } from "bungie-api-ts/destiny2";
+import { Subtitle2 } from "components/Text";
 
 interface VendorCategoriesProps {
   definition: DestinyVendorDefinition;
@@ -34,7 +35,7 @@ const VendorCategories: React.FC<VendorCategoriesProps> = ({
 
         return (
           <div className={s.category} key={index}>
-            <h4 className={s.categoryTitle}>
+            <Subtitle2>
               {category.title || <em>No name</em>}
 
               {category.tags.map((tag, ii) => (
@@ -45,7 +46,7 @@ const VendorCategories: React.FC<VendorCategoriesProps> = ({
                   <SelectBreak />
                 </>
               ))}
-            </h4>
+            </Subtitle2>
 
             <div className={s.categoryItems}>
               {category.items.map((itemSale) => {

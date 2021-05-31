@@ -3,6 +3,7 @@ import {
   DestinyInventoryItemDefinition,
 } from "bungie-api-ts/destiny2";
 import Item from "components/Item";
+import { Subtitle1 } from "components/Text";
 import { useDefinitionTable } from "lib/destinyTsUtils";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
 import React, { useMemo } from "react";
@@ -55,7 +56,7 @@ const PerkDetails: React.FC<PerkDetailsProps> = ({ definition }) => {
 
   return (
     <div>
-      <h3>Items with this perk</h3>
+      <Subtitle1>Items with this perk</Subtitle1>
       <div className={s.itemGrid}>
         {itemsWithThisPerk?.map((item) => (
           <Item

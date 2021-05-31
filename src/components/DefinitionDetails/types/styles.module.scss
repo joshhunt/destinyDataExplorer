@@ -26,32 +26,9 @@
 
 // items
 
-.categoryTitle {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-}
-
-.categorySubtitle {
-  margin: 0 0 8px 0;
-  font-weight: 600;
-  font-size: 16px;
-}
-
 .category {
-  & + & {
-    // margin-top: 32px;
-
-    margin-top: 16px;
-    padding-top: 16px;
-    // border-top: 1px solid rgba(white, 0.15);
-  }
-}
-
-.extraGap {
-  & + & {
-    margin-top: 26px;
-    padding-top: 26px;
-  }
+  margin-top: 32px;
+  margin-bottom: 40px;
 }
 
 .socketList {
@@ -135,9 +112,9 @@
 .questStep {
   composes: containWidth;
   opacity: 0.6;
-  & + & {
-    margin-top: 32px;
-  }
+
+  margin-top: 32px;
+  margin-bottom: 40px;
 }
 
 .activeQuestStep {

@@ -6,6 +6,7 @@ import s from "../styles.module.scss";
 import { VendorNormalizedCategory } from "./types";
 import VendorSaleItem from "./VendorSaleItem";
 import { SelectBreak } from "components/DataView/JsonValueAnnotation";
+import { Subtitle2 } from "components/Text";
 
 interface VendorInteractionsProps {
   definition: DestinyVendorDefinition;
@@ -25,14 +26,14 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
 
         return (
           <div className={cx(s.category, s.extraGap)}>
-            <h4 className={s.categoryTitle}>
+            <Subtitle2>
               {interaction.headerDisplayProperties.name}
 
               <span className={s.tag}>
                 interactionIndex: {interaction.interactionIndex}
               </span>
               <SelectBreak />
-            </h4>
+            </Subtitle2>
 
             <blockquote className={s.quoteProse}>
               {interaction.flavorLineOne}
@@ -40,7 +41,6 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
 
             {vendorCategory && (
               <>
-                <h4 className={s.categorySubtitle}>Vendor category</h4>
                 <div className={s.categoryItems}>
                   {vendorCategory.items.map((itemSale) => {
                     return (
@@ -57,7 +57,6 @@ const VendorInteractions: React.FC<VendorInteractionsProps> = ({
 
             {rewardsCategory && (
               <>
-                <h4 className={s.categorySubtitle}>Reward vendor category</h4>
                 <div className={s.categoryItems}>
                   {rewardsCategory.items.map((itemSale) => {
                     return (

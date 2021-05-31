@@ -6,6 +6,7 @@ import { ReduxStore } from "types";
 import { useSelector } from "react-redux";
 import Item from "components/Item";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
+import { Subtitle1, Subtitle2 } from "components/Text";
 
 interface SocketsProps {
   definition: DestinyInventoryItemDefinition;
@@ -25,7 +26,7 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
 
   return (
     <div>
-      <h3 className={s.title}>Sockets</h3>
+      <Subtitle1>Sockets</Subtitle1>
 
       {sockets.socketCategories.map((socketCategory) => {
         const categoryDef =
@@ -35,9 +36,7 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
 
         return (
           <div key={socketCategory.socketCategoryHash} className={s.category}>
-            <h4 className={s.categoryTitle}>
-              {categoryDef?.displayProperties.name}
-            </h4>
+            <Subtitle2>{categoryDef?.displayProperties.name}</Subtitle2>
 
             <div className={s.socketList}>
               {socketCategory.socketIndexes.map((socketIndex) => {

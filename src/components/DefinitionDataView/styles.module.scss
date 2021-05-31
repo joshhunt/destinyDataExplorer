@@ -10,7 +10,7 @@ $bg: lighten(variables.$background, 3%);
 }
 
 .code {
-  font-size: 13px;
+  composes: small from "styles/typography.module.scss";
   border-radius: 3px;
   font-family: "Roboto Mono", monospace;
   font-weight: 400;

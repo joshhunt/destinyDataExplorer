@@ -9,6 +9,7 @@ import { useDefinitionTable } from "lib/destinyTsUtils";
 import s from "../styles.module.scss";
 import ObjectiveList from "components/ObjectiveList";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
+import { Subtitle1, Subtitle2 } from "components/Text";
 
 interface QuestProps {
   definition: DestinyInventoryItemDefinition;
@@ -33,7 +34,7 @@ const Quest: React.FC<QuestProps> = ({ definition }) => {
 
   return (
     <div>
-      <h2>QUEST: {definition.setData.questLineName}</h2>
+      <Subtitle1>QUEST: {definition.setData.questLineName}</Subtitle1>
 
       {questStepItems.map((questStepItem, index) => (
         <div
@@ -43,7 +44,7 @@ const Quest: React.FC<QuestProps> = ({ definition }) => {
               : s.questStep
           }
         >
-          <h3 className={s.questStepName}>
+          <Subtitle2>
             <Link
               to={pathForItem("DestinyInventoryItemDefinition", {
                 def: questStepItem,
@@ -53,7 +54,7 @@ const Quest: React.FC<QuestProps> = ({ definition }) => {
             >
               {index + 1}. {questStepItem.displayProperties.name}
             </Link>
-          </h3>
+          </Subtitle2>
 
           <p className={s.questStepDescription}>
             {questStepItem.displayProperties.description}

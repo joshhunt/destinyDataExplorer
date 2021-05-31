@@ -1,5 +1,6 @@
 import { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
 import Item from "components/Item";
+import { Subtitle1 } from "components/Text";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
 import { notEmpty } from "lib/utils";
 import React from "react";
@@ -32,7 +33,7 @@ const ItemGearset: React.FC<ItemGearsetProps> = ({ definition }) => {
 
   return (
     <div>
-      <h3 className={s.category}>Gearset</h3>
+      <Subtitle1>Gearset</Subtitle1>
 
       <div className={s.categoryItems}>
         {items.map((item) => (
