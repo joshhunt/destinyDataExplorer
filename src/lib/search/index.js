@@ -38,7 +38,8 @@ const fallbackSearchFunction = {
       matches(displayName, comparableSearchTerm) ||
       matches(obj.def.statId, comparableSearchTerm) ||
       matches(obj.def.statName, comparableSearchTerm) ||
-      matches(obj.def.progressDescription, comparableSearchTerm)
+      matches(obj.def.progressDescription, comparableSearchTerm) ||
+      matches(obj.def.setData?.questLineName, comparableSearchTerm)
     );
   },
 };
@@ -75,9 +76,9 @@ export default function search(_searchTerm, filterOptions, definitions) {
     }, allDefs);
   }
 
-  const filterOptionsArr = Object.entries(
-    filterOptions
-  ).map(([key, value]) => ({ key, value }));
+  const filterOptionsArr = Object.entries(filterOptions).map(
+    ([key, value]) => ({ key, value })
+  );
 
   results = filterOptionsArr.reduce((acc, filterOptionSet) => {
     const filterDef = FILTERS.find((f) => f.id === filterOptionSet.key);
