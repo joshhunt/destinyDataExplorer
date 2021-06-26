@@ -2,6 +2,10 @@ import { get, isString } from "lodash";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
+function $RefreshSig$() {
+  return () => {};
+}
+
 export function getLower(obj: any, path: string, fallback = "") {
   const g = get(obj, path, fallback);
   return g.toLowerCase ? g.toLowerCase() : g;

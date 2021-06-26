@@ -1,3 +1,5 @@
+const WorkerPlugin = require("worker-plugin");
+
 module.exports = function override(config, env) {
   // Remove wasm from defaultRules
   // See https://github.com/joshhunt/destinyDataExplorer/commits/master/config/webpack.config.js
@@ -11,6 +13,8 @@ module.exports = function override(config, env) {
       type: "json",
     },
   ];
+
+  config.plugins.push(new WorkerPlugin());
 
   return config;
 };

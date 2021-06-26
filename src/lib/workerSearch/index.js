@@ -1,10 +1,8 @@
 import PromiseWorker from "promise-worker";
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import Worker from "worker-loader!./worker.js";
 
 import { SEND_DEFINITIONS, SEARCH } from "./constants";
 
-const worker = new Worker();
+const worker = new Worker("./worker.js", { type: "module" });
 const promiseWorker = new PromiseWorker(worker);
 
 const sentDefinitions = new WeakMap();
