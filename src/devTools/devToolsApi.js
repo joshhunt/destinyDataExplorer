@@ -80,6 +80,14 @@ function makeSearchResults(def) {
   };
 }
 
+function makeGlobalConstantName(def) {
+  const safeName =
+    def.displayProperties?.name.replace(/[^A-Za-z]/g, "") ||
+    `UnnamedCategory_${def.hash}`;
+
+  return safeName;
+}
+
 const prevKeeper = new WeakMap();
 export function connectToWindow(store) {
   window.__store = store;
@@ -98,6 +106,7 @@ export function connectToWindow(store) {
       ) {
         prevKeeper.set(newState.definitions.definitions, true);
 
+        // Set definitions on window like window.$DestinyInventoryItemDefinition
         Object.entries(newState.definitions.definitions).forEach(
           ([tableName, defs]) => {
             const windowKeyName = `$${tableName}`;
@@ -106,6 +115,39 @@ export function connectToWindow(store) {
             window[windowKeyName].filter = filter.bind(null, store, defs);
           }
         );
+
+        // Set some consts for item categories
+        if (newState.definitions.definitions.DestinyItemCategoryDefinition) {
+          for (const category of Object.values(
+            newState.definitions.definitions.DestinyItemCategoryDefinition
+          )) {
+            const safeName = makeGlobalConstantName(category);
+
+            if (!window[safeName]) {
+              window[safeName] = category.hash;
+            }
+          }
+
+          window.$categories = () => {
+            const table = Object.values(
+              newState.definitions.definitions.DestinyItemCategoryDefinition
+            ).map((category) => {
+              const itemsMatch = Object.values(
+                newState.definitions.definitions.DestinyInventoryItemDefinition
+              ).filter((v) =>
+                v.itemCategoryHashes?.includes(category.hash)
+              ).length;
+
+              return {
+                Category: category.displayProperties?.name,
+                "Variable name": makeGlobalConstantName(category),
+                "Items matching": itemsMatch,
+              };
+            });
+
+            console.table(table);
+          };
+        }
       }
     })
   );
@@ -133,19 +175,27 @@ ${css("", "font-family: sans-serif")}${css(
 
 There are a few handy utils installed here for more advanced querying. Each of the definitions are available on window:
 
-    ${css("window.$DestinyInventoryItemDefinition", CODE_CSS)}
+    ${css("$DestinyInventoryItemDefinition", CODE_CSS)}
+
+Additionally, all the item categories are available on via their name for your convience, like ${css(
+  "Weapon",
+  CODE_CSS
+)} or ${css("ArmorModsLegs", CODE_CSS)}. You can preview them with ${css(
+  `window.$categories()`,
+  CODE_CSS
+)}
 
 Each table has a filter function, to easily filter each of the definitions:
 
     ${css(
-      "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656))",
+      "$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(FusionRifle))",
       CODE_CSS
     )}
 
 You can call .show() on the results to display them in the Data Explorer UI:
 
     ${css(
-      "window.$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(3109687656)).show()",
+      "$DestinyInventoryItemDefinition.filter(v => v.itemCategoryHashes.includes(FusionRifle)).show()",
       CODE_CSS
     )}
 
