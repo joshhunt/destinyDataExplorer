@@ -12,6 +12,7 @@ import theme from "./theme";
 import CSSThemeVariables from "components/CSSThemeVariables";
 import { DefinitionEntry } from "components/DataViewsOverlay/utils";
 import CharacterJsonValue, { isCharacterId } from "./CharacterJsonValue";
+import { JsonValueCommentAnnotation } from "./JsonValueAnnotation";
 
 interface DataViewProps {
   data: any;
@@ -89,6 +90,8 @@ const DataView: React.FC<DataViewProps> = ({
 // export default DataView;
 export default React.memo(DataView);
 
+const NULL_HASH = 2166136261;
+
 function renderWithAccessory(
   data: DataViewProps["data"],
   schema: DataViewProps["schema"],
@@ -142,6 +145,14 @@ function renderWithAccessory(
       <CharacterJsonValue value={rawValue} data={data}>
         {displayNode}
       </CharacterJsonValue>
+    );
+  }
+
+  if (rawValue === NULL_HASH) {
+    return (
+      <JsonValueCommentAnnotation value={rawValue}>
+        null hash
+      </JsonValueCommentAnnotation>
     );
   }
 

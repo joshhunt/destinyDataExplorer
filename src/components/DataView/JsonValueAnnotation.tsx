@@ -20,6 +20,20 @@ const JsonValueAnnotation: React.FC<JsonValueAnnotationProps> = ({
   );
 };
 
+export const JsonValueCommentAnnotation: React.FC<JsonValueAnnotationProps> = ({
+  value,
+  children,
+}) => {
+  return (
+    <>
+      {value}
+      <SelectBreak />
+      <Separator />
+      <span className={s.comment}>{children}</span>
+    </>
+  );
+};
+
 export const SelectBreak: React.FC = () => {
   return <span className={s.noSelect}> </span>;
 };
