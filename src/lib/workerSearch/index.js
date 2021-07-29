@@ -35,7 +35,6 @@ export function sendDefinitions(definitions) {
   const dfd = deferred();
   sentDefinitions.set(definitions, dfd.promise);
 
-  console.log("sending definitions...");
   return toWorker(SEND_DEFINITIONS, definitions)
     .then(() => dfd.resolve())
     .then(() => dfd.promise);

@@ -8,7 +8,6 @@ import { SEND_DEFINITIONS, SEARCH } from "./constants";
 let definitions;
 
 registerPromiseWorker(({ type, payload }) => {
-  console.log("worker invocation", { type, payload });
   if (type === SEND_DEFINITIONS) {
     definitions = payload;
     return Promise.resolve();

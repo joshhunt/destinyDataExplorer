@@ -5,6 +5,10 @@ import _normalizeText from "normalize-text";
 
 type Hash = number | string;
 
+const isIndex = (obj: any, phrase: Hash) => {
+  return obj.def.index === phrase;
+};
+
 const isItemCategoryHash = (obj: any, hash: Hash) =>
   obj.def &&
   obj.def.itemCategoryHashes &&
@@ -134,12 +138,14 @@ export const matches = (
 export function phraseFn(obj: any, phrase: string) {
   const displayName =
     obj.def && obj.def.displayProperties && obj.def.displayProperties.name;
+  const phraseAsNumber = Number(phrase);
 
   return (
-    obj.key === phrase ||
+    obj.key === phrase || // this is basically obj.def.hash for most entries
     matches(obj.type, phrase) ||
     matches(displayName, phrase) ||
     matches(obj.def.statId, phrase) ||
+    obj.def.index === phraseAsNumber ||
     matches(obj.def.statName, phrase) ||
     matches(obj.def.progressDescription, phrase) ||
     matches(obj.def.setData?.questLineName, phrase)
@@ -151,6 +157,8 @@ const SEARCH_FNS = [
   makeSearchFn("hasperk", true, hasPerk),
   makeSearchFn("hasrandomperk", true, hasRandomPerk),
   makeSearchFn("data", false, isDefinition),
+
+  makeSearchFn("index", true, isIndex),
 
   makeSearchFn(
     "is",
