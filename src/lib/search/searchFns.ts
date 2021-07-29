@@ -129,7 +129,7 @@ const littleEndianHexToHash = (leHex: string) => {
     return cached;
   }
 
-  const result = parseInt("0x" + leHex.match(/../g)?.reverse().join(""));
+  const result = parseInt("0x" + leHex.replace(/\s/g, "").match(/../g)?.reverse().join(""));
   normalizeTextCache.set(leHex, result);
 
   return result.toString();
