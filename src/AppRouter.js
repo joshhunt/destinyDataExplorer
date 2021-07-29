@@ -8,6 +8,7 @@ import store from "./store";
 import ApiView from "./views/Api";
 import ApiRequestView from "./views/ApiRequest";
 import Home from "./views/Home";
+import ValueConverters from "./views/ValueConverters";
 
 export default class AppRouter extends Component {
   render() {
@@ -20,6 +21,7 @@ export default class AppRouter extends Component {
             <Route exact path="/list-api" component={ApiView} />
 
             <Route exact path="/api" component={ApiRequestView} />
+            <Route exact path="/converters" component={ValueConverters} />
 
             <Route
               exact

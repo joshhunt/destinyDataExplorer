@@ -1,5 +1,5 @@
 import React from "react";
-import { memoize, toPairs } from "lodash";
+import { memoize } from "lodash";
 
 import { EMBLEM, HUNTER, TITAN, WARLOCK, NO_CLASS } from "lib/destinyEnums";
 import { getLower } from "lib/utils";
