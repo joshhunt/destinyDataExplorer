@@ -121,6 +121,20 @@ const normalizeText = (string: string) => {
   return result;
 };
 
+const littleEndianHexToNumberCache = new Map();
+const littleEndianHexToHash = (leHex: string) => {
+  const cached = littleEndianHexToNumberCache.get(leHex);
+
+  if (cached) {
+    return cached;
+  }
+
+  const result = parseInt("0x" + leHex.match(/../g)?.reverse().join(""));
+  normalizeTextCache.set(leHex, result);
+
+  return result.toString();
+};
+
 export const matches = (
   string: string | undefined,
   searchTerm: string | undefined
@@ -138,10 +152,13 @@ export const matches = (
 export function phraseFn(obj: any, phrase: string) {
   const displayName =
     obj.def && obj.def.displayProperties && obj.def.displayProperties.name;
+
   const phraseAsNumber = Number(phrase);
+  const fromHex = littleEndianHexToHash(phrase);
 
   return (
     obj.key === phrase || // this is basically obj.def.hash for most entries
+    obj.key === fromHex ||
     matches(obj.type, phrase) ||
     matches(displayName, phrase) ||
     matches(obj.def.statId, phrase) ||
