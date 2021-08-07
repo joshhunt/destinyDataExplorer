@@ -52,26 +52,27 @@ interface DefinitionDisplayAnnotationProps {
   definitionName: string;
 }
 
+function swap16(val: number) {
+  return ((val & 0xff) << 8) | ((val >> 8) & 0xff);
+}
+
 const DefinitionDisplayAnnotation: React.FC<DefinitionDisplayAnnotationProps> =
   ({ definition, definitionName }) => {
     const displayName = getDisplayName(definition);
     const parts: string[] = [definitionName];
 
-    if (displayName) parts.push(` "${displayName}"`);
+    if (displayName) parts.push(`"${displayName}"`);
     if (isAdvanced()) {
-      const hexIndex = definition?.index
-        ?.toString(16)
-        ?.toUpperCase()
-        ?.match(/../g)
-        ?.reverse()
-        .join("");
-      parts.push(`, index: ${definition.index} (0x${hexIndex})`);
+      const hexIndex = swap16(definition?.index ?? 0)
+        .toString(16)
+        .toUpperCase();
+      parts.push(`index: ${definition.index} (0x${hexIndex})`);
     }
 
     return (
       <>
         {"<"}
-        {parts.join("")}
+        {parts.join(" ")}
         {">"}
       </>
     );
