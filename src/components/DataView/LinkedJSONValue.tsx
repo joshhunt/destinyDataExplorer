@@ -7,6 +7,8 @@ import { getDisplayName, useDefinition } from "lib/destinyTsUtils";
 import { definitionNameFromRef } from "lib/apiSchemaUtils";
 import { DefinitionEntry } from "components/DataViewsOverlay";
 import JsonValueAnnotation from "./JsonValueAnnotation";
+import { BaseDestinyDefinition } from "types";
+import { isAdvanced } from "lib/flags";
 
 interface LinkedJSONValueProps {
   value: any;
@@ -28,20 +30,49 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
     return <>{children}</>;
   }
 
-  const displayName = getDisplayName(definition);
-
   return (
     <JsonValueAnnotation value={children}>
       <Link
         to={linkedDefinitionUrl({ type: linkedDefinitionName, hash: value })}
         className={s.linkedAnnotation}
       >
-        {displayName
-          ? `<${shortDefinitionName} "${displayName}">`
-          : `<${shortDefinitionName}>`}
+        <DefinitionDisplayAnnotation
+          definition={definition}
+          definitionName={shortDefinitionName}
+        />
       </Link>
     </JsonValueAnnotation>
   );
 };
 
 export default LinkedJSONValue;
+
+interface DefinitionDisplayAnnotationProps {
+  definition: BaseDestinyDefinition;
+  definitionName: string;
+}
+
+const DefinitionDisplayAnnotation: React.FC<DefinitionDisplayAnnotationProps> =
+  ({ definition, definitionName }) => {
+    const displayName = getDisplayName(definition);
+    const parts: string[] = [definitionName];
+
+    if (displayName) parts.push(` "${displayName}"`);
+    if (isAdvanced()) {
+      const hexIndex = definition?.index
+        ?.toString(16)
+        ?.toUpperCase()
+        ?.match(/../g)
+        ?.reverse()
+        .join("");
+      parts.push(`, index: ${definition.index} (0x${hexIndex})`);
+    }
+
+    return (
+      <>
+        {"<"}
+        {parts.join("")}
+        {">"}
+      </>
+    );
+  };

@@ -109,10 +109,8 @@ function makeIsFnPredicate(
 
 const normalizeTextCache = new Map();
 const normalizeText = (string: string) => {
-  const cached = normalizeTextCache.get(string);
-
-  if (cached) {
-    return cached;
+  if (normalizeTextCache.has(string)) {
+    return normalizeTextCache.get(string);
   }
 
   const result = _normalizeText(string.toLocaleLowerCase());
@@ -121,18 +119,23 @@ const normalizeText = (string: string) => {
   return result;
 };
 
+function isHex(h: string) {
+  var a = parseInt(h, 16);
+  return a.toString(16) === h.toLowerCase();
+}
+
 const littleEndianHexToNumberCache = new Map();
 const littleEndianHexToHash = (leHex: string) => {
-  const cached = littleEndianHexToNumberCache.get(leHex);
-
-  if (cached) {
-    return cached;
+  if (littleEndianHexToNumberCache.has(leHex)) {
+    return littleEndianHexToNumberCache.get(leHex);
   }
 
-  const result = parseInt("0x" + leHex.replace(/\s/g, "").match(/../g)?.reverse().join(""));
-  normalizeTextCache.set(leHex, result);
+  const result = isHex(leHex)
+    ? parseInt("0x" + leHex.replace(/\s/g, "").match(/../g)?.reverse().join(""))
+    : null;
+  littleEndianHexToNumberCache.set(leHex, result);
 
-  return result.toString();
+  return result === null ? null : result.toString();
 };
 
 export const matches = (

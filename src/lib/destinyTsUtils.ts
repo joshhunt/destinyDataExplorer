@@ -3,13 +3,14 @@ import { AllDestinyManifestComponents } from "bungie-api-ts/destiny2";
 import { useSelector } from "react-redux";
 
 export function getDisplayName(def: BaseDestinyDefinition) {
-  return (
+  const v =
     def.displayProperties?.name ||
     def.progressDescription ||
     def.tierName ||
     def.statName ||
-    def.powerCap
-  );
+    def.powerCap;
+
+  return typeof v === "string" ? v : v?.toString();
 }
 
 export function isTableName(
