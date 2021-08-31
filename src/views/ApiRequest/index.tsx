@@ -24,22 +24,23 @@ import ResponseEmptyState from "components/ResponseEmptyState";
 import APIResponseDataView from "components/APIResponseDataView";
 import { getValidAuthData, useBungieAuth } from "lib/bungieAuth";
 import OAuthLoginButton from "components/OAuthLoginButton";
+import useDestinyProfile from "lib/useDestinyProfile";
 
 interface ApiRequestViewProps {}
 
 const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
   const authData = useBungieAuth();
+  const destinyProfile = useDestinyProfile(authData);
   const history = useHistory();
   const [menuOverlayVisible, setMenuOverlayVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState<any>();
   const [collapsed, setCollapsed] = useState(Collapsed.Unselected);
 
-  const { operationName, 0: splat } =
-    useParams<{
-      operationName?: string;
-      "0"?: string;
-    }>();
+  const { operationName, 0: splat } = useParams<{
+    operationName?: string;
+    "0"?: string;
+  }>();
 
   const apiOperation = useMemo(
     () => (operationName ? getOperation(operationName) : undefined),
@@ -87,6 +88,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
       .then((data) => {
         setLoading(false);
         setApiResponse(data);
+        setCollapsed(Collapsed.Collapsed);
       });
   }, [apiOperation, apiParams]);
 
@@ -171,6 +173,7 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
             onPathParamsChange={handleParamsEdited}
             onQueryParamsChange={handleParamsEdited}
             onSubmit={handleSubmit}
+            destinyProfile={destinyProfile}
             onToggleCollapsed={() =>
               setCollapsed((v) => invertCollapsed(v, isCollapsed))
             }

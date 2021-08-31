@@ -10,13 +10,15 @@ interface OAuthTokenResponse {
   expires_in: number;
   refresh_expires_in: number;
   error_description?: string;
+  membership_id: string;
 }
 
-interface AuthData {
+export interface AuthData {
   accessToken: string;
   refreshToken: string;
   accessTokenExpiration: Date;
   refreshTokenExpiration: Date;
+  bnetMembershipID: string;
 }
 
 const LS_KEY = "dx-auth";
@@ -55,6 +57,7 @@ function parseAuthData(token: OAuthTokenResponse, _now?: Date): AuthData {
     refreshToken: token.refresh_token,
     accessTokenExpiration,
     refreshTokenExpiration,
+    bnetMembershipID: token.membership_id,
   };
 }
 
@@ -149,6 +152,7 @@ export function getAuthDataFromLocalStorage(): AuthData | undefined {
     refreshToken,
     accessTokenExpiration,
     refreshTokenExpiration,
+    bnetMembershipID,
   } = parsed;
 
   if (
@@ -159,13 +163,16 @@ export function getAuthDataFromLocalStorage(): AuthData | undefined {
     accessTokenExpiration &&
     typeof accessTokenExpiration === "string" &&
     refreshTokenExpiration &&
-    typeof refreshTokenExpiration === "string"
+    typeof refreshTokenExpiration === "string" &&
+    bnetMembershipID &&
+    typeof bnetMembershipID === "string"
   ) {
     return {
       accessToken,
       refreshToken,
       accessTokenExpiration: new Date(accessTokenExpiration),
       refreshTokenExpiration: new Date(refreshTokenExpiration),
+      bnetMembershipID,
     };
   }
 

@@ -9,6 +9,7 @@ import { makeApiRequestUrl, Params } from "views/ApiRequest/utils";
 
 import s from "./styles.module.scss";
 import { notEmpty } from "lib/utils";
+import { DestinyProfileResponse } from "bungie-api-ts/destiny2";
 
 interface APIRequestEditorProps {
   className?: string;
@@ -16,6 +17,7 @@ interface APIRequestEditorProps {
   apiOperation: ReturnType<typeof getOperation>;
   apiParams: Params;
   isCollapsed: boolean;
+  destinyProfile: DestinyProfileResponse | undefined;
   onSubmit: () => void;
   onToggleCollapsed: () => void;
   onPathParamsChange: (params: Params) => void;
@@ -28,15 +30,16 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   apiOperation,
   apiParams,
   isCollapsed,
+  destinyProfile,
   onSubmit,
   onToggleCollapsed,
   onPathParamsChange,
   onQueryParamsChange,
 }) => {
-  const displayUrl = useMemo(() => makeApiRequestUrl(apiOperation, apiParams), [
-    apiOperation,
-    apiParams,
-  ]);
+  const displayUrl = useMemo(
+    () => makeApiRequestUrl(apiOperation, apiParams),
+    [apiOperation, apiParams]
+  );
 
   const fakeHeaderParams = [
     {
@@ -93,6 +96,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
               title="Path params"
               parameters={apiOperation.pathParameters}
               values={apiParams}
+              destinyProfile={destinyProfile}
               onChange={onPathParamsChange}
             />
           )}
@@ -103,6 +107,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
               title="Query params"
               parameters={apiOperation.queryParameters}
               values={apiParams}
+              destinyProfile={destinyProfile}
               onChange={onQueryParamsChange}
             />
           )}
@@ -113,6 +118,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
               title="Headers"
               parameters={fakeHeaderParams}
               values={apiParams}
+              destinyProfile={destinyProfile}
               onChange={onQueryParamsChange}
             />
           )}

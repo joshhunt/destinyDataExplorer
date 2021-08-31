@@ -1,0 +1,52 @@
+.root {
+  position: relative;
+  // overflow: hidden;
+
+  & + & {
+    margin-top: 8px;
+  }
+}
+
+.body {
+  position: relative;
+  // padding: 10px;
+  z-index: 2;
+  border: 1px solid rgba(white, 0.05);
+  background: rgba(white, 0.05);
+  display: flex;
+  align-items: center;
+  transition: background 50ms ease-in-out;
+
+  &:hover {
+    background: rgba(white, 0.1);
+  }
+}
+
+.iconWell {
+  width: 43px;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(white, 0.05);
+}
+
+.crossSaveIcon {
+  height: 20px;
+  width: 22.55px;
+  display: block;
+}
+
+.name {
+  padding-left: 16px;
+  flex: 1 0 auto;
+}
+
+.nameSuffix {
+  color: lighten(desaturate(#479ce4, 25%), 10%);
+}
+
+.crossSaveIcon {
+  width: 43px;
+  height: 43px;
+}
