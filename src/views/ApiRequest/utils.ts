@@ -149,3 +149,24 @@ export function makeUrl(
 
   return operationName ? `/api/${operationName}/${urlEnd}` : `/api/${urlEnd}`;
 }
+
+const REQUIRED_QUERY_PARAMS = ["components"];
+
+export function isRequestValid(
+  apiOperation: ReturnType<typeof getOperation>,
+  apiParams: Params
+) {
+  if (!apiOperation) {
+    return false;
+  }
+
+  const pathParamsValid = apiOperation.pathParameters.every(
+    (param) => apiParams[param.name]
+  );
+
+  const queryParamsValid = apiOperation.queryParameters
+    .filter((v) => REQUIRED_QUERY_PARAMS.includes(v.name))
+    .every((param) => apiParams[param.name]);
+
+  return pathParamsValid && queryParamsValid;
+}

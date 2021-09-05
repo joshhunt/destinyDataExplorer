@@ -56,7 +56,7 @@ export const STAT_BLACKLIST = [
   3897883278, // Defense
 ];
 
-export const PLATFORMS = {
+export const PLATFORMS: Record<number, string> = {
   [XBOX]: "Xbox",
   [PLAYSTATION]: "PlayStation",
   [PC_BLIZZARD]: "PC (Battle.net)",
@@ -64,7 +64,7 @@ export const PLATFORMS = {
   [BUNGIENEXT]: "BungieNext",
 };
 
-export const CLASSES = {
+export const CLASSES: Record<number, string> = {
   [WARLOCK]: "Warlock",
   [TITAN]: "Titan",
   [HUNTER]: "Hunter",

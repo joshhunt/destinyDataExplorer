@@ -55,7 +55,7 @@ const ParameterArrayField: React.FC<ParameterArrayFieldProps> = ({
       options={options}
       isMulti={true}
       defaultValue={defaultValue}
-      onChange={(v) => handleChange((v as unknown) as iOption[] | null)}
+      onChange={(v) => handleChange(v as unknown as iOption[] | null)}
     />
   );
 };

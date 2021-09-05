@@ -86,12 +86,12 @@ class HomeView extends Component {
     this.setState({ displayAllResults: true });
   };
 
-  pathForItem = (type, obj) => {
+  pathForItem = (type, definition) => {
     // TODO: some places in the code pass through a definition item directly rather than one of our
     // 'obj' wrappers
     let url = "";
     const shortType = makeTypeShort(type);
-    const key = obj.def ? obj.key || obj.def.hash : obj.hash;
+    const key = definition.hash ?? definition.statId; // TODO: check medals
 
     if (getSplat(this.props.match.params)) {
       url = `${this.props.location.pathname}/${shortType}:${key}`;

@@ -3,10 +3,10 @@
 .urlBar {
   width: 100%;
   display: flex;
-  // line-height: 1;
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .url {
@@ -15,13 +15,7 @@
   white-space: nowrap;
   overflow: hidden;
   margin-right: 8px;
-  transform: translateX(-211px);
-  // transition: transform 300ms ease-in-out;
   padding: 6px 0;
-
-  // &:hover {
-  //   transform: translateX(0);
-  // }
 
   &,
   .urlPrefix {
@@ -34,6 +28,7 @@
 }
 
 .urlActions {
+  margin-left: 16px;
 }
 
 .description {

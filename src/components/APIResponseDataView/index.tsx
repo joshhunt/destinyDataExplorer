@@ -6,6 +6,7 @@ import { notEmpty } from "lib/utils";
 import { OpenAPIV3 } from "openapi-types/dist/index";
 import React, { Suspense, useState } from "react";
 import GetPostGameCarnageReport from "./responseViews/GetPostGameCarnageReportView";
+import GetProfileView from "./responseViews/GetProfileView";
 
 const NewDataView = React.lazy(() => import("components/DataView"));
 
@@ -52,7 +53,11 @@ const APIResponseDataView: React.FC<APIResponseDataViewProps> = ({
       )}
 
       {activeTab === TabKind.Preview && (
-        <DetailsView operationName={operationName} data={data} />
+        <DetailsView
+          operationName={operationName}
+          data={data}
+          schema={schema}
+        />
       )}
     </div>
   );
@@ -61,6 +66,7 @@ const APIResponseDataView: React.FC<APIResponseDataViewProps> = ({
 function operationHasDetails(operationName: string) {
   switch (operationName) {
     case "Destiny2.GetPostGameCarnageReport":
+    case "Destiny2.GetProfile":
       return true;
     default:
       return false;
@@ -70,12 +76,19 @@ function operationHasDetails(operationName: string) {
 interface DetailsViewProps {
   data: any;
   operationName: string;
+  schema?: OpenAPIV3.SchemaObject;
 }
 
-const DetailsView: React.FC<DetailsViewProps> = ({ data, operationName }) => {
+const DetailsView: React.FC<DetailsViewProps> = ({
+  data,
+  operationName,
+  schema,
+}) => {
   switch (operationName) {
     case "Destiny2.GetPostGameCarnageReport":
       return <GetPostGameCarnageReport data={data} />;
+    case "Destiny2.GetProfile":
+      return <GetProfileView data={data} schema={schema} />;
     default:
       return null;
   }

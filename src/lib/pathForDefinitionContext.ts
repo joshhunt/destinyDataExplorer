@@ -1,8 +1,7 @@
 import { createContext, useContext } from "react";
+import { PathForItemFn } from "types";
 
-type ItemPathFunction = (type: string, obj: any) => string;
-
-const context = createContext<ItemPathFunction>(() => "");
+const context = createContext<PathForItemFn>(() => "");
 
 export const Provider = context.Provider;
 

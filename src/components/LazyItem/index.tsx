@@ -16,9 +16,14 @@ const LazyItem: React.FC<LazyItemProps> = ({
   type,
   className,
   onClick,
+  children,
 }) => {
   const pathForItem = usePathForDefinition();
   const definition = useDefinition(type, hash);
+
+  if (!definition) {
+    return null;
+  }
 
   return (
     <Item
@@ -30,6 +35,7 @@ const LazyItem: React.FC<LazyItemProps> = ({
         type,
         def: definition,
       }}
+      children={children}
     />
   );
 };

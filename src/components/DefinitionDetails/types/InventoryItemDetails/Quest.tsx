@@ -46,10 +46,7 @@ const Quest: React.FC<QuestProps> = ({ definition }) => {
         >
           <Subtitle2>
             <Link
-              to={pathForItem("DestinyInventoryItemDefinition", {
-                def: questStepItem,
-                type: "DestinyInventoryItemDefinition",
-              })}
+              to={pathForItem("DestinyInventoryItemDefinition", questStepItem)}
               className={s.plainLink}
             >
               {index + 1}. {questStepItem.displayProperties.name}

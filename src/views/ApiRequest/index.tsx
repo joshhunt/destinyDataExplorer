@@ -12,6 +12,7 @@ import {
   invertCollapsed,
   makeUrl,
   Params,
+  isRequestValid,
 } from "./utils";
 import APIRequestEditor from "components/APIRequestEditor";
 import DataViewsOverlay, {
@@ -54,43 +55,57 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
 
   const [apiParams, setApiParams] = useApiParams(apiOperation);
 
+  useEffect(() => {
+    const isValid = isRequestValid(apiOperation, apiParams);
+
+    if (isValid) {
+      setCollapsed(Collapsed.Visible);
+      handleSubmit(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Clear state when the URL/operation changes
   useEffect(() => {
     setApiResponse(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [operationName]);
 
-  const handleSubmit = useCallback(() => {
-    const url = makeApiRequestUrl(apiOperation, apiParams, true);
+  const handleSubmit = useCallback(
+    (collapseEditor = true) => {
+      const url = makeApiRequestUrl(apiOperation, apiParams, true);
 
-    setLoading(true);
+      setLoading(true);
 
-    const fullUrl =
-      apiOperation?.operationId === "Destiny2.GetPostGameCarnageReport"
-        ? `https://stats.bungie.net${url}`
-        : `https://www.bungie.net${url}`;
+      const fullUrl =
+        apiOperation?.operationId === "Destiny2.GetPostGameCarnageReport"
+          ? `https://stats.bungie.net${url}`
+          : `https://www.bungie.net${url}`;
 
-    getValidAuthData()
-      .then((authData) =>
-        fetch(fullUrl, {
-          headers: {
-            "x-api-key": process.env.REACT_APP_API_KEY ?? "",
-            authorization:
-              authData && apiParams.$auth
-                ? `Bearer ${authData.accessToken}`
-                : "",
-          },
+      getValidAuthData()
+        .then((authData) =>
+          fetch(fullUrl, {
+            headers: {
+              "x-api-key": process.env.REACT_APP_API_KEY ?? "",
+              authorization:
+                authData && apiParams.$auth
+                  ? `Bearer ${authData.accessToken}`
+                  : "",
+            },
+          })
+        )
+        .then((response) => {
+          return response.json();
         })
-      )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setLoading(false);
-        setApiResponse(data);
-        setCollapsed(Collapsed.Collapsed);
-      });
-  }, [apiOperation, apiParams]);
+        .then((data) => {
+          setLoading(false);
+          setApiResponse(data);
+          console.log({ collapseEditor });
+          collapseEditor && setCollapsed(Collapsed.Collapsed);
+        });
+    },
+    [apiOperation, apiParams]
+  );
 
   const linkedDefinitionUrl = useCallback(
     ({ type, hash }: DefinitionEntry) => {

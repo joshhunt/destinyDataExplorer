@@ -2,44 +2,27 @@ import React from "react";
 import cx from "classnames";
 import { Link } from "react-router-dom";
 
-import { CLASSES } from "lib/destinyEnums";
-import { makeTypeShort } from "lib/destinyUtils";
-
 import BungieImage from "components/BungieImage";
 import Icon from "components/Icon";
 
 import s from "./styles.module.scss";
-import { getDisplayName } from "lib/destinyTsUtils";
-
-const DUMMIES_HASH = 3109687656;
-
-function makeItemTypeName(item, type) {
-  const shortType = makeTypeShort(type);
-  const _klass = CLASSES[item.classType];
-  const klass = _klass ? `${_klass} ` : "";
-  const official = item.itemTypeName || item.itemTypeDisplayName;
-
-  if (
-    !official &&
-    item.itemCategoryHashes &&
-    item.itemCategoryHashes.includes(DUMMIES_HASH)
-  ) {
-    return `${shortType}: Dummy item`;
-  }
-
-  return official ? `${shortType}: ${klass}${official}` : shortType;
-}
+import {
+  getDisplayName,
+  getIcon,
+  itemTypeDisplayName,
+} from "lib/destinyTsUtils";
+import { PathForItemFn, WrappedDefinition } from "types";
 
 const NO_ICON = "/img/misc/missing_icon_d2.png";
 
-const SUBSTITUTE_ICON = {
+const SUBSTITUTE_ICON: Record<string, string> = {
   DestinyLoreDefinition: "book",
   DestinyItemCategoryDefinition: "th-large",
   DestinyInventoryBucketDefinition: "shopping-basket",
   DestinyHistoricalStatsDefinition: "trophy",
 };
 
-function SubstituteIcon({ type }) {
+function SubstituteIcon({ type }: { type: string }) {
   const sub = SUBSTITUTE_ICON[type];
 
   return sub ? (
@@ -51,30 +34,35 @@ function SubstituteIcon({ type }) {
   );
 }
 
-export default function Item({
+interface ItemProps<TEntry = WrappedDefinition> {
+  className?: string;
+  entry: TEntry;
+  pathForItem: PathForItemFn; // TOPDO: make optional
+  onClick?: (ev: React.MouseEvent<HTMLAnchorElement>, entry: TEntry) => void;
+  isCollected: boolean;
+}
+
+const Item: React.FC<ItemProps> = ({
   className,
   entry,
   pathForItem,
   onClick,
   isCollected,
-  children = <></>,
-}) {
-  const { def: item, type } = entry;
+  children,
+}) => {
+  const { def: definition, type } = entry;
 
-  if (!item) {
+  if (!definition) {
     console.warn("Item is empty for entry", entry);
     return null;
   }
 
-  const name = getDisplayName(item) || <em>No name</em>;
-  const icon =
-    (item.displayProperties && item.displayProperties.icon) ||
-    item.iconImage ||
-    NO_ICON;
+  const name = getDisplayName(definition) || <em>No name</em>;
+  const icon = getIcon(definition) || NO_ICON;
 
   return (
     <Link
-      to={pathForItem(type, entry)}
+      to={pathForItem(type, definition)}
       className={cx(s.root, className, isCollected && s.collected)}
       onClick={(ev) => onClick && onClick(ev, entry)}
     >
@@ -88,9 +76,13 @@ export default function Item({
 
       <div className={s.main}>
         <div className={s.name}>{name}</div>
-        <div className={s.itemType}>{makeItemTypeName(item, type)}</div>
-        <div className={s.children}>{children}</div>
+        <div className={s.itemType}>
+          {itemTypeDisplayName(definition, type)}
+        </div>
+        {children && <div className={s.children}>{children}</div>}
       </div>
     </Link>
   );
-}
+};
+
+export default Item;

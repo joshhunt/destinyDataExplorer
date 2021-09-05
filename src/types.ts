@@ -4,9 +4,11 @@ import {
   DestinyInventoryItemDefinition,
   DestinyHistoricalStatsDefinition,
   DestinyPowerCapDefinition,
+  DestinyVendorGroupDefinition,
 } from "bungie-api-ts/destiny2";
 
-export type AnyDefinitionTable = AllDestinyManifestComponents[keyof AllDestinyManifestComponents];
+export type AnyDefinitionTable =
+  AllDestinyManifestComponents[keyof AllDestinyManifestComponents];
 export type AnyDefinition = AnyDefinitionTable[keyof AnyDefinitionTable];
 
 export interface BaseDestinyDefinition
@@ -14,7 +16,8 @@ export interface BaseDestinyDefinition
     DestinyInventoryItemDefinition &
       DestinyObjectiveDefinition &
       DestinyHistoricalStatsDefinition &
-      DestinyPowerCapDefinition
+      DestinyPowerCapDefinition &
+      DestinyVendorGroupDefinition
   > {
   tierName?: string;
 }
@@ -24,3 +27,13 @@ export interface ReduxStore {
     definitions: Partial<AllDestinyManifestComponents>;
   };
 }
+
+export interface WrappedDefinition {
+  type: string;
+  def: AnyDefinition;
+}
+
+export type PathForItemFn = (
+  tableName: string,
+  definition: AnyDefinition
+) => string;

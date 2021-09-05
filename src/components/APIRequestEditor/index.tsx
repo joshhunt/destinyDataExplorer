@@ -57,10 +57,7 @@ const APIRequestEditor: React.FC<APIRequestEditorProps> = ({
   return (
     <div className={cx(s.requestEditor, className)}>
       <div className={s.urlBar}>
-        <div className={s.url}>
-          <span className={s.urlPrefix}>https://www.bungie.net</span>
-          {displayUrl}
-        </div>
+        <div className={s.url}>{displayUrl}</div>
 
         <div className={s.urlActions}>
           <button
