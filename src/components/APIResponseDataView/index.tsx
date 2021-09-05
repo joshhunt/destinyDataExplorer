@@ -66,7 +66,7 @@ const APIResponseDataView: React.FC<APIResponseDataViewProps> = ({
 function operationHasDetails(operationName: string) {
   switch (operationName) {
     case "Destiny2.GetPostGameCarnageReport":
-    case "Destiny2.GetProfile":
+      // case "Destiny2.GetProfile":
       return true;
     default:
       return false;
