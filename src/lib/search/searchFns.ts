@@ -248,7 +248,7 @@ const SEARCH_FNS = [
   ),
 
   makeSearchFn("deep", false, (obj, term) => {
-    const stringTerm = typeof term === "string" ? term : term.toString();
+    const stringTerm = String(term).toLowerCase();
     const str = JSON.stringify(obj.def).toLowerCase();
     return str.includes(stringTerm);
   }),
