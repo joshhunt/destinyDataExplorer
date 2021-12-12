@@ -26,7 +26,7 @@ export function getIcon(item: BaseDestinyDefinition) {
 
 export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
   const shortType = makeTypeShort(type);
-  const classType = item.classType && CLASSES[item.classType];
+  const classType = CLASSES[item.classType ?? 69];
   const official = item.itemTypeDisplayName;
 
   if (
@@ -37,7 +37,9 @@ export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
     return `${shortType}: Dummy item`;
   }
 
-  return official ? `${shortType}: ${classType ?? ""}${official}` : shortType;
+  return official
+    ? `${shortType}: ${classType ? classType + " " : ""}${official}`
+    : shortType;
 }
 
 export function isTableName(
