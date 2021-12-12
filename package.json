@@ -25,7 +25,7 @@
     "dexie": "^3.0.3",
     "file-loader": "^6.2.0",
     "imports-loader": "^1.2.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "memoize-one": "^5.1.1",
     "merge-deep": "^3.0.3",
     "normalize-text": "^2.3.1",
