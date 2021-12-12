@@ -18,7 +18,7 @@
     "@types/react-select": "^3.0.28",
     "@types/react-syntax-highlighter": "^13.5.0",
     "assign-deep": "^1.0.1",
-    "axios": "^0.21.0",
+    "axios": "^0.21.2",
     "bungie-api-ts": "^4.10.1",
     "classnames": "^2.2.5",
     "dequal": "^2.0.2",
