@@ -34,7 +34,7 @@ const PerkDetails: React.FC<PerkDetailsProps> = ({ definition }) => {
     }
 
     const matchingPlugSets = Object.values(plugSetDefs).filter((plugSet) =>
-      plugSet.reusablePlugItems.some((v) => v.plugItemHash === perkItemHash)
+      plugSet.reusablePlugItems?.some((v) => v.plugItemHash === perkItemHash)
     );
 
     return Object.values(itemDefs).filter((itemDef) => {
