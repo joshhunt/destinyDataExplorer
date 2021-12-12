@@ -1,7 +1,11 @@
 import { filter as lodashFilter, isObject, isArray, isString } from "lodash";
 
 import { SET_SEARCH_RESULTS } from "../store/filter";
+import { mergeBulkDefinitions } from "../store/definitions";
+import { sendDefinitions } from "lib/workerSearch";
 import css from "./cssLog";
+
+import { startingSearchWorkerSuccess } from "../store/app";
 
 class ResultsArray extends Array {
   show() {
@@ -88,11 +92,45 @@ function makeGlobalConstantName(def) {
   return safeName;
 }
 
+function loadAdditionalDefinitions(store, inputDefs) {
+  const payload = inputDefs.DestinyInventoryItemDefinition
+    ? inputDefs
+    : {
+        DestinyInventoryItemDefinition: inputDefs,
+      };
+
+  console.log("Dispatching definitions to override", payload);
+  const action = mergeBulkDefinitions(payload);
+
+  console.log("Dispatching new definitions");
+  store.dispatch(action);
+
+  console.log("Merged! Getting new definitions");
+  const newDefs = store.getState().definitions.definitions;
+
+  console.log("Sending new definitions to search worker");
+  sendDefinitions(newDefs).then(() => {
+    console.log("All done!");
+    store.dispatch(startingSearchWorkerSuccess());
+  });
+}
+
+function loadDefinitionOverrides(store) {
+  import("../definitionOverrides.json").then((allDefsOverrides) => {
+    loadAdditionalDefinitions(store, allDefsOverrides.default);
+  });
+}
+
 const prevKeeper = new WeakMap();
 export function connectToWindow(store) {
   window.__store = store;
   window.$show = show.bind(null, store);
   window.$filter = filter.bind(null, store);
+  window.$loadAdditionalDefinitions = loadAdditionalDefinitions.bind(
+    null,
+    store
+  );
+  window.$loadDefinitionOverrides = loadDefinitionOverrides.bind(null, store);
 
   store.subscribe(
     catchErrors(() => {

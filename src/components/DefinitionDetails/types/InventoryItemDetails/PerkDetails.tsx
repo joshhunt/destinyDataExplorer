@@ -38,10 +38,10 @@ const PerkDetails: React.FC<PerkDetailsProps> = ({ definition }) => {
     );
 
     return Object.values(itemDefs).filter((itemDef) => {
-      return itemDef.sockets?.socketEntries.some((socket) => {
+      return itemDef.sockets?.socketEntries?.some((socket) => {
         return (
           socket.singleInitialItemHash === perkItemHash ||
-          socket.reusablePlugItems.some(
+          socket.reusablePlugItems?.some(
             (v) => v.plugItemHash === perkItemHash
           ) ||
           matchingPlugSets.some((v) => socket.randomizedPlugSetHash === v.hash)

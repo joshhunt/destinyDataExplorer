@@ -57,9 +57,15 @@ const Quest: React.FC<QuestProps> = ({ definition }) => {
             {questStepItem.displayProperties.description}
           </p>
 
-          {definition.objectives && (
+          {questStepItem.setData?.questStepSummary && (
+            <p className={s.questStepDescription}>
+              <em>{questStepItem.setData?.questStepSummary}</em>
+            </p>
+          )}
+
+          {questStepItem.objectives && (
             <ObjectiveList
-              objectiveHashes={definition.objectives.objectiveHashes}
+              objectiveHashes={questStepItem.objectives.objectiveHashes}
             />
           )}
 

@@ -1,5 +1,8 @@
 import React from "react";
-import { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
+import {
+  DestinyInventoryItemDefinition,
+  DestinyItemSocketCategoryDefinition,
+} from "bungie-api-ts/destiny2";
 
 import s from "../styles.module.scss";
 import { ReduxStore } from "types";
@@ -24,11 +27,21 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
     return null;
   }
 
+  const socketCategories: DestinyItemSocketCategoryDefinition[] =
+    sockets.socketCategories ?? [
+      {
+        socketCategoryHash: 0,
+        socketIndexes: definition.sockets?.socketEntries.map(
+          (v, index) => index
+        ),
+      },
+    ];
+
   return (
     <div>
       <Subtitle1>Sockets</Subtitle1>
 
-      {sockets.socketCategories.map((socketCategory) => {
+      {socketCategories.map((socketCategory) => {
         const categoryDef =
           definitions.DestinySocketCategoryDefinition?.[
             socketCategory.socketCategoryHash
@@ -36,7 +49,9 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
 
         return (
           <div key={socketCategory.socketCategoryHash} className={s.category}>
-            <Subtitle2>{categoryDef?.displayProperties.name}</Subtitle2>
+            <Subtitle2>
+              {categoryDef?.displayProperties.name ?? <em>Unknown category</em>}
+            </Subtitle2>
 
             <div className={s.socketList}>
               {socketCategory.socketIndexes.map((socketIndex) => {
@@ -60,7 +75,7 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
                   ]?.reusablePlugItems;
 
                 const reusablePlugs = [
-                  ...socketEntry.reusablePlugItems,
+                  ...(socketEntry.reusablePlugItems ?? []),
                   // ...(randomPlugSet || []),
                   ...(reusablePlugSet || []),
                 ].filter(

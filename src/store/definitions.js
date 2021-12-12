@@ -1,7 +1,9 @@
 import { pickBy, mapValues } from "lodash";
 import { makePayloadAction } from "./utils";
+import assignDeep from "assign-deep";
 
 export const SET_BULK_DEFINITIONS = "Set bulk definitions";
+export const MERGE_BULK_DEFINITIONS = "Merge bulk definitions";
 export const DEFINITIONS_ERROR = "Definitions error";
 export const DEFINITIONS_STATUS = "Definitions status";
 
@@ -41,6 +43,16 @@ export default function definitionsReducer(
       };
     }
 
+    case MERGE_BULK_DEFINITIONS: {
+      const newDefs = assignDeep({}, state.definitions, payload);
+
+      return {
+        ...state,
+        definitions: newDefs,
+        error: false,
+      };
+    }
+
     default:
       return state;
   }
@@ -49,3 +61,4 @@ export default function definitionsReducer(
 export const setBulkDefinitions = makePayloadAction(SET_BULK_DEFINITIONS);
 export const definitionsStatus = makePayloadAction(DEFINITIONS_STATUS);
 export const definitionsError = makePayloadAction(DEFINITIONS_ERROR);
+export const mergeBulkDefinitions = makePayloadAction(MERGE_BULK_DEFINITIONS);
