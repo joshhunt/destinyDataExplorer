@@ -13,7 +13,7 @@
       "name": "BSD License 2.0",
       "url": "https://github.com/Bungie-net/api/blob/master/LICENSE"
     },
-    "version": "2.12.0"
+    "version": "2.13.0"
   },
   "host": "www.bungie.net",
   "basePath": "/Platform",
@@ -485,6 +485,131 @@
               "properties": {
                 "Response": {
                   "$ref": "#/definitions/User.HardLinkedUserMembership"
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/Search/Prefix/{displayNamePrefix}/{page}/": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "[OBSOLETE] Do not use this to search users, use SearchByGlobalNamePost instead.",
+        "operationId": "User.SearchByGlobalNamePrefix",
+        "parameters": [
+          {
+            "name": "displayNamePrefix",
+            "in": "path",
+            "description": "The display name prefix you're looking for.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "description": "The zero-based page of results you desire.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "$ref": "#/definitions/User.UserSearchResponse"
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/Search/GlobalName/{page}/": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Given the prefix of a global display name, returns all users who share that name.",
+        "operationId": "User.SearchByGlobalNamePost",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "path",
+            "description": "The zero-based page of results you desire.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "$ref": "#/definitions/User.UserSearchResponse"
                 },
                 "ErrorCode": {
                   "format": "int32",
@@ -4504,21 +4629,14 @@
         }
       }
     },
-    "/Destiny2/SearchDestinyPlayer/{membershipType}/{displayName}/": {
-      "get": {
+    "/Destiny2/SearchDestinyPlayerByBungieName/{membershipType}/": {
+      "post": {
         "tags": [
           "Destiny2"
         ],
         "description": "Returns a list of Destiny memberships given a global Bungie Display Name. This method will hide overridden memberships due to cross save.",
-        "operationId": "Destiny2.SearchDestinyPlayer",
+        "operationId": "Destiny2.SearchDestinyPlayerByBungieName",
         "parameters": [
-          {
-            "name": "displayName",
-            "in": "path",
-            "description": "The full bungie global display name to look up, include the # and the code at the end. This is an exact match lookup.",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "membershipType",
             "in": "path",
@@ -5794,7 +5912,69 @@
         },
         "x-preview": true,
         "x-documentation-attributes": {
-          "ThrottleSecondsBetweenActionPerUser": "1"
+          "ThrottleSecondsBetweenActionPerUser": "0.5"
+        }
+      }
+    },
+    "/Destiny2/Actions/Items/InsertSocketPlugFree/": {
+      "post": {
+        "tags": [
+          "Destiny2",
+          "Preview"
+        ],
+        "description": "Insert a 'free' plug into an item's socket. This does not require 'Advanced Write Action' authorization and is available to 3rd-party apps, but will only work on 'free and reversible' socket actions (Perks, Armor Mods, Shaders, Ornaments, etc.). You must have a valid Destiny Account, and the character must either be in a social space, in orbit, or offline.",
+        "operationId": "Destiny2.InsertSocketPlugFree",
+        "parameters": [],
+        "deprecated": false,
+        "security": [
+          {
+            "oauth2": [
+              "MoveEquipDestinyItems"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "$ref": "#/definitions/Destiny.Responses.DestinyItemChangeResponse"
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-preview": true,
+        "x-documentation-attributes": {
+          "ThrottleSecondsBetweenActionPerUser": "0.5"
         }
       }
     },
@@ -9511,6 +9691,54 @@
         "CrossSaveOverriddenMembershipId": {
           "format": "int64",
           "type": "integer"
+        }
+      }
+    },
+    "User.UserSearchResponse": {
+      "type": "object",
+      "properties": {
+        "searchResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User.UserSearchResponseDetail"
+          }
+        },
+        "page": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "hasMore": {
+          "type": "boolean"
+        }
+      }
+    },
+    "User.UserSearchResponseDetail": {
+      "type": "object",
+      "properties": {
+        "bungieGlobalDisplayName": {
+          "type": "string"
+        },
+        "bungieGlobalDisplayNameCode": {
+          "format": "int16",
+          "type": "integer"
+        },
+        "bungieNetMembershipId": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "destinyMemberships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User.UserInfoCard"
+          }
+        }
+      }
+    },
+    "User.UserSearchPrefixRequest": {
+      "type": "object",
+      "properties": {
+        "displayNamePrefix": {
+          "type": "string"
         }
       }
     },
@@ -13431,7 +13659,8 @@
       "description": "Describes the type of progression that a vendor has.",
       "enum": [
         "0",
-        "1"
+        "1",
+        "2"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -13444,6 +13673,11 @@
           "numericValue": "1",
           "identifier": "Ritual",
           "description": "Progression from ranks in ritual content. For example: Crucible (Shaxx), Gambit (Drifter), and Season 13 Battlegrounds (War Table)."
+        },
+        {
+          "numericValue": "2",
+          "identifier": "NoSeasonalRefresh",
+          "description": "A vendor progression with no seasonal refresh. For example: Xur in the Eternity destination for the 30th Anniversary."
         }
       ]
     },
@@ -15139,7 +15373,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -15451,6 +15686,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         },
@@ -16646,7 +16885,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -16958,6 +17198,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         },
@@ -17066,7 +17310,8 @@
         "81",
         "82",
         "83",
-        "84"
+        "84",
+        "85"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -17378,6 +17623,10 @@
         {
           "numericValue": "84",
           "identifier": "TrialsOfOsiris"
+        },
+        {
+          "numericValue": "85",
+          "identifier": "Dares"
         }
       ]
     },
@@ -20167,7 +20416,8 @@
         "2",
         "3",
         "4",
-        "5"
+        "5",
+        "6"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -20194,6 +20444,10 @@
         {
           "numericValue": "5",
           "identifier": "Subclass"
+        },
+        {
+          "numericValue": "6",
+          "identifier": "Stasis"
         }
       ]
     },
@@ -23405,6 +23659,7 @@
         "1007",
         "1008",
         "1009",
+        "1010",
         "1100",
         "1204",
         "1205",
@@ -23787,7 +24042,11 @@
         "3903",
         "3904",
         "3905",
-        "3906"
+        "3906",
+        "3907",
+        "3908",
+        "3910",
+        "3911"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -25473,6 +25732,10 @@
           "identifier": "IgnoreUserIgnored"
         },
         {
+          "numericValue": "1010",
+          "identifier": "TargetUserIgnored"
+        },
+        {
           "numericValue": "1100",
           "identifier": "NotificationSettingInvalid"
         },
@@ -27004,6 +27267,22 @@
         {
           "numericValue": "3906",
           "identifier": "ErrorBungieFriendsIdenticalSourceTarget"
+        },
+        {
+          "numericValue": "3907",
+          "identifier": "ErrorBungieFriendsSelf"
+        },
+        {
+          "numericValue": "3908",
+          "identifier": "ErrorBungieBlockSelf"
+        },
+        {
+          "numericValue": "3910",
+          "identifier": "ErrorBungieFriendsListFull"
+        },
+        {
+          "numericValue": "3911",
+          "identifier": "ErrorBungieBlockListFull"
         }
       ]
     },
@@ -27452,6 +27731,18 @@
         }
       }
     },
+    "User.ExactSearchRequest": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "displayNameCode": {
+          "format": "int16",
+          "type": "integer"
+        }
+      }
+    },
     "Destiny.Responses.DestinyLinkedProfilesResponse": {
       "description": "I know what you seek. You seek linked accounts. Found them, you have.\r\nThis contract returns a minimal amount of data about Destiny Accounts that are linked through your Bungie.Net account. We will not return accounts in this response whose",
       "type": "object",
@@ -27516,7 +27807,9 @@
             "8",
             "16",
             "32",
-            "64"
+            "64",
+            "128",
+            "256"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -27551,6 +27844,14 @@
             {
               "numericValue": "64",
               "identifier": "BeyondLight"
+            },
+            {
+              "numericValue": "128",
+              "identifier": "Anniversary30th"
+            },
+            {
+              "numericValue": "256",
+              "identifier": "TheWitchQueen"
             }
           ]
         },
@@ -27898,7 +28199,9 @@
         "8",
         "16",
         "32",
-        "64"
+        "64",
+        "128",
+        "256"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -27933,6 +28236,14 @@
         {
           "numericValue": "64",
           "identifier": "BeyondLight"
+        },
+        {
+          "numericValue": "128",
+          "identifier": "Anniversary30th"
+        },
+        {
+          "numericValue": "256",
+          "identifier": "TheWitchQueen"
         }
       ]
     },
@@ -30371,6 +30682,17 @@
             "$ref": "#/definitions/Destiny.Definitions.DestinyInventoryItemDefinition"
           }
         },
+        "uninstancedItemPerks": {
+          "description": "Sometimes, you have items in your inventory that don't have instances, but still have perks (for example: Trials passage cards). This gives you the perk information for uninstanced items.\r\nThis dictionary is keyed by item hash, which you can use to look up the corresponding item definition. The value is the list of perks states for the item.",
+          "type": "object",
+          "additionalProperties": {
+            "x-destiny-component-type-dependency": "ItemPerks",
+            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
+          },
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.DestinyInventoryItemDefinition"
+          }
+        },
         "checklists": {
           "description": "The set of checklists that can be examined for this specific character, keyed by the hash identifier of the Checklist (DestinyChecklistDefinition)\r\nFor each checklist returned, its value is itself a Dictionary keyed by the checklist's hash identifier with the value being a boolean indicating if it's been discovered yet.",
           "type": "object",
@@ -30767,7 +31089,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -31079,6 +31402,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         },
@@ -31211,7 +31538,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -31523,6 +31851,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         }
@@ -32188,6 +32520,46 @@
         }
       }
     },
+    "Destiny.Entities.Items.DestinyItemPerksComponent": {
+      "description": "Instanced items can have perks: benefits that the item bestows.\r\nThese are related to DestinySandboxPerkDefinition, and sometimes - but not always - have human readable info. When they do, they are the icons and text that you see in an item's tooltip.\r\nTalent Grids, Sockets, and the item itself can apply Perks, which are then summarized here for your convenience.",
+      "type": "object",
+      "properties": {
+        "perks": {
+          "description": "The list of perks to display in an item tooltip - and whether or not they have been activated.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Destiny.Perks.DestinyPerkReference"
+          }
+        }
+      },
+      "x-destiny-component-type-dependency": "ItemPerks"
+    },
+    "Destiny.Perks.DestinyPerkReference": {
+      "description": "The list of perks to display in an item tooltip - and whether or not they have been activated.\r\nPerks apply a variety of effects to a character, and are generally either intrinsic to the item or provided in activated talent nodes or sockets.",
+      "type": "object",
+      "properties": {
+        "perkHash": {
+          "format": "uint32",
+          "description": "The hash identifier for the perk, which can be used to look up DestinySandboxPerkDefinition if it exists. Be warned, perks frequently do not have user-viewable information. You should examine whether you actually found a name/description in the perk's definition before you show it to the user.",
+          "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.DestinySandboxPerkDefinition"
+          }
+        },
+        "iconPath": {
+          "description": "The icon for the perk.",
+          "type": "string"
+        },
+        "isActive": {
+          "description": "Whether this perk is currently active. (We may return perks that you have not actually activated yet: these represent perks that you should show in the item's tooltip, but that the user has not yet activated.)",
+          "type": "boolean"
+        },
+        "visible": {
+          "description": "Some perks provide benefits, but aren't visible in the UI. This value will let you know if this is perk should be shown in your UI.",
+          "type": "boolean"
+        }
+      }
+    },
     "Destiny.Artifacts.DestinyArtifactCharacterScoped": {
       "type": "object",
       "properties": {
@@ -32533,7 +32905,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -32845,6 +33218,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         },
@@ -33095,6 +33472,10 @@
         "objectives": {
           "x-destiny-component-type-dependency": "ItemObjectives",
           "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemObjectivesComponent"
+        },
+        "perks": {
+          "x-destiny-component-type-dependency": "ItemPerks",
+          "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemPerksComponent"
         }
       }
     },
@@ -33134,6 +33515,29 @@
           "additionalProperties": {
             "x-destiny-component-type-dependency": "ItemObjectives",
             "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemObjectivesComponent"
+          }
+        },
+        "privacy": {
+          "format": "int32",
+          "type": "integer",
+          "x-enum-reference": {
+            "$ref": "#/components/schemas/Components.ComponentPrivacySetting"
+          }
+        },
+        "disabled": {
+          "description": "If true, this component is disabled.",
+          "type": "boolean"
+        }
+      }
+    },
+    "DictionaryComponentResponseOfuint32AndDestinyItemPerksComponent": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "x-destiny-component-type-dependency": "ItemPerks",
+            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
           }
         },
         "privacy": {
@@ -33285,6 +33689,10 @@
         "objectives": {
           "x-destiny-component-type-dependency": "ItemObjectives",
           "$ref": "#/definitions/DictionaryComponentResponseOfint64AndDestinyItemObjectivesComponent"
+        },
+        "perks": {
+          "x-destiny-component-type-dependency": "ItemPerks",
+          "$ref": "#/definitions/DictionaryComponentResponseOfint64AndDestinyItemPerksComponent"
         }
       }
     },
@@ -33311,16 +33719,35 @@
         }
       }
     },
+    "DictionaryComponentResponseOfint64AndDestinyItemPerksComponent": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "x-destiny-component-type-dependency": "ItemPerks",
+            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
+          }
+        },
+        "privacy": {
+          "format": "int32",
+          "type": "integer",
+          "x-enum-reference": {
+            "$ref": "#/components/schemas/Components.ComponentPrivacySetting"
+          }
+        },
+        "disabled": {
+          "description": "If true, this component is disabled.",
+          "type": "boolean"
+        }
+      }
+    },
     "DestinyItemComponentSetOfint64": {
       "type": "object",
       "properties": {
         "instances": {
           "x-destiny-component-type-dependency": "ItemInstances",
           "$ref": "#/definitions/DictionaryComponentResponseOfint64AndDestinyItemInstanceComponent"
-        },
-        "perks": {
-          "x-destiny-component-type-dependency": "ItemPerks",
-          "$ref": "#/definitions/DictionaryComponentResponseOfint64AndDestinyItemPerksComponent"
         },
         "renderData": {
           "x-destiny-component-type-dependency": "ItemRenderData",
@@ -33353,6 +33780,10 @@
         "objectives": {
           "x-destiny-component-type-dependency": "ItemObjectives",
           "$ref": "#/definitions/DictionaryComponentResponseOfint64AndDestinyItemObjectivesComponent"
+        },
+        "perks": {
+          "x-destiny-component-type-dependency": "ItemPerks",
+          "$ref": "#/definitions/DictionaryComponentResponseOfint64AndDestinyItemPerksComponent"
         }
       }
     },
@@ -33614,69 +34045,6 @@
           "additionalProperties": {
             "x-destiny-component-type-dependency": "ItemInstances",
             "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemInstanceComponent"
-          }
-        },
-        "privacy": {
-          "format": "int32",
-          "type": "integer",
-          "x-enum-reference": {
-            "$ref": "#/components/schemas/Components.ComponentPrivacySetting"
-          }
-        },
-        "disabled": {
-          "description": "If true, this component is disabled.",
-          "type": "boolean"
-        }
-      }
-    },
-    "Destiny.Entities.Items.DestinyItemPerksComponent": {
-      "description": "Instanced items can have perks: benefits that the item bestows.\r\nThese are related to DestinySandboxPerkDefinition, and sometimes - but not always - have human readable info. When they do, they are the icons and text that you see in an item's tooltip.\r\nTalent Grids, Sockets, and the item itself can apply Perks, which are then summarized here for your convenience.",
-      "type": "object",
-      "properties": {
-        "perks": {
-          "description": "The list of perks to display in an item tooltip - and whether or not they have been activated.",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Destiny.Perks.DestinyPerkReference"
-          }
-        }
-      },
-      "x-destiny-component-type-dependency": "ItemPerks"
-    },
-    "Destiny.Perks.DestinyPerkReference": {
-      "description": "The list of perks to display in an item tooltip - and whether or not they have been activated.\r\nPerks apply a variety of effects to a character, and are generally either intrinsic to the item or provided in activated talent nodes or sockets.",
-      "type": "object",
-      "properties": {
-        "perkHash": {
-          "format": "uint32",
-          "description": "The hash identifier for the perk, which can be used to look up DestinySandboxPerkDefinition if it exists. Be warned, perks frequently do not have user-viewable information. You should examine whether you actually found a name/description in the perk's definition before you show it to the user.",
-          "type": "integer",
-          "x-mapped-definition": {
-            "$ref": "#/definitions/Destiny.Definitions.DestinySandboxPerkDefinition"
-          }
-        },
-        "iconPath": {
-          "description": "The icon for the perk.",
-          "type": "string"
-        },
-        "isActive": {
-          "description": "Whether this perk is currently active. (We may return perks that you have not actually activated yet: these represent perks that you should show in the item's tooltip, but that the user has not yet activated.)",
-          "type": "boolean"
-        },
-        "visible": {
-          "description": "Some perks provide benefits, but aren't visible in the UI. This value will let you know if this is perk should be shown in your UI.",
-          "type": "boolean"
-        }
-      }
-    },
-    "DictionaryComponentResponseOfint64AndDestinyItemPerksComponent": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "additionalProperties": {
-            "x-destiny-component-type-dependency": "ItemPerks",
-            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
           }
         },
         "privacy": {
@@ -35414,7 +35782,8 @@
         "8192",
         "16384",
         "32768",
-        "65536"
+        "65536",
+        "131072"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -35507,6 +35876,11 @@
           "numericValue": "65536",
           "identifier": "Popular",
           "description": "This indicates that the sale item is popular."
+        },
+        {
+          "numericValue": "131072",
+          "identifier": "Free",
+          "description": "This indicates that the sale item is free."
         }
       ]
     },
@@ -35565,6 +35939,10 @@
         "objectives": {
           "x-destiny-component-type-dependency": "ItemObjectives",
           "$ref": "#/definitions/DictionaryComponentResponseOfint32AndDestinyItemObjectivesComponent"
+        },
+        "perks": {
+          "x-destiny-component-type-dependency": "ItemPerks",
+          "$ref": "#/definitions/DictionaryComponentResponseOfint32AndDestinyItemPerksComponent"
         }
       }
     },
@@ -35591,16 +35969,35 @@
         }
       }
     },
+    "DictionaryComponentResponseOfint32AndDestinyItemPerksComponent": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "x-destiny-component-type-dependency": "ItemPerks",
+            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
+          }
+        },
+        "privacy": {
+          "format": "int32",
+          "type": "integer",
+          "x-enum-reference": {
+            "$ref": "#/components/schemas/Components.ComponentPrivacySetting"
+          }
+        },
+        "disabled": {
+          "description": "If true, this component is disabled.",
+          "type": "boolean"
+        }
+      }
+    },
     "DestinyItemComponentSetOfint32": {
       "type": "object",
       "properties": {
         "instances": {
           "x-destiny-component-type-dependency": "ItemInstances",
           "$ref": "#/definitions/DictionaryComponentResponseOfint32AndDestinyItemInstanceComponent"
-        },
-        "perks": {
-          "x-destiny-component-type-dependency": "ItemPerks",
-          "$ref": "#/definitions/DictionaryComponentResponseOfint32AndDestinyItemPerksComponent"
         },
         "renderData": {
           "x-destiny-component-type-dependency": "ItemRenderData",
@@ -35633,6 +36030,10 @@
         "objectives": {
           "x-destiny-component-type-dependency": "ItemObjectives",
           "$ref": "#/definitions/DictionaryComponentResponseOfint32AndDestinyItemObjectivesComponent"
+        },
+        "perks": {
+          "x-destiny-component-type-dependency": "ItemPerks",
+          "$ref": "#/definitions/DictionaryComponentResponseOfint32AndDestinyItemPerksComponent"
         }
       }
     },
@@ -35644,29 +36045,6 @@
           "additionalProperties": {
             "x-destiny-component-type-dependency": "ItemInstances",
             "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemInstanceComponent"
-          }
-        },
-        "privacy": {
-          "format": "int32",
-          "type": "integer",
-          "x-enum-reference": {
-            "$ref": "#/components/schemas/Components.ComponentPrivacySetting"
-          }
-        },
-        "disabled": {
-          "description": "If true, this component is disabled.",
-          "type": "boolean"
-        }
-      }
-    },
-    "DictionaryComponentResponseOfint32AndDestinyItemPerksComponent": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "additionalProperties": {
-            "x-destiny-component-type-dependency": "ItemPerks",
-            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
           }
         },
         "privacy": {
@@ -36179,10 +36557,6 @@
           "x-destiny-component-type-dependency": "ItemInstances",
           "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemInstanceComponent"
         },
-        "perks": {
-          "x-destiny-component-type-dependency": "ItemPerks",
-          "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemPerksComponent"
-        },
         "renderData": {
           "x-destiny-component-type-dependency": "ItemRenderData",
           "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemRenderComponent"
@@ -36214,6 +36588,10 @@
         "objectives": {
           "x-destiny-component-type-dependency": "ItemObjectives",
           "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemObjectivesComponent"
+        },
+        "perks": {
+          "x-destiny-component-type-dependency": "ItemPerks",
+          "$ref": "#/definitions/DictionaryComponentResponseOfuint32AndDestinyItemPerksComponent"
         }
       }
     },
@@ -36225,29 +36603,6 @@
           "additionalProperties": {
             "x-destiny-component-type-dependency": "ItemInstances",
             "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemInstanceComponent"
-          }
-        },
-        "privacy": {
-          "format": "int32",
-          "type": "integer",
-          "x-enum-reference": {
-            "$ref": "#/components/schemas/Components.ComponentPrivacySetting"
-          }
-        },
-        "disabled": {
-          "description": "If true, this component is disabled.",
-          "type": "boolean"
-        }
-      }
-    },
-    "DictionaryComponentResponseOfuint32AndDestinyItemPerksComponent": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "additionalProperties": {
-            "x-destiny-component-type-dependency": "ItemPerks",
-            "$ref": "#/definitions/Destiny.Entities.Items.DestinyItemPerksComponent"
           }
         },
         "privacy": {
@@ -36434,6 +36789,7 @@
       "properties": {
         "itemId": {
           "format": "int64",
+          "description": "The instance ID of the item for this action request.",
           "type": "integer"
         },
         "characterId": {
@@ -36465,6 +36821,7 @@
         },
         "itemId": {
           "format": "int64",
+          "description": "The instance ID of the item for this action request.",
           "type": "integer"
         },
         "characterId": {
@@ -36493,6 +36850,7 @@
         },
         "itemId": {
           "format": "int64",
+          "description": "The instance ID of the item for this action request.",
           "type": "integer"
         },
         "characterId": {
@@ -36570,6 +36928,7 @@
         },
         "itemId": {
           "format": "int64",
+          "description": "The instance ID of the item for this action request.",
           "type": "integer"
         },
         "characterId": {
@@ -36703,6 +37062,36 @@
           "identifier": "Intrinsic"
         }
       ]
+    },
+    "Destiny.Requests.Actions.DestinyInsertPlugsFreeActionRequest": {
+      "type": "object",
+      "properties": {
+        "plug": {
+          "description": "The plugs being inserted.",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Destiny.Requests.Actions.DestinyInsertPlugsRequestEntry"
+            }
+          ]
+        },
+        "itemId": {
+          "format": "int64",
+          "description": "The instance ID of the item for this action request.",
+          "type": "integer"
+        },
+        "characterId": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "membershipType": {
+          "format": "int32",
+          "type": "integer",
+          "x-enum-reference": {
+            "$ref": "#/components/schemas/BungieMembershipType"
+          }
+        }
+      }
     },
     "Destiny.HistoricalStats.DestinyPostGameCarnageReportData": {
       "type": "object",
@@ -38144,7 +38533,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -38456,6 +38846,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         }
@@ -38558,7 +38952,8 @@
             "81",
             "82",
             "83",
-            "84"
+            "84",
+            "85"
           ],
           "type": "integer",
           "x-enum-values": [
@@ -38870,6 +39265,10 @@
             {
               "numericValue": "84",
               "identifier": "TrialsOfOsiris"
+            },
+            {
+              "numericValue": "85",
+              "identifier": "Dares"
             }
           ]
         }
@@ -40460,6 +40859,20 @@
           "type": "integer"
         },
         "currentRankProgressionHashes": {
+          "type": "array",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          }
+        },
+        "insertPlugFreeProtectedPlugItemHashes": {
+          "type": "array",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          }
+        },
+        "insertPlugFreeBlockedSocketTypeHashes": {
           "type": "array",
           "items": {
             "format": "uint32",
