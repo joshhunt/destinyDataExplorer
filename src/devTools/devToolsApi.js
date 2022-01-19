@@ -6,6 +6,7 @@ import { sendDefinitions } from "lib/workerSearch";
 import css from "./cssLog";
 
 import { startingSearchWorkerSuccess } from "../store/app";
+import "./convenienceTableFunctions";
 
 class ResultsArray extends Array {
   show() {
