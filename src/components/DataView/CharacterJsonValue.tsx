@@ -3,7 +3,7 @@ import { ServerResponse } from "bungie-api-ts/common";
 import { DestinyProfileResponse } from "bungie-api-ts/destiny2/interfaces";
 import JsonValueAnnotation from "./JsonValueAnnotation";
 import { useSelector } from "react-redux";
-import { ReduxStore } from "types";
+import { ReduxState } from "types";
 import { definitionFromStore, getDisplayName } from "lib/destinyTsUtils";
 
 interface CharacterJsonValueProps {
@@ -17,7 +17,7 @@ const CharacterJsonValue: React.FC<CharacterJsonValueProps> = ({
   children,
 }) => {
   const characterData = getCharacterData(value, data);
-  const { classDefinition } = useSelector((store: ReduxStore) => {
+  const { classDefinition } = useSelector((store: ReduxState) => {
     const classDefinition =
       characterData &&
       definitionFromStore(

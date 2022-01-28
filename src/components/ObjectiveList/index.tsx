@@ -2,7 +2,7 @@ import { DestinyObjectiveDefinition } from "bungie-api-ts/destiny2";
 import { notEmpty } from "lib/utils";
 import React from "react";
 import { useSelector } from "react-redux";
-import { ReduxStore } from "types";
+import { ReduxState } from "types";
 
 import s from "./styles.module.scss";
 
@@ -37,7 +37,7 @@ function isBooleanObjective(objectiveDef: DestinyObjectiveDefinition) {
 }
 
 const ObjectiveList: React.FC<ObjectiveListProps> = ({ objectiveHashes }) => {
-  const objectives = useSelector((state: ReduxStore) => {
+  const objectives = useSelector((state: ReduxState) => {
     return objectiveHashes
       .map(
         (hash) =>

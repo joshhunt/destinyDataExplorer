@@ -22,7 +22,7 @@ export interface BaseDestinyDefinition
   tierName?: string;
 }
 
-export interface ReduxStore {
+export interface ReduxState {
   definitions: {
     definitions: Partial<AllDestinyManifestComponents>;
   };

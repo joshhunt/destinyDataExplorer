@@ -7,6 +7,11 @@ function $RefreshSig$() {
   return () => {};
 }
 
+export function getShortTableName(name: string) {
+  const match = name.match(/^Destiny(\w+)Definition/);
+  return match && match[1];
+}
+
 export function getLower(obj: any, path: string, fallback = "") {
   const g = get(obj, path, fallback);
   return g.toLowerCase ? g.toLowerCase() : g;

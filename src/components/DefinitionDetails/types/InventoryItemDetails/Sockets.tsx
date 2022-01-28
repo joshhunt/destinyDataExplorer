@@ -5,7 +5,7 @@ import {
 } from "bungie-api-ts/destiny2";
 
 import s from "../styles.module.scss";
-import { ReduxStore } from "types";
+import { ReduxState } from "types";
 import { useSelector } from "react-redux";
 import Item from "components/Item";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
@@ -19,7 +19,7 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
   const pathForItem = usePathForDefinition();
 
   const definitions = useSelector(
-    (store: ReduxStore) => store.definitions.definitions
+    (store: ReduxState) => store.definitions.definitions
   );
   const { sockets } = definition;
 

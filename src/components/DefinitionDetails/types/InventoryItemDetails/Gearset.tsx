@@ -5,7 +5,7 @@ import { usePathForDefinition } from "lib/pathForDefinitionContext";
 import { notEmpty } from "lib/utils";
 import React from "react";
 import { useSelector } from "react-redux";
-import { ReduxStore } from "types";
+import { ReduxState } from "types";
 
 import s from "../styles.module.scss";
 
@@ -16,7 +16,7 @@ interface ItemGearsetProps {
 const ItemGearset: React.FC<ItemGearsetProps> = ({ definition }) => {
   const pathForItem = usePathForDefinition();
 
-  const items = useSelector((state: ReduxStore) =>
+  const items = useSelector((state: ReduxState) =>
     definition.gearset?.itemList
       .map(
         (itemHash) =>

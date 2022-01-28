@@ -4,7 +4,7 @@ import { notEmpty } from "lib/utils";
 import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { ReduxStore } from "types";
+import { ReduxState } from "types";
 import s from "./styles.module.scss";
 import { DefinitionEntry } from "./utils";
 
@@ -19,7 +19,7 @@ const DataViewsOverlay: React.FC<DataViewsOverlayProps> = ({
   linkedDefinitionUrl,
   requestPopOverlay,
 }) => {
-  const definitions = useSelector((store: ReduxStore) =>
+  const definitions = useSelector((store: ReduxState) =>
     items
       .map((item) => {
         const definition = definitionFromStore(store, item.type, item.hash);

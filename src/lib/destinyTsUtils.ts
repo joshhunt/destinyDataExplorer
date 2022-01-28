@@ -1,4 +1,4 @@
-import { BaseDestinyDefinition, ReduxStore } from "types";
+import { BaseDestinyDefinition, ReduxState } from "types";
 import { AllDestinyManifestComponents } from "bungie-api-ts/destiny2";
 import { useSelector } from "react-redux";
 import { CLASSES } from "./destinyEnums";
@@ -50,7 +50,7 @@ export function isTableName(
 }
 
 export function definitionFromStore(
-  store: ReduxStore,
+  store: ReduxState,
   tableName: string,
   hash: any
 ) {
@@ -64,11 +64,11 @@ export function definitionFromStore(
   }
 }
 
-type DefinitionsStore = ReduxStore["definitions"]["definitions"];
+type DefinitionsStore = ReduxState["definitions"]["definitions"];
 
 // TODO: type hash to number or string or something
 export function useDefinition(tableName: string, hash: any) {
-  return useSelector((store: ReduxStore) => {
+  return useSelector((store: ReduxState) => {
     return definitionFromStore(store, tableName, hash);
   });
 }
@@ -77,6 +77,6 @@ export function useDefinitionTable<TTableName extends keyof DefinitionsStore>(
   tableName: TTableName
 ): DefinitionsStore[TTableName] {
   return useSelector(
-    (store: ReduxStore) => store.definitions.definitions?.[tableName]
+    (store: ReduxState) => store.definitions.definitions?.[tableName]
   );
 }

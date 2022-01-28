@@ -54,6 +54,13 @@ export default function filterReducer(
 const raf = () =>
   new Promise((resolve) => window.requestAnimationFrame(() => resolve()));
 
+export function setSearchResults(results) {
+  return {
+    type: SET_SEARCH_RESULTS,
+    payload: results,
+  };
+}
+
 async function doSearch(dispatch, getState) {
   const state = getState();
 
@@ -66,10 +73,7 @@ async function doSearch(dispatch, getState) {
 
   const results = await search(searchPayload, state.definitions.definitions);
 
-  dispatch({
-    type: SET_SEARCH_RESULTS,
-    payload: results,
-  });
+  dispatch(setSearchResults(results));
 }
 
 // export const setFilterString = makePayloadAction(SET_FILTER_STRING);
