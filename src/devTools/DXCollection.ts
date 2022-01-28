@@ -31,7 +31,7 @@ abstract class IsIndexable {
 }
 
 type PredicateFn = (def: AnyDefinition, hash: string) => boolean;
-type MapFn<T> = (def: AnyDefinition, hash: string) => T;
+type MapFn<T = unknown> = (def: AnyDefinition, hash: string) => T;
 
 function makeSearchResults(def: AnyDefinition) {
   const hash = def.hash;
@@ -57,7 +57,7 @@ export class DXCollection extends IsIndexable {
     }
   }
 
-  show() {
+  show(): void {
     const results = this.map((v) => makeSearchResults(v));
     this.#reduxStore.dispatch(setSearchResults(results));
   }
@@ -67,10 +67,14 @@ export class DXCollection extends IsIndexable {
     return items.map(([hash, item]) => fn(item, hash));
   }
 
-  filter(predicate: PredicateFn): DXCollection {
-    const results = new DXCollection(this.#reduxStore);
+  forEach(fn: MapFn): void {
+    const items = Object.entries(this.asIndexable());
+    items.forEach(([hash, item]) => fn(item, hash));
+  }
 
+  filter(predicate: PredicateFn): DXCollection {
     window.$errors = [];
+    const results = new DXCollection(this.#reduxStore);
 
     for (const key in this.asIndexable()) {
       const item = this.get(key);
