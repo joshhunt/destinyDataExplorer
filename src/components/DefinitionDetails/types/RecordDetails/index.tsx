@@ -37,7 +37,7 @@ export default RecordDetails;
 export function displayRecordDetails(tableName: string, definition: any) {
   return (
     tableName === "DestinyRecordDefinition" &&
-    (definition.objectiveHashes.length > 0 ||
+    (definition.objectiveHashes?.length > 0 ||
       definition.intervalInfo?.intervalObjectives.length > 0)
   );
 }
