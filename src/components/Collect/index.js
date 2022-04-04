@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import copy from "lib/copyToClipboard";
+import { copyStr } from "lib/copyToClipboard";
 import sortIntoSections from "lib/sortIntoSections";
 import BungieImage from "components/BungieImage";
 import Icon from "components/Icon";
@@ -32,7 +32,7 @@ export default class CollectDrawer extends Component {
       jason = jason.replace(match, newline);
     });
 
-    copy(jason);
+    copyStr(jason);
   }
 
   render() {

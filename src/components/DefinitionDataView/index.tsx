@@ -15,6 +15,7 @@ import { notEmpty } from "lib/utils";
 import ComponentLoading from "components/ComponentLoading";
 import typeStyles from "styles/typography.module.scss";
 import { SelectBreak } from "components/DataView/JsonValueAnnotation";
+import CopyButton from "components/TabButtonList/CopyButton";
 
 const NewDataView = React.lazy(() => import("components/DataView"));
 
@@ -44,6 +45,8 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
   const description =
     typedDef.displayProperties?.description || typedDef.flavorText;
 
+  const copy = <CopyButton data={typedDef} />;
+
   return (
     <div>
       <h2 className={typeStyles.h1}>
@@ -65,6 +68,7 @@ const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
           [TabKind.RawJson, "Raw JSON"] as const,
           hasDetails && ([TabKind.Preview, "Details"] as const),
         ].filter(notEmpty)}
+        additionalTabContent={copy}
       />
 
       {activeTab === TabKind.Pretty && (
