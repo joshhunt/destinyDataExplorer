@@ -7,7 +7,7 @@ import JSONTree from "react-json-tree";
 import { makeTypeShort } from "lib/destinyUtils";
 import BungieImage from "components/BungieImage";
 import { bungieUrl } from "lib/destinyUtils";
-import copyToClipboard from "lib/copyToClipboard";
+import { copyObj } from "lib/copyToClipboard";
 
 import Vendor from "./detailViews/Vendor";
 import InventoryItem from "./detailViews/InventoryItem";
@@ -201,7 +201,7 @@ export default class DataView extends Component {
   };
 
   copyJSON = () => {
-    copyToClipboard(stringifyJSON(this.getDefinition()));
+    copyObj(this.getDefinition());
   };
 
   render() {

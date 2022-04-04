@@ -16,12 +16,14 @@ interface TabButtonListProps {
   options: (readonly [TabKind, React.ReactNode])[];
   activeTab: TabKind;
   onTabChange: (arg: TabKind) => void;
+  additionalTabContent?: JSX.Element;
 }
 
 const TabButtonList: React.FC<TabButtonListProps> = ({
   options,
   activeTab,
   onTabChange: onButtonClick,
+  additionalTabContent,
 }) => {
   return (
     <div className={s.root}>
@@ -34,6 +36,7 @@ const TabButtonList: React.FC<TabButtonListProps> = ({
           {tabLabel}
         </button>
       ))}
+      {additionalTabContent}
     </div>
   );
 };

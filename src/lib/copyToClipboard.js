@@ -1,9 +1,6 @@
-export default function copy(str) {
-  function listener(e) {
-    e.clipboardData.setData("text/plain", str);
-    e.preventDefault();
-  }
-  document.addEventListener("copy", listener);
-  document.execCommand("copy");
-  document.removeEventListener("copy", listener);
+export function copyStr(str) {
+  navigator.clipboard.writeText(str);
+}
+export function copyObj(str) {
+  copyStr(JSON.stringify(str, null, 2));
 }
