@@ -75,3 +75,16 @@ $substituteColour: #494a4c;
   opacity: 0.75;
   font-size: 0.85em;
 }
+
+.extraIndicator {
+  display: inline-block;
+  height: 0.55em;
+  width: 0.55em;
+  border-radius: 100%;
+  background-color: #f39c12;
+}
+
+.name span {
+  vertical-align: middle;
+  line-height: 1;
+}

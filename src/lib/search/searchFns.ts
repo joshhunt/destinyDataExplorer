@@ -221,6 +221,8 @@ const SEARCH_FNS = [
       isFn("classitem", itemCategory(enums.CLASS_ITEMS)),
 
       isFn("medal", (obj) => obj.def && obj.def.medalTierIdentifier),
+      isFn("classified", (obj) => obj.def.redacted),
+      isFn("extra", (obj) => obj.def.$$extra),
 
       isFn(
         "perk",

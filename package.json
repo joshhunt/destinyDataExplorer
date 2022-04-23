@@ -51,6 +51,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
+    "rot": "^0.1.0",
     "sass": "^1.30.0",
     "sql.js": "github:DestinyItemManager/sql.js",
     "ts-node": "^9.1.1",

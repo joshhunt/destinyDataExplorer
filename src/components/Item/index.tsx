@@ -75,7 +75,10 @@ const Item: React.FC<ItemProps> = ({
       </div>
 
       <div className={s.main}>
-        <div className={s.name}>{name}</div>
+        <div className={s.name}>
+          {(definition as any).$$extra && <span className={s.extraIndicator} />}{" "}
+          <span>{name}</span>
+        </div>
         <div className={s.itemType}>
           {itemTypeDisplayName(definition, type)}
         </div>

@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 
 import { getSchemaFromDefinitionName } from "lib/apiSchemaUtils";
 import { DefinitionEntry } from "components/DataViewsOverlay";
@@ -26,11 +26,16 @@ interface DefinitionDataViewProps {
 }
 
 const DefinitionDataView: React.FC<DefinitionDataViewProps> = ({
-  definition,
+  definition: baseDefinition,
   tableName,
   linkedDefinitionUrl,
 }) => {
   const [activeTab, setActiveTab] = useState(TabKind.Pretty);
+  const definition = useMemo(() => {
+    const def = { ...baseDefinition };
+    delete def.$$extra;
+    return def;
+  }, [baseDefinition]);
   const typedDef = definition as BaseDestinyDefinition;
   const hasDetails = displayDefinitionDetails(tableName, definition);
 

@@ -27,7 +27,7 @@ export const getName = (item: any): React.ReactNode => {
 };
 
 export const bungieUrl = (path: string | undefined) => {
-  return path && path.includes && path.includes("//bungie.net/")
+  return path && path.includes && path.startsWith("http")
     ? path
     : `https://bungie.net${path}`;
 };

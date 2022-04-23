@@ -1,6 +1,8 @@
 import css from "./cssLog";
+import rot from "rot";
 
 import { getShortTableName } from "lib/utils";
+import { mergeBulkDefinitions } from "store/definitions";
 import { DXCollection } from "./DXCollection";
 
 function makeGlobalConstantName(def) {
@@ -13,8 +15,51 @@ function makeGlobalConstantName(def) {
 
 const prevKeeper = new WeakMap();
 
+const URL_BASE = "klzapuf-leayh-klmpupapvuz";
+
 export function connectToWindow(store) {
   window.__store = store;
+
+  window.$loadRemoteDefinitions = async (pw, ...tables) => {
+    const urlBase = `https://${rot(
+      URL_BASE,
+      pw
+    )}.s3.ap-southeast-2.amazonaws.com/`;
+
+    const promises = tables.map(async (table) => {
+      const url = `${urlBase}${table}.json`;
+
+      const resp = await fetch(url);
+      const data = await resp.json();
+
+      for (const hash in data) {
+        const def = data[hash];
+        def.$$extra = true;
+        if (def?.displayProperties?.icon) {
+          def.displayProperties.icon = urlBase + def.displayProperties.icon;
+        }
+
+        if (def?.displayProperties?.iconSequences) {
+          for (const sequence of def.displayProperties.iconSequences) {
+            if (sequence.frames) {
+              sequence.frames = sequence.frames.map((v) => urlBase + v);
+            }
+          }
+        }
+      }
+
+      store.dispatch(
+        mergeBulkDefinitions({
+          [`Destiny${table}Definition`]: data,
+        })
+      );
+
+      console.log(`Loaded ${Object.keys(data).length} ${table}s`);
+    });
+
+    await Promise.all(promises);
+    console.log("Loaded all extra tables");
+  };
 
   store.subscribe(
     catchErrors(() => {
@@ -26,6 +71,10 @@ export function connectToWindow(store) {
       if (!definitions || prevKeeper.has(definitions)) {
         return;
       }
+
+      window.$mergeDefs = (newDefs) => {
+        store.dispatch(mergeBulkDefinitions(newDefs));
+      };
 
       for (const tableName in definitions) {
         const defs = definitions[tableName];
