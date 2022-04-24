@@ -40,7 +40,6 @@ const ParameterArrayField: React.FC<ParameterArrayFieldProps> = ({
   }));
 
   const handleChange = (value: iOption[] | null) => {
-    console.log(value);
     onChange(parameter.name, (value ?? []).map((v) => v.value).join(","));
   };
 

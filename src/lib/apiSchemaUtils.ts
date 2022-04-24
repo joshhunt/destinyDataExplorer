@@ -121,8 +121,6 @@ export function getReferencedSchema(ref: string) {
     | OpenAPIV3.NonArraySchemaObject
     | undefined = apiSpec.components?.schemas?.[getSchemaNameFromRef(ref)];
 
-  // console.log({ ref, section, name });
-
   if (!found && section === "responses") {
     found = apiSpec.components?.responses?.[name];
   } else if (!found && section === "schemas") {

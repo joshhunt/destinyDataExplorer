@@ -100,7 +100,6 @@ const ApiRequestView: React.FC<ApiRequestViewProps> = () => {
         .then((data) => {
           setLoading(false);
           setApiResponse(data);
-          console.log({ collapseEditor });
           collapseEditor && setCollapsed(Collapsed.Collapsed);
         });
     },

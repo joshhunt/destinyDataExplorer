@@ -60,8 +60,6 @@ const Sockets: React.FC<SocketsProps> = ({ definition }) => {
 
                 if (!socketEntry) return null;
 
-                console.log({ socketEntry });
-
                 const randomPlugSet =
                   socketEntry.randomizedPlugSetHash &&
                   definitions.DestinyPlugSetDefinition?.[

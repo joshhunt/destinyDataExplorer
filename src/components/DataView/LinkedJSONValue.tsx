@@ -25,7 +25,6 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
   const linkedDefinitionName = definitionNameFromRef(ref);
   const shortDefinitionName = makeTypeShort(linkedDefinitionName);
   const definition = useDefinition(linkedDefinitionName, value);
-  console.log({ value, ref, linkedDefinitionName });
 
   if (!definition) {
     return <>{children}</>;
