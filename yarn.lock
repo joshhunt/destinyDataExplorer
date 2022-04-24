@@ -1845,7 +1845,7 @@
 
 "@destiny-item-manager/zip.js@github:DestinyItemManager/zip.js":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/DestinyItemManager/zip.js.git#6931dae24f729399100ee7a6fe5dce43007581f0"
+  resolved "https://codeload.github.com/DestinyItemManager/zip.js/tar.gz/6931dae24f729399100ee7a6fe5dce43007581f0"
 
 "@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"
@@ -10268,9 +10268,9 @@ react-base16-styling@^0.8.0:
     csstype "^3.0.2"
     lodash.curry "^4.1.1"
 
-react-data-grid@^7.0.0-canary.33:
+react-data-grid@7.0.0-canary.33:
   version "7.0.0-canary.33"
-  resolved "https://registry.npmjs.org/react-data-grid/-/react-data-grid-7.0.0-canary.33.tgz"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-7.0.0-canary.33.tgz#7f1ebe89c89418bc661015d503a58dbdf3342b7c"
   integrity sha512-S6bX+DoEQ8M+rhX8NEs4WyefCxEB/7Vp5KVrbSeQvkzf91pZaQ5G4+OmLJf2n6i1+faWoL9/l40KozD80iZkXg==
   dependencies:
     clsx "^1.1.1"
@@ -11515,7 +11515,7 @@ sprintf-js@~1.0.2:
 
 "sql.js@github:DestinyItemManager/sql.js":
   version "0.4.0"
-  resolved "git+ssh://git@github.com/DestinyItemManager/sql.js.git#465c6828f2af3cc70cd2f732bb54720bfb2d90ac"
+  resolved "https://codeload.github.com/DestinyItemManager/sql.js/tar.gz/465c6828f2af3cc70cd2f732bb54720bfb2d90ac"
 
 sshpk@^1.7.0:
   version "1.16.1"
