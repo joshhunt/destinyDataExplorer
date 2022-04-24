@@ -60,6 +60,37 @@ const extensions: Partial<OpenAPIV3.Document> = {
         },
         "x-mobile-manifest-name": "SandboxPattern",
       },
+
+      "Destiny.Definitions.Traits.DestinyTraitCategoryDefinition": {
+        type: "object",
+        properties: {
+          traitHashes: {
+            type: "array",
+            "x-mapped-definition": {
+              $ref: "#/components/schemas/Destiny.Definitions.DestinyTraitDefinition",
+            },
+            items: {
+              type: "integer",
+              format: "uint32",
+            },
+          },
+        },
+      },
+
+      "Destiny.Definitions.DestinyInventoryItemDefinition": {
+        properties: {
+          traitHashes: {
+            type: "array",
+            "x-mapped-definition": {
+              $ref: "#/components/schemas/Destiny.Definitions.DestinyTraitDefinition",
+            },
+            items: {
+              type: "integer",
+              format: "uint32",
+            },
+          },
+        },
+      },
     },
   },
 };

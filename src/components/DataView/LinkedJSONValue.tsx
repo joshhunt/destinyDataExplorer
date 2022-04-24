@@ -25,6 +25,7 @@ const LinkedJSONValue: React.FC<LinkedJSONValueProps> = ({
   const linkedDefinitionName = definitionNameFromRef(ref);
   const shortDefinitionName = makeTypeShort(linkedDefinitionName);
   const definition = useDefinition(linkedDefinitionName, value);
+  console.log({ value, ref, linkedDefinitionName });
 
   if (!definition) {
     return <>{children}</>;
@@ -56,24 +57,25 @@ function swap16(val: number) {
   return ((val & 0xff) << 8) | ((val >> 8) & 0xff);
 }
 
-const DefinitionDisplayAnnotation: React.FC<DefinitionDisplayAnnotationProps> =
-  ({ definition, definitionName }) => {
-    const displayName = getDisplayName(definition);
-    const parts: string[] = [definitionName];
+const DefinitionDisplayAnnotation: React.FC<
+  DefinitionDisplayAnnotationProps
+> = ({ definition, definitionName }) => {
+  const displayName = getDisplayName(definition);
+  const parts: string[] = [definitionName];
 
-    if (displayName) parts.push(`"${displayName}"`);
-    if (isAdvanced()) {
-      const hexIndex = swap16(definition?.index ?? 0)
-        .toString(16)
-        .toUpperCase();
-      parts.push(`index: ${definition.index} (0x${hexIndex})`);
-    }
+  if (displayName) parts.push(`"${displayName}"`);
+  if (isAdvanced()) {
+    const hexIndex = swap16(definition?.index ?? 0)
+      .toString(16)
+      .toUpperCase();
+    parts.push(`index: ${definition.index} (0x${hexIndex})`);
+  }
 
-    return (
-      <>
-        {"<"}
-        {parts.join(" ")}
-        {">"}
-      </>
-    );
-  };
+  return (
+    <>
+      {"<"}
+      {parts.join(" ")}
+      {">"}
+    </>
+  );
+};
