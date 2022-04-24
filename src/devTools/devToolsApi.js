@@ -154,5 +154,7 @@ You can call .show() on the results to display them in the Data Explorer UI:
       CODE_CSS
     )}
 
+Lodash is available globally as ${css("_", CODE_CSS)}
+
 Enjoy :)
 `);
