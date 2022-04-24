@@ -4,6 +4,7 @@ import rot from "rot";
 import { getShortTableName } from "lib/utils";
 import { mergeBulkDefinitions } from "store/definitions";
 import { DXCollection } from "./DXCollection";
+import lodash from "lodash";
 
 function makeGlobalConstantName(def) {
   const safeName =
@@ -19,6 +20,7 @@ const URL_BASE = "klzapuf-leayh-klmpupapvuz";
 
 export function connectToWindow(store) {
   window.__store = store;
+  window._ = lodash;
 
   window.$loadRemoteDefinitions = async (pw, ...tables) => {
     const urlBase = `https://${rot(

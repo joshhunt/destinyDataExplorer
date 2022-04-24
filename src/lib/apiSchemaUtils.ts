@@ -1,10 +1,7 @@
 import { OpenAPIV3 } from "openapi-types";
 
-// import _apispec from "./apispecv3.json";
 import { notEmpty } from "./utils";
 import apiSpec from "./apiSpecExtensions";
-
-// const apiSpec = (_apispec as unknown) as OpenAPIV3.Document;
 
 declare module "openapi-types/dist/index" {
   namespace OpenAPIV3 {
