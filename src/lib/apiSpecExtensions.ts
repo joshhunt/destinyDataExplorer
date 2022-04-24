@@ -48,7 +48,16 @@ const extensions: Partial<OpenAPIV3.Document> = {
 
       "Destiny.Definitions.DestinySandboxPatternDefinition": {
         type: "object",
-        properties: {},
+        properties: {
+          weaponType: {
+            type: "integer",
+            format: "int32",
+            "x-enum-reference": {
+              $ref: "#/components/schemas/Destiny.DestinyItemSubType",
+            },
+            "x-enum-is-bitmask": false,
+          },
+        },
         "x-mobile-manifest-name": "SandboxPattern",
       },
     },
