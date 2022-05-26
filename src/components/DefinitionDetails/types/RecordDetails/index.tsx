@@ -9,7 +9,7 @@ interface RecordDetailsProps {
 const RecordDetails: React.FC<RecordDetailsProps> = ({ definition }) => {
   const normalObjectives = definition.objectiveHashes ?? [];
   const intervalObjectives =
-    definition.intervalInfo.intervalObjectives.map(
+    definition.intervalInfo?.intervalObjectives.map(
       (v) => v.intervalObjectiveHash
     ) ?? [];
 

@@ -13,7 +13,7 @@
       "name": "BSD License 2.0",
       "url": "https://github.com/Bungie-net/api/blob/master/LICENSE"
     },
-    "version": "2.14.1"
+    "version": "2.15.0"
   },
   "servers": [
     {
@@ -3070,6 +3070,60 @@
             ]
           }
         ]
+      }
+    },
+    "/Tokens/Rewards/GetRewardsForUser/{membershipId}/": {
+      "summary": "Tokens.GetBungieRewardsForUser",
+      "description": "Returns the bungie rewards for the targeted user.",
+      "get": {
+        "tags": [
+          "Tokens"
+        ],
+        "description": "Returns the bungie rewards for the targeted user.",
+        "operationId": "Tokens.GetBungieRewardsForUser",
+        "parameters": [
+          {
+            "name": "membershipId",
+            "in": "path",
+            "description": "bungie.net user membershipId for requested user rewards. If not self, elevated permissions are required.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DictionaryOfstringAndBungieRewardDisplay"
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "oauth2": [
+              "ReadAndApplyTokens"
+            ]
+          }
+        ]
+      }
+    },
+    "/Tokens/Rewards/BungieRewards/": {
+      "summary": "Tokens.GetBungieRewardsList",
+      "description": "Returns a list of the current bungie rewards",
+      "get": {
+        "tags": [
+          "Tokens"
+        ],
+        "description": "Returns a list of the current bungie rewards",
+        "operationId": "Tokens.GetBungieRewardsList",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DictionaryOfstringAndBungieRewardDisplay"
+          }
+        },
+        "deprecated": false
       }
     },
     "/Destiny2/Manifest/": {
@@ -10914,7 +10968,10 @@
           },
           "weaponPatternHash": {
             "type": "integer",
-            "format": "uint32"
+            "format": "uint32",
+            "x-mapped-definition": {
+              "$ref": "#/components/schemas/Destiny.Definitions.DestinySandboxPatternDefinition"
+            }
           },
           "defaultDyes": {
             "type": "array",
@@ -12886,7 +12943,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "If the activity had an activity mode directly defined on it, this will be the enum value of that mode.",
@@ -13213,6 +13273,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -13414,7 +13486,7 @@
           },
           "valueStyle": {
             "type": "integer",
-            "description": "The UI style applied to the objective. It's an enum, take a look at DestinyUnlockValueUIStyle for details of the possible styles. Use this info as you wish to customize your UI.",
+            "description": "The UI style applied to the objective. It's an enum, take a look at DestinyUnlockValueUIStyle for details of the possible styles. Use this info as you wish to customize your UI.\r\nDEPRECATED: This is no longer populated by Destiny 2 game content. Please use inProgressValueStyle and completedValueStyle instead.",
             "format": "int32",
             "x-enum-reference": {
               "$ref": "#/components/schemas/Destiny.DestinyUnlockValueUIStyle"
@@ -14555,7 +14627,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "If the playlist entry had an activity mode directly defined on it, this will be the enum value of that mode.",
@@ -14882,6 +14957,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -14994,7 +15081,10 @@
           "84",
           "85",
           "86",
-          "87"
+          "87",
+          "88",
+          "89",
+          "90"
         ],
         "type": "integer",
         "description": "For historical reasons, this list will have both D1 and D2-relevant Activity Modes in it. Please don't take this to mean that some D1-only feature is coming back!",
@@ -15320,6 +15410,18 @@
           {
             "numericValue": "87",
             "identifier": "LostSector"
+          },
+          {
+            "numericValue": "88",
+            "identifier": "Rift"
+          },
+          {
+            "numericValue": "89",
+            "identifier": "ZoneControl"
+          },
+          {
+            "numericValue": "90",
+            "identifier": "IronBannerRift"
           }
         ],
         "x-enum-is-bitmask": false
@@ -16146,6 +16248,89 @@
         },
         "description": "These definitions represent faction vendors at different points in the game.\r\nA single faction may contain multiple vendors, or the same vendor available at two different locations."
       },
+      "Destiny.Definitions.DestinySandboxPatternDefinition": {
+        "type": "object",
+        "properties": {
+          "patternHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "patternGlobalTagIdHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "weaponContentGroupHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "weaponTranslationGroupHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "weaponTypeHash": {
+            "type": "integer",
+            "format": "uint32",
+            "nullable": true
+          },
+          "weaponType": {
+            "type": "integer",
+            "format": "int32",
+            "x-enum-reference": {
+              "$ref": "#/components/schemas/Destiny.DestinyItemSubType"
+            },
+            "x-enum-is-bitmask": false
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Destiny.Definitions.DestinyArrangementRegionFilterDefinition"
+            }
+          },
+          "hash": {
+            "type": "integer",
+            "description": "The unique identifier for this entity. Guaranteed to be unique for the type of entity, but not globally.\r\nWhen entities refer to each other in Destiny content, it is this hash that they are referring to.",
+            "format": "uint32"
+          },
+          "index": {
+            "type": "integer",
+            "description": "The index of the entity as it was found in the investment tables.",
+            "format": "int32"
+          },
+          "redacted": {
+            "type": "boolean",
+            "description": "If this is true, then there is an entity with this identifier/type combination, but BNet is not yet allowed to show it. Sorry!"
+          }
+        },
+        "x-mobile-manifest-name": "SandboxPatterns"
+      },
+      "Destiny.Definitions.DestinyArrangementRegionFilterDefinition": {
+        "type": "object",
+        "properties": {
+          "artArrangementRegionHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "artArrangementRegionIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "arrangementIndexByStatValue": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-dictionary-key": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
       "Destiny.Definitions.DestinyItemPreviewBlockDefinition": {
         "type": "object",
         "properties": {
@@ -16886,6 +17071,10 @@
               "$ref": "#/components/schemas/Destiny.Definitions.Traits.DestinyTraitCategoryDefinition"
             }
           },
+          "displayHint": {
+            "type": "string",
+            "description": "An identifier for how this trait can be displayed. For example: a 'keyword' hint to show an explanation for certain related terms."
+          },
           "hash": {
             "type": "integer",
             "description": "The unique identifier for this entity. Guaranteed to be unique for the type of entity, but not globally.\r\nWhen entities refer to each other in Destiny content, it is this hash that they are referring to.",
@@ -16916,7 +17105,7 @@
               "format": "uint32"
             },
             "x-mapped-definition": {
-              "$ref": "#/components/schemas/Destiny.Definitions.Traits.DestinyTraitCategoryDefinition"
+              "$ref": "#/components/schemas/Destiny.Definitions.Traits.DestinyTraitDefinition"
             }
           },
           "traitIds": {
@@ -17537,6 +17726,10 @@
           },
           "forTitleGilding": {
             "type": "boolean"
+          },
+          "shouldShowLargeIcons": {
+            "type": "boolean",
+            "description": "A hint to show a large icon for a reward"
           },
           "titleInfo": {
             "$ref": "#/components/schemas/Destiny.Definitions.Records.DestinyRecordTitleBlock"
@@ -25598,6 +25791,107 @@
           }
         }
       },
+      "Tokens.BungieRewardDisplay": {
+        "type": "object",
+        "properties": {
+          "UserRewardAvailabilityModel": {
+            "$ref": "#/components/schemas/Tokens.UserRewardAvailabilityModel"
+          },
+          "ObjectiveDisplayProperties": {
+            "$ref": "#/components/schemas/Tokens.RewardDisplayProperties"
+          },
+          "RewardDisplayProperties": {
+            "$ref": "#/components/schemas/Tokens.RewardDisplayProperties"
+          }
+        }
+      },
+      "Tokens.UserRewardAvailabilityModel": {
+        "type": "object",
+        "properties": {
+          "AvailabilityModel": {
+            "$ref": "#/components/schemas/Tokens.RewardAvailabilityModel"
+          },
+          "IsAvailableForUser": {
+            "type": "boolean"
+          },
+          "IsUnlockedForUser": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Tokens.RewardAvailabilityModel": {
+        "type": "object",
+        "properties": {
+          "HasExistingCode": {
+            "type": "boolean"
+          },
+          "RecordDefinitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Destiny.Definitions.Records.DestinyRecordDefinition"
+            }
+          },
+          "CollectibleDefinitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tokens.CollectibleDefinitions"
+            }
+          },
+          "IsOffer": {
+            "type": "boolean"
+          },
+          "HasOffer": {
+            "type": "boolean"
+          },
+          "OfferApplied": {
+            "type": "boolean"
+          },
+          "DecryptedToken": {
+            "type": "string"
+          },
+          "IsLoyaltyReward": {
+            "type": "boolean"
+          },
+          "ShopifyEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "GameEarnByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "RedemptionEndDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Tokens.CollectibleDefinitions": {
+        "type": "object",
+        "properties": {
+          "CollectibleDefinition": {
+            "$ref": "#/components/schemas/Destiny.Definitions.Collectibles.DestinyCollectibleDefinition"
+          },
+          "DestinyInventoryItemDefinition": {
+            "$ref": "#/components/schemas/Destiny.Definitions.DestinyInventoryItemDefinition"
+          }
+        }
+      },
+      "Tokens.RewardDisplayProperties": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "ImagePath": {
+            "type": "string"
+          }
+        }
+      },
       "Destiny.Config.DestinyManifest": {
         "type": "object",
         "properties": {
@@ -26178,7 +26472,7 @@
           },
           "progress": {
             "type": "integer",
-            "description": "If progress has been made, and the progress can be measured numerically, this will be the value of that progress. You can compare it to the DestinyObjectiveDefinition.completionValue property for current vs. upper bounds, and use DestinyObjectiveDefinition.valueStyle to determine how this should be rendered. Note that progress, in Destiny 2, need not be a literal numeric progression. It could be one of a number of possible values, even a Timestamp. Always examine DestinyObjectiveDefinition.valueStyle before rendering progress.",
+            "description": "If progress has been made, and the progress can be measured numerically, this will be the value of that progress. You can compare it to the DestinyObjectiveDefinition.completionValue property for current vs. upper bounds, and use DestinyObjectiveDefinition.inProgressValueStyle or completedValueStyle to determine how this should be rendered. Note that progress, in Destiny 2, need not be a literal numeric progression. It could be one of a number of possible values, even a Timestamp. Always examine DestinyObjectiveDefinition.inProgressValueStyle or completedValueStyle before rendering progress.",
             "format": "int32",
             "nullable": true
           },
@@ -29251,7 +29545,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "The enumeration equivalent of the most specific Activity Mode under which this activity is played.",
@@ -29578,6 +29875,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -29713,7 +30022,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "The enumeration equivalent of the most specific Activity Mode under which this activity is played.",
@@ -30040,6 +30352,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -31148,7 +31472,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "And the current activity's most specific mode type, if it can be found.",
@@ -31475,6 +31802,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -34386,7 +34725,8 @@
           "16384",
           "32768",
           "65536",
-          "131072"
+          "131072",
+          "262144"
         ],
         "type": "integer",
         "description": "The possible states of Destiny Profile Records. IMPORTANT: Any given item can theoretically have many of these states simultaneously: as a result, this was altered to be a flags enumeration/bitmask for v3.2.0.",
@@ -34486,6 +34826,11 @@
             "numericValue": "131072",
             "identifier": "Free",
             "description": "This indicates that the sale item is free."
+          },
+          {
+            "numericValue": "262144",
+            "identifier": "Locked",
+            "description": "This indicates that the sale item is locked."
           }
         ],
         "x-enum-is-bitmask": true
@@ -37422,7 +37767,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "The enumeration equivalent of the most specific Activity Mode under which this activity is played.",
@@ -37749,6 +38097,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -37857,7 +38217,10 @@
               "84",
               "85",
               "86",
-              "87"
+              "87",
+              "88",
+              "89",
+              "90"
             ],
             "type": "integer",
             "description": "The enumeration equivalent of the most specific Activity Mode under which this activity is played.",
@@ -38184,6 +38547,18 @@
               {
                 "numericValue": "87",
                 "identifier": "LostSector"
+              },
+              {
+                "numericValue": "88",
+                "identifier": "Rift"
+              },
+              {
+                "numericValue": "89",
+                "identifier": "ZoneControl"
+              },
+              {
+                "numericValue": "90",
+                "identifier": "IronBannerRift"
               }
             ],
             "x-enum-is-bitmask": false
@@ -41899,6 +42274,57 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/Tokens.PartnerOfferSkuHistoryResponse"
+                  }
+                },
+                "ErrorCode": {
+                  "type": "integer",
+                  "format": "int32",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  },
+                  "x-enum-is-bitmask": false
+                },
+                "ThrottleSeconds": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "x-dictionary-key": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DictionaryOfstringAndBungieRewardDisplay": {
+        "description": "Look at the Response property for more information about the nature of this response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/Tokens.BungieRewardDisplay"
+                  },
+                  "x-dictionary-key": {
+                    "type": "string"
                   }
                 },
                 "ErrorCode": {
