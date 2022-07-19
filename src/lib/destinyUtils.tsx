@@ -27,9 +27,19 @@ export const getName = (item: any): React.ReactNode => {
 };
 
 export const bungieUrl = (path: string | undefined) => {
-  return path && path.includes && path.startsWith("http")
-    ? path
-    : `https://bungie.net${path}`;
+  if (!path) {
+    return "https://www.bungie.net/img/misc/missing_icon_d2.png";
+  }
+
+  if (path.startsWith("http")) {
+    return path;
+  }
+
+  if (path.startsWith("/")) {
+    return `https://bungie.net${path}`;
+  }
+
+  return `https://bungie.net/${path}`;
 };
 
 function classFromString(str: string) {
