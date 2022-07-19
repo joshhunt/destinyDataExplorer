@@ -36,10 +36,10 @@ export const bungieUrl = (path: string | undefined) => {
   }
 
   if (path.startsWith("/")) {
-    return `https://bungie.net${path}`;
+    return `https://www.bungie.net${path}`;
   }
 
-  return `https://bungie.net/${path}`;
+  return `https://www.bungie.net/${path}`;
 };
 
 function classFromString(str: string) {
