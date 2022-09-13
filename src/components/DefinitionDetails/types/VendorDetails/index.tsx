@@ -14,12 +14,11 @@ const VendorDetails: React.FC<VendorDetailsProps> = ({ definition }) => {
   const [activeTab, setActiveTab] = useState(TabKind.VendorCategories);
 
   const displayCategoriesData = useMemo(() => {
-    const categories: VendorCategory[] = definition.displayCategories.map(
-      (displayCategory) => ({
+    const categories: VendorCategory[] =
+      definition.displayCategories?.map((displayCategory) => ({
         displayCategory,
         items: [],
-      })
-    );
+      })) ?? [];
 
     const negativeOneCategory: VendorCategory = {
       manualName: "-1 uncategorised items",
