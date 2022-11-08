@@ -13,7 +13,7 @@
       "name": "BSD License 2.0",
       "url": "https://github.com/Bungie-net/api/blob/master/LICENSE"
     },
-    "version": "2.15.0"
+    "version": "2.16.0"
   },
   "host": "www.bungie.net",
   "basePath": "/Platform",
@@ -1132,6 +1132,64 @@
               "properties": {
                 "Response": {
                   "type": "object"
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Content/Rss/NewsArticles/{pageToken}/": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "description": "Returns a JSON string response that is the RSS feed for news articles.",
+        "operationId": "Content.RssNewsArticles",
+        "parameters": [
+          {
+            "name": "pageToken",
+            "in": "path",
+            "description": "Zero-based pagination token for paging through result sets.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "$ref": "#/definitions/Content.NewsArticleRssResponse"
                 },
                 "ErrorCode": {
                   "format": "int32",
@@ -4367,6 +4425,63 @@
         }
       }
     },
+    "/Tokens/Partner/ForceDropsRepair/": {
+      "post": {
+        "tags": [
+          "Tokens"
+        ],
+        "description": "Twitch Drops self-repair function - scans twitch for drops not marked as fulfilled and resyncs them.",
+        "operationId": "Tokens.ForceDropsRepair",
+        "parameters": [],
+        "deprecated": false,
+        "security": [
+          {
+            "oauth2": [
+              "PartnerOfferGrant"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "type": "boolean"
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Tokens/Partner/ClaimOffer/": {
       "post": {
         "tags": [
@@ -4575,6 +4690,80 @@
         }
       }
     },
+    "/Tokens/Partner/History/{targetBnetMembershipId}/Application/{partnerApplicationId}/": {
+      "get": {
+        "tags": [
+          "Tokens"
+        ],
+        "description": "Returns the partner rewards history of the targeted user, both partner offers and Twitch drops.",
+        "operationId": "Tokens.GetPartnerRewardHistory",
+        "parameters": [
+          {
+            "name": "partnerApplicationId",
+            "in": "path",
+            "description": "The partner application identifier.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "targetBnetMembershipId",
+            "in": "path",
+            "description": "The bungie.net user to return reward history for.",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "deprecated": false,
+        "security": [
+          {
+            "oauth2": [
+              "PartnerOfferGrant"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "$ref": "#/definitions/Tokens.PartnerRewardHistoryResponse"
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Tokens/Rewards/GetRewardsForUser/{membershipId}/": {
       "get": {
         "tags": [
@@ -4590,6 +4779,83 @@
             "required": true,
             "type": "integer",
             "format": "int64"
+          }
+        ],
+        "deprecated": false,
+        "security": [
+          {
+            "oauth2": [
+              "ReadAndApplyTokens"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Look at the Response property for more information about the nature of this response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Response": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/Tokens.BungieRewardDisplay"
+                  }
+                },
+                "ErrorCode": {
+                  "format": "int32",
+                  "type": "integer",
+                  "x-enum-reference": {
+                    "$ref": "#/components/schemas/Exceptions.PlatformErrorCodes"
+                  }
+                },
+                "ThrottleSeconds": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "ErrorStatus": {
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "MessageData": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "DetailedErrorTrace": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Tokens/Rewards/GetRewardsForPlatformUser/{membershipId}/{membershipType}/": {
+      "get": {
+        "tags": [
+          "Tokens"
+        ],
+        "description": "Returns the bungie rewards for the targeted user when a platform membership Id and Type are used.",
+        "operationId": "Tokens.GetBungieRewardsForPlatformUser",
+        "parameters": [
+          {
+            "name": "membershipId",
+            "in": "path",
+            "description": "users platform membershipId for requested user rewards. If not self, elevated permissions are required.",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "membershipType",
+            "in": "path",
+            "description": "The target Destiny 2 membership type.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "deprecated": false,
@@ -9035,7 +9301,7 @@
         {
           "numericValue": "4096",
           "identifier": "PartnerOfferGrant",
-          "description": "Can user the partner offer api to claim rewards defined for a partner"
+          "description": "Can use the partner offer api to claim rewards defined for a partner"
         },
         {
           "numericValue": "8192",
@@ -9286,6 +9552,7 @@
         "3",
         "4",
         "5",
+        "6",
         "10",
         "254",
         "-1"
@@ -9315,6 +9582,10 @@
         {
           "numericValue": "5",
           "identifier": "TigerStadia"
+        },
+        {
+          "numericValue": "6",
+          "identifier": "TigerEgs"
         },
         {
           "numericValue": "10",
@@ -9570,6 +9841,9 @@
         "cachedBungieGlobalDisplayNameCode": {
           "format": "int16",
           "type": "integer"
+        },
+        "egsDisplayName": {
+          "type": "string"
         }
       }
     },
@@ -9662,7 +9936,8 @@
         "12",
         "14",
         "16",
-        "18"
+        "18",
+        "20"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -9717,6 +9992,10 @@
         {
           "numericValue": "18",
           "identifier": "TwitchId"
+        },
+        {
+          "numericValue": "20",
+          "identifier": "EgsId"
         }
       ]
     },
@@ -10513,6 +10792,50 @@
         "useTotalResults": {
           "description": "If useTotalResults is true, then totalResults represents an accurate count.\r\nIf False, it does not, and may be estimated/only the size of the current page.\r\nEither way, you should probably always only trust hasMore.\r\nThis is a long-held historical throwback to when we used to do paging with known total results. Those queries toasted our database, and we were left to hastily alter our endpoints and create backward- compatible shims, of which useTotalResults is one.",
           "type": "boolean"
+        }
+      }
+    },
+    "Content.NewsArticleRssResponse": {
+      "type": "object",
+      "properties": {
+        "NewsArticles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Content.NewsArticleRssItem"
+          }
+        },
+        "CurrentPaginationToken": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "NextPaginationToken": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "ResultCountThisPage": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "Content.NewsArticleRssItem": {
+      "type": "object",
+      "properties": {
+        "Title": {
+          "type": "string"
+        },
+        "Link": {
+          "type": "string"
+        },
+        "PubDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "UniqueIdentifier": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
         }
       }
     },
@@ -24079,6 +24402,12 @@
         "173",
         "174",
         "175",
+        "176",
+        "177",
+        "178",
+        "179",
+        "180",
+        "181",
         "200",
         "201",
         "202",
@@ -24222,6 +24551,7 @@
         "593",
         "594",
         "595",
+        "596",
         "601",
         "602",
         "603",
@@ -24628,6 +24958,8 @@
         "2504",
         "2505",
         "2506",
+        "2507",
+        "2508",
         "2600",
         "2601",
         "2700",
@@ -24750,7 +25082,17 @@
         "3907",
         "3908",
         "3910",
-        "3911"
+        "3911",
+        "4000",
+        "4001",
+        "4002",
+        "4003",
+        "4004",
+        "4005",
+        "4006",
+        "4007",
+        "4008",
+        "4009"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -25340,6 +25682,30 @@
           "identifier": "ContentLocaleEditPermissionDenied"
         },
         {
+          "numericValue": "176",
+          "identifier": "ContentStackUnknownError"
+        },
+        {
+          "numericValue": "177",
+          "identifier": "ContentStackNotFound"
+        },
+        {
+          "numericValue": "178",
+          "identifier": "ContentStackRateLimited"
+        },
+        {
+          "numericValue": "179",
+          "identifier": "ContentStackTimeout"
+        },
+        {
+          "numericValue": "180",
+          "identifier": "ContentStackServiceError"
+        },
+        {
+          "numericValue": "181",
+          "identifier": "ContentStackDeserializationFailure"
+        },
+        {
           "numericValue": "200",
           "identifier": "UserNonUniqueName"
         },
@@ -25910,6 +26276,10 @@
         {
           "numericValue": "595",
           "identifier": "ForumRequiresDestiny2Progress"
+        },
+        {
+          "numericValue": "596",
+          "identifier": "ForumRequiresDestiny2EntitlementPurchase"
         },
         {
           "numericValue": "601",
@@ -27537,6 +27907,14 @@
           "identifier": "TwitchNoPlatformChosen"
         },
         {
+          "numericValue": "2507",
+          "identifier": "TwitchDropHistoryPermissionFailure"
+        },
+        {
+          "numericValue": "2508",
+          "identifier": "TwitchDropsRepairPartialFailure"
+        },
+        {
           "numericValue": "2600",
           "identifier": "TrendingCategoryNotFound"
         },
@@ -28027,6 +28405,46 @@
         {
           "numericValue": "3911",
           "identifier": "ErrorBungieBlockListFull"
+        },
+        {
+          "numericValue": "4000",
+          "identifier": "ErrorEgsUnknown"
+        },
+        {
+          "numericValue": "4001",
+          "identifier": "ErrorEgsBadRequest"
+        },
+        {
+          "numericValue": "4002",
+          "identifier": "ErrorEgsNotAuthorized"
+        },
+        {
+          "numericValue": "4003",
+          "identifier": "ErrorEgsForbidden"
+        },
+        {
+          "numericValue": "4004",
+          "identifier": "ErrorEgsAccountNotFound"
+        },
+        {
+          "numericValue": "4005",
+          "identifier": "ErrorEgsWebException"
+        },
+        {
+          "numericValue": "4006",
+          "identifier": "ErrorEgsUnavailable"
+        },
+        {
+          "numericValue": "4007",
+          "identifier": "ErrorEgsJwksMissing"
+        },
+        {
+          "numericValue": "4008",
+          "identifier": "ErrorEgsJwtMalformedHeader"
+        },
+        {
+          "numericValue": "4009",
+          "identifier": "ErrorEgsJwtMalformedPayload"
         }
       ]
     },
@@ -28328,6 +28746,7 @@
             "3",
             "4",
             "5",
+            "6",
             "10",
             "254",
             "-1"
@@ -28357,6 +28776,10 @@
             {
               "numericValue": "5",
               "identifier": "TigerStadia"
+            },
+            {
+              "numericValue": "6",
+              "identifier": "TigerEgs"
             },
             {
               "numericValue": "10",
@@ -28391,6 +28814,84 @@
           "type": "string"
         }
       }
+    },
+    "Tokens.PartnerRewardHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "PartnerOffers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tokens.PartnerOfferSkuHistoryResponse"
+          }
+        },
+        "TwitchDrops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tokens.TwitchDropHistoryResponse"
+          }
+        }
+      }
+    },
+    "Tokens.TwitchDropHistoryResponse": {
+      "type": "object",
+      "properties": {
+        "Title": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "CreatedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ClaimState": {
+          "format": "byte",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ],
+          "type": "integer",
+          "x-enum-values": [
+            {
+              "numericValue": "0",
+              "identifier": "Claimed"
+            },
+            {
+              "numericValue": "1",
+              "identifier": "Applied"
+            },
+            {
+              "numericValue": "2",
+              "identifier": "Fulfilled"
+            }
+          ]
+        }
+      }
+    },
+    "Streaming.DropStateEnum": {
+      "format": "byte",
+      "enum": [
+        "0",
+        "1",
+        "2"
+      ],
+      "type": "integer",
+      "x-enum-values": [
+        {
+          "numericValue": "0",
+          "identifier": "Claimed"
+        },
+        {
+          "numericValue": "1",
+          "identifier": "Applied"
+        },
+        {
+          "numericValue": "2",
+          "identifier": "Fulfilled"
+        }
+      ]
     },
     "Tokens.BungieRewardDisplay": {
       "type": "object",
@@ -29861,6 +30362,17 @@
             "$ref": "#/definitions/Destiny.Definitions.Seasons.DestinySeasonDefinition"
           }
         },
+        "eventCardHashesOwned": {
+          "description": "A list of hashes for event cards that a profile owns. Unlike most values in versionsOwned, these stay with the profile across all platforms.",
+          "type": "array",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.Seasons.DestinyEventCardDefinition"
+          }
+        },
         "currentSeasonHash": {
           "format": "uint32",
           "description": "If populated, this is a reference to the season that is currently active.",
@@ -29873,9 +30385,112 @@
           "format": "int32",
           "description": "If populated, this is the reward power cap for the current season.",
           "type": "integer"
+        },
+        "activeEventCardHash": {
+          "format": "uint32",
+          "description": "If populated, this is a reference to the event card that is currently active.",
+          "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.Seasons.DestinyEventCardDefinition"
+          }
         }
       },
       "x-destiny-component-type-dependency": "Profiles"
+    },
+    "Destiny.Definitions.Seasons.DestinyEventCardDefinition": {
+      "description": "Defines the properties of an 'Event Card' in Destiny 2, to coincide with a seasonal event for additional challenges, premium rewards, a new seal, and a special title. For example: Solstice of Heroes 2022.",
+      "type": "object",
+      "properties": {
+        "displayProperties": {
+          "$ref": "#/definitions/Destiny.Definitions.Common.DestinyDisplayPropertiesDefinition"
+        },
+        "linkRedirectPath": {
+          "type": "string"
+        },
+        "color": {
+          "$ref": "#/definitions/Destiny.Misc.DestinyColor"
+        },
+        "images": {
+          "$ref": "#/definitions/Destiny.Definitions.Seasons.DestinyEventCardImages"
+        },
+        "triumphsPresentationNodeHash": {
+          "format": "uint32",
+          "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.Presentation.DestinyPresentationNodeDefinition"
+          }
+        },
+        "sealPresentationNodeHash": {
+          "format": "uint32",
+          "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.Presentation.DestinyPresentationNodeDefinition"
+          }
+        },
+        "ticketCurrencyItemHash": {
+          "format": "uint32",
+          "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.DestinyInventoryItemDefinition"
+          }
+        },
+        "ticketVendorHash": {
+          "format": "uint32",
+          "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.DestinyVendorDefinition"
+          }
+        },
+        "ticketVendorCategoryHash": {
+          "format": "uint32",
+          "type": "integer"
+        },
+        "endTime": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "hash": {
+          "format": "uint32",
+          "description": "The unique identifier for this entity. Guaranteed to be unique for the type of entity, but not globally.\r\nWhen entities refer to each other in Destiny content, it is this hash that they are referring to.",
+          "type": "integer"
+        },
+        "index": {
+          "format": "int32",
+          "description": "The index of the entity as it was found in the investment tables.",
+          "type": "integer"
+        },
+        "redacted": {
+          "description": "If this is true, then there is an entity with this identifier/type combination, but BNet is not yet allowed to show it. Sorry!",
+          "type": "boolean"
+        }
+      },
+      "x-mobile-manifest-name": "EventCards"
+    },
+    "Destiny.Definitions.Seasons.DestinyEventCardImages": {
+      "type": "object",
+      "properties": {
+        "unownedCardSleeveImagePath": {
+          "type": "string"
+        },
+        "unownedCardSleeveWrapImagePath": {
+          "type": "string"
+        },
+        "cardIncompleteImagePath": {
+          "type": "string"
+        },
+        "cardCompleteImagePath": {
+          "type": "string"
+        },
+        "cardCompleteWrapImagePath": {
+          "type": "string"
+        },
+        "progressIconImagePath": {
+          "type": "string"
+        },
+        "themeBackgroundImagePath": {
+          "type": "string"
+        }
+      }
     },
     "SingleComponentResponseOfDestinyProfileComponent": {
       "type": "object",
@@ -41124,7 +41739,8 @@
         "2",
         "3",
         "4",
-        "5"
+        "5",
+        "6"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -41151,6 +41767,10 @@
         {
           "numericValue": "5",
           "identifier": "Stadia"
+        },
+        {
+          "numericValue": "6",
+          "identifier": "Egs"
         }
       ]
     },
@@ -41643,7 +42263,8 @@
         "0",
         "1",
         "2",
-        "3"
+        "3",
+        "4"
       ],
       "type": "integer",
       "x-enum-values": [
@@ -41662,6 +42283,10 @@
         {
           "numericValue": "3",
           "identifier": "Steam"
+        },
+        {
+          "numericValue": "4",
+          "identifier": "Egs"
         }
       ]
     },
@@ -41713,6 +42338,7 @@
             "3",
             "4",
             "5",
+            "6",
             "10",
             "254",
             "-1"
@@ -41742,6 +42368,10 @@
             {
               "numericValue": "5",
               "identifier": "TigerStadia"
+            },
+            {
+              "numericValue": "6",
+              "identifier": "TigerEgs"
             },
             {
               "numericValue": "10",
@@ -41800,6 +42430,9 @@
           "items": {
             "$ref": "#/definitions/Common.Models.CoreSetting"
           }
+        },
+        "defaultGroupTheme": {
+          "$ref": "#/definitions/Common.Models.CoreSetting"
         },
         "destinyMembershipTypes": {
           "type": "array",
@@ -42455,7 +43088,7 @@
         "ReadDestinyVendorsAndAdvisors": "Access vendor and advisor data specific to a user. OBSOLETE. This scope is only used on the Destiny 1 API.",
         "ReadAndApplyTokens": "Read offer history and claim and apply tokens for the user.",
         "AdvancedWriteActions": "Can perform actions that will result in a prompt to the user via the Destiny app.",
-        "PartnerOfferGrant": "Can user the partner offer api to claim rewards defined for a partner",
+        "PartnerOfferGrant": "Can use the partner offer api to claim rewards defined for a partner",
         "DestinyUnlockValueQuery": "Allows an app to query sensitive information like unlock flags and values not available through normal methods.",
         "UserPiiRead": "Allows an app to query sensitive user PII, most notably email information."
       }

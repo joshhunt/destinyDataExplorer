@@ -22,20 +22,22 @@ export function connectToWindow(store) {
   window.__store = store;
   window._ = lodash;
 
-  window.$loadRemoteDefinitions = async (pw, ...tables) => {
+  window.$loadRemoteDefinitions = async (pw, fileName) => {
     const urlBase = `https://${rot(
       URL_BASE,
       pw
     )}.s3.ap-southeast-2.amazonaws.com/`;
 
-    const promises = tables.map(async (table) => {
-      const url = `${urlBase}${table}.json`;
+    const url = `${urlBase}${fileName}.json`;
 
-      const resp = await fetch(url);
-      const data = await resp.json();
+    const resp = await fetch(url);
+    const data = await resp.json();
 
-      for (const hash in data) {
-        const def = data[hash];
+    for (const tableName in data) {
+      const definitionsCollection = data[tableName];
+
+      for (const hash in definitionsCollection) {
+        const def = definitionsCollection[hash];
         def.$$extra = true;
         if (def?.displayProperties?.icon) {
           def.displayProperties.icon = urlBase + def.displayProperties.icon;
@@ -50,17 +52,12 @@ export function connectToWindow(store) {
         }
       }
 
-      store.dispatch(
-        mergeBulkDefinitions({
-          [`Destiny${table}Definition`]: data,
-        })
+      console.log(
+        `Loaded ${Object.keys(definitionsCollection).length} ${tableName}`
       );
+    }
 
-      console.log(`Loaded ${Object.keys(data).length} ${table}s`);
-    });
-
-    await Promise.all(promises);
-    console.log("Loaded all extra tables");
+    store.dispatch(mergeBulkDefinitions(data));
   };
 
   store.subscribe(
