@@ -28,6 +28,7 @@ export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
   const shortType = makeTypeShort(type);
   const classType = CLASSES[item.classType ?? 69];
   const official = item.itemTypeDisplayName;
+  const includeClassType = Boolean(classType) && !official?.includes(official);
 
   if (
     !official &&
@@ -37,8 +38,14 @@ export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
     return `${shortType}: Dummy item`;
   }
 
-  return official
-    ? `${shortType}: ${classType ? classType + " " : ""}${official}`
+  const typeParts = [
+    item.itemCategoryHashes?.includes(DUMMIES_HASH) ? "Dummy" : undefined,
+    includeClassType ? classType : undefined,
+    official,
+  ].filter(Boolean);
+
+  return typeParts.length > 0
+    ? `${shortType}: ${typeParts.join(" ")}`
     : shortType;
 }
 
