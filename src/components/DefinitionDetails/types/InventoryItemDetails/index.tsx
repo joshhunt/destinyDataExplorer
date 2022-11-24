@@ -5,6 +5,7 @@ import Sockets from "./Sockets";
 import Objectives from "./Objectives";
 import ItemGearset from "./Gearset";
 import PerkDetails from "./PerkDetails";
+import Crafting from "./Crafting";
 import Quest from "./Quest";
 
 interface InventoryItemDetailsProps {
@@ -19,6 +20,7 @@ const InventoryItemDetails: React.FC<InventoryItemDetailsProps> = ({
       <Sockets definition={definition} />
       <ItemGearset definition={definition} />
       <PerkDetails definition={definition} />
+      <Crafting definition={definition} />
 
       {definition.setData ? (
         <Quest definition={definition} />
@@ -40,6 +42,7 @@ export function displayInventoryItemDetails(
       (definition.sockets || definition.objectives)) ||
     definition.gearset ||
     definition.plug ||
+    definition.crafting?.outputItemHash ||
     definition.setData?.itemList?.length
   );
 }
