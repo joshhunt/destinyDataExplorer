@@ -17,10 +17,10 @@ const InventoryItemDetails: React.FC<InventoryItemDetailsProps> = ({
 }) => {
   return (
     <div>
+      <Crafting definition={definition} />
       <Sockets definition={definition} />
       <ItemGearset definition={definition} />
       <PerkDetails definition={definition} />
-      <Crafting definition={definition} />
 
       {definition.setData ? (
         <Quest definition={definition} />

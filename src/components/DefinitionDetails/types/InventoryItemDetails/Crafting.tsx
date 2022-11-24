@@ -18,7 +18,7 @@ const ItemCrafting: React.FC<ItemCraftingProps> = ({ definition }) => {
   const outputItem = useSelector(
     (state: ReduxState) =>
       state.definitions.definitions?.DestinyInventoryItemDefinition?.[
-        definition.crafting.outputItemHash
+        definition?.crafting?.outputItemHash
       ]
   );
 
@@ -28,11 +28,9 @@ const ItemCrafting: React.FC<ItemCraftingProps> = ({ definition }) => {
 
   return (
     <div>
-      <Subtitle1>Crafting</Subtitle1>
+      <Subtitle1>Crafting output item</Subtitle1>
 
-      <p>Output item:</p>
-
-      <div className={s.categoryItems}>
+      <div className={s.itemGrid}>
         <Item
           pathForItem={pathForItem}
           className={s.item}
