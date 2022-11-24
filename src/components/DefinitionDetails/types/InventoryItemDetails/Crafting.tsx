@@ -2,7 +2,6 @@ import { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
 import Item from "components/Item";
 import { Subtitle1 } from "components/Text";
 import { usePathForDefinition } from "lib/pathForDefinitionContext";
-import { notEmpty } from "lib/utils";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ReduxState } from "types";

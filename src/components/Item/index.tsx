@@ -57,8 +57,11 @@ const Item: React.FC<ItemProps> = ({
     return null;
   }
 
+  const anyDef = definition as any;
+
   const name = getDisplayName(definition) || <em>No name</em>;
   const icon = getIcon(definition) || NO_ICON;
+  const isEnhancedTrait = anyDef.plug && anyDef.inventory?.tierType === 3;
 
   return (
     <Link
@@ -70,7 +73,10 @@ const Item: React.FC<ItemProps> = ({
         {icon === NO_ICON ? (
           <SubstituteIcon type={type} />
         ) : (
-          <BungieImage className={s.icon} src={icon} />
+          <BungieImage
+            className={cx(s.icon, isEnhancedTrait && s.enhancedIcon)}
+            src={icon}
+          />
         )}
       </div>
 
