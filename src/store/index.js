@@ -4,7 +4,7 @@ import querystring from "querystring";
 import reduxThunk from "redux-thunk";
 
 import { setLanguage, getLanguage } from "lib/ls";
-import { fasterGetDefinitions } from "lib/definitions";
+import { getDefinitions } from "lib/definitions/newIndex";
 import { sendDefinitions } from "lib/workerSearch";
 
 import { connectToWindow } from "../devTools/devToolsApi";
@@ -101,12 +101,8 @@ store.subscribe(() => {
 store.dispatch(setActiveLanguage(LANG_CODE));
 
 function loadDefinitions(langCode) {
-  fasterGetDefinitions(
+  getDefinitions(
     langCode,
-    null,
-    (data) => {
-      store.dispatch(definitionsStatus(data));
-    },
     (err, data) => {
       if (err) {
         console.error("Error loading definitions:", err);
@@ -133,6 +129,9 @@ function loadDefinitions(langCode) {
           });
         }, 1000);
       }
+    },
+    (data) => {
+      store.dispatch(definitionsStatus(data));
     }
   );
 }
