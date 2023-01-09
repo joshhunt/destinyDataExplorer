@@ -6,8 +6,10 @@ import {
   keys,
   setMany as idbSetMany,
   get as idbGet,
+  entries as idbEntries,
 } from "idb-keyval";
 import { getDestiny } from "lib/destiny";
+import asyncPool from "tiny-async-pool";
 import { getAllRecords, requireDatabase } from "./database";
 
 import "imports-loader?wrapper=window!@destiny-item-manager/zip.js"; // eslint-disable-line
@@ -86,46 +88,71 @@ function storedDefinitionsToPayload(
   return payload;
 }
 
+const USE_GET_MANY = false; // Firefox dies with entries() so we can't use iut
+const GET_SINGLE_CONCURRENCY = 5;
+
+async function getFromIdbGetSingle(): Promise<StoredDefinition[]> {
+  log("Using keys() + get() to get 3 from idb at a time");
+
+  const existingKeys = await keys(idbStore);
+
+  const loadDefinitionFromIdb = (idbKey: IDBValidKey) =>
+    idbGet(idbKey, idbStore);
+
+  const results = await asyncPool(
+    GET_SINGLE_CONCURRENCY,
+    existingKeys,
+    loadDefinitionFromIdb
+  );
+
+  return results.filter(isStoredDefinition);
+}
+
+async function getFromIdbGetMany(): Promise<StoredDefinition[]> {
+  log("Using entries() to get everythig from idb at once");
+
+  const entries = await idbEntries(idbStore);
+  const values = entries.map((v) => v[1]);
+  return values.filter(isStoredDefinition);
+}
+
+function getStoredDefinitions(): Promise<StoredDefinition[]> {
+  if (USE_GET_MANY) {
+    return getFromIdbGetMany();
+  } else {
+    return getFromIdbGetSingle();
+  }
+}
+
 export async function getDefinitions(
   language: string,
   dataCallback: DataCallback,
   progressCallback: ProgressCallback
 ) {
-  log("Loading existing keys from idb");
-  const existingKeys = await keys(idbStore);
-  log("Got using idb keys", existingKeys);
+  log("Loading definitions", { language });
 
-  const existingDefinitions: StoredDefinition[] = [];
+  log("Fetching manifest for later");
+  const manifestPromise = getDestiny("/Platform/Destiny2/Manifest/", {
+    _noAuth: true,
+  });
 
-  log("Loading existing definitions from idb, one at a time");
-  while (existingKeys.length) {
-    // 100 at a time
-    await Promise.all(
-      existingKeys.splice(0, 3).map(async (idbKey) => {
-        const value = idbGet(idbKey, idbStore);
-        if (isStoredDefinition(value)) {
-          existingDefinitions.push(value);
-        }
-      })
-    );
-  }
+  log("Loading existing definitions from idb");
+  const idbLoadStart = performance.now();
+  const existingDefinitions = await getStoredDefinitions();
+  const idbLoadEnd = performance.now();
 
-  log(
-    "Existing definitions in idb:",
-    existingDefinitions.map((v) => ({
+  log("Loaded existing definitions from idb", {
+    timeMs: idbLoadEnd - idbLoadStart,
+    tables: existingDefinitions.map((v) => ({
       tableName: v.tableName,
       version: v.version,
-    }))
-  );
+    })),
+  });
 
   dataCallback(null, storedDefinitionsToPayload(existingDefinitions, false));
 
-  const manifest: DestinyManifest = await getDestiny(
-    "/Platform/Destiny2/Manifest/",
-    {
-      _noAuth: true,
-    }
-  );
+  log("Waiting for manifest to load");
+  const manifest: DestinyManifest = await manifestPromise;
 
   const version = manifest.version;
   const allCurrentVersion =
@@ -133,7 +160,7 @@ export async function getDefinitions(
     existingDefinitions.every((v) => v.version === version);
 
   if (allCurrentVersion) {
-    // The cached definitions we already sent match the current version, so we can finish now
+    log("All definitions are current, finishing!");
     return dataCallback(null, { done: true });
   }
 
