@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 
 interface IconProps {
   name: string;
@@ -7,6 +8,7 @@ interface IconProps {
   light?: boolean;
   duotone?: boolean;
   brand?: boolean;
+  spin?: boolean;
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -16,6 +18,7 @@ const Icon: React.FC<IconProps> = ({
   light,
   duotone,
   brand,
+  spin,
   ...rest
 }) => {
   const prefix =
@@ -27,7 +30,12 @@ const Icon: React.FC<IconProps> = ({
       [brand ? "true" : "false"]: "fab",
     }["true"] || "far";
 
-  return <span className={`${prefix} fa-${name}`} {...rest}></span>;
+  return (
+    <span
+      className={cx(prefix, `fa-${name}`, spin && "fa-spin")}
+      {...rest}
+    ></span>
+  );
 };
 
 export default Icon;
