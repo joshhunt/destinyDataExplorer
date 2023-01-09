@@ -1,6 +1,5 @@
 import axios from "axios";
 import { DestinyManifest } from "bungie-api-ts/destiny2";
-import Dexie from "dexie";
 import {
   createStore,
   keys,
@@ -19,6 +18,7 @@ import inflate from "file-loader!@destiny-item-manager/zip.js/WebContent/inflate
 
 /// @ts-ignore
 import zipWorker from "file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js"; // eslint-disable-line
+import { cleanOldDatabases } from "./legacy";
 
 declare var zip: any;
 
@@ -26,11 +26,7 @@ const log = require("lib/log")("definitions");
 
 log("Creating custom idb-keyval store");
 const idbStore = createStore("data-explorer", "definitions");
-log("Deleting old destinyManifest dexie store");
-Dexie.delete("destinyManifest");
-log("Deleting old destinyDefinitions dexie store");
-Dexie.delete("destinyDefinitions");
-log("Done db setup");
+cleanOldDatabases();
 
 type GenericDefinition = any;
 type DefinitionTable = Record<string, GenericDefinition>;

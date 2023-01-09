@@ -23,12 +23,12 @@ function deleteIndexedDBDatabase(dbName: string) {
   });
 }
 
-export function cleanOldDatabases() {
+export async function cleanOldDatabases() {
   try {
-    deleteIndexedDBDatabase("destinyManifest");
+    await deleteIndexedDBDatabase("destinyManifest");
   } catch {}
 
   try {
-    deleteIndexedDBDatabase("destidestinyDefinitionsnyManifest");
+    await deleteIndexedDBDatabase("destinyDefinitions");
   } catch {}
 }

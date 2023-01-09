@@ -23,7 +23,6 @@
     "bungie-api-ts": "^4.19.0",
     "classnames": "^2.2.5",
     "dequal": "^2.0.2",
-    "dexie": "^3.0.3",
     "file-loader": "^6.2.0",
     "idb-keyval": "^6.2.0",
     "imports-loader": "^1.2.0",
