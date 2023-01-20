@@ -5,6 +5,7 @@ import { CLASSES } from "./destinyEnums";
 import { makeTypeShort } from "./destinyUtils";
 
 const DUMMIES_HASH = 3109687656;
+const PATTERNS_HASH = 3726054802;
 
 export function getDisplayName(def: BaseDestinyDefinition) {
   const v =
@@ -32,10 +33,14 @@ export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
 
   if (
     !official &&
-    item.itemCategoryHashes &&
-    item.itemCategoryHashes.includes(DUMMIES_HASH)
+    item.itemCategoryHashes
   ) {
-    return `${shortType}: Dummy item`;
+    if (item.itemCategoryHashes.includes(DUMMIES_HASH)) {
+      return `${shortType}: Dummy item`;
+    }
+    if (item.itemCategoryHashes.includes(PATTERNS_HASH)) {
+      return `${shortType}: Pattern`;
+    }
   }
 
   const typeParts = [
