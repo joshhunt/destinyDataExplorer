@@ -1,35 +1,29 @@
 import axios from "axios";
 import { DestinyManifest } from "bungie-api-ts/destiny2";
-import {
-  createStore,
-  keys,
-  setMany as idbSetMany,
-  get as idbGet,
-  entries as idbEntries,
-} from "idb-keyval";
 import { getDestiny } from "lib/destiny";
-import asyncPool from "tiny-async-pool";
 import { getAllRecords, requireDatabase } from "./database";
 
 import "imports-loader?wrapper=window!@destiny-item-manager/zip.js"; // eslint-disable-line
 
-/// @ts-ignore
+// @ts-ignore
 import inflate from "file-loader!@destiny-item-manager/zip.js/WebContent/inflate.js"; // eslint-disable-line
 
-/// @ts-ignore
+// @ts-ignore
 import zipWorker from "file-loader!@destiny-item-manager/zip.js/WebContent/z-worker.js"; // eslint-disable-line
 import { cleanOldDatabases } from "./legacy";
+import {
+  DefinitionTable,
+  definitionsStore,
+  StoredDefinition,
+  getStoredDefinitions,
+} from "./store";
 
 declare var zip: any;
 
 const log = require("lib/log")("definitions");
 
 log("Creating custom idb-keyval store");
-const idbStore = createStore("data-explorer", "definitions");
 cleanOldDatabases();
-
-type GenericDefinition = any;
-type DefinitionTable = Record<string, GenericDefinition>;
 
 enum ProgressStatus {
   Downloading,
@@ -40,6 +34,7 @@ enum ProgressStatus {
 }
 
 interface DataCallbackCallback {
+  manifestVersion?: string;
   definitions?: Record<string, DefinitionTable>;
   done: boolean;
 }
@@ -51,22 +46,7 @@ interface ProgressPayload {
 type DataCallback = (err: Error | null, payload: DataCallbackCallback) => void;
 type ProgressCallback = (progress: ProgressPayload) => void;
 
-interface StoredDefinition {
-  tableName: string;
-  version: string;
-  definitions: DefinitionTable;
-}
-
 const BANNED_TABLE_NAMES = ["DestinyInventoryItemLiteDefinition"];
-
-function isStoredDefinition(obj: any): obj is StoredDefinition {
-  return (
-    obj &&
-    typeof obj.tableName === "string" &&
-    typeof obj.version === "string" &&
-    typeof obj.definitions === "object"
-  );
-}
 
 function storedDefinitionsToPayload(
   stored: StoredDefinition[],
@@ -82,42 +62,6 @@ function storedDefinitionsToPayload(
   }
 
   return payload;
-}
-
-const USE_GET_MANY = false; // Firefox dies with entries() so we can't use iut
-const GET_SINGLE_CONCURRENCY = 5;
-
-async function getFromIdbGetSingle(): Promise<StoredDefinition[]> {
-  log("Using keys() + get() to get 3 from idb at a time");
-
-  const existingKeys = await keys(idbStore);
-
-  const loadDefinitionFromIdb = (idbKey: IDBValidKey) =>
-    idbGet(idbKey, idbStore);
-
-  const results = await asyncPool(
-    GET_SINGLE_CONCURRENCY,
-    existingKeys,
-    loadDefinitionFromIdb
-  );
-
-  return results.filter(isStoredDefinition);
-}
-
-async function getFromIdbGetMany(): Promise<StoredDefinition[]> {
-  log("Using entries() to get everythig from idb at once");
-
-  const entries = await idbEntries(idbStore);
-  const values = entries.map((v) => v[1]);
-  return values.filter(isStoredDefinition);
-}
-
-function getStoredDefinitions(): Promise<StoredDefinition[]> {
-  if (USE_GET_MANY) {
-    return getFromIdbGetMany();
-  } else {
-    return getFromIdbGetSingle();
-  }
 }
 
 export async function getDefinitions(
@@ -151,13 +95,14 @@ export async function getDefinitions(
   const manifest: DestinyManifest = await manifestPromise;
 
   const version = manifest.version;
+  log("Loaded manifest from Bungie", { version, manifest });
   const allCurrentVersion =
     existingDefinitions.length > 1 &&
     existingDefinitions.every((v) => v.version === version);
 
   if (allCurrentVersion) {
     log("All definitions are current, finishing!");
-    return dataCallback(null, { done: true });
+    return dataCallback(null, { done: true, manifestVersion: version });
   }
 
   const sqlitePath = manifest.mobileWorldContentPaths[language];
@@ -197,7 +142,11 @@ export async function getDefinitions(
     allDefinitions[jsonTable.tableName] = jsonTable.definitionsTable;
   }
 
-  dataCallback(null, { done: true, definitions: allDefinitions });
+  dataCallback(null, {
+    done: true,
+    definitions: allDefinitions,
+    manifestVersion: version,
+  });
 
   const storedDefinitionsPayload: [string, StoredDefinition][] = Object.entries(
     allDefinitions
@@ -211,9 +160,14 @@ export async function getDefinitions(
     })
     .map((storedDef) => [keyForStoredDefinition(storedDef), storedDef]);
 
-  await idbSetMany(storedDefinitionsPayload, idbStore);
+  await definitionsStore.putMany(storedDefinitionsPayload);
 
-  // TODO: should clear all keys
+  const oldKeys = (await definitionsStore.keys()).filter(
+    (v) => typeof v === "string" && !v.includes(version)
+  );
+
+  log("Cleaning up old keys to delete", { oldKeys });
+  await definitionsStore.deleteMany(oldKeys);
 }
 
 function keyForStoredDefinition(storedDef: StoredDefinition) {
@@ -281,7 +235,9 @@ async function requestSQLiteArchive(dbPath: string) {
   const resp = await axios(`https://www.bungie.net${dbPath}`, {
     responseType: "blob",
     onDownloadProgress: (progressEvent) =>
-      console.log("requestSQLiteArchive", progressEvent),
+      log("Downloading sqlite archive", {
+        progress: progressEvent.loaded / progressEvent.total,
+      }),
   });
 
   log("Finished downloading definitions archive");

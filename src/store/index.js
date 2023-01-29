@@ -4,7 +4,7 @@ import querystring from "querystring";
 import reduxThunk from "redux-thunk";
 
 import { setLanguage, getLanguage } from "lib/ls";
-import { getDefinitions } from "lib/definitions/newIndex";
+import { getDefinitions } from "lib/definitions";
 import { sendDefinitions } from "lib/workerSearch";
 
 import { connectToWindow } from "../devTools/devToolsApi";
@@ -111,23 +111,21 @@ function loadDefinitions(langCode) {
       }
 
       if (data && data.done) {
-        store.dispatch(definitionsStatus({ status: null }));
+        store.dispatch(
+          definitionsStatus({
+            status: null,
+            manifestVersion: data.manifestVersion,
+          })
+        );
+
+        store.dispatch(startingSearchWorker());
+        sendDefinitions(data.manifestVersion).then(() => {
+          store.dispatch(startingSearchWorkerSuccess());
+        });
       }
 
       if (data && data.definitions) {
         store.dispatch(setBulkDefinitions(data.definitions));
-
-        store.dispatch(startingSearchWorker());
-
-        window.setTimeout(() => {
-          window.requestAnimationFrame(() => {
-            const defs = store.getState().definitions.definitions;
-
-            sendDefinitions(defs).then(() => {
-              store.dispatch(startingSearchWorkerSuccess());
-            });
-          });
-        }, 1000);
       }
     },
     (data) => {

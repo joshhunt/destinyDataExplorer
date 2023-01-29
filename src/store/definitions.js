@@ -27,6 +27,7 @@ export default function definitionsReducer(
       return {
         ...state,
         status: payload.status,
+        manifestVersion: payload.manifestVersion,
       };
     }
 

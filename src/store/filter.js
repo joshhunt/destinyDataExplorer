@@ -2,7 +2,7 @@ import { pickBy } from "lodash";
 
 import search from "lib/workerSearch";
 import { makePayloadAction } from "./utils";
-import debounce from 'lodash/debounce'
+import debounce from "lodash/debounce";
 
 export const SET_FILTER_STRING = "Set filter string";
 export const SET_FILTER_VALUE = "Set filter value";
@@ -62,7 +62,7 @@ export function setSearchResults(results) {
   };
 }
 
-const doSearch = debounce(async function(dispatch, getState) {
+const doSearch = debounce(async function (dispatch, getState) {
   const state = getState();
 
   await raf();
@@ -73,9 +73,8 @@ const doSearch = debounce(async function(dispatch, getState) {
   };
 
   const results = await search(searchPayload, state.definitions.definitions);
-
   dispatch(setSearchResults(results));
-}, 500)
+}, 500);
 
 // export const setFilterString = makePayloadAction(SET_FILTER_STRING);
 export const setFilterValue = (filterValue) => {
