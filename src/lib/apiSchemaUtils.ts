@@ -117,8 +117,8 @@ export function getReferencedSchema(ref: string) {
 
   let found:
     | OpenAPIV3.ReferenceObject
-    | OpenAPIV3.ArraySchemaObject
-    | OpenAPIV3.NonArraySchemaObject
+    | OpenAPIV3.SchemaObject
+    | OpenAPIV3.ResponseObject
     | undefined = apiSpec.components?.schemas?.[getSchemaNameFromRef(ref)];
 
   if (!found && section === "responses") {
@@ -127,11 +127,18 @@ export function getReferencedSchema(ref: string) {
     found = apiSpec.components?.schemas?.[name];
   }
 
+  if (found && "content" in found) {
+    const jsonResponse = found.content?.['application/json']
+    if (jsonResponse && jsonResponse.schema) {
+      found = jsonResponse.schema
+    }
+  }
+
   if (found && "$ref" in found) {
     throw new Error("Referenced schema can not be a reference schema itself");
   }
 
-  return found;
+  return found as OpenAPIV3.SchemaObject;
 }
 
 // TODO: type this better, remove all the any casts
