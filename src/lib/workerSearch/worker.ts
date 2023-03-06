@@ -2,11 +2,16 @@ import { AllDestinyManifestComponents } from "bungie-api-ts/destiny2";
 import { getStoredDefinitions } from "lib/definitions/store";
 import registerPromiseWorker from "promise-worker/register";
 
+// @ts-ignore
+import assignDeep from "assign-deep";
+
 import search from "../search";
 
 import {
   LoadDefinitionsWorkerMessage,
+  LoadExtraDefinitionsWorkerMessage,
   LOAD_DEFINITIONS,
+  LOAD_EXTRA_DEFINITIONS,
   SEARCH,
   SearchWorkerMessage,
   WorkerMessage,
@@ -31,6 +36,14 @@ async function loadDefinitions(
   return Promise.resolve();
 }
 
+function loadExtraDefinitions(
+  payload: LoadExtraDefinitionsWorkerMessage["payload"]
+) {
+  definitions = assignDeep(definitions, payload.definitions);
+
+  return Promise.resolve();
+}
+
 async function doSearch(payload: SearchWorkerMessage["payload"]) {
   if (!definitions) {
     return Promise.reject(
@@ -42,13 +55,17 @@ async function doSearch(payload: SearchWorkerMessage["payload"]) {
   return results.map((obj) => ({ ...obj, def: null }));
 }
 
-registerPromiseWorker((msg: WorkerMessage): Promise<any> => {
+registerPromiseWorker((msg: WorkerMessage): Promise<unknown> => {
   if (msg.type === LOAD_DEFINITIONS) {
     return loadDefinitions(msg.payload);
   }
 
   if (msg.type === SEARCH) {
     return doSearch(msg.payload);
+  }
+
+  if (msg.type === LOAD_EXTRA_DEFINITIONS) {
+    return loadExtraDefinitions(msg.payload);
   }
 
   return Promise.reject(new Error("Unknown message recived by worker"));

@@ -1,10 +1,16 @@
 import css from "./cssLog";
 import rot from "rot";
+import mergeWith from "lodash/mergeWith";
 
 import { getShortTableName } from "lib/utils";
 import { mergeBulkDefinitions } from "store/definitions";
 import { DXCollection } from "./DXCollection";
+import { sendExtraDefinitions } from "lib/workerSearch";
 import lodash from "lodash";
+import {
+  startingSearchWorker,
+  startingSearchWorkerSuccess,
+} from "../store/app";
 
 function makeGlobalConstantName(def) {
   const safeName =
@@ -17,6 +23,20 @@ function makeGlobalConstantName(def) {
 const prevKeeper = new WeakMap();
 
 const URL_BASE = "klzapuf-leayh-klmpupapvuz";
+
+function transformIconsInDefinition(def, urlBase) {
+  if (def?.displayProperties?.icon) {
+    def.displayProperties.icon = urlBase + def.displayProperties.icon;
+  }
+
+  if (def?.displayProperties?.iconSequences) {
+    for (const sequence of def.displayProperties.iconSequences) {
+      if (sequence.frames) {
+        sequence.frames = sequence.frames.map((v) => urlBase + v);
+      }
+    }
+  }
+}
 
 export function connectToWindow(store) {
   window.__store = store;
@@ -38,16 +58,14 @@ export function connectToWindow(store) {
 
       for (const hash in definitionsCollection) {
         const def = definitionsCollection[hash];
-        def.$$extra = true;
-        if (def?.displayProperties?.icon) {
-          def.displayProperties.icon = urlBase + def.displayProperties.icon;
-        }
 
-        if (def?.displayProperties?.iconSequences) {
-          for (const sequence of def.displayProperties.iconSequences) {
-            if (sequence.frames) {
-              sequence.frames = sequence.frames.map((v) => urlBase + v);
-            }
+        def.$$extra = true;
+
+        transformIconsInDefinition(def, urlBase);
+
+        if (def?.modifiers) {
+          for (const modifier of def.modifiers) {
+            transformIconsInDefinition(modifier, urlBase);
           }
         }
       }
@@ -58,6 +76,11 @@ export function connectToWindow(store) {
     }
 
     store.dispatch(mergeBulkDefinitions(data));
+
+    store.dispatch(startingSearchWorker());
+    sendExtraDefinitions(data).then(() => {
+      store.dispatch(startingSearchWorkerSuccess());
+    });
   };
 
   store.subscribe(

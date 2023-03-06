@@ -1,7 +1,13 @@
 import Deferred from "lib/Deferred";
+import { DefinitionTable } from "lib/definitions/store";
 import PromiseWorker from "promise-worker";
 
-import { LOAD_DEFINITIONS, SEARCH, WorkerMessage } from "./constants";
+import {
+  LOAD_DEFINITIONS,
+  LOAD_EXTRA_DEFINITIONS,
+  SEARCH,
+  WorkerMessage,
+} from "./constants";
 
 const worker = new Worker("./worker", { type: "module" });
 const promiseWorker = new PromiseWorker(worker);
@@ -26,6 +32,16 @@ export async function sendDefinitions(manifestVersion: string) {
   workerReady = true;
 
   return sendDefsDeferred.promise;
+}
+
+export async function sendExtraDefinitions(
+  definitions: Record<string, DefinitionTable>
+) {
+  if (!workerReady) {
+    await sendDefsDeferred.promise;
+  }
+
+  return toWorker({ type: LOAD_EXTRA_DEFINITIONS, payload: { definitions } });
 }
 
 export default async function search(filterPayload: any) {
