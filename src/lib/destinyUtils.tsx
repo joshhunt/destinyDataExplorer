@@ -6,6 +6,10 @@ import { getLower } from "lib/utils";
 import { AllDestinyManifestComponents } from "bungie-api-ts/destiny2/manifest";
 import { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2/interfaces";
 
+const SHORTER_TABLE_NAMES: Record<string, string | undefined> = {
+  DestinyInventoryItemDefinition: "Item",
+};
+
 // TODO: we can just use itemCategoryHashes for this now?
 export const isOrnament = (item: DestinyInventoryItemDefinition) =>
   item.inventory &&
@@ -14,9 +18,13 @@ export const isOrnament = (item: DestinyInventoryItemDefinition) =>
   item.plug.plugCategoryIdentifier &&
   item.plug.plugCategoryIdentifier.includes("skins");
 
-export const makeTypeShort = memoize((type) => {
+export const makeTypeShort = memoize((type: string) => {
   const match = type.match(/Destiny(\w+)Definition/);
   return match ? match[1] : type;
+});
+
+export const makeTypeShorter = memoize((type) => {
+  return SHORTER_TABLE_NAMES[type] || makeTypeShort(type);
 });
 
 export const getName = (item: any): React.ReactNode => {

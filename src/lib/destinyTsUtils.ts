@@ -2,7 +2,7 @@ import { BaseDestinyDefinition, ReduxState } from "types";
 import { AllDestinyManifestComponents } from "bungie-api-ts/destiny2";
 import { useSelector } from "react-redux";
 import { CLASSES } from "./destinyEnums";
-import { makeTypeShort } from "./destinyUtils";
+import { makeTypeShorter } from "./destinyUtils";
 
 const DUMMIES_HASH = 3109687656;
 const PATTERNS_HASH = 3726054802;
@@ -26,20 +26,14 @@ export function getIcon(item: BaseDestinyDefinition) {
 }
 
 export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
-  const shortType = makeTypeShort(type);
+  const shortType = makeTypeShorter(type);
   const classType = CLASSES[item.classType ?? 69];
   const official = item.itemTypeDisplayName;
   const includeClassType = Boolean(classType) && !official?.includes(official);
 
-  if (
-    !official &&
-    item.itemCategoryHashes
-  ) {
+  if (!official && item.itemCategoryHashes) {
     if (item.itemCategoryHashes.includes(DUMMIES_HASH)) {
       return `${shortType}: Dummy item`;
-    }
-    if (item.itemCategoryHashes.includes(PATTERNS_HASH)) {
-      return `${shortType}: Pattern`;
     }
   }
 
@@ -47,6 +41,7 @@ export function itemTypeDisplayName(item: BaseDestinyDefinition, type: string) {
     item.itemCategoryHashes?.includes(DUMMIES_HASH) ? "Dummy" : undefined,
     includeClassType ? classType : undefined,
     official,
+    item.itemCategoryHashes?.includes(PATTERNS_HASH) ? "Pattern" : undefined,
   ].filter(Boolean);
 
   return typeParts.length > 0
