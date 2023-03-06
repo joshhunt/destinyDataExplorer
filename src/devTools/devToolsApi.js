@@ -1,6 +1,5 @@
 import css from "./cssLog";
 import rot from "rot";
-import mergeWith from "lodash/mergeWith";
 
 import { getShortTableName } from "lib/utils";
 import { mergeBulkDefinitions } from "store/definitions";
@@ -38,6 +37,15 @@ function transformIconsInDefinition(def, urlBase) {
   }
 }
 
+async function getRemoteDefinitions(urlBase, fileName) {
+  const url = `${urlBase}${fileName}.json`;
+
+  const resp = await fetch(url);
+  const data = await resp.json();
+
+  return data;
+}
+
 export function connectToWindow(store) {
   window.__store = store;
   window._ = lodash;
@@ -48,13 +56,16 @@ export function connectToWindow(store) {
       pw
     )}.s3.ap-southeast-2.amazonaws.com/`;
 
-    const url = `${urlBase}${fileName}.json`;
+    let extraTables;
 
-    const resp = await fetch(url);
-    const data = await resp.json();
+    if (pw && fileName) {
+      extraTables = await getRemoteDefinitions(urlBase, fileName);
+    } else if (typeof pw === "object") {
+      extraTables = pw;
+    }
 
-    for (const tableName in data) {
-      const definitionsCollection = data[tableName];
+    for (const tableName in extraTables) {
+      const definitionsCollection = extraTables[tableName];
 
       for (const hash in definitionsCollection) {
         const def = definitionsCollection[hash];
@@ -75,10 +86,10 @@ export function connectToWindow(store) {
       );
     }
 
-    store.dispatch(mergeBulkDefinitions(data));
+    store.dispatch(mergeBulkDefinitions(extraTables));
 
     store.dispatch(startingSearchWorker());
-    sendExtraDefinitions(data).then(() => {
+    sendExtraDefinitions(extraTables).then(() => {
       store.dispatch(startingSearchWorkerSuccess());
     });
   };
