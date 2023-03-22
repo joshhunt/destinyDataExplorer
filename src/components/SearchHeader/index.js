@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { keyBy, isArray } from "lodash";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -40,6 +40,14 @@ function SearchHeader({
   defs,
   searchIsReady,
 }) {
+  const [extraErCount, setExtraErCount] = useState(0);
+  const extraEr = useMemo(
+    () => new Array(extraErCount).fill("er").join(""),
+    [extraErCount]
+  );
+
+  const handleErClick = () => setExtraErCount((v) => v + 1);
+
   const filterArr = Object.entries(filters)
     .map(([key, value]) => ({
       key,
@@ -53,7 +61,7 @@ function SearchHeader({
         <div className={s.logoish}>
           <img className={s.logo} src={logo} alt="" />
 
-          <span>Data Explorer</span>
+          <span onClick={handleErClick}>Data Explorer{extraEr}</span>
         </div>
 
         <div className={s.mainMain}>
