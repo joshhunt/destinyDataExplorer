@@ -112,13 +112,17 @@ export function getShortSchemaNameFromRef(ref: string) {
   return bits[bits.length - 1];
 }
 
+function isResponseObject(node: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | OpenAPIV3.ResponseObject): node is OpenAPIV3.ResponseObject {
+  return 'content' in node
+}
+
 export function getReferencedSchema(ref: string) {
   const [, , section, name] = ref.split("/");
 
   let found:
     | OpenAPIV3.ReferenceObject
-    | OpenAPIV3.ArraySchemaObject
-    | OpenAPIV3.NonArraySchemaObject
+    | OpenAPIV3.SchemaObject
+    | OpenAPIV3.ResponseObject
     | undefined = apiSpec.components?.schemas?.[getSchemaNameFromRef(ref)];
 
   if (!found && section === "responses") {
@@ -127,8 +131,19 @@ export function getReferencedSchema(ref: string) {
     found = apiSpec.components?.schemas?.[name];
   }
 
+  if (found && isResponseObject(found)) {
+    const jsonResponse = found.content?.['application/json']
+    if (jsonResponse && jsonResponse.schema) {
+      found = jsonResponse.schema
+    }
+  }
+
   if (found && "$ref" in found) {
     throw new Error("Referenced schema can not be a reference schema itself");
+  }
+
+  if (found && isResponseObject(found)) {
+    throw new Error("Expected a Schema object, found a ResponseObject");
   }
 
   return found;
