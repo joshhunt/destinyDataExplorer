@@ -13,6 +13,7 @@ import {
 
 import "./App.css";
 import { store } from "./lib/DefinitionsStore";
+import { getDefinitionTable } from "./lib/bungieAPI";
 import { httpClient } from "./lib/httpClient";
 import { AnyDefinition, type StoredDefinition } from "./lib/types";
 
@@ -28,7 +29,7 @@ function App() {
 
     function loadKeys() {
       store
-        .getAllKeysForTable("DestinyInventoryItemDefinition")
+        .getAllKeysForTable("DestinyRecordDefinition")
         .then((allKeys) => {
           setKeys(allKeys as number[]);
         })
@@ -38,6 +39,7 @@ function App() {
     }
 
     loadKeys();
+
     loadDefs((prog) => {
       setLoadingState(prog);
     }).finally(() => {
@@ -177,38 +179,41 @@ function getTierTypeClass(def: AnyDefinition) {
 }
 
 function Def(props: DefProps) {
-  const [sd, loaded] = useDefinition(props.defKey);
+  const [row, loaded] = useDefinition(props.defKey);
 
   const prettyTableName = useMemo(
-    () => sd?.tableName?.match(/Destiny(\w+)Definition/)?.[1] ?? "",
-    [sd]
+    () => row?.tableName?.match(/Destiny(\w+)Definition/)?.[1] ?? "",
+    [row]
   );
 
   if (!loaded) {
     return <div className="item-loading">Loading...</div>;
   }
 
-  if (!sd) {
+  if (!row) {
     return <div className="item-loading">Error</div>;
   }
 
-  const def = sd.definition as AnyDefinition;
+  const def = row.definition as AnyDefinition;
   const name = getName(def);
   const icon = getIcon(def);
 
   return (
     <div className="item">
       <div className="item_icon">
-        <img
-          className={getTierTypeClass(def)}
-          src={`https://www.bungie.net${icon}`}
-        />
+        {icon && (
+          <img
+            className={getTierTypeClass(def)}
+            src={`https://www.bungie.net${icon}`}
+          />
+        )}
       </div>
 
       <div className="item_main">
         <div className="item_name">{name}</div>
         <div className="item_type">
           {prettyTableName} {def.index}
+          {/* {row.version} */}
         </div>
       </div>
     </div>
@@ -277,7 +282,9 @@ async function loadTable(version: string, tableName: string, defsPath: string) {
     return;
   }
 
-  const req = await fetch(`https://www.bungie.net${defsPath}`);
-  const defs = await req.json();
+  const defs = await getDefinitionTable(defsPath);
+  console.log("loaded defs", defs);
   await store.addDefinitions(version, tableName, Object.values(defs));
+
+  return defs;
 }

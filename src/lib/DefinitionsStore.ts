@@ -2,6 +2,9 @@ import { IDBPDatabase, openDB } from "idb";
 
 import { StoredDefinition, StoredDefinitionInput } from "./types";
 
+// Old Version
+// 118365.23.08.23.1700-1-bnet.51829
+
 export class DefinitionsStore {
   dbVersion = 1;
   dbName = "data-explorer-ng";
@@ -40,6 +43,7 @@ export class DefinitionsStore {
 
       try {
         await store.put(storedDef);
+        console.log("put a def");
       } catch (err) {
         console.error("Error storing definition", err, storedDef);
         throw err;
