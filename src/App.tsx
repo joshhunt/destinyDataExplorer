@@ -37,7 +37,9 @@ function App() {
       promises
         .then((allKeys) => {
           console.log(allKeys);
-          const allAllKeys = allKeys.flatMap((v) => v);
+          const allAllKeys = allKeys
+            .flatMap((v) => v)
+            .sort((a, b) => (a as number) - (b as number));
           setKeys(allAllKeys as number[]);
         })
         .catch((err) => {
