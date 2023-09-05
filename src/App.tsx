@@ -8,16 +8,15 @@ import {
 } from "react";
 import "./App.css";
 import { store } from "./lib/DefinitionsStore";
+import useResizeObserver from "@react-hook/resize-observer";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import useMeasure from "react-use-measure";
 import { AnyDefinition, type StoredDefinition } from "./lib/types";
 import pLimit from "p-limit";
 import { getDestinyManifest } from "bungie-api-ts/destiny2";
 import { httpClient } from "./lib/httpClient";
 
 function App() {
-  const [measureItem, itemBounds] = useMeasure();
-  const [measureGrid, gridBounds] = useMeasure();
+  const [columnCount, setColumnCount] = useState(8);
   const [defsKeys, setKeys] = useState<number[]>([]);
   const [loadingState, setLoadingState] = useState<number>(0);
   const ranRef = useRef(false);
@@ -47,16 +46,23 @@ function App() {
 
   const parentRef = useRef<HTMLDivElement>(null);
 
+  const gridRef = useRef(null);
+  useResizeObserver(gridRef, (entry) => {
+    const gridComputedStyle = window.getComputedStyle(entry.target);
+    const gridColumnCount = gridComputedStyle
+      .getPropertyValue("grid-template-columns")
+      .split(" ").length;
+
+    setColumnCount(gridColumnCount);
+  });
+
   const parentOffsetRef = useRef(0);
 
   useLayoutEffect(() => {
     parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
   }, []);
 
-  const baseItemsPerRow = gridBounds.width / Math.floor(itemBounds.width);
-  const itemsPerRow = isFinite(baseItemsPerRow)
-    ? Math.max(Math.floor(baseItemsPerRow), 1)
-    : 8;
+  const itemsPerRow = columnCount;
   const itemCount = defsKeys?.length ?? 0;
   const rowCount = Math.ceil(itemCount / itemsPerRow);
 
@@ -71,7 +77,6 @@ function App() {
   const measureElement = useCallback(
     (el: HTMLElement | null) => {
       virtualizer.measureElement(el);
-      measureItem(el);
     },
     [virtualizer.measureElement]
   );
@@ -94,7 +99,7 @@ function App() {
         >
           <div
             className="Grid"
-            ref={measureGrid}
+            ref={gridRef}
             style={{
               position: "absolute",
               top: 0,
