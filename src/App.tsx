@@ -29,7 +29,7 @@ function App() {
 
     function loadKeys() {
       store
-        .getAllKeysForTable("DestinyRecordDefinition")
+        .getAllKeysForTable("DestinyInventoryItemDefinition")
         .then((allKeys) => {
           setKeys(allKeys as number[]);
         })
