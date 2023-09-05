@@ -1,91 +1,28 @@
 {
   "name": "destiny-data-explorer",
-  "version": "0.2.0",
   "private": true,
-  "dependencies": {
-    "@destiny-item-manager/zip.js": "github:DestinyItemManager/zip.js",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/classnames": "^2.2.11",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.53",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-redux": "^7.1.12",
-    "@types/react-router": "^5.1.8",
-    "@types/react-router-dom": "^5.1.6",
-    "@types/react-select": "^3.0.28",
-    "@types/react-syntax-highlighter": "^13.5.0",
-    "@types/tiny-async-pool": "1.0.0",
-    "assign-deep": "^1.0.1",
-    "axios": "^0.21.0",
-    "bungie-api-ts": "^4.19.0",
-    "classnames": "^2.2.5",
-    "dequal": "^2.0.2",
-    "file-loader": "^6.2.0",
-    "imports-loader": "^1.2.0",
-    "lodash": "^4.17.4",
-    "memoize-one": "^5.1.1",
-    "merge-deep": "^3.0.3",
-    "normalize-text": "^2.3.1",
-    "openapi-types": "^7.0.1",
-    "patch-package": "^6.2.2",
-    "postinstall-postinstall": "^2.1.0",
-    "promise-worker": "^2.0.1",
-    "react": "^17.0.1",
-    "react-animate-height": "^2.0.23",
-    "react-app-rewired": "^2.1.8",
-    "react-data-grid": "7.0.0-canary.33",
-    "react-dom": "^17.0.1",
-    "react-json-tree": "^0.13.0",
-    "react-modal": "^3.5.1",
-    "react-redux": "^7.2.2",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
-    "react-select": "^3.1.1",
-    "react-syntax-highlighter": "^15.4.3",
-    "react-tabs": "^3.1.2",
-    "react-transition-group": "^4.4.1",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0",
-    "rot": "^0.1.0",
-    "sass": "^1.30.0",
-    "sql.js": "github:DestinyItemManager/sql.js",
-    "tiny-async-pool": "1.3.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.0.3",
-    "worker-loader": "^3.0.6",
-    "worker-plugin": "^5.0.1"
-  },
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "update-api-spec": "curl https://raw.githubusercontent.com/Bungie-net/api/master/openapi-2.json > ./src/lib/apispec.json",
-    "update-api-spec-v3": "curl https://raw.githubusercontent.com/Bungie-net/api/master/openapi.json > ./src/lib/apispecv3.json",
-    "start": "yarn run update-api-spec && yarn run update-api-spec-v3 && react-app-rewired start",
-    "build": "yarn run update-api-spec && yarn run update-api-spec-v3 && react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "postinstall": "patch-package",
-    "serve": "serve -s build"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }
