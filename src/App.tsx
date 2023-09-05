@@ -1,3 +1,7 @@
+import useResizeObserver from "@react-hook/resize-observer";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import { getDestinyManifest } from "bungie-api-ts/destiny2";
+import pLimit from "p-limit";
 import {
   useCallback,
   useEffect,
@@ -6,14 +10,11 @@ import {
   useRef,
   useState,
 } from "react";
+
 import "./App.css";
 import { store } from "./lib/DefinitionsStore";
-import useResizeObserver from "@react-hook/resize-observer";
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { AnyDefinition, type StoredDefinition } from "./lib/types";
-import pLimit from "p-limit";
-import { getDestinyManifest } from "bungie-api-ts/destiny2";
 import { httpClient } from "./lib/httpClient";
+import { AnyDefinition, type StoredDefinition } from "./lib/types";
 
 function App() {
   const [columnCount, setColumnCount] = useState(8);

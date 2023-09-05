@@ -3,6 +3,9 @@ module.exports = {
     react: {
       version: "detect",
     },
+    "import/resolver": {
+      typescript: true,
+    },
   },
   env: {
     browser: true,
@@ -12,6 +15,8 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/typescript",
   ],
   overrides: [
     {
@@ -29,8 +34,22 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint", "react"],
+  plugins: ["@typescript-eslint", "react", "import"],
   rules: {
     "react/react-in-jsx-scope": 0,
+    "import/order": [
+      "error",
+      {
+        groups: [
+          ["builtin", "external"],
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+        ],
+        "newlines-between": "always",
+        alphabetize: { order: "asc" },
+      },
+    ],
   },
 };

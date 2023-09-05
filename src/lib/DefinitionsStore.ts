@@ -1,4 +1,5 @@
 import { IDBPDatabase, openDB } from "idb";
+
 import { StoredDefinition, StoredDefinitionInput } from "./types";
 
 export class DefinitionsStore {
