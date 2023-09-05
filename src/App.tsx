@@ -31,7 +31,7 @@ function App() {
       const promises = Promise.all([
         store.getAllKeysForTable("DestinyInventoryItemDefinition"),
         store.getAllKeysForTable("DestinyRecordDefinition"),
-        store.getAllKeysForTable("DestinyObjectiveDefinition"),
+        // store.getAllKeysForTable("DestinyObjectiveDefinition"),
       ]);
 
       promises
