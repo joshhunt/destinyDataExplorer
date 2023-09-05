@@ -29,7 +29,7 @@ function App() {
 
     function loadKeys() {
       store
-        .getAllKeysForTable("DestinyInventoryItemDefinition")
+        .getAllKeys()
         .then((allKeys) => {
           setKeys(allKeys as number[]);
         })
@@ -212,7 +212,7 @@ function Def(props: DefProps) {
       <div className="item_main">
         <div className="item_name">{name}</div>
         <div className="item_type">
-          {prettyTableName} {def.index}
+          {prettyTableName} {def.hash}
           {/* {row.version} */}
         </div>
       </div>
