@@ -183,7 +183,7 @@ function Def(props: DefProps) {
   }
 
   if (!sd) {
-    return "Error";
+    return <div className="item-loading">Error</div>;
   }
 
   const def = sd.definition as AnyDefinition;
