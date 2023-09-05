@@ -28,10 +28,17 @@ function App() {
     ranRef.current = true;
 
     function loadKeys() {
-      store
-        .getAllKeys()
+      const promises = Promise.all([
+        store.getAllKeysForTable("DestinyInventoryItemDefinition"),
+        store.getAllKeysForTable("DestinyRecordDefinition"),
+        store.getAllKeysForTable("DestinyObjectiveDefinition"),
+      ]);
+
+      promises
         .then((allKeys) => {
-          setKeys(allKeys as number[]);
+          console.log(allKeys);
+          const allAllKeys = allKeys.flatMap((v) => v);
+          setKeys(allAllKeys as number[]);
         })
         .catch((err) => {
           console.error(err);
