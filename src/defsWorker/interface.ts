@@ -2,12 +2,9 @@ import { WorkerPromise } from "../lib/workerPromise";
 
 import { DefinitionsWorkerMessage } from "./types";
 
-export const workerInterface = new WorkerPromise<
-  DefinitionsWorkerMessage,
-  unknown
->(
+export const workerInterface = new WorkerPromise<DefinitionsWorkerMessage>(
   () =>
-    new Worker(new URL("./worker.ts", import.meta.url), {
+    new Worker(new URL("./worker", import.meta.url), {
       type: "module",
     })
 );

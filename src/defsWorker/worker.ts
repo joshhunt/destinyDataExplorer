@@ -1,8 +1,10 @@
 /* eslint-disable no-restricted-globals */
-import { workerInterface } from "./interface";
-import { loadDefinitions } from "./loadDefinitions";
+import { onMessage } from "../lib/workerPromise";
 
-workerInterface.onMessage(async (message, onProgress) => {
+import { loadDefinitions } from "./loadDefinitions";
+import { DefinitionsWorkerMessage } from "./types";
+
+onMessage<DefinitionsWorkerMessage, unknown>(async (message, onProgress) => {
   switch (message.type) {
     case "init":
       return loadDefinitions(onProgress);

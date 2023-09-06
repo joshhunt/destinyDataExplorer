@@ -13,7 +13,7 @@ interface WorkerResponsePayload<T = unknown> {
   error?: string;
 }
 
-export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
+export class WorkerPromise<Payload = unknown> {
   worker: Worker | undefined;
   callbacks: Record<number, StoredCallback> = {};
   progressCallbacks: Record<number, StoredCallback> = {};
@@ -74,44 +74,46 @@ export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
       this.withWorker().postMessage(payload);
     });
   }
-
-  // This function is called within the worker context
-  async onMessage(cb: WorkerRegistrationFunction<Payload, ReturnValue>) {
-    self.onmessage = async function onWorkerMessage(
-      event: MessageEvent<WorkerMessagePayload<Payload>>
-    ) {
-      const message = event.data;
-
-      function progressCallback(progressEvent: any) {
-        self.postMessage({
-          messageID: message.messageID,
-          progressEvent,
-        });
-      }
-
-      Promise.resolve(cb(message.data, progressCallback))
-        .then((result) => {
-          const returnPayload: WorkerResponsePayload = {
-            messageID: message.messageID,
-            result,
-          };
-
-          self.postMessage(returnPayload);
-        })
-        .catch((err) => {
-          const returnPayload: WorkerResponsePayload = {
-            messageID: message.messageID,
-            result: undefined,
-            error: err.message ?? err.toString?.() ?? "unknown error",
-          };
-
-          self.postMessage(returnPayload);
-        });
-    };
-  }
 }
 
 type WorkerRegistrationFunction<Payload, Return> = (
   payload: Payload,
   progressCallback: (arg: any) => void
 ) => Return | Promise<Return>;
+
+// This function is called within the worker context
+export async function onMessage<Payload, ReturnValue>(
+  cb: WorkerRegistrationFunction<Payload, ReturnValue>
+) {
+  self.onmessage = async function onWorkerMessage(
+    event: MessageEvent<WorkerMessagePayload<Payload>>
+  ) {
+    const message = event.data;
+
+    function progressCallback(progressEvent: any) {
+      self.postMessage({
+        messageID: message.messageID,
+        progressEvent,
+      });
+    }
+
+    Promise.resolve(cb(message.data, progressCallback))
+      .then((result) => {
+        const returnPayload: WorkerResponsePayload = {
+          messageID: message.messageID,
+          result,
+        };
+
+        self.postMessage(returnPayload);
+      })
+      .catch((err) => {
+        const returnPayload: WorkerResponsePayload = {
+          messageID: message.messageID,
+          result: undefined,
+          error: err.message ?? err.toString?.() ?? "unknown error",
+        };
+
+        self.postMessage(returnPayload);
+      });
+  };
+}
