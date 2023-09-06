@@ -1,7 +1,5 @@
 import useResizeObserver from "@react-hook/resize-observer";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { getDestinyManifest } from "bungie-api-ts/destiny2";
-import pLimit from "p-limit";
 import {
   useCallback,
   useEffect,
@@ -12,14 +10,13 @@ import {
 } from "react";
 
 import "./App.css";
+import { workerInterface } from "./defsWorker/interface";
 import { store } from "./lib/DefinitionsStore";
-import { getDefinitionTable } from "./lib/bungieAPI";
-import { httpClient } from "./lib/httpClient";
-import { AnyDefinition, type StoredDefinition } from "./lib/types";
-
-type ProgressRecord = Record<string, [number, boolean]>;
-
-console.log("asking for worker init");
+import {
+  AnyDefinition,
+  ProgressRecord,
+  type StoredDefinition,
+} from "./lib/types";
 
 function App() {
   const [columnCount, setColumnCount] = useState(8);
@@ -30,6 +27,18 @@ function App() {
   useEffect(() => {
     if (ranRef.current) return;
     ranRef.current = true;
+
+    function onProgress(prog: any) {
+      setLoadingState(prog);
+    }
+
+    workerInterface
+      .post({ type: "init" }, onProgress)
+      .then((resp) => {
+        console.log("init defs", resp);
+        loadKeys();
+      })
+      .catch(console.error);
 
     function loadKeys() {
       const promises = Promise.all([
@@ -48,14 +57,13 @@ function App() {
         });
     }
 
-    loadKeys();
+    // loadKeys();
 
-    loadDefs((prog) => {
-      console.log("Progress", prog);
-      setLoadingState(prog);
-    }).finally(() => {
-      loadKeys();
-    });
+    // loadDefs((prog) => {
+    //   setLoadingState(prog);
+    // }).finally(() => {
+    //   loadKeys();
+    // });
   }, []);
 
   const parentRef = useRef<HTMLDivElement>(null);
@@ -288,94 +296,4 @@ function useDefinition(key: number) {
   }, [key]);
 
   return def;
-}
-
-const BANNED_TABLES = [
-  "DestinyInventoryItemLiteDefinition",
-  "DestinyRewardSourceDefinition",
-  "DestinyMetricDefinition",
-];
-
-const limit = pLimit(3);
-
-async function loadDefs(cb: (progress: ProgressRecord) => void) {
-  console.log("Loading definitions");
-  const manifest = await getDestinyManifest(httpClient);
-
-  const version = manifest.Response.version;
-
-  const components = Object.entries(
-    manifest.Response.jsonWorldComponentContentPaths.en
-  ).filter(([tableName]) => !BANNED_TABLES.includes(tableName));
-  // .filter(
-  //   ([tableName], index) => tableName === "DestinyInventoryItemDefinition"
-  //   // tableName === "DestinyActivityDefinition" ||
-  //   // tableName === "DestinyRecordDefinition" ||
-  //   // tableName === "DestinyObjectiveDefinition" ||
-  //   // index < 5
-  // )
-  // .filter(
-  //   ([tableName], index) =>
-  //     tableName === "DestinyInventoryItemDefinition" || index < 20
-  // );
-
-  let allProgress: ProgressRecord = {};
-
-  const promises = components.map(async ([tableName, defsPath]) => {
-    await limit(async () => {
-      allProgress = {
-        ...allProgress,
-        [tableName]: [0, false],
-      };
-      const gen = loadTable(version, tableName, defsPath);
-
-      for await (let tableProgress of gen) {
-        allProgress = {
-          ...allProgress,
-          [tableName]: [
-            tableProgress.receivedLength,
-            !!tableProgress.definitions,
-          ],
-        };
-        // console.log("calling cb with", allProgress);
-        cb(allProgress);
-      }
-    });
-  });
-
-  await Promise.all(promises);
-  window.localStorage.setItem("defs-ng-loaded", "true");
-}
-
-async function* loadTable(
-  version: string,
-  tableName: string,
-  defsPath: string
-) {
-  const defsCount = (await store.countForTable(version, tableName)) ?? -1;
-
-  if (defsCount > 0) {
-    return;
-  }
-
-  const gen = getDefinitionTable(defsPath);
-
-  for await (let tableProgress of gen) {
-    // console.log(
-    //   "getDefinitionTableBase yielded",
-    //   tableName,
-    //   tableProgress.receivedLength
-    // );
-    if (tableProgress.definitions) {
-      if (tableProgress.definitions) {
-        await store.addDefinitions(
-          version,
-          tableName,
-          Object.values(tableProgress.definitions)
-        );
-      }
-    }
-
-    yield tableProgress;
-  }
 }

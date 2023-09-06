@@ -21,3 +21,5 @@ export interface StoredDefinition {
 }
 
 export type StoredDefinitionInput = Omit<StoredDefinition, "key">;
+
+export type ProgressRecord = Record<string, [number, boolean]>;

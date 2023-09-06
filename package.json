@@ -13,6 +13,7 @@
     "@react-hook/resize-observer": "^1.2.6",
     "@tanstack/react-virtual": "3.0.0-beta.58",
     "bungie-api-ts": "^5.0.0",
+    "debug": "^4.3.4",
     "idb": "^7.1.1",
     "p-limit": "^4.0.0",
     "react": "^18.2.0",

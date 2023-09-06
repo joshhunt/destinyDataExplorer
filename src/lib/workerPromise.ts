@@ -1,6 +1,6 @@
 let globalWorkerMessageId = 0;
 
-type StoredCallback = (error: unknown, result: unknown) => void;
+type StoredCallback = (workerResponse: WorkerResponsePayload) => void;
 
 interface WorkerMessagePayload<T = unknown> {
   messageID: number;
@@ -9,16 +9,18 @@ interface WorkerMessagePayload<T = unknown> {
 
 interface WorkerResponsePayload<T = unknown> {
   messageID: number;
-  returnValue: T;
+  result: T | undefined;
+  error?: string;
 }
 
 export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
-  createWorker: () => Worker;
   worker: Worker | undefined;
   callbacks: Record<number, StoredCallback> = {};
+  progressCallbacks: Record<number, StoredCallback> = {};
+  loadWorker: () => Worker;
 
-  constructor(createWorker: () => Worker) {
-    this.createWorker = createWorker;
+  constructor(loadWorker: () => Worker) {
+    this.loadWorker = loadWorker;
   }
 
   withWorker(): Worker {
@@ -26,21 +28,28 @@ export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
       return this.worker;
     }
 
-    this.worker = this.createWorker();
+    this.worker = this.loadWorker();
 
     this.worker.addEventListener("message", (event) => {
-      const { messageID, error, result } = event.data;
+      const { messageID, progressEvent } = event.data;
 
-      const callback = this.callbacks[messageID];
-      if (callback) {
-        callback(error, result);
+      if (progressEvent) {
+        const callback = this.progressCallbacks[messageID];
+        if (callback) {
+          callback(progressEvent);
+        }
+      } else {
+        const callback = this.callbacks[messageID];
+        if (callback) {
+          callback(event.data);
+        }
       }
     });
 
     return this.worker;
   }
 
-  post(data: Payload) {
+  post(data: Payload, onProgress: (progressEvent: any) => void) {
     globalWorkerMessageId += 1;
     const messageID = globalWorkerMessageId;
 
@@ -49,8 +58,12 @@ export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
       data,
     };
 
+    this.progressCallbacks[messageID] = (progressEvent: any) => {
+      onProgress(progressEvent);
+    };
+
     return new Promise((resolve, reject) => {
-      this.callbacks[messageID] = (error, result) => {
+      this.callbacks[messageID] = ({ result, error }) => {
         if (error) {
           reject(error);
         } else {
@@ -58,27 +71,47 @@ export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
         }
       };
 
-      console.log("posting", payload);
       this.withWorker().postMessage(payload);
     });
   }
 
   // This function is called within the worker context
-  async onMessage(cb: (payload: Payload) => Promise<ReturnValue>) {
+  async onMessage(cb: WorkerRegistrationFunction<Payload, ReturnValue>) {
     self.onmessage = async function onWorkerMessage(
       event: MessageEvent<WorkerMessagePayload<Payload>>
     ) {
-      console.log("Worker self.onmessage recieved data", event.data);
       const message = event.data;
 
-      const returnValue = await cb(message.data);
+      function progressCallback(progressEvent: any) {
+        self.postMessage({
+          messageID: message.messageID,
+          progressEvent,
+        });
+      }
 
-      const returnPayload: WorkerResponsePayload = {
-        messageID: message.messageID,
-        returnValue,
-      };
+      Promise.resolve(cb(message.data, progressCallback))
+        .then((result) => {
+          const returnPayload: WorkerResponsePayload = {
+            messageID: message.messageID,
+            result,
+          };
 
-      self.postMessage(returnPayload);
+          self.postMessage(returnPayload);
+        })
+        .catch((err) => {
+          const returnPayload: WorkerResponsePayload = {
+            messageID: message.messageID,
+            result: undefined,
+            error: err.message ?? err.toString?.() ?? "unknown error",
+          };
+
+          self.postMessage(returnPayload);
+        });
     };
   }
 }
+
+type WorkerRegistrationFunction<Payload, Return> = (
+  payload: Payload,
+  progressCallback: (arg: any) => void
+) => Return | Promise<Return>;

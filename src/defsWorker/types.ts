@@ -2,4 +2,14 @@ export interface DefinitionsWorkerInit {
   type: "init";
 }
 
-export type DefinitionsWorkerMessage = DefinitionsWorkerInit;
+export interface DefinitionsWorkerThrows {
+  type: "throws-exception";
+}
+export interface DefinitionsWorkerRejects {
+  type: "rejects";
+}
+
+export type DefinitionsWorkerMessage =
+  | DefinitionsWorkerInit
+  | DefinitionsWorkerThrows
+  | DefinitionsWorkerRejects;

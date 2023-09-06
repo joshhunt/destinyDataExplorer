@@ -1,13 +1,18 @@
-import { AnyDefinition, StoredDefinition } from "./types";
+import { AnyDefinitionTable } from "./types";
 
 export interface DefinitionsProgress {
   receivedLength: number;
-  definitions?: StoredDefinition;
+  // definitions?: StoredDefinition;
 }
 
-export async function* getDefinitionTableBase(
-  tablePath: string
-): AsyncGenerator<DefinitionsProgress, void, void> {
+export type DefinitionsProgressCallback = (
+  progress: DefinitionsProgress
+) => void;
+
+export async function getDefinitionTableBase(
+  tablePath: string,
+  emitProgress: DefinitionsProgressCallback
+): Promise<AnyDefinitionTable> {
   const res = await fetch(`https://www.bungie.net${tablePath}`);
   const reader = res.body?.getReader();
   if (!reader) {
@@ -29,11 +34,7 @@ export async function* getDefinitionTableBase(
     chunks.push(value);
     receivedLength += value.length;
 
-    yield {
-      receivedLength,
-    };
-
-    // console.log(`Received ${receivedLength} of ${contentLength}`);
+    emitProgress({ receivedLength });
   }
 
   const chunksAll = new Uint8Array(receivedLength);
@@ -45,49 +46,40 @@ export async function* getDefinitionTableBase(
 
   const result = new TextDecoder("utf-8").decode(chunksAll);
   const defs = JSON.parse(result);
-
-  yield {
-    receivedLength,
-    definitions: defs,
-  };
+  return defs;
 }
 
-export async function* getDefinitionTable(
-  tablePath: string
-): AsyncGenerator<DefinitionsProgress, void, void> {
-  let defs: AnyDefinition | undefined = undefined;
+export async function getDefinitionTable(
+  tablePath: string,
+  emitProgress: DefinitionsProgressCallback
+): Promise<AnyDefinitionTable> {
+  let defs: AnyDefinitionTable | undefined = undefined;
   let tries = 0;
+  let lastError: any;
 
   const suffixes = [
-    "?",
+    "",
     "?destiny-data-explorer",
     "?cb=" + Date.now(),
     "?cb=" + Math.ceil(Math.random() * 100_000),
   ];
 
   do {
-    const suffix = suffixes[tries];
-    console.log("Getting table", { tablePath, suffix, tries });
+    const suffix = suffixes[tries] ?? "";
+    console.log("Fetching", tablePath, "with suffix", suffix, "on try", tries);
     tries += 1;
-    let defs: StoredDefinition | undefined;
 
     try {
-      const gen = await getDefinitionTableBase(tablePath + suffix);
-
-      for await (const progress of gen) {
-        yield progress;
-        defs = progress.definitions;
-
-        if (defs) {
-          console.log("returning defs", tablePath.split("-")[0]);
-          return;
-        }
-      }
+      defs = await getDefinitionTableBase(tablePath + suffix, emitProgress);
+      break;
     } catch (err) {
-      console.log("getDefinitionTable threw", err);
-      if (tries > suffixes.length) {
-        throw err;
-      }
+      lastError = err;
     }
-  } while (!defs);
+  } while (tries < suffixes.length);
+
+  if (!defs) {
+    throw lastError;
+  }
+
+  return defs;
 }
