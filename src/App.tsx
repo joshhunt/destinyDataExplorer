@@ -268,7 +268,9 @@ async function loadDefs(cb: (progress: number) => void) {
 
   const components = Object.entries(
     manifest.Response.jsonWorldComponentContentPaths.en
-  ).filter(([tableName]) => !BANNED_TABLES.includes(tableName));
+  )
+    .filter(([tableName]) => !BANNED_TABLES.includes(tableName))
+    .filter(([tableName]) => tableName === "DestinyInventoryItemDefinition");
 
   let loaded = 0;
 
