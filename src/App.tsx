@@ -13,14 +13,16 @@ import {
 
 import "./App.css";
 import { store } from "./lib/DefinitionsStore";
-import { getDefinitionTable } from "./lib/bungieAPI";
+import { getDefinitionTable, getDefinitionTableBase } from "./lib/bungieAPI";
 import { httpClient } from "./lib/httpClient";
 import { AnyDefinition, type StoredDefinition } from "./lib/types";
+
+type ProgressRecord = Record<string, [number, boolean]>;
 
 function App() {
   const [columnCount, setColumnCount] = useState(8);
   const [defsKeys, setKeys] = useState<number[]>([]);
-  const [loadingState, setLoadingState] = useState<number>(0);
+  const [loadingState, setLoadingState] = useState<ProgressRecord>({});
   const ranRef = useRef(false);
 
   useEffect(() => {
@@ -36,7 +38,6 @@ function App() {
 
       promises
         .then((allKeys) => {
-          console.log(allKeys);
           const allAllKeys = allKeys
             .flatMap((v) => v)
             .sort((a, b) => (a as number) - (b as number));
@@ -50,6 +51,7 @@ function App() {
     loadKeys();
 
     loadDefs((prog) => {
+      console.log("Progress", prog);
       setLoadingState(prog);
     }).finally(() => {
       loadKeys();
@@ -93,12 +95,48 @@ function App() {
     [virtualizer.measureElement]
   );
 
+  const [loadingTables, finishedTables] = useMemo(() => {
+    const progress = Object.entries(loadingState).reverse();
+    const loadingTables: [string, number][] = [];
+    const finishedTables: [string, number][] = [];
+
+    for (const [tableName, [bytes, isFinished]] of progress) {
+      const foo: [string, number] = [tableName, bytes];
+      if (isFinished) {
+        finishedTables.push(foo);
+      } else {
+        loadingTables.push(foo);
+      }
+    }
+
+    return [loadingTables, finishedTables];
+  }, [loadingState]);
+
   return (
     <>
-      {defsKeys.length > 0 ? (
-        <h1>Items</h1>
+      {loadingTables.length > 0 ? (
+        <>
+          {loadingTables.map(([tableName, bytes]) => {
+            return (
+              <pre key={tableName}>
+                {tableName}
+                {new Array(Math.ceil(bytes / 1024 / 1024 / 2))
+                  .fill(".")
+                  .join("")}
+              </pre>
+            );
+          })}
+          {finishedTables.map(([tableName]) => {
+            return (
+              <pre key={tableName} className="finished-table">
+                {tableName}
+                {" ✔️"}
+              </pre>
+            );
+          })}
+        </>
       ) : (
-        <h1>Loading {Math.floor(loadingState * 100)}%</h1>
+        <h1>Items</h1>
       )}
 
       <div ref={parentRef} className="List">
@@ -258,9 +296,9 @@ const BANNED_TABLES = [
   "DestinyMetricDefinition",
 ];
 
-const limit = pLimit(8);
+const limit = pLimit(3);
 
-async function loadDefs(cb: (progress: number) => void) {
+async function loadDefs(cb: (progress: ProgressRecord) => void) {
   console.log("Loading definitions");
   const manifest = await getDestinyManifest(httpClient);
 
@@ -268,17 +306,40 @@ async function loadDefs(cb: (progress: number) => void) {
 
   const components = Object.entries(
     manifest.Response.jsonWorldComponentContentPaths.en
-  )
-    .filter(([tableName]) => !BANNED_TABLES.includes(tableName))
-    .filter(([tableName]) => tableName === "DestinyInventoryItemDefinition");
+  ).filter(([tableName]) => !BANNED_TABLES.includes(tableName));
+  // .filter(
+  //   ([tableName], index) => tableName === "DestinyInventoryItemDefinition"
+  //   // tableName === "DestinyActivityDefinition" ||
+  //   // tableName === "DestinyRecordDefinition" ||
+  //   // tableName === "DestinyObjectiveDefinition" ||
+  //   // index < 5
+  // )
+  // .filter(
+  //   ([tableName], index) =>
+  //     tableName === "DestinyInventoryItemDefinition" || index < 20
+  // );
 
-  let loaded = 0;
+  let allProgress: ProgressRecord = {};
 
   const promises = components.map(async ([tableName, defsPath]) => {
     await limit(async () => {
-      await loadTable(version, tableName, defsPath);
-      loaded += 1;
-      cb(loaded / components.length);
+      allProgress = {
+        ...allProgress,
+        [tableName]: [0, false],
+      };
+      const gen = loadTable(version, tableName, defsPath);
+
+      for await (let tableProgress of gen) {
+        allProgress = {
+          ...allProgress,
+          [tableName]: [
+            tableProgress.receivedLength,
+            !!tableProgress.definitions,
+          ],
+        };
+        // console.log("calling cb with", allProgress);
+        cb(allProgress);
+      }
     });
   });
 
@@ -286,16 +347,35 @@ async function loadDefs(cb: (progress: number) => void) {
   window.localStorage.setItem("defs-ng-loaded", "true");
 }
 
-async function loadTable(version: string, tableName: string, defsPath: string) {
+async function* loadTable(
+  version: string,
+  tableName: string,
+  defsPath: string
+) {
   const defsCount = (await store.countForTable(version, tableName)) ?? -1;
 
   if (defsCount > 0) {
     return;
   }
 
-  const defs = await getDefinitionTable(defsPath);
-  console.log("loaded defs", defs);
-  await store.addDefinitions(version, tableName, Object.values(defs));
+  const gen = getDefinitionTableBase(defsPath);
 
-  return defs;
+  for await (let tableProgress of gen) {
+    // console.log(
+    //   "getDefinitionTableBase yielded",
+    //   tableName,
+    //   tableProgress.receivedLength
+    // );
+    if (tableProgress.definitions) {
+      if (tableProgress.definitions) {
+        await store.addDefinitions(
+          version,
+          tableName,
+          Object.values(tableProgress.definitions)
+        );
+      }
+    }
+
+    yield tableProgress;
+  }
 }

@@ -31,6 +31,8 @@ export class DefinitionsStore {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async addDefinitions(version: string, tableName: string, definitions: any[]) {
+    // return;
+
     const tx = (await this.ready).transaction(this.storeName, "readwrite");
     const store = tx.objectStore(this.storeName);
 
@@ -43,7 +45,6 @@ export class DefinitionsStore {
 
       try {
         await store.put(storedDef);
-        console.log("put a def");
       } catch (err) {
         console.error("Error storing definition", err, storedDef);
         throw err;
@@ -51,6 +52,7 @@ export class DefinitionsStore {
     }
 
     await tx.done;
+    console.log("Stored", definitions.length, tableName, "definitions");
   }
 
   async getDefinition(tableName: string, hash: number) {
