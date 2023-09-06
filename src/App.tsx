@@ -13,7 +13,7 @@ import {
 
 import "./App.css";
 import { store } from "./lib/DefinitionsStore";
-import { getDefinitionTable, getDefinitionTableBase } from "./lib/bungieAPI";
+import { getDefinitionTable } from "./lib/bungieAPI";
 import { httpClient } from "./lib/httpClient";
 import { AnyDefinition, type StoredDefinition } from "./lib/types";
 
@@ -358,7 +358,7 @@ async function* loadTable(
     return;
   }
 
-  const gen = getDefinitionTableBase(defsPath);
+  const gen = getDefinitionTable(defsPath);
 
   for await (let tableProgress of gen) {
     // console.log(
