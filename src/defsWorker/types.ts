@@ -1,5 +1,5 @@
-export interface InitMessage {
+export interface DefinitionsWorkerInit {
   type: "init";
 }
 
-export type WorkerMessage = InitMessage;
+export type DefinitionsWorkerMessage = DefinitionsWorkerInit;

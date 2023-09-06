@@ -19,6 +19,8 @@ import { AnyDefinition, type StoredDefinition } from "./lib/types";
 
 type ProgressRecord = Record<string, [number, boolean]>;
 
+console.log("asking for worker init");
+
 function App() {
   const [columnCount, setColumnCount] = useState(8);
   const [defsKeys, setKeys] = useState<number[]>([]);
@@ -32,8 +34,6 @@ function App() {
     function loadKeys() {
       const promises = Promise.all([
         store.getAllKeysForTable("DestinyInventoryItemDefinition"),
-        store.getAllKeysForTable("DestinyRecordDefinition"),
-        // store.getAllKeysForTable("DestinyObjectiveDefinition"),
       ]);
 
       promises

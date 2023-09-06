@@ -2,14 +2,33 @@ let globalWorkerMessageId = 0;
 
 type StoredCallback = (error: unknown, result: unknown) => void;
 
-export class WorkerPromise<T> {
-  worker: Worker;
+interface WorkerMessagePayload<T = unknown> {
+  messageID: number;
+  data: T;
+}
+
+interface WorkerResponsePayload<T = unknown> {
+  messageID: number;
+  returnValue: T;
+}
+
+export class WorkerPromise<Payload = unknown, ReturnValue = unknown> {
+  createWorker: () => Worker;
+  worker: Worker | undefined;
   callbacks: Record<number, StoredCallback> = {};
 
-  constructor(worker: Worker) {
-    this.worker = worker;
+  constructor(createWorker: () => Worker) {
+    this.createWorker = createWorker;
+  }
 
-    worker.addEventListener("message", (event) => {
+  withWorker(): Worker {
+    if (this.worker) {
+      return this.worker;
+    }
+
+    this.worker = this.createWorker();
+
+    this.worker.addEventListener("message", (event) => {
       const { messageID, error, result } = event.data;
 
       const callback = this.callbacks[messageID];
@@ -17,13 +36,15 @@ export class WorkerPromise<T> {
         callback(error, result);
       }
     });
+
+    return this.worker;
   }
 
-  post(data: T) {
+  post(data: Payload) {
     globalWorkerMessageId += 1;
     const messageID = globalWorkerMessageId;
 
-    const payload = {
+    const payload: WorkerMessagePayload = {
       messageID: messageID,
       data,
     };
@@ -37,7 +58,27 @@ export class WorkerPromise<T> {
         }
       };
 
-      this.worker.postMessage(payload);
+      console.log("posting", payload);
+      this.withWorker().postMessage(payload);
     });
+  }
+
+  // This function is called within the worker context
+  async onMessage(cb: (payload: Payload) => Promise<ReturnValue>) {
+    self.onmessage = async function onWorkerMessage(
+      event: MessageEvent<WorkerMessagePayload<Payload>>
+    ) {
+      console.log("Worker self.onmessage recieved data", event.data);
+      const message = event.data;
+
+      const returnValue = await cb(message.data);
+
+      const returnPayload: WorkerResponsePayload = {
+        messageID: message.messageID,
+        returnValue,
+      };
+
+      self.postMessage(returnPayload);
+    };
   }
 }
