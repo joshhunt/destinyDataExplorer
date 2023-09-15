@@ -8,7 +8,7 @@ import {
   getDefinitionTable,
 } from "../lib/bungieAPI";
 import { httpClient } from "../lib/httpClient";
-import { ProgressRecord } from "../lib/types";
+import { ProgressRecord, StoredDefinition } from "../lib/types";
 
 const BANNED_TABLES = [
   "DestinyInventoryItemLiteDefinition",
@@ -24,21 +24,49 @@ const limit = pLimit(3);
 // OLD 118365.23.08.23.1700-1-bnet.51970
 // CURRENT 118571.23.08.31.2000-1-bnet.51994
 
+// const PRETEND_OLD: string | null = "118365.23.08.23.1700-1-bnet.51829";
+const PRETEND_OLD: string | null = null;
+
 export async function initDefinitions(cb: (progress: ProgressRecord) => void) {
-  const { version } = await loadDefinitions(cb);
+  const { version, loadedTables } = await loadDefinitions(cb);
 
-  const keysForVersion = await store.deleteAllNotVersion(version);
-  console.log("keys for version", version, keysForVersion);
+  const allGenders: StoredDefinition[] = await store.getAllRowsForTable(
+    "DestinyGenderDefinition"
+  );
+  const uniqueVersions = allGenders.filter((row, index, arr) => {
+    return arr.findIndex((v) => v.version === row.version) === index;
+  });
 
-  const allGenders = await store.getAllRowsForTable("DestinyGenderDefinition");
-  console.log(allGenders);
+  console.group(
+    "Before cleanup, have",
+    uniqueVersions.length,
+    "different versions in indexeddb"
+  );
+  for (const { key, version, ...restRow } of allGenders) {
+    console.log(key, version, restRow);
+  }
+  console.groupEnd();
+
+  await store.cleanupForVersion(version);
+
+  console.group(
+    "After cleanup, have",
+    uniqueVersions.length,
+    "different versions in indexeddb"
+  );
+  for (const { key, version, ...restRow } of allGenders) {
+    console.log(key, version, restRow);
+  }
+  console.groupEnd();
+
+  return { version, loadedTables };
 }
 
 async function loadDefinitions(cb: (progress: ProgressRecord) => void) {
   console.log("Loading definitions");
   const manifest = await getDestinyManifest(httpClient);
 
-  const version = manifest.Response.version;
+  const version = PRETEND_OLD ? PRETEND_OLD : manifest.Response.version;
 
   const components = Object.entries(
     manifest.Response.jsonWorldComponentContentPaths.en
@@ -72,7 +100,7 @@ async function loadDefinitions(cb: (progress: ProgressRecord) => void) {
 
   return {
     loadedTables: components.map((v) => v[0]),
-    version: manifest.Response.version,
+    version: version,
   };
 }
 
@@ -84,6 +112,7 @@ async function loadTable(
 ) {
   debug("Loading table", tableName);
   const defsCount = (await store.countForTable(version, tableName)) ?? -1;
+  debug("got defs count", tableName, defsCount);
 
   if (defsCount > 0) {
     debug("Table already has definitions in idb", tableName);
