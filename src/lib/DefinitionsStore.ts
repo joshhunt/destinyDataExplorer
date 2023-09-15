@@ -1,6 +1,10 @@
-import { IDBPDatabase, openDB } from "idb";
+import { IDBPDatabase, openDB, unwrap } from "idb";
 
-import { StoredDefinition, StoredDefinitionInput } from "./types";
+import {
+  AnyDefinition,
+  StoredDefinition,
+  StoredDefinitionInput,
+} from "./types";
 
 // Old Version
 // 118365.23.08.23.1700-1-bnet.51829
@@ -29,10 +33,11 @@ export class DefinitionsStore {
     objectStore.createIndex("byVersionByTable", ["version", "tableName"]);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async addDefinitions(version: string, tableName: string, definitions: any[]) {
-    // return;
-
+  async addDefinitions(
+    version: string,
+    tableName: string,
+    definitions: AnyDefinition[]
+  ) {
     const tx = (await this.ready).transaction(this.storeName, "readwrite");
     const store = tx.objectStore(this.storeName);
 
@@ -90,13 +95,7 @@ export class DefinitionsStore {
     const tx = (await this.ready).transaction(this.storeName, "readonly");
     const store = tx.objectStore(this.storeName);
 
-    const startMs = Date.now();
-
     const allKeys = await store.getAllKeys();
-
-    const endMs = Date.now();
-    const dur = endMs - startMs;
-    console.log("Got", allKeys.length, "keys in", dur, "ms");
 
     return allKeys;
   }
@@ -106,15 +105,50 @@ export class DefinitionsStore {
     const store = tx.objectStore(this.storeName);
     const tableNameIndex = store.index("tableName");
 
-    const startMs = Date.now();
-
     const allKeys = await tableNameIndex.getAllKeys(tableName);
 
-    const endMs = Date.now();
-    const dur = endMs - startMs;
-    console.log("Got", allKeys.length, "keys in", dur, "ms");
+    return allKeys;
+  }
+
+  async getAllRowsForTable(tableName: string) {
+    const tx = (await this.ready).transaction(this.storeName, "readonly");
+    const store = tx.objectStore(this.storeName);
+    const tableNameIndex = store.index("tableName");
+
+    const allKeys = await tableNameIndex.getAll(tableName);
 
     return allKeys;
+  }
+
+  async deleteAllNotVersion(versionToKeep: string) {
+    const tx = (await this.ready).transaction(this.storeName, "readonly");
+    const store = tx.objectStore(this.storeName);
+    const tableNameIndex = unwrap(store.index("version"));
+
+    const toDelete: IDBValidKey = [];
+
+    let keyCounter = 0;
+
+    console.log("iterating over all keys...");
+    const keyCursorRequest = tableNameIndex.openKeyCursor();
+    keyCursorRequest.onsuccess = (evt) => {
+      const cursor = evt.target.result;
+      if (cursor) {
+        keyCounter += 1;
+        cursor.continue();
+      } else {
+        console.log("read all keys", keyCounter);
+      }
+    };
+
+    // let keyCursor = await tableNameIndex.openKeyCursor();
+
+    // console.log("iterating over all keys...");
+    // while (keyCursor) {
+    //   // console.log(keyCursor.key, keyCursor.primaryKey);
+    //   keyCursor = await keyCursor.continue();
+    // }
+    // console.log("...done");
   }
 }
 

@@ -21,7 +21,20 @@ debug.enabled = true;
 
 const limit = pLimit(3);
 
-export async function loadDefinitions(cb: (progress: ProgressRecord) => void) {
+// OLD 118365.23.08.23.1700-1-bnet.51970
+// CURRENT 118571.23.08.31.2000-1-bnet.51994
+
+export async function initDefinitions(cb: (progress: ProgressRecord) => void) {
+  const { version } = await loadDefinitions(cb);
+
+  const keysForVersion = await store.deleteAllNotVersion(version);
+  console.log("keys for version", version, keysForVersion);
+
+  const allGenders = await store.getAllRowsForTable("DestinyGenderDefinition");
+  console.log(allGenders);
+}
+
+async function loadDefinitions(cb: (progress: ProgressRecord) => void) {
   console.log("Loading definitions");
   const manifest = await getDestinyManifest(httpClient);
 
@@ -29,19 +42,7 @@ export async function loadDefinitions(cb: (progress: ProgressRecord) => void) {
 
   const components = Object.entries(
     manifest.Response.jsonWorldComponentContentPaths.en
-  )
-    .filter(([tableName]) => !BANNED_TABLES.includes(tableName))
-    // .filter(
-    //   ([tableName], index) => tableName === "DestinyInventoryItemDefinition"
-    //   // tableName === "DestinyActivityDefinition" ||
-    //   // tableName === "DestinyRecordDefinition" ||
-    //   // tableName === "DestinyObjectiveDefinition" ||
-    //   // index < 5
-    // )
-    .filter(
-      ([tableName], index) =>
-        tableName === "DestinyInventoryItemDefinition" || index < 150
-    );
+  ).filter(([tableName]) => !BANNED_TABLES.includes(tableName));
 
   let allProgress: ProgressRecord = {};
   function updateProgress(tableName: string, bytes: number, isLoaded: boolean) {

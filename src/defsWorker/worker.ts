@@ -1,13 +1,12 @@
-/* eslint-disable no-restricted-globals */
 import { onMessage } from "../lib/workerPromise";
 
-import { loadDefinitions } from "./loadDefinitions";
+import { initDefinitions } from "./initDefinitions";
 import { DefinitionsWorkerMessage } from "./types";
 
 onMessage<DefinitionsWorkerMessage, unknown>(async (message, onProgress) => {
   switch (message.type) {
     case "init":
-      return loadDefinitions(onProgress);
+      return initDefinitions(onProgress);
 
     case "throws-exception":
       throw new Error("this is an error i threw!");
