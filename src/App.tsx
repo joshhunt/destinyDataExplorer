@@ -14,6 +14,7 @@ import { workerInterface } from "./defsWorker/interface";
 import { store } from "./lib/DefinitionsStore";
 import {
   AnyDefinition,
+  InitDefinitionsProgressEvent,
   ProgressRecord,
   type StoredDefinition,
 } from "./lib/types";
@@ -28,21 +29,30 @@ function App() {
     if (ranRef.current) return;
     ranRef.current = true;
 
-    function onProgress(prog: any) {
-      setLoadingState(prog);
+    function onProgress(prog: InitDefinitionsProgressEvent) {
+      console.log("got progress", prog);
+      // setLoadingState(prog);
+
+      if (prog.type === "version-known") {
+        loadKeys(prog.version);
+      }
+
+      if (prog.type === "table-progress") {
+        setLoadingState(prog.progress);
+      }
     }
 
     workerInterface
       .post({ type: "init" }, onProgress)
-      .then((resp) => {
-        console.log("init defs", resp);
-        loadKeys();
+      .then((rawResp) => {
+        const resp = rawResp as { version: string };
+        loadKeys(resp.version);
       })
       .catch(console.error);
 
-    function loadKeys() {
+    function loadKeys(version: string) {
       const promises = Promise.all([
-        store.getAllKeysForTable("DestinyInventoryItemDefinition"),
+        store.getAllKeysForTable(version, "DestinyInventoryItemDefinition"),
       ]);
 
       promises

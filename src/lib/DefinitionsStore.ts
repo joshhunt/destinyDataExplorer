@@ -16,16 +16,12 @@ export class DefinitionsStore {
   constructor() {
     this.ready = openDB(this.dbName, this.dbVersion, {
       upgrade: this.upgradeHandler,
-      blocked: (...args: any[]) => console.log("table blocked", ...args),
-      blocking: (...args: any[]) => console.log("table blocking", ...args),
-      terminated: (...args: any[]) => console.log("table terminated", ...args),
     });
 
     // this.ready = Promise.reject("not opening idb connections");
   }
 
   upgradeHandler = (db: IDBPDatabase<unknown>) => {
-    console.log("upgrade handler ");
     const objectStore = db.createObjectStore(this.storeName, {
       keyPath: "key",
       autoIncrement: true,
@@ -89,15 +85,10 @@ export class DefinitionsStore {
   }
 
   async countForTable(version: string, tableName: string) {
-    console.log("countForTable");
     const db = await this.ready;
-    console.log("got db");
     const tx = db.transaction(this.storeName, "readonly");
-    console.log("got transaction");
     const store = tx.objectStore(this.storeName);
-    console.log("got store");
     const storeIndex = store.index("byVersionByTable");
-    console.log("got index");
     return storeIndex.count([version, tableName]);
   }
 
@@ -110,12 +101,12 @@ export class DefinitionsStore {
     return allKeys;
   }
 
-  async getAllKeysForTable(tableName: string) {
+  async getAllKeysForTable(version: string, tableName: string) {
     const tx = (await this.ready).transaction(this.storeName, "readonly");
     const store = tx.objectStore(this.storeName);
-    const tableNameIndex = store.index("tableName");
+    const tableNameIndex = store.index("byVersionByTable");
 
-    const allKeys = await tableNameIndex.getAllKeys(tableName);
+    const allKeys = await tableNameIndex.getAllKeys([version, tableName]);
 
     return allKeys;
   }
@@ -129,37 +120,6 @@ export class DefinitionsStore {
 
     return allKeys;
   }
-
-  // async deleteAllNotVersion(versionToKeep: string) {
-  //   const tx = (await this.ready).transaction(this.storeName, "readonly");
-  //   const store = tx.objectStore(this.storeName);
-  //   const tableNameIndex = unwrap(store.index("version"));
-
-  //   const toDelete: IDBValidKey = [];
-
-  //   let keyCounter = 0;
-
-  //   console.log("iterating over all keys...");
-  //   const keyCursorRequest = tableNameIndex.openKeyCursor();
-  //   keyCursorRequest.onsuccess = (evt) => {
-  //     const cursor = evt.target.result;
-  //     if (cursor) {
-  //       keyCounter += 1;
-  //       cursor.continue();
-  //     } else {
-  //       console.log("read all keys", keyCounter);
-  //     }
-  //   };
-
-  //   // let keyCursor = await tableNameIndex.openKeyCursor();
-
-  //   // console.log("iterating over all keys...");
-  //   // while (keyCursor) {
-  //   //   // console.log(keyCursor.key, keyCursor.primaryKey);
-  //   //   keyCursor = await keyCursor.continue();
-  //   // }
-  //   // console.log("...done");
-  // }
 
   /** Deletes all stored definitions not matching the requested version */
   async cleanupForVersion(versionToKeep: string) {

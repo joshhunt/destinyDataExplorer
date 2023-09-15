@@ -22,4 +22,17 @@ export interface StoredDefinition {
 
 export type StoredDefinitionInput = Omit<StoredDefinition, "key">;
 
+export interface InitDefinitionsProgressVersionKnown {
+  type: "version-known";
+  version: string;
+}
+
 export type ProgressRecord = Record<string, [number, boolean]>;
+export interface InitDefinitionsProgressTableProgress {
+  type: "table-progress";
+  progress: ProgressRecord;
+}
+
+export type InitDefinitionsProgressEvent =
+  | InitDefinitionsProgressVersionKnown
+  | InitDefinitionsProgressTableProgress;

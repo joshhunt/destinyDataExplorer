@@ -1,4 +1,4 @@
-import { getDestinyManifest } from "bungie-api-ts/destiny2";
+import { DestinyManifest, getDestinyManifest } from "bungie-api-ts/destiny2";
 import debugLib from "debug";
 import pLimit from "p-limit";
 
@@ -8,7 +8,11 @@ import {
   getDefinitionTable,
 } from "../lib/bungieAPI";
 import { httpClient } from "../lib/httpClient";
-import { ProgressRecord, StoredDefinition } from "../lib/types";
+import {
+  InitDefinitionsProgressEvent,
+  ProgressRecord,
+  StoredDefinition,
+} from "../lib/types";
 
 const BANNED_TABLES = [
   "DestinyInventoryItemLiteDefinition",
@@ -27,8 +31,24 @@ const limit = pLimit(3);
 // const PRETEND_OLD: string | null = "118365.23.08.23.1700-1-bnet.51829";
 const PRETEND_OLD: string | null = null;
 
-export async function initDefinitions(cb: (progress: ProgressRecord) => void) {
-  const { version, loadedTables } = await loadDefinitions(cb);
+type EmitProgressEvent = (ev: InitDefinitionsProgressEvent) => void;
+
+export async function initDefinitions(emitProgress: EmitProgressEvent) {
+  const manifestResp = await getDestinyManifest(httpClient);
+  if (PRETEND_OLD) {
+    // @ts-expect-error
+    manifestResp.Response.version = PRETEND_OLD;
+  }
+
+  emitProgress({
+    type: "version-known",
+    version: manifestResp.Response.version,
+  });
+
+  const { version, loadedTables } = await loadDefinitions(
+    manifestResp.Response,
+    emitProgress
+  );
 
   const allGenders: StoredDefinition[] = await store.getAllRowsForTable(
     "DestinyGenderDefinition"
@@ -62,35 +82,41 @@ export async function initDefinitions(cb: (progress: ProgressRecord) => void) {
   return { version, loadedTables };
 }
 
-async function loadDefinitions(cb: (progress: ProgressRecord) => void) {
+async function loadDefinitions(
+  manifest: DestinyManifest,
+  cb: EmitProgressEvent
+) {
   console.log("Loading definitions");
-  const manifest = await getDestinyManifest(httpClient);
 
-  const version = PRETEND_OLD ? PRETEND_OLD : manifest.Response.version;
-
+  const version = manifest.version;
   const components = Object.entries(
-    manifest.Response.jsonWorldComponentContentPaths.en
+    manifest.jsonWorldComponentContentPaths.en
   ).filter(([tableName]) => !BANNED_TABLES.includes(tableName));
 
   let allProgress: ProgressRecord = {};
-  function updateProgress(tableName: string, bytes: number, isLoaded: boolean) {
+  function emitTableProgress(
+    tableName: string,
+    bytes: number,
+    isLoaded: boolean
+  ) {
     allProgress = {
       ...allProgress,
       [tableName]: [bytes, isLoaded],
     };
 
-    cb(allProgress);
+    cb({
+      type: "table-progress",
+      progress: allProgress,
+    });
   }
 
   const promises = components.map(async ([tableName, defsPath]) => {
     return await limit(async () => {
-      updateProgress(tableName, 0, false);
-
       const defs = await loadTable(version, tableName, defsPath, (tableProg) =>
-        updateProgress(tableName, tableProg.receivedLength, false)
+        emitTableProgress(tableName, tableProg.receivedLength, false)
       );
 
-      updateProgress(tableName, 0, true);
+      emitTableProgress(tableName, 0, true);
 
       return [tableName, defs] as const;
     });
@@ -118,6 +144,8 @@ async function loadTable(
     debug("Table already has definitions in idb", tableName);
     return;
   }
+
+  emitProgress({ receivedLength: 0 });
 
   debug("Requesting table from network", tableName);
   const defs = await getDefinitionTable(defsPath, emitProgress);
