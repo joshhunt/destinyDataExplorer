@@ -1,5 +1,4 @@
 import { DestinyManifest, getDestinyManifest } from "bungie-api-ts/destiny2";
-import debugLib from "debug";
 import pLimit from "p-limit";
 
 import { store } from "../lib/DefinitionsStore";
@@ -7,12 +6,9 @@ import {
   DefinitionsProgressCallback,
   getDefinitionTable,
 } from "../lib/bungieAPI";
+import { createDebug } from "../lib/debug";
 import { httpClient } from "../lib/httpClient";
-import {
-  InitDefinitionsProgressEvent,
-  ProgressRecord,
-  StoredDefinition,
-} from "../lib/types";
+import { InitDefinitionsProgressEvent, ProgressRecord } from "../lib/types";
 
 const BANNED_TABLES = [
   "DestinyInventoryItemLiteDefinition",
@@ -20,24 +16,27 @@ const BANNED_TABLES = [
   "DestinyMetricDefinition",
 ];
 
-const debug = debugLib("worker:loadDefinitions");
-debug.enabled = true;
+const ALLOWED_TABLES: string[] = [
+  // "DestinyGenderDefinition",
+  // "DestinyRaceDefinition",
+  // "DestinyClassDefinition",
+  // "DestinyPlaceDefinition",
+];
+
+const debug = createDebug("loadDefinitions");
 
 const limit = pLimit(3);
 
-// OLD 118365.23.08.23.1700-1-bnet.51970
-// CURRENT 118571.23.08.31.2000-1-bnet.51994
-
-// const PRETEND_OLD: string | null = "118365.23.08.23.1700-1-bnet.51829";
-const PRETEND_OLD: string | null = null;
-
 type EmitProgressEvent = (ev: InitDefinitionsProgressEvent) => void;
 
-export async function initDefinitions(emitProgress: EmitProgressEvent) {
+export async function initDefinitions(
+  emitProgress: EmitProgressEvent,
+  pretendVersion?: string
+) {
   const manifestResp = await getDestinyManifest(httpClient);
-  if (PRETEND_OLD) {
+  if (pretendVersion) {
     // @ts-expect-error
-    manifestResp.Response.version = PRETEND_OLD;
+    manifestResp.Response.version = pretendVersion;
   }
 
   emitProgress({
@@ -50,34 +49,9 @@ export async function initDefinitions(emitProgress: EmitProgressEvent) {
     emitProgress
   );
 
-  const allGenders: StoredDefinition[] = await store.getAllRowsForTable(
-    "DestinyGenderDefinition"
-  );
-  const uniqueVersions = allGenders.filter((row, index, arr) => {
-    return arr.findIndex((v) => v.version === row.version) === index;
-  });
-
-  console.group(
-    "Before cleanup, have",
-    uniqueVersions.length,
-    "different versions in indexeddb"
-  );
-  for (const { key, version, ...restRow } of allGenders) {
-    console.log(key, version, restRow);
-  }
-  console.groupEnd();
-
+  console.time("defs cleanup");
   await store.cleanupForVersion(version);
-
-  console.group(
-    "After cleanup, have",
-    uniqueVersions.length,
-    "different versions in indexeddb"
-  );
-  for (const { key, version, ...restRow } of allGenders) {
-    console.log(key, version, restRow);
-  }
-  console.groupEnd();
+  console.timeEnd("defs cleanup");
 
   return { version, loadedTables };
 }
@@ -86,12 +60,18 @@ async function loadDefinitions(
   manifest: DestinyManifest,
   cb: EmitProgressEvent
 ) {
-  console.log("Loading definitions");
+  debug("Loading definitions");
 
   const version = manifest.version;
   const components = Object.entries(
     manifest.jsonWorldComponentContentPaths.en
-  ).filter(([tableName]) => !BANNED_TABLES.includes(tableName));
+  ).filter(([tableName]) => {
+    if (ALLOWED_TABLES.length > 0) {
+      return ALLOWED_TABLES.includes(tableName);
+    }
+
+    return !BANNED_TABLES.includes(tableName);
+  });
 
   let allProgress: ProgressRecord = {};
   function emitTableProgress(

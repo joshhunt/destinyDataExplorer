@@ -49,7 +49,7 @@ export class WorkerPromise<Payload = unknown> {
     return this.worker;
   }
 
-  post(data: Payload, onProgress: (progressEvent: any) => void) {
+  post(data: Payload, onProgress?: (progressEvent: any) => void) {
     globalWorkerMessageId += 1;
     const messageID = globalWorkerMessageId;
 
@@ -59,7 +59,7 @@ export class WorkerPromise<Payload = unknown> {
     };
 
     this.progressCallbacks[messageID] = (progressEvent: any) => {
-      onProgress(progressEvent);
+      onProgress?.(progressEvent);
     };
 
     return new Promise((resolve, reject) => {

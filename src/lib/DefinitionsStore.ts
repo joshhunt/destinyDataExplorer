@@ -1,10 +1,13 @@
 import { IDBPDatabase, openDB } from "idb";
 
+import { createDebug } from "./debug";
 import {
   AnyDefinition,
   StoredDefinition,
   StoredDefinitionInput,
 } from "./types";
+
+const debug = createDebug("definitionsStore");
 
 export class DefinitionsStore {
   dbVersion = 1;
@@ -21,10 +24,15 @@ export class DefinitionsStore {
     // this.ready = Promise.reject("not opening idb connections");
   }
 
+  /**
+   * However if the primary key is a compound key and the first entry in the
+   * compound key is the field you want to filter on, you can use a KeyRange
+   * and pass it to IDBObjectStore.delete like you suggested:
+   */
+
   upgradeHandler = (db: IDBPDatabase<unknown>) => {
     const objectStore = db.createObjectStore(this.storeName, {
-      keyPath: "key",
-      autoIncrement: true,
+      keyPath: ["version", "tableName", "key"],
     });
 
     objectStore.createIndex("tableName", "tableName");
@@ -43,9 +51,10 @@ export class DefinitionsStore {
 
     for (const def of definitions) {
       const storedDef: StoredDefinitionInput = {
-        tableName,
-        definition: def,
         version: version,
+        tableName,
+        key: getKeyForDefinition(tableName, def),
+        definition: def,
       };
 
       try {
@@ -57,7 +66,7 @@ export class DefinitionsStore {
     }
 
     await tx.done;
-    console.log("Stored", definitions.length, tableName, "definitions");
+    debug("Stored", definitions.length, tableName, "definitions");
   }
 
   async getDefinition(tableName: string, hash: number) {
@@ -123,36 +132,70 @@ export class DefinitionsStore {
 
   /** Deletes all stored definitions not matching the requested version */
   async cleanupForVersion(versionToKeep: string) {
-    const tx = (await this.ready).transaction(this.storeName, "readwrite");
+    const tx = (await this.ready).transaction(this.storeName, "readwrite", {
+      durability: "strict",
+    });
+
+    const store = tx.objectStore(this.storeName);
+    const versionIndex = store.index("version");
+
+    // Get all unique versions
+    console.time("get unique versions");
+    let cursor = await versionIndex.openKeyCursor(undefined, "nextunique");
+    const versions: string[] = [];
+    while (cursor) {
+      const version = cursor.key;
+      if (typeof version !== "string") {
+        throw new Error("Version was not a string");
+      }
+
+      if (version !== versionToKeep) {
+        versions.push(version);
+      }
+
+      cursor = await cursor.continue();
+    }
+    console.timeEnd("get unique versions");
+    debug("Unique versions to delete", versions);
+
+    for (const version of versions) {
+      console.time(`deleting ${version}`);
+
+      const keyRange = IDBKeyRange.bound(
+        [version, 0],
+        [version, "xxxxxx"],
+        false,
+        true
+      );
+      await store.delete(keyRange);
+
+      console.timeEnd(`deleting ${version}`);
+    }
+  }
+
+  async getAllDefinitions(version: string) {
+    const allDefinitions: StoredDefinition[] = [];
+
+    const tx = (await this.ready).transaction(this.storeName, "readonly");
     const store = tx.objectStore(this.storeName);
     const versionKeyIndex = store.index("version");
 
-    const keysToDelete = await versionKeyIndex.getAllKeys(
-      IDBKeyRange.upperBound(versionToKeep, true)
-    );
+    let cursor = await versionKeyIndex.openCursor(version);
 
-    console.log("Deleting", keysToDelete.length, "old rows");
-
-    let counter = 0;
-    const intervalId = setInterval(() => {
-      console.log(
-        `deleted ${counter} / ${keysToDelete.length} ${Math.floor(
-          (counter / keysToDelete.length) * 100
-        )}%`
-      );
-    }, 500);
-
-    for (const key of keysToDelete) {
-      await store.delete(key);
-      counter += 1;
+    while (cursor) {
+      allDefinitions.push(cursor.value);
+      cursor = await cursor.continue();
     }
 
-    clearInterval(intervalId);
+    return allDefinitions;
   }
 }
 
 export const store = new DefinitionsStore();
 
+/**
+ * @deprecated Not used
+ */
 export function getKeyRanges(keys: IDBValidKey[]) {
   const sparse = [];
 
@@ -197,4 +240,12 @@ export function getKeyRanges(keys: IDBValidKey[]) {
   }
 
   return ranges;
+}
+
+function getKeyForDefinition(tableName: string, def: AnyDefinition) {
+  if (def.hash == undefined) {
+    throw new Error(`Definition ${tableName} does not have a hash`);
+  }
+
+  return def.hash;
 }

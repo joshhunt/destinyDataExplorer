@@ -34,6 +34,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "react", "import"],
   rules: {
+    "no-console": ["error", { allow: ["warn", "error", "time", "timeEnd"] }],
     "react/react-in-jsx-scope": 0,
     "import/order": [
       "error",

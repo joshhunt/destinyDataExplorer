@@ -1,8 +1,10 @@
+import { createDebug } from "./debug";
 import { AnyDefinitionTable } from "./types";
+
+const debug = createDebug("bungieAPI");
 
 export interface DefinitionsProgress {
   receivedLength: number;
-  // definitions?: StoredDefinition;
 }
 
 export type DefinitionsProgressCallback = (
@@ -66,7 +68,7 @@ export async function getDefinitionTable(
 
   do {
     const suffix = suffixes[tries] ?? "";
-    console.log("Fetching", tablePath, "with suffix", suffix, "on try", tries);
+    debug("Fetching table", { tablePath, suffix, tries });
     tries += 1;
 
     try {

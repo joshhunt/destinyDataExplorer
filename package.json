@@ -14,6 +14,7 @@
     "@tanstack/react-virtual": "3.0.0-beta.58",
     "bungie-api-ts": "^5.0.0",
     "debug": "^4.3.4",
+    "flexsearch": "^0.7.31",
     "fuse.js": "^6.6.2",
     "idb": "^7.1.1",
     "p-limit": "^4.0.0",

@@ -6,21 +6,20 @@ export type AnyDefinitionTable =
 export type AnyDefinition = AnyDefinitionTable[keyof AnyDefinitionTable];
 
 export interface StoredDefinition {
-  /** Auto-incrementing ID for this definition, unique across *all* definitions
-   * and tables. Does not match the definition hash or index.  */
-  key: number;
+  /** Manifest version this definition is from. */
+  version: string;
 
   /** Definition table name, such as DestinyInventoryItemDefinition. */
   tableName: string;
 
-  /** Manifest version this definition is from. */
-  version: string;
+  /** Definition hash (or other identifier) */
+  key: string | number;
 
   /** The definition object itself. */
   definition: AnyDefinition;
 }
 
-export type StoredDefinitionInput = Omit<StoredDefinition, "key">;
+export type StoredDefinitionInput = StoredDefinition;
 
 export interface InitDefinitionsProgressVersionKnown {
   type: "version-known";
