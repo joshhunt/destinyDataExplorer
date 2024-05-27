@@ -1,8 +1,10 @@
 import { IDBPDatabase, openDB } from "idb";
 
+import { TupleMap } from "./TupleMap";
 import { createDebug } from "./debug";
 import {
   AnyDefinition,
+  PrimaryKey,
   StoredDefinition,
   StoredDefinitionInput,
 } from "./types";
@@ -67,9 +69,9 @@ export class DefinitionsStore {
     return def;
   }
 
-  getByKeyCache = new Map<number, StoredDefinition>();
+  getByKeyCache = new TupleMap<PrimaryKey, StoredDefinition>();
 
-  async getByKey(key: number): Promise<StoredDefinition | undefined> {
+  async getByKey(key: PrimaryKey): Promise<StoredDefinition | undefined> {
     let value = this.getByKeyCache.get(key);
 
     if (value) {
@@ -189,55 +191,6 @@ export class DefinitionsStore {
 }
 
 export const store = new DefinitionsStore();
-
-/**
- * @deprecated Not used
- */
-export function getKeyRanges(keys: IDBValidKey[]) {
-  const sparse = [];
-
-  for (var i = 0; i < keys.length; i++) {
-    const value = keys[i];
-    if (typeof value !== "number") {
-      throw new Error("Number was not passed into getKeyRanges");
-    }
-
-    sparse[value] = true;
-  }
-
-  const ranges: [number?, number?][] = [[]];
-  let currentRange: (typeof ranges)[number] | undefined;
-
-  for (let index = 0; index < sparse.length; index++) {
-    currentRange = ranges.at(-1);
-
-    if (!currentRange) {
-      throw new Error("do not have a currentRange");
-    }
-
-    const prevHasValue = sparse[index - 1];
-    const hasValue = sparse[index];
-
-    if (!prevHasValue && hasValue) {
-      // is start of a range
-      currentRange[0] = index;
-    } else if (hasValue) {
-      // is middle of a range
-    } else if (prevHasValue && !hasValue) {
-      // prev i is end of range
-      currentRange[1] = index - 1;
-      ranges.push([]);
-    } else {
-      // is just not in a range
-    }
-  }
-
-  if (currentRange?.length === 1) {
-    currentRange.push(sparse.length - 1);
-  }
-
-  return ranges;
-}
 
 function getKeyForDefinition(tableName: string, def: AnyDefinition) {
   if (def.hash == undefined) {

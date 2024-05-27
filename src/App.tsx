@@ -5,10 +5,14 @@ import { ItemGrid } from "./components/ItemGrid";
 import { LoadingTables } from "./components/LoadingTables";
 import { workerInterface } from "./defsWorker/interface";
 import { store } from "./lib/DefinitionsStore";
-import { InitDefinitionsProgressEvent, ProgressRecord } from "./lib/types";
+import {
+  InitDefinitionsProgressEvent,
+  PrimaryKey,
+  ProgressRecord,
+} from "./lib/types";
 
 function App() {
-  const [defsKeys, setKeys] = useState<number[]>([]);
+  const [defsKeys, setKeys] = useState<PrimaryKey[]>([]);
   const [loadingState, setLoadingState] = useState<ProgressRecord>({});
   const ranRef = useRef(false);
 
@@ -58,7 +62,7 @@ function App() {
             .flatMap((v) => v)
             .sort((a, b) => (a as number) - (b as number));
 
-          setKeys(allAllKeys as number[]);
+          setKeys(allAllKeys as PrimaryKey[]);
         })
         .catch((err) => {
           console.error(err);

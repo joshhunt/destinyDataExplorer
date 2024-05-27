@@ -19,6 +19,12 @@ export interface StoredDefinition {
   definition: AnyDefinition;
 }
 
+export type PrimaryKey = [
+  StoredDefinition["version"],
+  StoredDefinition["tableName"],
+  StoredDefinition["key"]
+];
+
 export type StoredDefinitionInput = StoredDefinition;
 
 export interface InitDefinitionsProgressVersionKnown {

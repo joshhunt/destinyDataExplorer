@@ -1,14 +1,14 @@
 import { useMemo, useState, useEffect } from "react";
 
 import { store } from "../lib/DefinitionsStore";
-import { AnyDefinition, StoredDefinition } from "../lib/types";
+import { AnyDefinition, PrimaryKey, StoredDefinition } from "../lib/types";
 
 interface DefProps {
-  defKey: number;
+  pkey: PrimaryKey;
 }
 
-export function Def(props: DefProps) {
-  const [row, loaded] = useDefinition(props.defKey);
+export function Def({ pkey }: DefProps) {
+  const [row, loaded] = useDefinition(pkey);
 
   const prettyTableName = useMemo(
     () => row?.tableName?.match(/Destiny(\w+)Definition/)?.[1] ?? "",
@@ -51,15 +51,13 @@ export function Def(props: DefProps) {
 
 type UseDefTuple = [StoredDefinition, true] | [undefined, boolean];
 
-function useDefinition(key: number) {
+function useDefinition(pkey: PrimaryKey) {
   const [def, setDef] = useState<UseDefTuple>([undefined, false]);
 
   useEffect(() => {
-    if (key === -1) return;
-
     async function run() {
       try {
-        const defResult = await store.getByKey(key);
+        const defResult = await store.getByKey(pkey);
         setDef([defResult, true]);
       } catch {
         setDef([undefined, true]);
@@ -67,7 +65,7 @@ function useDefinition(key: number) {
     }
 
     run();
-  }, [key]);
+  }, [pkey]);
 
   return def;
 }

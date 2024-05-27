@@ -2,10 +2,13 @@ import useResizeObserver from "@react-hook/resize-observer";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
+import { serialiseKey } from "../lib/defsUtils";
+import { PrimaryKey } from "../lib/types";
+
 import { Def } from "./Def";
 
 interface ItemGridProps {
-  defsKeys: number[];
+  defsKeys: PrimaryKey[];
 }
 
 export function ItemGrid({ defsKeys }: ItemGridProps) {
@@ -82,7 +85,7 @@ export function ItemGrid({ defsKeys }: ItemGridProps) {
 
               return (
                 <div
-                  key={key}
+                  key={serialiseKey(key)}
                   data-index={virtualRow.index}
                   ref={index === 0 ? measureElement : undefined}
                   className={
@@ -90,7 +93,7 @@ export function ItemGrid({ defsKeys }: ItemGridProps) {
                   }
                 >
                   <div style={{ padding: "10px 0" }}>
-                    <Def defKey={key} />
+                    <Def pkey={key} />
                   </div>
                 </div>
               );
