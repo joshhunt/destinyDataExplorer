@@ -20,18 +20,11 @@ export class DefinitionsStore {
     this.ready = openDB(this.dbName, this.dbVersion, {
       upgrade: this.upgradeHandler,
     });
-
-    // this.ready = Promise.reject("not opening idb connections");
   }
-
-  /**
-   * However if the primary key is a compound key and the first entry in the
-   * compound key is the field you want to filter on, you can use a KeyRange
-   * and pass it to IDBObjectStore.delete like you suggested:
-   */
 
   upgradeHandler = (db: IDBPDatabase<unknown>) => {
     const objectStore = db.createObjectStore(this.storeName, {
+      // The primary key must be compound, starting with version, so we can bulk delete based on version
       keyPath: ["version", "tableName", "key"],
     });
 
@@ -161,6 +154,10 @@ export class DefinitionsStore {
     for (const version of versions) {
       console.time(`deleting ${version}`);
 
+      // See https://stackoverflow.com/a/55983636
+      // The primary key is a composit key of [version, tableName, key] which allows us to delete all rows
+      // for a version in a single operation
+      // The key range goes until version + xxxxxx, hoping that all table names are sorted before 'xxxxxx'
       const keyRange = IDBKeyRange.bound(
         [version, 0],
         [version, "xxxxxx"],
