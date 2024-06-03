@@ -15,7 +15,7 @@ export interface SearchWorkerMessage {
 export interface LoadDefinitionsWorkerMessage {
   type: typeof LOAD_DEFINITIONS;
   payload: {
-    manifestVersion: string;
+    manifestVersion: string | undefined;
   };
 }
 

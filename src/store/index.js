@@ -107,6 +107,12 @@ function loadDefinitions(langCode) {
       if (err) {
         console.error("Error loading definitions:", err);
         store.dispatch(definitionsError(err));
+
+        store.dispatch(startingSearchWorker());
+        sendDefinitions(undefined).then(() => {
+          store.dispatch(startingSearchWorkerSuccess());
+        });
+
         return;
       }
 

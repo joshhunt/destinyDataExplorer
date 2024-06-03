@@ -69,105 +69,110 @@ export async function getDefinitions(
   dataCallback: DataCallback,
   progressCallback: ProgressCallback
 ) {
-  log("Loading definitions", { language });
+  try {
+    log("Loading definitions", { language });
 
-  log("Fetching manifest for later");
-  const manifestPromise = getDestiny("/Platform/Destiny2/Manifest/", {
-    _noAuth: true,
-  });
+    log("Fetching manifest for later!");
+    const manifestPromise = getDestiny("/Platform/Destiny2/Manifest/", {
+      _noAuth: true,
+    });
 
-  log("Loading existing definitions from idb");
-  const idbLoadStart = performance.now();
-  const existingDefinitions = await getStoredDefinitions();
-  const idbLoadEnd = performance.now();
+    log("Loading existing definitions from idb");
+    const idbLoadStart = performance.now();
+    const existingDefinitions = await getStoredDefinitions();
+    const idbLoadEnd = performance.now();
 
-  log("Loaded existing definitions from idb", {
-    timeMs: idbLoadEnd - idbLoadStart,
-    tables: existingDefinitions.map((v) => ({
-      tableName: v.tableName,
-      version: v.version,
-    })),
-  });
+    log("Loaded existing definitions from idb", {
+      timeMs: idbLoadEnd - idbLoadStart,
+      tables: existingDefinitions.map((v) => ({
+        tableName: v.tableName,
+        version: v.version,
+      })),
+    });
 
-  dataCallback(null, storedDefinitionsToPayload(existingDefinitions, false));
+    dataCallback(null, storedDefinitionsToPayload(existingDefinitions, false));
 
-  log("Waiting for manifest to load");
-  const manifest: DestinyManifest = await manifestPromise;
+    log("Waiting for manifest to load");
+    const manifest: DestinyManifest = await manifestPromise;
 
-  const version = manifest.version;
-  log("Loaded manifest from Bungie", { version, manifest });
-  const allCurrentVersion =
-    existingDefinitions.length > 1 &&
-    existingDefinitions.every((v) => v.version === version);
+    const version = manifest.version;
+    log("Loaded manifest from Bungie", { version, manifest });
+    const allCurrentVersion =
+      existingDefinitions.length > 1 &&
+      existingDefinitions.every((v) => v.version === version);
 
-  if (allCurrentVersion) {
-    log("All definitions are current, finishing!");
-    return dataCallback(null, { done: true, manifestVersion: version });
-  }
+    if (allCurrentVersion) {
+      log("All definitions are current, finishing!");
+      return dataCallback(null, { done: true, manifestVersion: version });
+    }
 
-  const sqlitePath = manifest.mobileWorldContentPaths[language];
+    const sqlitePath = manifest.mobileWorldContentPaths[language];
 
-  progressCallback({ status: ProgressStatus.Downloading });
+    progressCallback({ status: ProgressStatus.Downloading });
 
-  const sqliteDefinitions = await getDefinitionsFromSQLite(
-    sqlitePath,
-    progressCallback
-  );
-
-  const jsonTablesToFetch = Object.entries(
-    manifest.jsonWorldComponentContentPaths[language]
-  ).filter(([tableName]) => {
-    return (
-      !BANNED_TABLE_NAMES.includes(tableName) && !sqliteDefinitions[tableName]
+    const sqliteDefinitions = await getDefinitionsFromSQLite(
+      sqlitePath,
+      progressCallback
     );
-  });
 
-  log("Loading JSON components for", jsonTablesToFetch);
+    const jsonTablesToFetch = Object.entries(
+      manifest.jsonWorldComponentContentPaths[language]
+    ).filter(([tableName]) => {
+      return (
+        !BANNED_TABLE_NAMES.includes(tableName) && !sqliteDefinitions[tableName]
+      );
+    });
 
-  progressCallback({ status: ProgressStatus.LoadingJSONTables });
+    log("Loading JSON components for", jsonTablesToFetch);
 
-  const loadedJsonTables = await Promise.all(
-    jsonTablesToFetch.map(async ([tableName, tablePath]) => {
-      return fetch(`https://www.bungie.net${tablePath}`)
-        .then((resp) => resp.json())
-        .then((definitionsTable: DefinitionTable) => ({
-          tableName,
-          definitionsTable,
-        }));
-    })
-  );
+    progressCallback({ status: ProgressStatus.LoadingJSONTables });
 
-  const allDefinitions = { ...sqliteDefinitions };
-  for (const jsonTable of loadedJsonTables) {
-    allDefinitions[jsonTable.tableName] = jsonTable.definitionsTable;
+    const loadedJsonTables = await Promise.all(
+      jsonTablesToFetch.map(async ([tableName, tablePath]) => {
+        return fetch(`https://www.bungie.net${tablePath}`)
+          .then((resp) => resp.json())
+          .then((definitionsTable: DefinitionTable) => ({
+            tableName,
+            definitionsTable,
+          }));
+      })
+    );
+
+    const allDefinitions = { ...sqliteDefinitions };
+    for (const jsonTable of loadedJsonTables) {
+      allDefinitions[jsonTable.tableName] = jsonTable.definitionsTable;
+    }
+
+    dataCallback(null, {
+      done: true,
+      definitions: allDefinitions,
+      manifestVersion: version,
+    });
+
+    const storedDefinitionsPayload: [string, StoredDefinition][] =
+      Object.entries(allDefinitions)
+        .map(([tableName, definitionsTable]) => {
+          return {
+            tableName,
+            version,
+            definitions: definitionsTable,
+          };
+        })
+        .map((storedDef) => [keyForStoredDefinition(storedDef), storedDef]);
+
+    await definitionsStore.putMany(storedDefinitionsPayload);
+
+    const oldKeys = (await definitionsStore.keys()).filter(
+      (v) => typeof v === "string" && !v.includes(version)
+    );
+
+    log("Cleaning up old keys to delete", { oldKeys });
+    await definitionsStore.deleteMany(oldKeys);
+  } catch (err) {
+    console.log("caught error here", err);
+    log("Error loading definitions", err);
+    dataCallback(err as Error, { done: false });
   }
-
-  dataCallback(null, {
-    done: true,
-    definitions: allDefinitions,
-    manifestVersion: version,
-  });
-
-  const storedDefinitionsPayload: [string, StoredDefinition][] = Object.entries(
-    allDefinitions
-  )
-    .map(([tableName, definitionsTable]) => {
-      return {
-        tableName,
-        version,
-        definitions: definitionsTable,
-      };
-    })
-    .map((storedDef) => [keyForStoredDefinition(storedDef), storedDef]);
-
-  await definitionsStore.putMany(storedDefinitionsPayload);
-
-  const oldKeys = (await definitionsStore.keys()).filter(
-    (v) => typeof v === "string" && !v.includes(version)
-  );
-
-  log("Cleaning up old keys to delete", { oldKeys });
-  await definitionsStore.deleteMany(oldKeys);
 }
 
 function keyForStoredDefinition(storedDef: StoredDefinition) {

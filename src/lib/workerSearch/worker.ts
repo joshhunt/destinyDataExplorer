@@ -22,9 +22,13 @@ let definitions: AllDestinyManifestComponents;
 async function loadDefinitions(
   payload: LoadDefinitionsWorkerMessage["payload"]
 ) {
-  const storedDefinitions = (await getStoredDefinitions()).filter(
-    (v) => v.version === payload.manifestVersion
-  );
+  let storedDefinitions = await getStoredDefinitions();
+
+  if (payload.manifestVersion) {
+    storedDefinitions = storedDefinitions.filter(
+      (v) => v.version === payload.manifestVersion
+    );
+  }
 
   definitions = {} as AllDestinyManifestComponents;
 

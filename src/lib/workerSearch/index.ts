@@ -20,7 +20,7 @@ const sendDefsDeferred = new Deferred<void>();
 let hasSentDefs = false;
 let workerReady = false;
 
-export async function sendDefinitions(manifestVersion: string) {
+export async function sendDefinitions(manifestVersion: string | undefined) {
   if (hasSentDefs) {
     return sendDefsDeferred.promise;
   }
